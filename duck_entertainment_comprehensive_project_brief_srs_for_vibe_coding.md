@@ -30,8 +30,9 @@
   - **Monospace / Codes / Refs:** `Consolas Bold` (for booking references, prices, badges).
   - **Arabic Typography:** Modern clean Arabic sans-serif (`Cairo` or `IBM Plex Sans Arabic`) with full **RTL** layout support.
 - **Visual Vibe & Motion:**
-  - Calm, organized, trustworthy, and relaxing Nile aesthetic—**not** noisy, chaotic, or cluttered.
-  - Use subtle, high-performance **micro-animations** (smooth card hovers, instant filter transitions, clean drawer/modal reveals) while maintaining fast load times (`FCP < 2.5s`).
+  - Calm, organized, trustworthy, and relaxing **Editorial Marine / Sea-Inspired** Nile aesthetic—**not** noisy, chaotic, cluttered, or cartoonish Neo-Brutalism (no thick black borders or hard `6px 6px 0` offset shadows).
+  - Execute Duck identity with soft oceanic depth (`0 12px 32px rgba(18, 21, 40, 0.08)`), hairline teal borders, `20px–24px` radii, frosted glass, real photography with marine overlays, and `#F5E847` used only as a sunlight accent (CTAs, Egyptian price pills, active states)—never as full-screen yellow blocks.
+  - Visual reference prototype: `Final_4.html` (repository parent). Use subtle, high-performance **micro-animations** while maintaining `FCP < 2.5s`.
 
 ### 2.2 Brand Story & Tone of Voice
 - **Story:** Started in 2023 in Aswan with a simple idea on the Nile ("a little duck with a big dream"), expanding from Kayaking into Stand-Up Paddleboarding (SUP) and Water Bikes.
@@ -241,7 +242,7 @@ export interface B2BQuote {
 
 ## 10. Non-Functional & Quality Checklist (Acceptance Criteria)
 
-- [ ] **Mobile-First Responsive (`360px+`):** Flawless layout on mobile, tablet, and desktop with a persistent sticky bottom CTA bar on mobile activity pages.
+- [ ] **Mobile-First Responsive & UI/UX Excellence (`360px+` — TOP PRIORITY):** Flawless, native-feeling mobile experience (`360px–430px`), tablet (`768px+`), and desktop (`1280px+`) layout with `>= 44px × 44px` touch targets, `>= 16px` mobile form inputs (preventing iOS auto-zoom), zero horizontal scroll overflow, and a persistent sticky bottom CTA bar on mobile activity/booking pages.
 - [ ] **Bilingual & Bidirectional (`EN` LTR / `AR` RTL):** Instant language toggle that mirrors layout direction, typography, and currency formatting cleanly.
 - [ ] **Dual Pricing Visibility (`AC-01`):** Every trip card clearly displays both Egyptian and Foreigner prices with zero text overlap or typos.
 - [ ] **Water Bike Scarcity Enforcement (`AC-02`):** Attempting to book `> 2` units for Water Bike in a single slot is blocked with a clear notice.
@@ -249,3 +250,4 @@ export interface B2BQuote {
 - [ ] **Payment Failure Resilience (`AC-04`):** Simulated payment failure retains all user input in session state and allows immediate retry.
 - [ ] **Zero Card Data Storage (`NFR-008`):** Never store credit card numbers in `localStorage` or frontend state; pass payment intent cleanly to the payment gateway screen.
 - [ ] **Admin Route Protection (`AC-06`):** `/admin` routes are guarded and inaccessible to guests or standard buyers.
+- [ ] **Living `.md` Documentation Synchronization:** Any architectural update or newly discovered engineering/business rule must be updated immediately across all `.md` files (`AGENTS.md`, `README.md`, `duck_entertainment_comprehensive_project_brief_srs_for_vibe_coding.md`, and `docs/`).
