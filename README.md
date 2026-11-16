@@ -262,8 +262,8 @@ src/
 
 ## 11. نظام التصميم والتدويل (Design System & i18n)
 
-### توكنز الهوية البصرية (Design Tokens)
-توجد المتغيرات المركزية في ملف `src/shared/styles/tokens.css` والمستورد مباشرة في بداية `src/index.css`:
+### توكنز الهوية البصرية (Design Tokens — Refined Nile & Sea Aesthetic)
+توجد المتغيرات المركزية في ملف `src/shared/styles/tokens.css` والمستورد مباشرة في بداية `src/index.css` (وفق التوجيه البصري المعتمد في `Final_4.html` و `AGENTS.md`: ظلال محيطية ناعمة، حدود زجاجية شفافة، زوايا `20px–24px`، وبدون أنماط كرتونية):
 ```css
 :root {
   --color-navy: #121528;

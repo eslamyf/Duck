@@ -1,265 +1,237 @@
-# DUCK Entertainment — Agent Constitution (`AGENTS.md`)
+# DUCK Entertainment (`duckegy.com`) — AI Coding Agent Constitution & Architecture Blueprint (`AGENTS.md`)
 
-> **Authority:** Mandatory and non-negotiable for every AI coding agent, subagent, and automated workflow in this repository.  
-> **Product:** DUCK Entertainment (`duckegy.com`) — Nile & sea water-activities booking. Tagline: **IN DUCK WE TRUST**.  
-> **Engineering standard:** IEEE 29148 SRS v3.0 (`duck_entertainment_comprehensive_project_brief_srs_for_vibe_coding.md`) mapped onto the existing React 19 + Vite 8 Feature-Sliced tree.  
-> **Visual reference prototype:** `../Final_4.html` (Editorial Marine / Sea-Inspired polish). Do not regress to cartoon Neo-Brutalism (`Final_3.html` hard offsets).
+> **Authority Level:** **MANDATORY & NON-NEGOTIABLE**  
+> **Project:** DUCK Entertainment — Water Activities & Nile Experiences Booking Platform (`IN DUCK WE TRUST`)  
+> **Engineering Standard:** IEEE 29148 SRS v3.0 + Feature-Sliced Clean Architecture (React 19 + Vite 8)  
+> **Visual Reference:** [`../Final_4.html`](../Final_4.html) (Refined Nile & Sea Editorial Aesthetic)
 
 ---
 
 ## 1. Mandatory Pre-Flight Protocol (Agent Operating Rules)
 
-Before planning, creating, editing, or deleting any code, every agent **MUST**:
+Every AI coding agent, subagent, or automated workflow operating in this repository **MUST** execute this pre-flight protocol before planning, creating, modifying, or deleting any code:
 
-1. **Read this file in full**, then cross-reference [`duck_entertainment_comprehensive_project_brief_srs_for_vibe_coding.md`](./duck_entertainment_comprehensive_project_brief_srs_for_vibe_coding.md) and [`README.md`](./README.md). Business rules, dual pricing, Guest Checkout, B2B RFQ, Admin, contacts, and IEEE 29148 IDs in the SRS win over memory.
-2. **Strict Brand Identity Lock**
-   - Never alter Duck’s official logo (`https://www.duckegy.com/logo-transparent.png` / brand wordmark) or invent a new mark.
-   - Never change the official palette or “improve” it with extra brand colors:
-     - **Deep Navy** `#121528` (`--color-navy` / `--n`) — text, headers, footer, dark surfaces
-     - **Nile / Sea Teal** `#067BA1` (`--color-blue` / `--b`) — water theme, links, secondary actions
-     - **Sunburst Yellow** `#F5E847` (`--color-yellow` / `--y`) — high-contrast accent only
-   - Typography: English display `Berlin Sans FB Demi` with fallbacks `Plus Jakarta Sans` / `Poppins` / `Inter`; Arabic `Cairo` or `IBM Plex Sans Arabic`; booking refs, prices, and phones in `Consolas` / `ui-monospace` with `dir="ltr"` + `unicode-bidi: isolate`.
-3. **No invented facts.** Do not invent prices, activities, meeting points, or contacts. Official contacts only: **`+201550061006`**, `https://wa.me/201550061006`, **`duck.asw@gmail.com`**, Aswan (Aswan Island / Makani Café, Gharb Soheil / Al-Shima Beach). Baseline prices live in Section 8 and `src/entities/activity/model/activitiesData.js`.
-4. **Reuse before create.** Search `src/shared/ui/`, `src/entities/*/ui/`, `src/features/`, and `src/widgets/` first. `src/components/` is **deprecated** (`buyer/BookingModal.jsx`, `buyer/GuestCheckout.jsx`, `common/*`). Never add files there.
-5. **Frontend-only scope.** No backend servers, no payment processor implementation, no storing card numbers (`NFR-008`). Data goes through `src/shared/api/httpClient.js` and `src/entities/*/api/` so mocks swap to a real API via `VITE_` env.
-6. **No background music** in video or promo assets (`SRS §2.2`).
-7. **Living docs.** If architecture, packages, routes, or business rules change, update `AGENTS.md`, `README.md`, the SRS, and `docs/` in the same task.
+1. **Read & Cross-Reference First:**
+   - Read this `AGENTS.md` file in full.
+   - Cross-reference every business requirement, user flow, data contract, and acceptance criterion against [`duck_entertainment_comprehensive_project_brief_srs_for_vibe_coding.md`](./duck_entertainment_comprehensive_project_brief_srs_for_vibe_coding.md) and [`README.md`](./README.md).
+2. **Strict Brand Identity Lock (Zero Hallucination):**
+   - **NEVER** alter Duck's official logo, typography direction, or exact color palette:
+     - **Deep Navy / Charcoal Base (Primary Text / Dark Headers / Footer):** `#121528` (`--color-navy`)
+     - **Nile / Sea Teal-Blue (Secondary / Water Theme / Links / Borders):** `#067BA1` (`--color-blue`)
+     - **Sunburst Yellow (Primary Sunlight Accent / High-Contrast CTAs / Egyptian Price Pills):** `#F5E847` (`--color-yellow`)
+     - **Surfaces:** Crisp white (`#FFFFFF`), soft sea-mist tint (`#F3FAFC` / `#F7FBFD`), with minimum `4.5:1` WCAG contrast ratio.
+   - **NEVER** invent unapproved activities, fake prices, locations, or contact details. Use only the official contact details (`+201550061006`, `https://wa.me/201550061006`, `duck.asw@gmail.com`) and approved baseline pricing in Section 8.
+   - **NO Background Music:** Never embed auto-playing audio or background music in any video or promotional asset (`SRS §2.2`).
+3. **Inspect Before Creating (Reuse First):**
+   - Always verify existing components in `src/shared/ui/`, `src/entities/*/ui/`, `src/features/`, and `src/widgets/` before creating new ones.
+   - **Legacy Folder Deprecation (`src/components/`):** The `src/components/` directory (`buyer/BookingModal.jsx`, `buyer/GuestCheckout.jsx`, `common/Footer.jsx`, `common/LanguageCurrencySwitcher.jsx`, `common/Navbar.jsx`) is a **deprecated legacy directory** superseded by the Feature-Sliced Clean Architecture folders (`src/widgets/`, `src/features/`, `src/entities/`). **NEVER** add new code to `src/components/`; all implementations belong in their canonical FSD / Clean Architecture slices.
+4. **Scope Enforcement:**
+   - This repository is strictly a **Frontend Web Application** (B2C Buyer Flow, B2B Corporate RFQ Flow, and `/admin` Dashboard UI). Do not build backend servers from scratch, do not store raw credit card numbers (`NFR-008`), and route all data through `src/shared/api/` and `src/entities/*/api/`.
+5. **Living Documentation & Immediate `.md` Synchronization Rule:**
+   - Whenever any architectural update, visual token change, package update, directory adjustment, new component/route addition, or important new engineering/business rule is introduced or discovered, the agent **MUST immediately update all Markdown (`.md`) files across the repository** (`AGENTS.md`, `README.md`, `duck_entertainment_comprehensive_project_brief_srs_for_vibe_coding.md`, and any files under `docs/`) in the same task so all documentation remains 100% synchronized.
+6. **Mobile-First Experience & UI/UX Obsession (Top Priority Mandate):**
+   - Over 80% of DUCK Entertainment's traffic arrives from mobile social media (Instagram & TikTok in-app browsers). **The mobile experience (`360px–430px`), visual UI/UX polish, ultra-easy booking ergonomics, and seamless responsiveness across all breakpoints are the #1 user-facing priority** of every task.
 
 ---
 
 ## 2. Visual Direction: Refined Nile & Sea Aesthetic (Zero Cartoonishness, 100% Duck Identity)
 
-Keep Duck’s exact colors and friendly personality. Execute them as **Editorial Marine / Sea-Inspired** polish — calm, photographic, trustworthy — not cartoon Neo-Brutalism.
+Keep Duck's exact brand colors (`#121528`, `#067BA1`, `#F5E847`) and welcoming, adventurous personality, but execute every surface with an **Editorial Marine / Sea-Inspired** polish matching [`Final_4.html`](../Final_4.html)—**never** cartoonish Neo-Brutalism:
 
-**Do (Final_4 language):**
-- Soft oceanic depth: `box-shadow: 0 12px 32px rgba(18, 21, 40, 0.08)` (and `0 20px 48px rgba(6, 123, 161, 0.12)` for elevated booking tickets).
-- Hairline translucent borders: `1px solid rgba(6, 123, 161, 0.16)`.
-- Smooth radii **`20px–24px`** on cards/sheets; pills remain `999px`.
-- Frosted glass overlays: `backdrop-filter: blur(12px)` (nav, mobile dock, sticky booking bar, destination chips).
-- `#F5E847` as **sunlight accent only**: primary CTAs, Egyptian price pills, active/focus rings, scarcity badges. Never as a full-screen yellow block (reviews, transport, FAQ aside).
-- Deep `#121528` navy hero/footer + `#067BA1` sea teal for water, stats, links.
-- Real high-resolution photography (`object-fit: cover`) with subtle marine gradient overlays (`linear-gradient` navy → teal, not flat vector SVG scenes).
-- Gentle organic wave dividers between major sections.
-- Micro-motion `150–250ms cubic-bezier(0.22, 1, 0.36, 1)`. Respect `prefers-reduced-motion`.
-
-**Do not (Final_3 leftovers):**
-- Thick `2px` black borders, hard offset shadows (`6px 6px 0 #121528`), dashed navy outlines as a system, or clip-art SVG Nile scenes as the default media.
-- Yellow full-bleed review bands or yellow FAQ “sticky notes.”
-- New palettes, gradients that dilute brand hexes, or playful stickers that fight the logo.
-
-Tokens belong in `src/shared/styles/tokens.css` (currently navy/blue/yellow only — extend with `--shadow-sea`, `--border-hairline`, `--radius-card`, `--glass` without changing the three brand hexes). Purge leftover Vite purple (`#aa3bff`) and `#root { width: 1126px }` if they reappear in `src/index.css`.
+- **Forbidden Cartoonish Patterns:**
+  - **NO** thick `2px–3px` solid black borders (`#000` / `#121528` comic outlines).
+  - **NO** hard comic offset shadows (`box-shadow: 6px 6px 0 #121528`).
+  - **NO** flat cartoon vector SVG illustrations replacing real water/Nile scenes.
+- **Required Editorial Marine Design Tokens (`src/shared/styles/tokens.css`):**
+  - **Soft Oceanic Depth:** Use subtle, layered marine shadows (`--shadow-soft: 0 12px 32px rgba(18, 21, 40, 0.08)`, `--shadow-ocean: 0 20px 48px rgba(6, 123, 161, 0.12)`).
+  - **Hairline Translucent Borders:** `--border-marine: 1px solid rgba(6, 123, 161, 0.16)` and `--border-subtle: 1px solid rgba(18, 21, 40, 0.08)`.
+  - **Smooth Radii & Glassmorphism:** Smooth `20px–24px` (`--radius-card: 22px`, `--radius-lg: 24px`) card corners, `99px` pill buttons/badges, and frosted glass surfaces (`background: rgba(255, 255, 255, 0.74); backdrop-filter: blur(14px)`).
+  - **Purposeful `#F5E847` Sunlight Accent:** Use `#F5E847` intentionally as a high-contrast sunlight highlight (primary CTAs, Egyptian price pills, active states, hero text highlight underline)—balanced calmly against deep `#121528` navy, `#067BA1` sea teal, and airy `#F3FAFC` / `#FFFFFF` backgrounds. Never flood entire sections with raw yellow backgrounds.
+  - **Real Photography & Organic Wave Dividers:** Render real high-resolution photography (`object-fit: cover`) layered with subtle marine gradient overlays (`linear-gradient(180deg, rgba(18, 21, 40, 0.12), rgba(6, 123, 161, 0.28))`) and gentle organic SVG wave section dividers.
 
 ---
 
 ## 3. Mobile-First UX, Responsiveness & Ultra-Easy Appointment Booking (Top Priority)
 
-Most traffic is Instagram / TikTok **in-app mobile browsers**. Design **`360px+` first**, then `640 / 768 / 1024 / 1280`.
+### 3.1 Mobile-First Engineering (`360px+`)
+Every screen, modal, card, filter bar, and table must be designed **Mobile-First** for Instagram & TikTok smartphone visitors before scaling up:
+- **Progressive Breakpoints:** Base styles target **Mobile (`360px – 639px`)**, enhanced via `@media (min-width: 640px)`, `@media (min-width: 768px)` (Tablet), `@media (min-width: 1024px)` (Laptop), and `@media (min-width: 1280px)` (Desktop).
+- **Zero Horizontal Overflow:** `overflow-x: hidden` on body; no card, dual-price badge, or table may break `360px` viewport bounds in `LTR` or `RTL`.
+- **Thumb-Zone Tap Targets:** All interactive controls (buttons, date chips, slot pills, `QuantityStepper` `+`/`-`, language/currency switchers) **MUST** have `min-height: 48px–56px` (minimum `44px × 44px` hit area) with `>= 8px` gap between adjacent targets.
+- **Sticky Mobile Bottom Booking Bar (`StickyBar.jsx`):** Fixed to `bottom: 0` on `< 768px` viewports with `padding-bottom: env(safe-area-inset-bottom)` showing live dual pricing and the primary CTA.
+- **Swipe Carousels & Mobile Forms:** Galleries must support native touch swipe (`overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none`). Mobile form inputs must use `font-size >= 16px` (preventing iOS Safari zoom) and semantic `inputMode` (`tel`, `email`, `numeric`).
 
-### 3.1 Mobile engineering
-- Zero horizontal overflow (`overflow-x: hidden` on `html/body`; no element wider than the viewport in AR or EN).
-- Thumb targets **`min-height: 48px–56px`** (never below `44px`). Form `font-size >= 16px` to stop iOS zoom.
-- Sticky bottom booking bars with `padding-bottom: env(safe-area-inset-bottom)`.
-- Native-feeling swipe carousels (`scroll-snap-type: x mandatory`, hidden scrollbars, optional arrow controls).
-- Mobile nav = sheet/drawer; admin tables = stacked cards or sticky first column.
-- Persistent mobile dock may use yellow only on the center **احجز** CTA.
-
-### 3.2 Ultra-frictionless 3-step Guest-First booking (< 45 seconds on a phone)
-
-**Never require an account before pay (`BR-010`).** Wire UI to `src/features/guest-checkout/` (`BookingFlowProvider`, `useBookingFlow`, `StepDateSlotCount`, `StepGuestInfo`, `StepOnlinePayment`, `DualPriceSummary`, `AddonsSelector`). Persist wizard state with `src/shared/hooks/useSessionStorage.js` (`NFR-007`).
-
-1. **Step 1 — Date, time & tickets**
-   - One-tap chips: **Today / Tomorrow / Day After** + `<input type="date">`.
-   - Sunrise-to-Sunset slot pills only (`BR-001`): **Sunrise, Morning, Afternoon, Sunset** (`src/entities/booking/lib/timeSlots.js`).
-   - Instant `+ / -` steppers for **Egyptian** vs **Foreigner** participants (`QuantityStepper`), live total via `priceCalculator.js`:
-     `Total = (EG × price_egp) + (Foreign × price_foreign) + addons`.
-   - Water Bike: hard-cap `egyptian_count + foreigner_count <= 2` (`capacityValidator.js`, `LimitedSeatsBadge`).
-2. **Step 2 — Minimal guest info (3 required fields only)**
-   - Full Name, WhatsApp phone (`inputmode="tel"` + auto-format), Email (`inputmode="email"`).
-   - Mandatory 24h cancellation checkbox (`BR-007`). Optional add-ons collapsed.
-3. **Step 3 — Online payment & post-booking account prompt**
-   - Gateway handoff states: **Success / Failed / Pending** (`PaymentSuccess`, `PaymentFailed`, `PaymentPending`, `PaymentRetryNotice`).
-   - Failed payment restores Step 1–2 from `sessionStorage` — never re-type (`NFR-007`).
-   - **Never** persist PAN/CVV/expiry (`NFR-008`).
-   - After success: booking ref (e.g. `DUCK-2026-8492`) + 1-tap **Post-Booking Account Prompt** (`PostBookingAccountPrompt.jsx`) — password only; name/email/phone pre-filled (`FR-005` / `BR-010`).
-
-Visual prototype of this flow: `../Final_4.html` booking sheet (`#book`). Production implementation must live in the FSD slices above, not in a new HTML island inside React.
+### 3.2 Ultra-Frictionless Appointment Booking (Under 45 Seconds on Mobile)
+The **3-Step Guest-First Booking Flow** (`/booking` / `src/features/guest-checkout/`) must feel effortless on a phone:
+1. **Step 1 — Pick Date, Time & Tickets (`StepDateSlotCount.jsx`):**
+   - **One-Tap Quick Date Chips:** `Today` (`اليوم`), `Tomorrow` (`غداً`), `Day After` (`بعد غد`) + clean native/custom calendar date picker.
+   - **Sunrise-to-Sunset Slot Pills (`BR-001`):** Tappable visual pills (`Sunrise`, `Morning`, `Afternoon`, `Sunset` with exact daylight hours).
+   - **Instant `+ / -` Ticket Steppers (`QuantityStepper.jsx`):** Separate steppers for **Egyptian** vs. **Foreigner** participants with real-time split-ticket total calculation (`DualPriceSummary.jsx`) and optional Add-ons (`Transportation`, `Photography`). Strictly block `> 2` total units for Water Bike (`BR-003`).
+2. **Step 2 — Minimal Guest Info (`StepGuestInfo.jsx`):**
+   - **Only 3 Required Fields:** `Full Name`, `WhatsApp Phone` (`type="tel" inputMode="tel"`), and `Email` (`type="email" inputMode="email"`), plus the mandatory **24-Hour Free Cancellation Policy** agreement checkbox.
+   - Auto-format phone input and **zero mandatory login/registration** before booking (`BR-010`).
+3. **Step 3 — Online Payment & Post-Booking Account Prompt (`StepOnlinePayment.jsx` & `PostBookingAccountPrompt.jsx`):**
+   - Seamless handoff/handling for Online Payment (`Success`, `Failed`, `Pending`).
+   - **Failure Resilience (`NFR-007`):** Persist all Step 1 & Step 2 inputs in `sessionStorage` via `useSessionStorage.js` so payment failure never wipes user input and allows 1-tap retry.
+   - **Post-Booking 1-Tap Account Prompt (`BR-010` / `FR-005`):** Immediately on confirmation (`BookingConfirmationPage.jsx`), display a friendly card pre-filled with the guest's Name, Email, and Phone—requiring **only a Password** to create an account in 1 click and track bookings in `/my-bookings`.
 
 ---
 
 ## 4. Tech Stack & Installed Packages Map
 
-Inspected from `package.json` (this repo is intentionally lean). **Do not `npm install` UI kits, icon packs, date libraries, Tailwind, MUI, Redux, or routers without an explicit user request.**
+The repository is intentionally lean, zero-bloat, and built on **React 19** and **Vite 8** (`ESM`). Below is the exact manifest from `package.json`:
 
-| Layer | Installed / native | Version | Usage rule |
+| Category | Installed Package / Native Capability | Version | Mandatory Usage Rules & Restrictions |
 | :--- | :--- | :--- | :--- |
-| UI | `react`, `react-dom` | `^19.3.1` | Function components + hooks only. `React.lazy` / `Suspense` for `/admin` and secondary routes. Class components forbidden except `ErrorBoundary.jsx`. |
-| Bundler | `vite`, `@vitejs/plugin-react` | `^8.3.6` / `^6.1.2` | ESM. Env vars `VITE_*` only via `src/shared/config/env.js`. Add `@` → `/src` in `vite.config.js` if missing. |
-| Language | JavaScript `.js` / `.jsx` + `@types/react` | `^19.3.0` | JSDoc `@typedef` for SRS §8 contracts. No TypeScript migration unless asked. |
-| Routing | **Not in `package.json`.** Skeleton: `src/app/routes/AppRouter.jsx`, `ProtectedRoute.jsx`, `src/shared/config/routes.js` | Custom | Centralize paths in `routes.js`. Do not scatter URL strings in widgets. If `react-router-dom` is added, it is the single router — no duplicate history hacks. |
-| State | React Context + feature hooks | Built-in | Global: `AuthProvider`, `LanguageProvider`, `CurrencyProvider` only. Booking wizard: `BookingFlowProvider`. **No Redux / MobX / Zustand** unless requested. |
-| Styling | Vanilla CSS + custom properties | Built-in | `src/shared/styles/tokens.css`, `reset.css`, co-located `PascalCase.css`. **No Tailwind, Bootstrap, MUI, CSS-in-JS.** Consume `--color-navy/blue/yellow` and logical properties. |
-| Forms | Pure validators | Built-in | `src/shared/utils/validators.js` + `entities/booking/lib/*`. Bilingual field errors. |
-| i18n | `src/shared/i18n/{ar,en}.json` + `LanguageProvider` | Built-in | Zero hardcoded user-facing copy in JSX. Flip `document.documentElement.lang` + `dir`. |
-| HTTP | `fetch` wrapper `httpClient.js` | Built-in | Entity `*Service.js` only. `VITE_USE_MOCKS` switches mocks. |
-| Icons | Inline SVG / `public/icons.svg` | Built-in | `currentColor`. Flip directional icons under `[dir="rtl"]`. |
-| Lint | `eslint` `^10.14.0`, `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh` | Installed | `npm run lint` + `npm run build` = 0 errors, 0 warnings. |
-| Test | `vitest.config.js` + `tests/{unit,component,e2e}` | Configured, scripts TBD | Unit-test `priceCalculator`, `capacityValidator`, `cancellationPolicy` without DOM. |
-| Dates | Native `Intl` + ISO `YYYY-MM-DD` | Built-in | Do not add `dayjs`/`moment` unless asked. |
+| **Core UI Framework** | `react`, `react-dom` | `^19.3.1` | Functional components, React 19 hooks, `React.lazy`, `Suspense`, `useMemo`, `useCallback`. Class components forbidden (except `ErrorBoundary.jsx`). |
+| **Build & Bundler** | `vite`, `@vitejs/plugin-react` | `^8.3.6` | All env vars must use `VITE_` prefix and be read exclusively via `src/shared/config/env.js`. Configure `@` alias to `/src` in `vite.config.js`. |
+| **Language & Types** | JavaScript (`ES2024+` / `.js`, `.jsx`) + `@types/react` | `^19.3.0` | `.jsx` for React components, `.js` for pure logic/services. Document domain models/contracts with JSDoc `@typedef` matching SRS §8 schemas. |
+| **Routing Engine** | Custom / Lightweight Router in `src/app/routes/AppRouter.jsx` *(or `react-router-dom` if explicitly added)* | Native / Configured | Centralize route constants in `src/shared/config/routes.js`. Protect `/admin/*` via `src/app/routes/ProtectedRoute.jsx`. |
+| **State Management** | React Context API + Custom Hooks (`src/app/providers/*`, `src/features/*/model/*`) | Built-in | Do **NOT** install Redux, MobX, or external state libraries. Global state is strictly `AuthProvider`, `LanguageProvider`, `CurrencyProvider`. Checkout state uses `BookingFlowProvider.jsx` + `useSessionStorage.js`. |
+| **Styling System** | Vanilla CSS + CSS Custom Properties (`src/shared/styles/tokens.css`, `reset.css`) | Built-in | Do **NOT** install Tailwind, Bootstrap, MUI, or CSS-in-JS. Consume tokens from `tokens.css`. Purge default Vite boilerplate styles (`#aa3bff` purple and fixed `1126px` `#root` in `src/index.css`). |
+| **Form Validation** | Pure Domain & Shared Validators (`src/shared/utils/validators.js`, `src/entities/booking/lib/*`) | Built-in | Validate synchronously via pure functions (`capacityValidator.js`, `cancellationPolicy.js`, `validators.js`) with bilingual `EN`/`AR` errors. |
+| **i18n & Direction** | Dictionary Engine (`src/shared/i18n/ar.json`, `en.json`, `index.js`) + `LanguageProvider.jsx` | Built-in | Zero hardcoded UI strings in `.jsx`. Update `<html lang dir>` dynamically (`ar`/`rtl` ↔ `en`/`ltr`). |
+| **Icons & Assets** | Inline SVG Components & Sprite (`public/icons.svg`, `public/favicon.svg`) | Built-in | Lightweight inline SVGs with `currentColor`. Mirror directional icons automatically in `[dir="rtl"]`. |
+| **Linting & Testing** | `eslint` (`^10.14.0`), `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh`, Vitest (`vitest.config.js`) | Installed / Configured | Must pass `npm run lint` and `npm run build` with **0 errors and 0 warnings**. |
 
-**Scripts today:** `dev`, `build`, `lint`, `preview`. There is **no** `npm test` script yet.
-
-**Scaffold honesty:** Many slice files exist as empty or stub `export default function App() { return null }` placeholders. **Fill those files**; do not create a parallel tree.
+> **Strict Dependency Rule:** Do **NOT** run `npm install` to add duplicate UI kits, icon packs, date libraries, or state managers without explicit user approval.
 
 ---
 
 ## 5. Clean Architecture & Feature-First Directory Structure
 
-The repo already uses **Feature-Sliced Design (FSD)** mapped to Clean Architecture rings. Dependencies point **inward / downward**. UI never contains raw business math or hardcoded mock arrays.
+This repository implements **Feature-Sliced Design (FSD) mapped strictly to Clean Architecture principles**:
 
-### 5.1 Rings
+```text
+┌───────────────────────────────────────────────────────────────────────────┐
+│ 1. PRESENTATION LAYER (UI, Pages, Layouts, Widgets, Feature Flows)        │
+│    src/pages/*  ──►  src/layouts/*  ──►  src/widgets/*  ──►  src/features/*│
+│    (plus entity-specific dumb UI views in src/entities/*/ui/*)            │
+├───────────────────────────────────────────────────────────────────────────┤
+│ 2. DATA LAYER (API Services, Mocks, DTO Mappers, Session Persistence)     │
+│    src/entities/*/api/*   │   src/shared/api/*   │   useSessionStorage.js │
+├───────────────────────────────────────────────────────────────────────────┤
+│ 3. DOMAIN LAYER (Entities, Value Objects, Business Rules & Validators)    │
+│    src/entities/*/model/* │   src/entities/*/lib/* (Pure JS, Zero React)  │
+├───────────────────────────────────────────────────────────────────────────┤
+│ 4. CORE & SHARED KERNEL (App Providers, Route Guards, Design Tokens, UI)  │
+│    src/app/*              │   src/shared/{ui,styles,config,i18n,hooks,lib}│
+└───────────────────────────────────────────────────────────────────────────┘
+```
 
-| Ring | Responsibility | Canonical folders |
-| :--- | :--- | :--- |
-| **Presentation** | Pages, layouts, widgets, feature UI, entity cards | `src/pages/`, `src/layouts/`, `src/widgets/`, `src/features/*/ui/`, `src/entities/*/ui/` |
-| **Data** | HTTP, mocks, DTO mapping, session persistence | `src/entities/*/api/`, `src/shared/api/`, `src/shared/hooks/useSessionStorage.js` |
-| **Domain** | Entities, value objects, pure validators | `src/entities/*/model/`, `src/entities/*/lib/` (**zero React**) |
-| **Shared / Core** | Tokens, i18n, routes, guards, primitives | `src/app/`, `src/shared/{ui,styles,config,i18n,hooks,lib,utils}` |
-
-### 5.2 Tree (as on disk)
+### Canonical Directory Tree & Dependency Law
 
 ```text
 src/
-├── app/                         # bootstrap, providers, route guards
-│   ├── providers/               # AppProviders, Auth, Language, Currency, ErrorBoundary
-│   ├── routes/                  # AppRouter, ProtectedRoute
+├── app/                        # Layer 1 (Top): App bootstrap, global providers, route guards
+│   ├── providers/              # AppProviders, AuthProvider, LanguageProvider, CurrencyProvider, ErrorBoundary
+│   ├── routes/                 # AppRouter, ProtectedRoute (/admin guard)
 │   └── App.jsx
-├── pages/                       # thin route composers (home, activity-details, booking, b2b, auth, account, admin, static, not-found)
-├── layouts/                     # MainLayout, BookingLayout, AdminLayout
-├── widgets/                     # page sections (navbar, hero, activities-grid, destinations, reviews, faq, footer, admin-sidebar, …)
-├── features/
-│   └── <slice>/                 # guest-checkout, post-booking-account, payment-result, b2b-quote, activity-filter, …
-│       ├── model/               # BookingFlowProvider, useBookingFlow, useAuth
-│       ├── ui/
-│       └── index.js
-├── entities/                    # activity, addon, booking, destination, quote, review, user
-│   └── <entity>/
-│       ├── lib/                 # priceCalculator, capacityValidator, cancellationPolicy, timeSlots
-│       ├── model/
-│       ├── api/
-│       ├── ui/
-│       └── index.js
-├── shared/
-│   ├── api/                     # httpClient + mocks/
-│   ├── config/                  # constants.js, env.js, routes.js
-│   ├── hooks/
-│   ├── i18n/
-│   ├── lib/
-│   ├── styles/                  # tokens.css, reset.css
-│   ├── ui/                      # Button, Input, Modal, QuantityStepper, StickyBar, …
-│   └── utils/validators.js
-├── components/                  # DEPRECATED — do not extend
-├── index.css
-└── main.jsx
+├── pages/                      # Layer 2: Thin route screens (max ~80-100 lines)
+├── layouts/                    # Layer 3: MainLayout, BookingLayout, AdminLayout
+├── widgets/                    # Layer 4: Autonomous page sections (Hero, Navbar, ActivitiesGrid, FAQ, Footer...)
+├── features/                   # Layer 5: Interactive user flows (guest-checkout, post-booking-account, b2b-quote...)
+│   └── <feature-slice>/
+│       ├── model/              # Feature state hooks/providers (BookingFlowProvider, useBookingFlow)
+│       ├── ui/                 # Step UI components (StepDateSlotCount, StepGuestInfo, StepOnlinePayment)
+│       └── index.js            # Public API barrel export
+├── entities/                   # Layer 6: Core Business Domain & Data Services
+│   └── <entity-slice>/         # (activity, addon, booking, destination, quote, review, user)
+│       ├── lib/                # Pure JS domain rules (priceCalculator, capacityValidator, cancellationPolicy, timeSlots)
+│       ├── model/              # Domain schemas, approved pricing/data, status enums
+│       ├── api/                # Entity data repositories (activityService, bookingService, quoteService...)
+│       ├── ui/                 # Entity UI views (ActivityCard, PriceBadge, LimitedSeatsBadge...)
+│       └── index.js            # Public API barrel export
+└── shared/                     # Layer 7 (Bottom): Domain-agnostic primitives & infrastructure
+    ├── api/                    # httpClient.js & mock adapters
+    ├── config/                 # constants.js, env.js, routes.js
+    ├── hooks/                  # useCurrency.js, useMediaQuery.js, useSessionStorage.js
+    ├── i18n/                   # en.json, ar.json, index.js
+    ├── lib/                    # formatters.js, analytics.js, seo.jsx
+    ├── styles/                 # tokens.css, reset.css
+    ├── ui/                     # Reusable custom widgets (Button, StickyBar, QuantityStepper, Modal...)
+    └── utils/                  # validators.js
 ```
 
-Import law: `app → pages → layouts → widgets → features → entities → shared`.  
-Forbidden: `shared` importing `entities`; `entities` importing `features`; cross-slice deep imports (use each slice’s `index.js`).
-
-**Domain math examples (never inline in JSX):**
-- Water Bike max capacity `= 2`
-- Dual-price calculator
-- 24h cancellation (`cancellationPolicy.js`)
+#### Strict Dependency Rules:
+1. **Inward / Downward Imports Only:** `app` ➔ `pages` ➔ `layouts` ➔ `widgets` ➔ `features` ➔ `entities` ➔ `shared`.
+2. **Forbidden Upward Imports:** `shared/` never imports from `entities/` or above; `entities/` never imports from `features/` or above; `features/` never imports from `widgets/` or above.
+3. **No Raw Math or Hardcoded Arrays in UI:** UI components must **never** inline pricing math or hardcoded activity arrays—always delegate to `priceCalculator.js`, `capacityValidator.js`, and entity services.
 
 ---
 
 ## 6. Component Granularity, Naming & Custom Widget Rules
 
-### 6.1 Size
-- UI `.jsx`: **max ~120–150 lines** (excluding imports/JSDoc). Pages: **~80–100 lines**, compose only.
-- Domain `.js`: **max ~120 lines**, cyclomatic complexity `< 8`.
-- Split if >2 nested JSX conditionals, mixed sub-sections, or over the line cap — extract child widgets or `model/use*.js`.
+### 6.1 Small, Single-Responsibility Files (Strict Line & Complexity Ceiling)
+- **UI Component Line Ceiling:** **Maximum `120–150` lines** per `.jsx` file.
+- **Page Component Line Ceiling:** **Maximum `80–100` lines** per Page file in `src/pages/`.
+- **Domain/Utility Module Ceiling:** **Maximum `120` lines** per `.js` file; cyclomatic complexity `< 8`.
+- **Mandatory Decomposition:** Any component with `> 2` nested conditional/loop levels, multiple visual sub-sections, or `> 150` lines **MUST** be split into smaller sub-widgets and custom hooks (`model/use*.js`).
 
-### 6.2 Naming (match this repo)
+### 6.2 Strict File & Symbol Naming Conventions
 
-| Artifact | Pattern | Examples |
-| :--- | :--- | :--- |
-| Folders | `kebab-case` | `guest-checkout/`, `activity-details/`, `b2b-quote/` |
-| Shared UI folders | `PascalCase/` | `QuantityStepper/`, `StickyBar/` |
-| Components | `PascalCase.jsx` | `DualPriceSummary.jsx`, `PostBookingAccountPrompt.jsx` |
-| Styles | co-located `PascalCase.css` | `Button.css` |
-| Hooks | `useCamelCase.js` | `useBookingFlow.js`, `useSessionStorage.js` |
-| Providers | `PascalCaseProvider.jsx` | `BookingFlowProvider.jsx` |
-| Domain | `camelCase.js` | `priceCalculator.js` |
-| API | `<entity>Service.js` | `bookingService.js` |
-| Barrels | `index.js` | public API only |
+| Artifact Type | Naming Pattern | Location | Canonical Examples |
+| :--- | :--- | :--- | :--- |
+| **Feature / Widget / Entity Folders** | `kebab-case` | `src/{pages,widgets,features,entities}/` | `guest-checkout/`, `post-booking-account/`, `b2b-quote/` |
+| **Shared UI Widget Folders** | `PascalCase` | `src/shared/ui/<WidgetName>/` | `QuantityStepper/`, `StickyBar/`, `SectionHeader/`, `DatePicker/` |
+| **React Components (`.jsx`)** | `PascalCase.jsx` | `ui/` or widget root | `PriceBadge.jsx`, `DualPriceSummary.jsx`, `LimitedSeatsBadge.jsx`, `StepGuestInfo.jsx` |
+| **Component Stylesheets (`.css`)** | `PascalCase.css` | Co-located with `.jsx` | `Button.css`, `Input.css` |
+| **Custom Hooks (`.js`)** | `useCamelCase.js` | `shared/hooks/` or `features/*/model/` | `useBookingFlow.js`, `useCurrency.js`, `useSessionStorage.js` |
+| **Domain Calculators & Validators** | `camelCase.js` | `src/entities/*/lib/` | `priceCalculator.js`, `capacityValidator.js`, `cancellationPolicy.js`, `timeSlots.js` |
+| **API Services (`.js`)** | `<entity>Service.js` | `src/entities/*/api/` | `activityService.js`, `bookingService.js`, `quoteService.js` |
+| **Barrel Exports** | `index.js` | Root of each slice | `src/entities/activity/index.js`, `src/pages/booking/index.js` |
 
-Preferred **role-revealing** names when extracting: `dual_price_badge` → `PriceBadge.jsx`, `guest_checkout_sheet` → guest-checkout UI, `mobile_sticky_booking_bar` → `StickyBar.jsx`, `water_bike_capacity_alert` → `LimitedSeatsBadge.jsx`, `ticket_counter_stepper` → `QuantityStepper.jsx`.
-
-### 6.3 DRY — Rule of 2
-
-Any pattern used **twice** goes in `src/shared/ui/` (agnostic) or `src/entities/*/ui/` (domain). Registry already started:
-
-`Button`, `Input`, `Select`, `Checkbox`, `DatePicker`, `QuantityStepper`, `Modal`, `Card`, `Badge`, `Accordion`, `Gallery`, `SectionHeader`, `StickyBar`, `Table`, `Skeleton`, `EmptyState`, `Toast`, `PriceBadge`, `ActivityCard`, `LimitedSeatsBadge`, `BookingStatusBadge`, `AddonOption`, `DestinationCard`, `ReviewCard`.
-
-Do not duplicate raw `<button>` / price pills / steppers in features.
+### 6.3 DRY & Custom Reusable Widgets Registry (`src/shared/ui/` & `src/entities/*/ui/`)
+**The "Rule of 2":** Any UI pattern used **2+ times** must live in `src/shared/ui/` or `src/entities/*/ui/`. Never duplicate button, input, pill, modal, or pricing markup:
+1. `Button.jsx` — Brand Yellow (`#F5E847` + `#121528` text) primary pill (`min-height: 48px–52px`), Nile Teal (`#067BA1`) secondary, translucent outline, and WhatsApp variants.
+2. `PriceBadge.jsx` — Simultaneous **Dual Pricing Pill (`BR-002`)** showing both Egyptian (`EGP` pill in `#F5E847`) and Foreigner rate (converted when `USD`/`EUR` active; unified single rate when `price_egp === price_foreign`).
+3. `LimitedSeatsBadge.jsx` — Scarcity alert pill (`"Limited: Only 2 bikes available"`) for Water Bike (`BR-003`).
+4. `ActivityCard.jsx` — Smooth `22px`-radius card with real photography, hairline marine border, soft oceanic shadow, `LimitedSeatsBadge`, `PriceBadge`, and direct `Book Now` CTA.
+5. `QuantityStepper.jsx` — Thumb-friendly `48px` `+`/`-` ticket counter enforcing `min`/`max` (`max = 2` total for Water Bike).
+6. `StickyBar.jsx` — Persistent mobile bottom booking bar with safe-area bottom inset.
+7. `SectionHeader.jsx`, `Input.jsx`, `Select.jsx`, `Checkbox.jsx`, `DatePicker.jsx`, `Modal.jsx`, `Toast.jsx`, `EmptyState.jsx`, `Skeleton.jsx`, `BookingStatusBadge.jsx`.
 
 ---
 
 ## 7. Performance, Scalability & Bilingual RTL/LTR Standards
 
-### Performance (`NFR-001`)
-- Lazy-load `/admin` and secondary modals (`React.lazy` + `Suspense` + `Skeleton`).
-- `useMemo` filtered lists; `useCallback` stable card handlers.
-- Debounce admin search (~250ms); destination pills stay instant.
-- Images: WebP when possible, `loading="lazy"` below the fold, `fetchpriority="high"` on hero, explicit `aspect-ratio` (`CLS = 0`). Target **FCP < 2.5s on 4G**.
-
-### Bilingual & direction (`FR-009`)
-- `LanguageProvider` sets `<html lang dir>`. Arabic RTL / English LTR with no layout shift.
-- **Forbidden physical CSS:** `margin-left/right`, `padding-left/right`, `left`/`right`, `text-align: left/right`, `border-left/right`.
-- **Required logical CSS:** `margin-inline`, `padding-inline`, `inset-inline-start/end`, `border-inline-*`, `text-align: start/end`.
-- EN headings: Berlin Sans / Plus Jakarta / Inter. AR: Cairo. Prices and `+201550061006` stay LTR isolated.
-
-### Security (`NFR-004`, `NFR-008`)
-- `/admin/*` wrapped in `ProtectedRoute` with `Role === 'Admin'` (`BR-009`). Guests/Buyers → `/login`.
-- Zero client storage of payment card details.
+- **Bundle & Rendering Performance (`NFR-001` — `< 2.5s` FCP on 4G):**
+  - Wrap `/admin/*`, `/b2b`, and secondary routes in `React.lazy()` + `<Suspense fallback={<Skeleton />}>` inside `AppRouter.jsx`.
+  - Memoize filtered activity grids and admin searches (`useMemo`, `useCallback`); debounce admin table search (`~250ms`).
+  - Use `loading="lazy"`, `decoding="async"`, and explicit `aspect-ratio` on below-the-fold images; `fetchpriority="high"` on hero media.
+- **Bilingual (`AR`/`EN`) & CSS Logical Properties (`FR-009`):**
+  - **FORBIDDEN:** `margin-left`, `margin-right`, `padding-left`, `padding-right`, `text-align: left/right`, `left:`, `right:`, `border-left/right`.
+  - **REQUIRED:** `margin-inline-start/end`, `padding-inline-start/end`, `text-align: start/end`, `inset-inline-start/end`, `border-inline-start/end`.
+  - Render prices, phone numbers (`+201550061006`), and booking refs (`DUCK-2026-8492`) in monospace `Consolas` (`font-weight: 700`) with `dir="ltr"` / `unicode-bidi: isolate` so numbers never scramble in Arabic RTL.
+- **Security & State Safety (`NFR-004`, `NFR-007`, `NFR-008`):**
+  - Guard all `/admin/*` routes via `<ProtectedRoute allowedRoles={['Admin']}>`.
+  - Preserve failed-payment booking form inputs in `sessionStorage`; **NEVER** store raw credit card numbers, CVVs, or expiry dates anywhere in client state or storage.
 
 ---
 
 ## 8. Domain Invariants & Critical Business Rules Quick-Reference
 
-| ID | Rule | Enforcement |
-| :--- | :--- | :--- |
-| **BR-001** | Daily operations **Sunrise → Sunset** only | `timeSlots.js`, Step 1 pills |
-| **BR-002** | Dual pricing **EGP Egyptian + Foreigner** visible on every trip card with no extra click | `PriceBadge.jsx`, `DualPriceSummary.jsx`, `priceCalculator.js`. Unified badge if `price_egp === price_foreign` (e.g. Matrouh `400 EGP`) |
-| **BR-003** | Water Bike **max 2 units / slot** | `capacityValidator.js`, `LimitedSeatsBadge.jsx` |
-| **BR-004** | **130 kg** max; swimming **not** required (life jackets provided); children with an adult | `constants.js`, `SafetyRulesBox.jsx` |
-| **BR-005** | Products: Kayak, SUP, Water Bike. Hubs: Aswan (primary), Matrouh, Giza, Siwa (seasonal). Baseline: Aswan Private Kayak `850` / `275`; Open Kayak `500` / `180`; SUP `650` / `350`; Matrouh `400` unified. Add-ons: transport, photography | `activitiesData.js`, `addonsData.js`, `destinationsData.js` |
-| **BR-006** | B2C confirmed only after **online payment** | `StepOnlinePayment.jsx` |
-| **BR-007** | Free cancellation **≥ 24h**; else non-refundable | `cancellationPolicy.js`, Step 2 checkbox |
-| **BR-008** | B2B RFQ for groups **≥ 10** (universities, companies) | `B2BQuoteForm.jsx`, `MIN_B2B_GROUP_SIZE` |
-| **BR-009** | Admin dashboard **Admin-only** | `ProtectedRoute.jsx`, `features/admin-management/` |
-| **BR-010** | Guest checkout + post-booking password-only account prompt | `guest-checkout/*`, `PostBookingAccountPrompt.jsx` |
-| **NFR-007** | Failed payment keeps form state in `sessionStorage` | `useSessionStorage.js` |
-| **NFR-008** | No card data in storage or client state | payment UI |
-
-Contacts again: `+201550061006`, `duck.asw@gmail.com`. Roles: `Guest` \| `Buyer` \| `Admin`.
+| Rule ID | Domain Rule | Exact Engineering Requirement | Canonical File(s) |
+| :--- | :--- | :--- | :--- |
+| **`BR-001`** | **Daylight Hours Only** | Operating slots strictly **Sunrise to Sunset**; future dates only (`>= today`). | `src/entities/booking/lib/timeSlots.js` |
+| **`BR-002`** | **Simultaneous Dual Pricing** | Both Egyptian (`EGP`) and Foreigner prices visible on every card without extra clicks. | `src/entities/activity/ui/PriceBadge.jsx`<br>`src/entities/booking/lib/priceCalculator.js` |
+| **`BR-003`** | **Water Bike Cap (`Max = 2`)** | Strictly **2 units per slot**; show scarcity badge and block `egyptian_count + foreigner_count > 2`. | `src/entities/booking/lib/capacityValidator.js`<br>`src/entities/activity/ui/LimitedSeatsBadge.jsx` |
+| **`BR-004`** | **Safety & Eligibility** | Max weight **130 kg**; **no swimming required** (life jackets mandatory & provided); adults accompany children. | `src/shared/config/constants.js`<br>`src/widgets/safety-rules/SafetyRulesBox.jsx` |
+| **`BR-005`** | **Approved Lineup & Prices** | Core: **Kayak**, **SUP** (with beginner guide), **Water Bike**. Primary hub: **Aswan** (*Aswan Island / Makani Café*, *Gharb Soheil / Al-Shima Beach*); Seasonal: **Matrouh**, **Giza/Cairo**, **Siwa**.<br>• Aswan Private Kayak: `850 EGP` (Foreigner) \| `275 EGP` (Egyptian)<br>• Aswan Open Kayak: `500 EGP` (Foreigner) \| `180 EGP` (Egyptian)<br>• Aswan SUP: `650 EGP` (Foreigner) \| `350 EGP` (Egyptian)<br>• Matrouh Trips: `400 EGP` (Unified) | `src/entities/activity/model/activitiesData.js`<br>`src/entities/addon/model/addonsData.js` |
+| **`BR-006`** | **Online Payment Formula** | $\text{Total} = (\text{Count}_{\text{EG}} \times \text{Price}_{\text{EG}}) + (\text{Count}_{\text{Foreign}} \times \text{Price}_{\text{Foreign}}) + \text{Addons}$ | `src/entities/booking/lib/priceCalculator.js` |
+| **`BR-007`** | **24h Free Cancellation** | 100% refund if canceled `>= 24h` prior; non-refundable `< 24h` or no-show. Mandatory checkbox in Step 2. | `src/entities/booking/lib/cancellationPolicy.js` |
+| **`BR-008`** | **B2B Group RFQ (`>= 10`)** | Dedicated `/b2b` RFQ flow for universities, scouts, corporate events (`group_size >= 10`) + WhatsApp handoff. | `src/features/b2b-quote/ui/B2BQuoteForm.jsx` |
+| **`BR-009`** | **Admin Role Restriction** | `/admin/*` restricted to `Role === 'Admin'`. | `src/app/routes/ProtectedRoute.jsx` |
+| **`BR-010`** | **Guest Checkout + 1-Tap Prompt** | Zero pre-login required; show 1-tap password-only Account Creation Card immediately on booking confirmation. | `src/features/post-booking-account/ui/PostBookingAccountPrompt.jsx` |
 
 ---
 
 ## 9. Definition of Done (Self-Check Checklist for Agents)
 
-After every task, verify:
-
-- [ ] **Pre-flight:** `AGENTS.md` + SRS consulted; no invented prices/contacts/logo/colors.
-- [ ] **Architecture:** Imports downward only; math in `entities/*/lib/`; nothing new in `src/components/`.
-- [ ] **Granularity & names:** UI files ≤ ~150 lines, pages ≤ ~100, names match Section 6.
-- [ ] **DRY:** Repeated UI extracted to `shared/ui` or `entities/*/ui`.
-- [ ] **Visual:** Editorial Marine (soft shadow, hairline teal border, 20–24px radius, glass, yellow as accent). Matches Duck identity (`#121528` / `#067BA1` / `#F5E847`) and `Final_4.html` — not cartoon brutalism.
-- [ ] **Mobile 360px+:** No horizontal scroll, 48–56px targets, safe-area sticky booking bar, swipe carousels.
-- [ ] **Booking:** 3-step guest flow < 45s; dual EG/Foreign steppers; 3 required fields; payment Success/Fail/Pending with session restore; optional password-only account prompt.
-- [ ] **RTL/LTR:** Logical CSS; AR/EN mirror without shift.
-- [ ] **Domain:** Dual prices on cards, Water Bike cap 2, 130 kg, 24h cancel, B2B ≥ 10, `/admin` guarded.
-- [ ] **Docs:** `.md` files updated if architecture or rules changed.
-- [ ] **Quality:** `npm run lint` and `npm run build` with **zero** warnings/errors.
-
-If any box fails, the task is not done.
+- [ ] **Architecture & Boundaries:** Imports strictly flow downward (`pages -> layouts -> widgets -> features -> entities -> shared`); business math lives only in `entities/*/lib/`; zero files added to legacy `src/components/`.
+- [ ] **Visual Identity & Aesthetic:** Exact brand palette (`#121528`, `#067BA1`, `#F5E847`) preserved with refined Nile & Sea depth (no Neo-Brutalist thick black borders or hard offset shadows).
+- [ ] **Mobile-First UX & 45s Booking Flow:** Verified at `360px` mobile width first; tap targets `>= 48px`; sticky bottom bar active; Step 1 (quick dates/slots/steppers), Step 2 (3 fields), and Step 3 (payment + post-booking prompt) seamless.
+- [ ] **Granularity & DRY:** UI components `< 150` lines, pages `< 100` lines; repeated patterns extracted to `src/shared/ui/` or `src/entities/*/ui/`.
+- [ ] **Bilingual `RTL`/`LTR` & Security:** CSS Logical Properties used exclusively; `/admin/*` protected; zero card numbers stored; `sessionStorage` preserved on payment failure.
+- [ ] **Living `.md` Documentation Sync:** `AGENTS.md`, `README.md`, `duck_entertainment_comprehensive_project_brief_srs_for_vibe_coding.md`, and `docs/` updated immediately if any rule or structure changed.
+- [ ] **Build & Lint Verification:** `npm run lint` and `npm run build` pass with **0 errors and 0 warnings**.
