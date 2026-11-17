@@ -1,30 +1,39 @@
-# DUCK Entertainment — Comprehensive Project Brief & Engineering Specification
+# DUCK Entertainment — Comprehensive Project Brief & Engineering Specification (SRS v3.1)
 
-> **Purpose of this Document:** This file is the single source of truth for building the **DUCK Entertainment Frontend Web Application**. It consolidates the approved IEEE 29148 Software Requirements Specification (SRS v3.0), the Marketing & Brand Brief, UX User Flows, Business Rules, Pricing, Brand Identity, and Technical Constraints into a structured format optimized for AI coding agents and developers.
+> **Purpose of this Document:** This file is the single source of truth for building the **DUCK Entertainment Multi-Provider Water Activities Platform (`duckegy.com`)**. It consolidates IEEE 29148 Software Requirements Specification (SRS v3.1), **Client Strategic Direction (`DUCK____Answers___Strategic_Direction.pdf`)**, UX User Flows, 6-Role RBAC Permissions, Equipment Inventory Rules, Hybrid B2B Packages, Analytics Funnel Events, Brand Identity, and Technical Constraints.
 
 ---
 
-## 1. Project Overview & Context
+## 1. Project Overview, Strategic Priorities & Production Safeguard
 
-- **Project Name:** DUCK Entertainment (`duckegy.com`) — Water Activities & Nile Experiences Booking Platform
+- **Project Name:** DUCK Entertainment (`duckegy.com`) — Integrated Egypt Water Activities & Marine Experiences Platform (B2C + B2B + Multi-Provider)
 - **Brand Tagline / Promise:** `IN DUCK WE TRUST`
 - **Track / Initiative:** Tech & Web Track — CreativeZ / Dandara Al Ebdaa (12 Nov – 3 Dec 2026)
-- **Technical Scope:** **Frontend Web Application ONLY** (React/Next.js/Vite or clean modular HTML/CSS/JS ready for client backend integration).
-  - **Included:** Customer/Buyer Frontend (B2C), Corporate/Groups Frontend (B2B RFQ), and Admin Dashboard Frontend (`/admin`).
-  - **Out of Scope:** Building backend servers from scratch, coding a payment processor from scratch, building native iOS/Android apps, or altering the brand's visual identity.
-- **Core Objective:** Redesign and rebuild the frontend of `duckegy.com` (which already serves ~3,000 booked customers) to fix current UX/copy flaws, clarify dual pricing (Egyptian vs. Foreigner), enable frictionless **Guest Checkout** with online payment, capture high-value **B2B group leads**, and provide a clean **Admin UI**—maximizing conversions from social media traffic (especially Instagram & TikTok on mobile).
+- **Strategic Direction (Not Just a Redesign):** Build an integrated Egyptian platform for water activities supporting **B2C**, **B2B**, and **code-free addition of new Service Providers, Destinations, and Activities** from the Control Panel.
+- **Approved Priority Order:**
+  1. **Conversion Rate Optimization (CRO)**
+  2. **Booking Experience**
+  3. **Performance & SEO**
+  4. **Provider Management**
+  5. **Scalability**
+  6. **Analytics & Data-Driven Decisions**
+- **Technical Scope:** **Frontend Web Application** (B2C Buyer, B2B Groups, and 6-Role RBAC Portals `/admin`, `/portal`, `/my-bookings`, ready for backend integration).
+  - **Out of Scope:** Building backend servers from scratch, storing raw card numbers, or altering the **live `duckegy.com` site, database, OS, or hosting before auditing current infrastructure and creating + testing a full Backup & Recovery plan**.
+- **Core Objective:** Preserve ~3,000 existing customers' operational continuity while fixing UX/copy flaws, enforcing transparent dual pricing (`EGP` accounting base), enabling frictionless **Guest Checkout** + QR digital tickets, enforcing **Inventory & Availability (`Kayak: 20`, `Water Bike: 2`)**, capturing **Hybrid B2B packages + RFQ**, and running complete conversion analytics (`GA4`, `GTM`, `Meta Pixel`, `Meta CAPI`).
 
 ---
 
 ## 2. Brand Identity, Visual System & Tone of Voice
 
 ### 2.1 Visual Identity (STRICT — Do Not Alter)
-- **Logo:** Yellow stylized duck icon flanked by blue water waves + `DUCK Entertainment` wordmark.
+- **Logo:** Official DUCK logo (`logo-transparent.png`) without redesign or replacement.
 - **Approved Color Palette:**
-  - **Primary Accent / Brand Yellow:** `#F5E847` (High energy, CTAs, highlights, badges)
-  - **Secondary / Nile Teal-Blue:** `#067BA1` (Water theme, links, secondary buttons, accents)
-  - **Dark Navy / Charcoal Base:** `#121528` (Primary text, dark headers, footer, contrast base)
-  - **Backgrounds:** Clean white (`#FFFFFF`) and soft off-white/light sand surfaces for calm readability (ensure minimum `4.5:1` WCAG contrast ratio).
+  - **Primary Accent / Brand Yellow:** `#F5E847` *(Client PDF brief swatch ref: `#FDFB45`)*
+  - **Secondary / Nile Teal-Blue:** `#067BA1` *(Client PDF brief swatch ref: `#147D9F`)*
+  - **Dark Navy / Charcoal Base:** `#121528` *(Client PDF brief swatch ref: `#0C1226`)*
+  - **Real Media Rule:** **Use real photography from DUCK's actual operations only** (no generic stock or invented visuals).
+  - **Design Direction:** **Premium, Minimal & Modern** (Editorial Marine aesthetic: fast, clear pricing, subtle purposeful micro-animations — **zero heavy visual effects that hurt speed or booking simplicity**). Reference: `../FinalDesign/Final_4.html`.
+- **Backgrounds:** Crisp white (`#FFFFFF`) and soft sea-mist surfaces (`#F3FAFC` / `#F7FBFD`) with minimum `4.5:1` WCAG contrast.
 - **Typography:**
   - **English Primary / Display:** `Berlin Sans FB Demi Bold` (or clean rounded geometric display fallback if font file isn't loaded locally) + clean sans-serif body (`Inter` / `Plus Jakarta Sans`).
   - **Monospace / Codes / Refs:** `Consolas Bold` (for booking references, prices, badges).
@@ -92,17 +101,19 @@
 
 - **`BR-001` Operating Hours:** All water activities operate daily during daylight hours **from Sunrise to Sunset only**. Time slot selectors must only display valid Sunrise-to-Sunset slots.
 - **`BR-002` Dual Pricing Display:** Fixed dual pricing (Egyptian citizen rate vs. Foreigner rate) applies. **Both prices must be visible simultaneously** on every activity card without requiring extra clicks.
-- **`BR-003` Water Bike Capacity Cap:** Maximum capacity for **Water Bike** is **2 units total per time slot**. The UI must block selecting more than 2 and display a clear availability alert.
+- **`BR-003` Equipment Capacity & Slot Availability Engine (`Inventory`):**
+  - Known fleet capacities: **Kayak = `20` units**, **Water Bike = `2` units (`وحدتان`)**, **SUP = configurable pre-launch fleet count**.
+  - An **Inventory & Availability Engine** must track slot reservations, block overbooking/conflicts (`Water Bike` capped strictly at `2`), and allow setting/updating capacity **per Service Provider, per Activity, and per Time Slot** via the Control Panel.
 - **`BR-004` Safety & Eligibility Rules:**
   - Maximum participant weight: **130 kg**.
   - **Swimming skills are NOT required** (certified life jackets are mandatory and provided for all participants).
   - Children must be accompanied by an adult.
-- **`BR-005` Product Lineup:** Core activities are strictly **Kayak**, **SUP**, and **Water Bike** across approved destinations.
-- **`BR-006` Mandatory Online Payment for B2C:** Individual bookings are confirmed only upon completing **Online Payment** via the payment gateway flow.
-- **`BR-007` Cancellation & Refund Policy:** **Free cancellation and 100% full refund** if canceled at least **24 hours** before the activity start time. Non-refundable if canceled less than 24 hours prior or in case of no-show.
-- **`BR-008` B2B Group Bookings:** Large groups, universities, scouts, and corporate events (`>= 10` participants) are handled via a dedicated **B2B RFQ Form**.
-- **`BR-009` Admin Role Restriction:** Access to `/admin` routes, booking status management, and trip/pricing edits is strictly restricted to users with the `Admin` role.
-- **`BR-010` Guest Checkout + Post-Booking Account Prompt:** Users **must NOT be forced to register or log in** to book and pay (`Guest Checkout`). Immediately *after* submitting their info and completing booking/payment, display a prominent, friendly card/modal inviting them to **create an account in 1 click** (by simply setting a password using their already-entered name, email, and phone) to track their booking status in real time.
+- **`BR-005` Product Lineup & Code-Free Expansion:** Core activities are **Kayak**, **SUP**, and **Water Bike** across approved destinations (plus optional Add-ons: Transportation, Photography). Admin/Providers must be able to add new activities, destinations, and providers from the Control Panel without editing source code.
+- **`BR-006` Mandatory Online Payment & `EGP` Accounting Base:** Individual B2C bookings are confirmed upon completing Online Payment. **All payments, accounting, and ledger records are settled in `EGP`**. `USD` / `EUR` may be displayed strictly as **indicative estimates** without changing the settlement currency.
+- **`BR-007` Cancellation Policy & 6-State Booking Lifecycle:** Free 100% refund if canceled `>= 24 hours` before start time (non-refundable `< 24h` or no-show), displayed clearly before payment. System must support all 6 statuses: `Pending`, `Confirmed`, `Paid`, `Completed`, `Cancelled`, `Refunded`.
+- **`BR-008` Hybrid B2B Group Packages & Custom RFQ (`>= 10`):** Combine **(1) Ready-Priced Tiered Packages** for standard recurring groups with **(2) Custom Request a Quote (RFQ)** across all 6 B2B partner segments: **Companies, Schools & Universities, Hotels, Tour Guides, Tour Operators, and Events & Occasions** — supporting partner-specific pricing, commissions, and contract terms.
+- **`BR-009` 6-Role RBAC & Custom Per-User Permissions:** Access Control enforces permissions across **Customer (`Guest` / `Buyer`)**, **Admin**, **Service Provider / Partner**, **Operations Team**, **Tour Guide / Agent**, and **Content Manager**, with per-user permission customization.
+- **`BR-010` Guest Checkout, QR Confirmation & 1-Tap Account Prompt:** Zero pre-login required. Post-payment screen delivers instant confirmation, Booking Ref (`DUCK-2026-XXXX`), activity/slot/location/count/arrival details, **Digital QR Code**, WhatsApp & Email confirmations, `/my-bookings` management page, and 1-tap password-only account creation.
 
 ---
 
@@ -135,35 +146,40 @@
      - Displays **Booking Reference ID** (e.g., `DUCK-2026-8492`), **Digital QR Code Ticket**, trip summary, Google Maps link, and a 1-click **"Send Ticket to WhatsApp"** button.
      - **Post-Booking Account Creation Card:** *"Want to track your booking updates & manage your ticket anytime? Create your account in 5 seconds!"* — Pre-fills Name, Email, and Phone; user just enters a **Password** and clicks **Create Account**, unlocking `/my-bookings`.
 
-### 7.2 B2B Corporate & Groups Flow (`/groups` or `/b2b`)
-- **Value Proposition for Organizers:** Operational readiness, group rotation schedules, certified life jackets, dedicated supervisors, and past group highlights.
-- **B2B RFQ Form:**
-  - Organization / University / Company Name (Required)
-  - Contact Person Name (Required)
-  - Phone / WhatsApp Number (Required)
-  - Activity Type (`Kayak` / `SUP` / `Water Bike` / `Mixed Event`)
-  - Destination
-  - Expected Group Size (`>= 10` participants, Required)
-  - Preferred Date & Notes
-- **Confirmation:** Generates a `Quote Reference ID` + instant button to message the B2B sales coordinator on WhatsApp.
+### 7.2 Hybrid B2B Packages & Custom Groups Flow (`/groups` or `/b2b`)
+- **Dual B2B Offering:**
+  1. **Ready Tiered Packages:** Fixed transparent per-group/per-person rates for recurring group bands (e.g., `10–24`, `25–49`, `50+` participants).
+  2. **Custom RFQ Form:** Tailored proposals for large groups & private events supporting **Companies, Schools & Universities, Hotels, Tour Guides, Tour Operators, Events & Occasions**, with custom pricing, partner commissions (`%`), and contract terms.
+- **Required Fields & Confirmation:** Organization Name, Contact Person, WhatsApp Phone, Partner Type, Activity (`Kayak`/`SUP`/`Water Bike`/`Mixed`), Destination, Group Size (`>= 10`), Date & Notes ➔ generates `Quote Reference ID` + WhatsApp handoff (`Lead Submission` event).
 
-### 7.3 Admin Dashboard Frontend (`/admin`)
-- **Route Guard (`NFR-004`):** Protected route; unauthenticated users or `Buyer` accounts are redirected to `/admin/login`. (Include a clear demo role-switcher or mock admin login credentials for testing/presentation).
-- **KPI Overview Cards:** Total Bookings, Today's Bookings (Sunrise–Sunset schedule), Total Revenue (`EGP`), and Pending B2B Quote Requests.
-- **Bookings Management Table:**
-  - Columns: `Booking Ref`, `Customer Name & Phone`, `Activity & Destination`, `Date & Time Slot`, `Ticket Breakdown (EG / Foreign)`, `Total Amount`, `Payment Status` (`Paid` / `Pending` / `Failed`), `Booking Status` (`Confirmed` / `Completed` / `Cancelled`).
-  - Features: Search by Booking Ref/Name, filter by Date/Destination/Status, view QR/details drawer, and update Booking Status.
-- **B2B Quotes Tab:** View incoming group RFQs, group size, organization details, and update lead status (`New` / `Quoted` / `Confirmed`).
-- **Trips & Pricing Manager:** Ability to toggle activity availability, edit Egyptian/Foreigner prices, and verify equipment capacity limits (e.g., Water Bike = `2`).
+### 7.3 Role-Based Portals & Classic Sidebar Control Panels (`/login`, `#/portal/:role`, `/my-bookings`)
+- **Split-Screen 2-Role Public Auth (`NFR-004`):** The public login/sign-up screen uses a split-screen layout restricted strictly to **2 public account types** (`Customer` and `Partner`). **No public RBAC role-switcher or staff cards** may be exposed on public pages.
+- **Password-Only Direct Staff Routes:** Internal/staff roles (`Admin`, `Operations`, `TourGuide`, `ContentManager`, `B2B`) authenticate exclusively via dedicated direct URLs (`#/portal/admin`, `#/portal/ops`, `#/portal/guide`, `#/portal/content`, `#/portal/b2b`) presenting an isolated password-only gate without public navigation chrome.
+- **Classic Sidebar Dashboard (`RTL`/`LTR` Adaptive):** All authenticated portals render in a classic vertical-sidebar shell positioned automatically by reading direction (**Right** in Arabic `RTL`, **Left** in English `LTR`), enforcing `can(permission)` via `AuthProvider` and `ProtectedRoute`:
+  - **Customer (`Buyer`):** `/my-bookings` to track bookings, payment status, digital **QR Code**, arrival info & cancellation rules.
+  - **Admin:** Full Control Panel (KPIs: Bookings, Today's Schedule, `EGP` Revenue, Attribution Source, Pending B2B Quotes; 6-status Bookings table; B2B Quotes & Partner Commissions; Code-Free Activities/Prices/Providers/Destinations Manager; **Equipment Inventory & Slot Availability Matrix**; **User Role & Custom Permission Editor**).
+  - **Service Provider / Partner:** Strictly scoped to own activities, agreed pricing, own slot capacity, and own bookings.
+  - **Operations Team:** Booking verification, `Confirmed -> Completed` transitions, and slot/fleet availability control.
+  - **Tour Guide / Agent:** Create & track customer/group booking requests and B2B leads within granted permissions.
+  - **Content Manager:** Manage activity descriptions, destination copy, real DUCK photography, and offers with financial/user admin controls blocked.
 
 ---
 
 ## 8. Data Models & Schema (Frontend State / API Contract)
 
 ```typescript
-export type Role = 'Guest' | 'Buyer' | 'Admin';
+export type Role =
+  | 'Guest'
+  | 'Customer'
+  | 'Admin'
+  | 'Partner'
+  | 'Operations'
+  | 'TourGuide'
+  | 'ContentManager';
 export type ActivityCategory = 'Kayak' | 'SUP' | 'WaterBike';
-export type Currency = 'EGP' | 'USD' | 'EUR';
+export type Currency = 'EGP' | 'USD' | 'EUR'; // EGP is accounting/payment base; USD/EUR indicative only
+export type Locale = 'ar' | 'en'; // Modular i18n ready for 'de' | 'fr' | 'ru'
+export type BookingStatus = 'Pending' | 'Confirmed' | 'Paid' | 'Completed' | 'Cancelled' | 'Refunded';
 
 export interface Activity {
   id: string;
@@ -236,18 +252,31 @@ export interface B2BQuote {
   - Instagram (Primary Booking Channel)
   - Facebook
   - TikTok
-- **Analytics & Tracking Containers:** Include clean placeholder hooks/scripts in `<head>` for **Meta Pixel ID** and **Google Analytics (GA4)** so marketing tracking IDs can be dropped in effortlessly.
+- **Analytics & Conversion Attribution Stack (`GA4` + `GTM` + `Meta Pixel` + `Meta CAPI`):** Track actual bookings, EGP sales value, and source attribution across all 8 required events:
+  1. `Page View` (`page_view`)
+  2. `View Activity` (`view_activity`)
+  3. `Search` (`search`)
+  4. `Initiate Booking` (`initiate_booking`)
+  5. `Add Booking Details` (`add_booking_details`)
+  6. `Initiate Checkout` (`initiate_checkout`)
+  7. `Purchase / Successful Booking` (`purchase`)
+  8. `Lead Submission` (`lead_submission`)
 
 ---
 
 ## 10. Non-Functional & Quality Checklist (Acceptance Criteria)
 
-- [ ] **Mobile-First Responsive & UI/UX Excellence (`360px+` — TOP PRIORITY):** Flawless, native-feeling mobile experience (`360px–430px`), tablet (`768px+`), and desktop (`1280px+`) layout with `>= 44px × 44px` touch targets, `>= 16px` mobile form inputs (preventing iOS auto-zoom), zero horizontal scroll overflow, and a persistent sticky bottom CTA bar on mobile activity/booking pages.
-- [ ] **Bilingual & Bidirectional (`EN` LTR / `AR` RTL):** Instant language toggle that mirrors layout direction, typography, and currency formatting cleanly.
-- [ ] **Dual Pricing Visibility (`AC-01`):** Every trip card clearly displays both Egyptian and Foreigner prices with zero text overlap or typos.
-- [ ] **Water Bike Scarcity Enforcement (`AC-02`):** Attempting to book `> 2` units for Water Bike in a single slot is blocked with a clear notice.
-- [ ] **Frictionless Guest Checkout + Post-Booking Account Prompt (`AC-03`):** Complete booking and simulated online payment without logging in, followed immediately by the 1-click password setup prompt to track the booking.
-- [ ] **Payment Failure Resilience (`AC-04`):** Simulated payment failure retains all user input in session state and allows immediate retry.
-- [ ] **Zero Card Data Storage (`NFR-008`):** Never store credit card numbers in `localStorage` or frontend state; pass payment intent cleanly to the payment gateway screen.
-- [ ] **Admin Route Protection (`AC-06`):** `/admin` routes are guarded and inaccessible to guests or standard buyers.
+- [ ] **Mobile-First Responsive & UI/UX Excellence (`309px–430px` — TOP PRIORITY):** Flawless, native-feeling mobile experience down to narrow viewports (`309px`), tablet (`768px+`), and desktop (`1280px+`) layout:
+  - **Single Clean Navbar on Mobile:** Hide the dark utility header (`.top`) on mobile; keep exclusively the sleek white bar (`.nr`, height ~52px) with Logo, Book CTA, and hamburger menu. Language, currency, and weather are placed in `.mnav`.
+  - **Compact Sticky Dock (`.dock`):** Height minimized to ~42–45px (font 10px, icons 14px, central CTA button 40px) to maximize content view.
+  - **Compact Cards & Truncation-Free Text:** Review card (`.rf`) author metadata, date, trip name, and Google badge aligned in a single ~45px row without multi-line stretching; map destination cards (`.mp-mini`) wrap cleanly on 2 lines with thumbnails and badges without ugly `...` cutoff.
+  - **Enterprise 4-Column Footer (`footer.ftr`):** Comprehensive responsive footer featuring brand bio, social channels, quick links, active hubs, WhatsApp/phone/email contacts, and safety badges.
+  - **Font Awesome 6.5.2 Standard:** All icons (dock, mobile menu, floating WhatsApp, story reviews, close buttons, password eyes, and dashboard tabs) use vector Font Awesome icons.
+  - Touch targets `>= 44px × 44px`, form inputs `>= 16px` (preventing iOS auto-zoom), zero horizontal scroll overflow.
+- [ ] **Bilingual & Bidirectional (`EN` LTR / `AR` RTL -> `DE`/`FR`/`RU` ready) + `EGP` Accounting Base:** Instant language toggle mirroring direction and showing `USD`/`EUR` strictly as indicative values while preserving `EGP` settlement.
+- [ ] **Dual Pricing & Equipment Inventory (`AC-01`, `AC-02`):** Both prices clearly visible; slot availability engine enforces **Kayak = 20**, **Water Bike = 2**, and configurable **SUP** caps per provider/slot.
+- [ ] **Frictionless Guest Checkout, QR Ticket & 1-Tap Prompt (`AC-03`):** Complete booking without login; instant confirmation shows Ref, QR Code, arrival details, WhatsApp/Email actions, all 6 lifecycle statuses, and 1-tap password-only account setup.
+- [ ] **Payment Failure Resilience & Security (`AC-04`, `NFR-008`):** Retain form inputs in `sessionStorage` on failure; never store card numbers.
+- [ ] **6-Role RBAC & Custom Permissions (`AC-06`):** Customer, Admin, Partner, Operations, Tour Guide/Agent, and Content Manager portals strictly enforce capability guards and allow per-user permission overrides.
+- [ ] **Hybrid B2B & 8-Event Funnel (`AC-07`):** Ready tiered group packages + Custom RFQ for all 6 partner segments; all 8 analytics events wired for GA4/GTM/Meta Pixel/CAPI.
 - [ ] **Living `.md` Documentation Synchronization:** Any architectural update or newly discovered engineering/business rule must be updated immediately across all `.md` files (`AGENTS.md`, `README.md`, `duck_entertainment_comprehensive_project_brief_srs_for_vibe_coding.md`, and `docs/`).

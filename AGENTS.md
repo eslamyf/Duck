@@ -1,9 +1,9 @@
 # DUCK Entertainment (`duckegy.com`) — AI Coding Agent Constitution & Architecture Blueprint (`AGENTS.md`)
 
 > **Authority Level:** **MANDATORY & NON-NEGOTIABLE**  
-> **Project:** DUCK Entertainment — Water Activities & Nile Experiences Booking Platform (`IN DUCK WE TRUST`)  
-> **Engineering Standard:** IEEE 29148 SRS v3.0 + Feature-Sliced Clean Architecture (React 19 + Vite 8)  
-> **Visual Reference:** [`../Final_4.html`](../Final_4.html) (Refined Nile & Sea Editorial Aesthetic)
+> **Project:** DUCK Entertainment — Egypt Marine & Water Activities Platform (`IN DUCK WE TRUST`, B2C + B2B + Multi-Provider)  
+> **Engineering Standard:** IEEE 29148 SRS v3.1 (`DUCK____Answers___Strategic_Direction.pdf` Synchronized) + Feature-Sliced Clean Architecture (React 19 + Vite 8)  
+> **Visual Reference:** [`../FinalDesign/Final_4.html`](../FinalDesign/Final_4.html) (Premium, Minimal & Modern — Editorial Marine Aesthetic)
 
 ---
 
@@ -15,18 +15,19 @@ Every AI coding agent, subagent, or automated workflow operating in this reposit
    - Read this `AGENTS.md` file in full.
    - Cross-reference every business requirement, user flow, data contract, and acceptance criterion against [`duck_entertainment_comprehensive_project_brief_srs_for_vibe_coding.md`](./duck_entertainment_comprehensive_project_brief_srs_for_vibe_coding.md) and [`README.md`](./README.md).
 2. **Strict Brand Identity Lock (Zero Hallucination):**
-   - **NEVER** alter Duck's official logo, typography direction, or exact color palette:
-     - **Deep Navy / Charcoal Base (Primary Text / Dark Headers / Footer):** `#121528` (`--color-navy`)
-     - **Nile / Sea Teal-Blue (Secondary / Water Theme / Links / Borders):** `#067BA1` (`--color-blue`)
-     - **Sunburst Yellow (Primary Sunlight Accent / High-Contrast CTAs / Egyptian Price Pills):** `#F5E847` (`--color-yellow`)
+   - **NEVER** alter Duck's official logo (`logo-transparent.png`), typography direction, or exact official brand color palette:
+     - **Deep Navy / Charcoal Base (Primary Text / Dark Headers / Footer):** `#121528` (`--color-navy`; PDF brief swatch ref: `#0C1226`)
+     - **Nile / Sea Teal-Blue (Secondary / Water Theme / Links / Borders):** `#067BA1` (`--color-blue`; PDF brief swatch ref: `#147D9F`)
+     - **Sunburst Yellow (Primary Sunlight Accent / High-Contrast CTAs / Egyptian Price Pills):** `#F5E847` (`--color-yellow`; PDF brief swatch ref: `#FDFB45`)
      - **Surfaces:** Crisp white (`#FFFFFF`), soft sea-mist tint (`#F3FAFC` / `#F7FBFD`), with minimum `4.5:1` WCAG contrast ratio.
-   - **NEVER** invent unapproved activities, fake prices, locations, or contact details. Use only the official contact details (`+201550061006`, `https://wa.me/201550061006`, `duck.asw@gmail.com`) and approved baseline pricing in Section 8.
+   - **NEVER** invent unapproved activities, fake prices, stock/AI photos, locations, or contact details. Use only real DUCK operational photography, official contact details (`+201550061006`, `https://wa.me/201550061006`, `duck.asw@gmail.com`), and approved baseline pricing/capacities in Section 8.
    - **NO Background Music:** Never embed auto-playing audio or background music in any video or promotional asset (`SRS §2.2`).
-3. **Inspect Before Creating (Reuse First):**
-   - Always verify existing components in `src/shared/ui/`, `src/entities/*/ui/`, `src/features/`, and `src/widgets/` before creating new ones.
-   - **Legacy Folder Deprecation (`src/components/`):** The `src/components/` directory (`buyer/BookingModal.jsx`, `buyer/GuestCheckout.jsx`, `common/Footer.jsx`, `common/LanguageCurrencySwitcher.jsx`, `common/Navbar.jsx`) is a **deprecated legacy directory** superseded by the Feature-Sliced Clean Architecture folders (`src/widgets/`, `src/features/`, `src/entities/`). **NEVER** add new code to `src/components/`; all implementations belong in their canonical FSD / Clean Architecture slices.
-4. **Scope Enforcement:**
-   - This repository is strictly a **Frontend Web Application** (B2C Buyer Flow, B2B Corporate RFQ Flow, and `/admin` Dashboard UI). Do not build backend servers from scratch, do not store raw credit card numbers (`NFR-008`), and route all data through `src/shared/api/` and `src/entities/*/api/`.
+3. **Inspect Before Creating (Reuse First — Zero Duplication):**
+   - Always inspect existing code, styles, and shared/entity components (`src/shared/ui/`, `src/entities/*/ui/`, `src/features/`, `src/widgets/`) before creating new code so duplicate utilities/components are never introduced (per Client Strategic Direction §03).
+   - **Legacy Folder Deprecation (`src/components/`):** The `src/components/` directory is a **deprecated legacy directory** superseded by FSD folders (`src/widgets/`, `src/features/`, `src/entities/`). **NEVER** add new code to `src/components/`.
+4. **Scope & Production Preservation Enforcement:**
+   - DUCK is a full **multi-provider Egypt water activities platform** supporting B2C, B2B (tiered packages + custom RFQ), and dynamic addition of new providers and destinations without editing code.
+   - This repository is strictly the **Frontend Web Application** (connecting via `src/shared/api/` contracts). **NEVER** store raw credit card numbers (`NFR-008`), and **NEVER** alter the live production site database, OS, or hosting before auditing current infrastructure and creating & testing a verified **Backup & Recovery Plan** (Client Strategic Direction p.4).
 5. **Living Documentation & Immediate `.md` Synchronization Rule:**
    - Whenever any architectural update, visual token change, package update, directory adjustment, new component/route addition, or important new engineering/business rule is introduced or discovered, the agent **MUST immediately update all Markdown (`.md`) files across the repository** (`AGENTS.md`, `README.md`, `duck_entertainment_comprehensive_project_brief_srs_for_vibe_coding.md`, and any files under `docs/`) in the same task so all documentation remains 100% synchronized.
 6. **Mobile-First Experience & UI/UX Obsession (Top Priority Mandate):**
@@ -193,19 +194,43 @@ src/
 
 ---
 
-## 7. Performance, Scalability & Bilingual RTL/LTR Standards
+## 7. Performance Budgets, Analytics Funnel, RBAC & Bilingual Standards
 
-- **Bundle & Rendering Performance (`NFR-001` — `< 2.5s` FCP on 4G):**
-  - Wrap `/admin/*`, `/b2b`, and secondary routes in `React.lazy()` + `<Suspense fallback={<Skeleton />}>` inside `AppRouter.jsx`.
-  - Memoize filtered activity grids and admin searches (`useMemo`, `useCallback`); debounce admin table search (`~250ms`).
+- **Strategic Priority Ranking (Client Direction):**
+  1. Conversion Rate Optimization (CRO) · 2. Booking Experience · 3. Performance & SEO · 4. Provider Management · 5. Scalability · 6. Analytics & Data-Driven Decisions.
+- **Performance Budgets (`NFR-001` — `< 2.5s` FCP on 4G):**
+  - Keep design **Premium, Minimal & Modern** with lightweight, GPU-composited **micro-animations** (`transform`, `opacity` only) — **never** add heavy visual effects at the expense of page load speed or booking simplicity.
+  - Wrap `/admin/*`, `/portal/*`, `/b2b`, and secondary routes in `React.lazy()` + `<Suspense fallback={<Skeleton />}>` inside `AppRouter.jsx`.
+  - Memoize filtered activity grids, inventory availability lookups, and table searches (`useMemo`, `useCallback`; debounce search `~250ms`).
   - Use `loading="lazy"`, `decoding="async"`, and explicit `aspect-ratio` on below-the-fold images; `fetchpriority="high"` on hero media.
-- **Bilingual (`AR`/`EN`) & CSS Logical Properties (`FR-009`):**
-  - **FORBIDDEN:** `margin-left`, `margin-right`, `padding-left`, `padding-right`, `text-align: left/right`, `left:`, `right:`, `border-left/right`.
-  - **REQUIRED:** `margin-inline-start/end`, `padding-inline-start/end`, `text-align: start/end`, `inset-inline-start/end`, `border-inline-start/end`.
-  - Render prices, phone numbers (`+201550061006`), and booking refs (`DUCK-2026-8492`) in monospace `Consolas` (`font-weight: 700`) with `dir="ltr"` / `unicode-bidi: isolate` so numbers never scramble in Arabic RTL.
-- **Security & State Safety (`NFR-004`, `NFR-007`, `NFR-008`):**
-  - Guard all `/admin/*` routes via `<ProtectedRoute allowedRoles={['Admin']}>`.
-  - Preserve failed-payment booking form inputs in `sessionStorage`; **NEVER** store raw credit card numbers, CVVs, or expiry dates anywhere in client state or storage.
+- **Analytics & Conversion Attribution Stack (`GA4` + `GTM` + `Meta Pixel` + `Meta CAPI`):**
+  - Emit structured events via `src/shared/lib/analytics.js` measuring real bookings, EGP revenue value, and traffic source:
+    1. `Page View` (`page_view`)
+    2. `View Activity` (`view_activity`)
+    3. `Search` (`search`)
+    4. `Initiate Booking` (`initiate_booking`)
+    5. `Add Booking Details` (`add_booking_details`)
+    6. `Initiate Checkout` (`initiate_checkout`)
+    7. `Purchase / Successful Booking` (`purchase`)
+    8. `Lead Submission` (`lead_submission`)
+- **Split-Screen 2-Role Public Auth, Password-Only Direct Staff Routes & 6-Role RBAC (`NFR-004`):**
+  - **Public `/login` Screen:** Split-screen layout exposing **only 2 public account types** (`Customer` / `Partner`). **NEVER** expose a public RBAC role-switcher modal or staff demo cards in customer-facing UI.
+  - **Direct Staff Gate:** Internal roles (`Admin`, `Operations`, `TourGuide`, `ContentManager`, `B2B`) authenticate strictly via dedicated direct URLs (`#/portal/admin`, `#/portal/ops`, `#/portal/guide`, `#/portal/content`, `#/portal/b2b`) with a minimal **password-only gate** and zero public navigation chrome.
+  - **Classic Sidebar Dashboard:** All role dashboards use a classic fixed/sticky **vertical sidebar layout aligned logically to language direction** (`Right` in Arabic `RTL`, `Left` in English `LTR`).
+  - Enforce granular permission checks (`can(permission)`) via `AuthProvider` and `ProtectedRoute` across all 6 client-mandated roles plus Guest Checkout:
+    1. **Customer (`Guest` / `Buyer`):** Browse, filter, guest/logged-in booking, online payment, QR ticket & `My Bookings` management.
+    2. **Admin:** Full platform governance (all bookings, customers, pricing, activities, providers, destinations, B2B commissions, content, inventory, and **customizing per-user permissions**).
+    3. **Service Provider / Partner:** Strictly scoped to **own** services, agreed prices, time slots, equipment capacity, and **own** bookings.
+    4. **Operations Team:** Booking execution tracking, `Confirmed -> Completed` transitions, time slot & equipment availability control (no global financial/admin edits).
+    5. **Tour Guide / Agent:** Create & track customer/group booking requests and B2B leads within granted permissions.
+    6. **Content Manager:** Manage copy, real DUCK photos, descriptions, and promotional offers **strictly without financial or sensitive administrative permissions**.
+- **Bilingual (`AR`/`EN` extensible to `DE`/`FR`/`RU`) & Accounting Currency (`EGP` Base):**
+  - Launch with full **Arabic (`RTL`)** and **English (`LTR`)** dictionaries structured modularly for future **German, French, and Russian** expansion.
+  - **Accounting Currency = `EGP`:** All payments, accounting records, and settlement amounts are in `EGP`; `USD` and `EUR` are strictly **indicative estimates** shown in UI without altering the `EGP` payment currency.
+  - **CSS Logical Properties Only:** Forbid `margin-left/right`, `padding-left/right`, `text-align: left/right`, `left/right`, `border-left/right`; exclusively use `margin-inline-start/end`, `padding-inline-start/end`, `text-align: start/end`, `inset-inline-start/end`, `border-inline-start/end`.
+  - Render prices, phone numbers (`+201550061006`), and booking refs (`DUCK-2026-8492`) in monospace `Consolas` (`font-weight: 700`) with `dir="ltr"` / `unicode-bidi: isolate`.
+- **Security & Payment Resilience (`NFR-007`, `NFR-008`):**
+  - Preserve failed-payment booking inputs in `sessionStorage`; **NEVER** store raw credit card numbers, CVVs, or expiry dates in client state or storage.
 
 ---
 
@@ -215,14 +240,16 @@ src/
 | :--- | :--- | :--- | :--- |
 | **`BR-001`** | **Daylight Hours Only** | Operating slots strictly **Sunrise to Sunset**; future dates only (`>= today`). | `src/entities/booking/lib/timeSlots.js` |
 | **`BR-002`** | **Simultaneous Dual Pricing** | Both Egyptian (`EGP`) and Foreigner prices visible on every card without extra clicks. | `src/entities/activity/ui/PriceBadge.jsx`<br>`src/entities/booking/lib/priceCalculator.js` |
-| **`BR-003`** | **Water Bike Cap (`Max = 2`)** | Strictly **2 units per slot**; show scarcity badge and block `egyptian_count + foreigner_count > 2`. | `src/entities/booking/lib/capacityValidator.js`<br>`src/entities/activity/ui/LimitedSeatsBadge.jsx` |
+| **`BR-003`** | **Equipment Inventory & Water Bike Cap** | Operational capacity: **Kayak = `20`**, **Water Bike = `2`**, **SUP = configurable pre-launch**; Inventory & Availability Engine blocks slot overbooking and lets Admin/Providers update capacity per provider, activity, and slot via UI. | `src/entities/booking/lib/capacityValidator.js`<br>`src/entities/activity/ui/LimitedSeatsBadge.jsx` |
 | **`BR-004`** | **Safety & Eligibility** | Max weight **130 kg**; **no swimming required** (life jackets mandatory & provided); adults accompany children. | `src/shared/config/constants.js`<br>`src/widgets/safety-rules/SafetyRulesBox.jsx` |
-| **`BR-005`** | **Approved Lineup & Prices** | Core: **Kayak**, **SUP** (with beginner guide), **Water Bike**. Primary hub: **Aswan** (*Aswan Island / Makani Café*, *Gharb Soheil / Al-Shima Beach*); Seasonal: **Matrouh**, **Giza/Cairo**, **Siwa**.<br>• Aswan Private Kayak: `850 EGP` (Foreigner) \| `275 EGP` (Egyptian)<br>• Aswan Open Kayak: `500 EGP` (Foreigner) \| `180 EGP` (Egyptian)<br>• Aswan SUP: `650 EGP` (Foreigner) \| `350 EGP` (Egyptian)<br>• Matrouh Trips: `400 EGP` (Unified) | `src/entities/activity/model/activitiesData.js`<br>`src/entities/addon/model/addonsData.js` |
-| **`BR-006`** | **Online Payment Formula** | $\text{Total} = (\text{Count}_{\text{EG}} \times \text{Price}_{\text{EG}}) + (\text{Count}_{\text{Foreign}} \times \text{Price}_{\text{Foreign}}) + \text{Addons}$ | `src/entities/booking/lib/priceCalculator.js` |
-| **`BR-007`** | **24h Free Cancellation** | 100% refund if canceled `>= 24h` prior; non-refundable `< 24h` or no-show. Mandatory checkbox in Step 2. | `src/entities/booking/lib/cancellationPolicy.js` |
-| **`BR-008`** | **B2B Group RFQ (`>= 10`)** | Dedicated `/b2b` RFQ flow for universities, scouts, corporate events (`group_size >= 10`) + WhatsApp handoff. | `src/features/b2b-quote/ui/B2BQuoteForm.jsx` |
-| **`BR-009`** | **Admin Role Restriction** | `/admin/*` restricted to `Role === 'Admin'`. | `src/app/routes/ProtectedRoute.jsx` |
-| **`BR-010`** | **Guest Checkout + 1-Tap Prompt** | Zero pre-login required; show 1-tap password-only Account Creation Card immediately on booking confirmation. | `src/features/post-booking-account/ui/PostBookingAccountPrompt.jsx` |
+| **`BR-005`** | **Approved Lineup & Dynamic Catalog** | Core: **Kayak**, **SUP**, **Water Bike**. Hubs: **Aswan** (*Aswan Island*, *Gharb Soheil*), **Matrouh**, **Giza**, **Siwa** — Admin/Providers can add activities, destinations & providers from Dashboard without code edits. | `src/entities/activity/model/activitiesData.js`<br>`src/entities/addon/model/addonsData.js` |
+| **`BR-006`** | **Online Payment & `EGP` Accounting** | $\text{Total} = (\text{Count}_{\text{EG}} \times \text{Price}_{\text{EG}}) + (\text{Count}_{\text{Foreign}} \times \text{Price}_{\text{Foreign}}) + \text{Addons}$ settled in **EGP** (`USD`/`EUR` indicative display only). | `src/entities/booking/lib/priceCalculator.js` |
+| **`BR-007`** | **24h Free Cancellation & Statuses** | 100% refund if canceled `>= 24h` prior; non-refundable `< 24h` or no-show; visible before payment. Support all 6 statuses: `Pending`, `Confirmed`, `Paid`, `Completed`, `Cancelled`, `Refunded`. | `src/entities/booking/lib/cancellationPolicy.js` |
+| **`BR-008`** | **Hybrid B2B Packages & RFQ (`>= 10`)** | Combine **Ready Group Packages** + **Custom RFQ** for Companies, Schools/Universities, Hotels, Tour Guides, Tour Operators & Events with partner-specific prices, commissions & terms. | `src/features/b2b-quote/ui/B2BQuoteForm.jsx` |
+| **`BR-009`** | **6-Role RBAC & Custom Permissions** | Restrict `/admin/*` & `/portal/*` by RBAC permissions across `Customer`, `Admin`, `Partner`, `Operations`, `Tour Guide/Agent`, `Content Manager` (with custom permission overrides per user). | `src/app/routes/ProtectedRoute.jsx`<br>`src/app/providers/AuthProvider.jsx` |
+| **`BR-010`** | **Guest Checkout + QR & 1-Tap Prompt** | Zero pre-login required; deliver instant confirmation, Booking Ref, **QR Code**, arrival info, WhatsApp/Email actions, and 1-tap password-only account setup to track `/my-bookings`. | `src/features/post-booking-account/ui/PostBookingAccountPrompt.jsx` |
+| **`BR-011`** | **Mobile Navbar Simplicity & FA Icons** | On mobile (`<= 900px`), display ONLY the clean single white navbar (`.nr`, height ~52px); hide dark `.top` bar and place utilities (lang, currency, weather) in `.mnav`; reduce bottom `.dock` to compact ~42-45px height; use Font Awesome 6.5.2 icons for all UI elements. | `src/widgets/navbar/Navbar.jsx`<br>`src/widgets/mobile-dock/MobileDock.jsx` |
+| **`BR-012`** | **Compact Cards & Enterprise Footer** | Review cards (`.rf`) must keep author metadata and badges in a single compact non-wrapping row (~45px) to prevent excessive vertical stretching; map destination cards (`.mp-mini`) must display thumbnail + badge + 2-line wrapped text without mid-word truncation; footer (`footer.ftr`) must follow 4-column responsive layout with social buttons, links, hubs, direct WhatsApp/phone contacts, and safety badges. | `src/widgets/reviews/ReviewCard.jsx`<br>`src/widgets/footer/Footer.jsx` |
 
 ---
 
@@ -232,6 +259,7 @@ src/
 - [ ] **Visual Identity & Aesthetic:** Exact brand palette (`#121528`, `#067BA1`, `#F5E847`) preserved with refined Nile & Sea depth (no Neo-Brutalist thick black borders or hard offset shadows).
 - [ ] **Mobile-First UX & 45s Booking Flow:** Verified at `360px` mobile width first; tap targets `>= 48px`; sticky bottom bar active; Step 1 (quick dates/slots/steppers), Step 2 (3 fields), and Step 3 (payment + post-booking prompt) seamless.
 - [ ] **Granularity & DRY:** UI components `< 150` lines, pages `< 100` lines; repeated patterns extracted to `src/shared/ui/` or `src/entities/*/ui/`.
-- [ ] **Bilingual `RTL`/`LTR` & Security:** CSS Logical Properties used exclusively; `/admin/*` protected; zero card numbers stored; `sessionStorage` preserved on payment failure.
+- [ ] **Bilingual `RTL`/`LTR`, EGP Base & RBAC Security:** CSS Logical Properties used exclusively; `EGP` settlement preserved; all 6 RBAC roles & permissions enforced; zero card numbers stored; `sessionStorage` preserved on payment failure; 8 analytics funnel events wired.
+- [ ] **Performance Budget & Live Preservation:** `FCP < 2.5s`, lazy images, subtle GPU micro-animations only, and verified Backup & Recovery plan before any production data/hosting change.
 - [ ] **Living `.md` Documentation Sync:** `AGENTS.md`, `README.md`, `duck_entertainment_comprehensive_project_brief_srs_for_vibe_coding.md`, and `docs/` updated immediately if any rule or structure changed.
 - [ ] **Build & Lint Verification:** `npm run lint` and `npm run build` pass with **0 errors and 0 warnings**.
