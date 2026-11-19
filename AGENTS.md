@@ -48,7 +48,8 @@ Keep Duck's exact brand colors (`#121528`, `#067BA1`, `#F5E847`) and welcoming, 
   - **Hairline Translucent Borders:** `--border-marine: 1px solid rgba(6, 123, 161, 0.16)` and `--border-subtle: 1px solid rgba(18, 21, 40, 0.08)`.
   - **Smooth Radii & Glassmorphism:** Smooth `20px–24px` (`--radius-card: 22px`, `--radius-lg: 24px`) card corners, `99px` pill buttons/badges, and frosted glass surfaces (`background: rgba(255, 255, 255, 0.74); backdrop-filter: blur(14px)`).
   - **Purposeful `#F5E847` Sunlight Accent:** Use `#F5E847` intentionally as a high-contrast sunlight highlight (primary CTAs, Egyptian price pills, active states, hero text highlight underline)—balanced calmly against deep `#121528` navy, `#067BA1` sea teal, and airy `#F3FAFC` / `#FFFFFF` backgrounds. Never flood entire sections with raw yellow backgrounds.
-  - **Real Photography & Organic Wave Dividers:** Render real high-resolution photography (`object-fit: cover`) layered with subtle marine gradient overlays (`linear-gradient(180deg, rgba(18, 21, 40, 0.12), rgba(6, 123, 161, 0.28))`) and gentle organic SVG wave section dividers.
+  - **Real Photography & Organic Wave Dividers:** Render real high-resolution photography (`object-fit: cover`) layered with subtle marine gradient overlays (`linear-gradient(135deg, rgba(18, 21, 40, 0.84), rgba(6, 123, 161, 0.68))`) and organic SVG wave dividers with hairline dark strokes (`stroke: #121528; stroke-width: 3.5px`). Example: Standalone Groups & Corporate Section (`#groups`) using real cover photo (`HSXR5504.JPG`).
+  - **Decoupled Groups & B2B Navigation:** Group/corporate booking is decoupled from individual trip destination filters and given its own prominent navbar link (`حجز المجموعات` / `Groups & B2B`), standalone showcase section (`#groups`), and dedicated details & RFQ registration hub (`#groups-details`).
 
 ---
 
