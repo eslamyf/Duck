@@ -50,5 +50,21 @@
     "poweredBy": "Powered by Alef",
     "whatsappAction": "كلمنا على واتساب",
     "whatsappPrefill": "أهلاً، عايز أسأل عن حجز رحلة"
+  },
+  "hero": {
+    "tag": "IN DUCK WE TRUST",
+    "titlePart1": "رحلتك المائية ",
+    "titleHighlight": "آمنة",
+    "titlePart2": " من أول ضغطة",
+    "desc": "اكتشف أجمل مياه مصر بطريقة غير مسبوقة. كاياك، ستاند أب بادل، دراجات مائية — أحجز في ٣ خطوات من غير ما تعمل حساب.",
+    "ctaTrips": "شوف الرحلات",
+    "ctaBook": "احجز الآن",
+    "stat1Number": "4,000+",
+    "stat1Label": "مغامر وعميل سعيد",
+    "stat2Number": "5",
+    "stat2Label": "وجهات ساحرة",
+    "stat3Number": "100%",
+    "stat3Label": "سترات نجاة وإرشاد معتمد",
+    "videoPosterAlt": "أسطول كاياك Duck على نيل أسوان"
   }
 }

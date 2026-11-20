@@ -50,5 +50,21 @@
     "poweredBy": "Powered by Alef",
     "whatsappAction": "Chat on WhatsApp",
     "whatsappPrefill": "Hello, I would like to inquire about booking a trip"
+  },
+  "hero": {
+    "tag": "IN DUCK WE TRUST",
+    "titlePart1": "Your Water Adventure, ",
+    "titleHighlight": "Safe",
+    "titlePart2": " from the First Click",
+    "desc": "Experience Egypt's finest waters like never before. Kayak, Stand-Up Paddleboard, and Water Bikes — book in 3 easy steps without creating an account.",
+    "ctaTrips": "Explore Trips",
+    "ctaBook": "Book Now",
+    "stat1Number": "4,000+",
+    "stat1Label": "Happy Adventurers",
+    "stat2Number": "5",
+    "stat2Label": "Stunning Destinations",
+    "stat3Number": "100%",
+    "stat3Label": "Certified Life Jackets & Guides",
+    "videoPosterAlt": "Duck Kayak Fleet on the Aswan Nile"
   }
 }
