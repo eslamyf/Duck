@@ -2,30 +2,47 @@
 @import './shared/styles/tokens.css';
 
 @theme {
-  --color-brand-yellow: #FDFB45;
-  --color-brand-navy: #0C1226;
-  --color-brand-blue: #147D9F;
-  --color-brand-yellow-legacy: #F5E847;
-  --color-brand-navy-legacy: #121528;
-  --color-brand-blue-legacy: #067BA1;
-  --color-surface-mist: #F3FAFC;
-  --color-surface-mist2: #E4F1F6;
+  --color-brand-yellow: var(--color-yellow);
+  --color-brand-navy: var(--color-navy);
+  --color-brand-blue: var(--color-blue);
+  --color-brand-yellow-legacy: var(--color-yellow-legacy);
+  --color-brand-navy-legacy: var(--color-navy-legacy);
+  --color-brand-blue-legacy: var(--color-blue-legacy);
+  --color-surface-white: var(--color-surface-white);
+  --color-surface-mist: var(--color-surface-mist);
+  --color-surface-mist2: var(--color-surface-mist2);
+  --color-surface-light: var(--color-surface-light);
+  --color-brand-whatsapp: var(--color-whatsapp);
+  --color-brand-yellow-hover: var(--color-yellow-hover);
+
+  --font-arabic: var(--font-arabic);
+  --font-body: var(--font-body);
+  --font-display: var(--font-display);
+  --font-cairo: var(--font-arabic);
+  --font-poppins: var(--font-body);
+  --font-sans: var(--font-body);
+
+  --shadow-soft: var(--shadow-soft);
+  --shadow-ocean: var(--shadow-ocean);
+  --shadow-card: var(--shadow-card);
+  --shadow-header: var(--shadow-header);
+  --shadow-whatsapp: var(--shadow-whatsapp);
   
-  --font-cairo: 'Cairo', 'Poppins', system-ui, sans-serif;
-  --font-poppins: 'Poppins', 'Cairo', system-ui, sans-serif;
+  --radius-card: var(--radius-card);
+  --radius-pill: var(--radius-pill);
 }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 88px;
+  scroll-padding-top: var(--scroll-padding);
 }
 
 body {
-  font-family: 'Poppins', 'Cairo', system-ui, sans-serif;
-  color: #0C1226;
+  font-family: var(--font-body);
+  color: var(--color-navy);
   background:
     radial-gradient(1200px 420px at 100% -10%, rgba(20, 125, 159, 0.08), transparent 55%),
-    linear-gradient(180deg, #fff 0%, #f7fbfd 48%, #fff 100%);
+    linear-gradient(180deg, var(--color-surface-white) 0%, var(--color-surface-light) 48%, var(--color-surface-white) 100%);
   line-height: 1.75;
   min-height: 100vh;
 }

@@ -28,9 +28,14 @@ Every AI coding agent, subagent, or automated workflow operating in this reposit
 4. **Scope & Production Preservation Enforcement:**
    - DUCK is a full **multi-provider Egypt water activities platform** supporting B2C, B2B (tiered packages + custom RFQ), and dynamic addition of new providers and destinations without editing code.
    - This repository is strictly the **Frontend Web Application** (connecting via `src/shared/api/` contracts). **NEVER** store raw credit card numbers (`NFR-008`), and **NEVER** alter the live production site database, OS, or hosting before auditing current infrastructure and creating & testing a verified **Backup & Recovery Plan** (Client Strategic Direction p.4).
-5. **Living Documentation & Immediate `.md` Synchronization Rule:**
+5. **Mandatory Architecture, Styling & Git Workflow Laws:**
+   - **Existing Structure Lock:** All code must be written strictly inside the existing directory structure in `D:\03_Work\Duck\Website\Duck\src` (`src/widgets/`, `src/shared/`, `src/entities/`, `src/features/`, `src/layouts/`, `src/pages/`, `src/app/`). Creating new folders or altering the folder hierarchy is strictly forbidden.
+   - **Single Source of Truth for Variables:** All variables (colors, typography, spacing, shadows, radii, animations, z-indices) must reside exclusively in `src/shared/styles/tokens.css`. Duplicating raw variables or hardcoded values anywhere else (including `index.css`) is strictly forbidden; files must import or reference `src/shared/styles/tokens.css` directly.
+   - **Font Awesome Official React Package Only:** All icons must be rendered using the official `@fortawesome/react-fontawesome` package (`<FontAwesomeIcon icon={...} />`) with `@fortawesome/free-solid-svg-icons`, `@fortawesome/free-brands-svg-icons`, or `@fortawesome/free-regular-svg-icons`. Manual inline SVGs, emoji icons, or third-party icon libraries are strictly forbidden.
+   - **Git Branch & Push Protocol:** Pushing to GitHub is permitted on the specific feature branch only (`git push -u origin <branch>`). Pushing directly to `main` is strictly forbidden. `main` remains clean with base setup and configuration only.
+6. **Living Documentation & Immediate `.md` Synchronization Rule:**
    - Whenever any architectural update, visual token change, package update, directory adjustment, new component/route addition, or important new engineering/business rule is introduced or discovered, the agent **MUST immediately update all Markdown (`.md`) files across the repository** (`AGENTS.md`, `README.md`, `duck_entertainment_comprehensive_project_brief_srs_for_vibe_coding.md`, and any files under `docs/`) in the same task so all documentation remains 100% synchronized.
-6. **Mobile-First Experience & UI/UX Obsession (Top Priority Mandate):**
+7. **Mobile-First Experience & UI/UX Obsession (Top Priority Mandate):**
    - Over 80% of DUCK Entertainment's traffic arrives from mobile social media (Instagram & TikTok in-app browsers). **The mobile experience (`360px–430px`), visual UI/UX polish, ultra-easy booking ergonomics, and seamless responsiveness across all breakpoints are the #1 user-facing priority** of every task.
 
 ---
@@ -93,7 +98,7 @@ The repository is intentionally lean, zero-bloat, and built on **React 19** and 
 | **Styling System** | Tailwind CSS + Design Tokens (`src/shared/styles/tokens.css`) | `tailwindcss` | Official styling framework: Tailwind CSS. Brand colors, typography, shadows, and radii are defined in `tailwind.config.js` and design tokens. No custom CSS except strictly necessary keyframes and variables. |
 | **Form Validation** | Pure Domain & Shared Validators (`src/shared/utils/validators.js`, `src/entities/booking/lib/*`) | Built-in | Validate synchronously via pure functions (`capacityValidator.js`, `cancellationPolicy.js`, `validators.js`) with bilingual `EN`/`AR` errors. |
 | **i18n & Direction** | Dictionary Engine (`src/shared/i18n/ar.json`, `en.json`, `index.js`) + `LanguageProvider.jsx` | Built-in | Zero hardcoded UI strings in `.jsx`. Update `<html lang dir>` dynamically (`ar`/`rtl` ↔ `en`/`ltr`). |
-| **Icons & Assets** | Inline SVG Components & Sprite (`public/icons.svg`, `public/favicon.svg`) | Built-in | Lightweight inline SVGs with `currentColor`. Mirror directional icons automatically in `[dir="rtl"]`. |
+| **Icons & Assets** | Official Font Awesome React Packages (`@fortawesome/react-fontawesome`, `@fortawesome/free-solid-svg-icons`, `@fortawesome/free-brands-svg-icons`, `@fortawesome/free-regular-svg-icons`) | Installed | All icons must use official Font Awesome React components (`FontAwesomeIcon`). Manual inline SVGs, emojis as icons, or other icon libraries are strictly forbidden. |
 | **Linting & Testing** | `eslint` (`^10.14.0`), `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh`, Vitest (`vitest.config.js`) | Installed / Configured | Must pass `npm run lint` and `npm run build` with **0 errors and 0 warnings**. |
 
 > **Strict Dependency Rule:** Do **NOT** run `npm install` to add duplicate UI kits, icon packs, date libraries, or state managers without explicit user approval.

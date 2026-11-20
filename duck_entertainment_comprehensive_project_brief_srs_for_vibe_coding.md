@@ -274,7 +274,9 @@ export interface B2BQuote {
   - **Compact Sticky Dock (`.dock`):** Height minimized to ~42–45px (font 10px, icons 14px, central CTA button 40px) to maximize content view.
   - **Compact Cards & Truncation-Free Text:** Review card (`.rf`) author metadata, date, trip name, and Google badge aligned in a single ~45px row without multi-line stretching; map destination cards (`.mp-mini`) wrap cleanly on 2 lines with thumbnails and badges without ugly `...` cutoff.
   - **Enterprise 4-Column Footer (`footer.ftr`):** Comprehensive responsive footer featuring brand bio, social channels, quick links, active hubs, WhatsApp/phone/email contacts, and safety badges.
-  - **Font Awesome 6.5.2 Standard:** All icons (dock, mobile menu, floating WhatsApp, story reviews, close buttons, password eyes, and dashboard tabs) use vector Font Awesome icons.
+  - **Font Awesome Official React Package (`@fortawesome/react-fontawesome`):** All UI icons must use the official `@fortawesome/react-fontawesome` package with `@fortawesome/free-solid-svg-icons` and `@fortawesome/free-brands-svg-icons`. Manual inline SVGs, emojis as icons, or other icon libraries are strictly prohibited.
+  - **Single Source of Truth for Variables:** All variables (colors, fonts, spacing, shadows, animations) reside exclusively in `src/shared/styles/tokens.css`. Duplicating raw variables in other files is strictly forbidden.
+  - **Branching & Push Rule:** Pushing to GitHub is permitted on the specific feature branch only (`git push -u origin <branch>`), and prohibited on `main`.
   - Touch targets `>= 44px × 44px`, form inputs `>= 16px` (preventing iOS auto-zoom), zero horizontal scroll overflow.
 - [ ] **Bilingual & Bidirectional (`EN` LTR / `AR` RTL -> `DE`/`FR`/`RU` ready) + `EGP` Accounting Base:** Instant language toggle mirroring direction and showing `USD`/`EUR` strictly as indicative values while preserving `EGP` settlement.
 - [ ] **Dual Pricing & Equipment Inventory (`AC-01`, `AC-02`):** Both prices clearly visible; slot availability engine enforces **Kayak = 20**, **Water Bike = 2**, and configurable **SUP** caps per provider/slot.

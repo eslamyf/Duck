@@ -1,58 +1,76 @@
 /* ============================================================
    DUCK Entertainment — Official Design Tokens (v3.1)
-   Source: DUCK____Answers___Strategic_Direction.pdf
-   Synchronized: 2026-11-19 | IEEE 29148 SRS v3.1
+   Single Source of Truth for all Brand Variables
+   Synchronized: 2026-11-20 | IEEE 29148 SRS v3.1 | Final_4.html
    ============================================================ */
 
 :root {
   /* ── Brand Colors (Client-Approved Exact Values) ────────── */
-  --color-yellow:  #FDFB45;   /* Primary Accent / Brand Sunburst Yellow  (PDF: #FDFB45) */
-  --color-navy:    #0C1226;   /* Deep Navy / Charcoal Base — primary dark (PDF: #0C1226) */
-  --color-blue:    #147D9F;   /* Water Blue / Nile Teal — secondary       (PDF: #147D9F) */
+  --color-yellow:        #FDFB45;   /* Primary Accent / Sunburst Yellow  (PDF: #FDFB45) */
+  --color-navy:          #0C1226;   /* Deep Navy Base — primary dark      (PDF: #0C1226) */
+  --color-blue:          #147D9F;   /* Water Blue / Nile Teal             (PDF: #147D9F) */
 
-  /* ── Working Aliases (backward-compat with legacy code) ─── */
-  --color-navy-legacy:  #121528; /* prev implementation value */
-  --color-blue-legacy:  #067BA1; /* prev implementation value */
-  --color-yellow-legacy: #F5E847; /* prev implementation value */
+  /* ── Working Aliases (backward-compat with Final_4.html) ─── */
+  --color-yellow-legacy: #F5E847;   /* Final_4.html --y */
+  --color-navy-legacy:   #121528;   /* Final_4.html --n */
+  --color-blue-legacy:   #067BA1;   /* Final_4.html --b */
 
   /* ── Semantic Surface Colors ─────────────────────────────── */
-  --color-surface-white:   #FFFFFF;
-  --color-surface-mist:    #F3FAFC; /* soft sea-mist tint */
-  --color-surface-light:   #F7FBFD;
+  --color-surface-white: #FFFFFF;
+  --color-surface-mist:  #F3FAFC;   /* Soft sea-mist tint (Final_4.html --t) */
+  --color-surface-mist2: #E4F1F6;   /* Deeper sea-mist tint (Final_4.html --t2) */
+  --color-surface-light: #F7FBFD;   /* Gradient background mid-tone */
+
+  /* ── State & Feedback Colors ─────────────────────────────── */
+  --color-error:         #B3261E;   /* Final_4.html --err */
+  --color-whatsapp:      #25D366;   /* WhatsApp Brand Green */
+  --color-yellow-hover:  #FFE95A;   /* Primary CTA hover state */
 
   /* ── Marine Shadow System ────────────────────────────────── */
-  --shadow-soft:  0 12px 32px rgba(12, 18, 38, 0.08);
-  --shadow-ocean: 0 20px 48px rgba(20, 125, 159, 0.12);
-  --shadow-card:  0 4px 16px rgba(12, 18, 38, 0.06);
+  --shadow-soft:         0 12px 32px rgba(12, 18, 38, 0.08);   /* Final_4.html --sh */
+  --shadow-ocean:        0 20px 48px rgba(20, 125, 159, 0.12); /* Final_4.html --sh2 */
+  --shadow-card:         0 4px 16px rgba(12, 18, 38, 0.06);
+  --shadow-header:       0 8px 24px rgba(12, 18, 38, 0.06);
+  --shadow-whatsapp:     0 8px 24px rgba(37, 211, 102, 0.35);
 
-  /* ── Borders ─────────────────────────────────────────────── */
-  --border-marine: 1px solid rgba(20, 125, 159, 0.16);
-  --border-subtle: 1px solid rgba(12, 18, 38, 0.08);
+  /* ── Borders & Outlines ──────────────────────────────────── */
+  --border-marine:       1px solid rgba(20, 125, 159, 0.16);  /* Final_4.html --bd */
+  --border-subtle:       1px solid rgba(12, 18, 38, 0.08);    /* Final_4.html --bd2 */
+  --border-glass:        1px solid rgba(255, 255, 255, 0.14);
+  --border-glass-dark:   1px solid rgba(255, 255, 255, 0.08);
 
-  /* ── Border Radius ───────────────────────────────────────── */
-  --radius-pill:   999px;
-  --radius-card:   22px;
-  --radius-lg:     24px;
-  --radius-md:     16px;
-  --radius-sm:     8px;
+  /* ── Border Radii ────────────────────────────────────────── */
+  --radius-pill:         9999px;
+  --radius-card:         22px;                                 /* Final_4.html --r */
+  --radius-lg:           24px;                                 /* Final_4.html --r2 */
+  --radius-md:           16px;
+  --radius-sm:           10px;
+  --radius-xs:           8px;
 
-  /* ── Transitions ─────────────────────────────────────────── */
-  --ease-out:    cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --transition-fast:   150ms var(--ease-out);
-  --transition-base:   280ms var(--ease-out);
-  --transition-slow:   500ms var(--ease-out);
+  /* ── Transitions & Easings ───────────────────────────────── */
+  --ease-marine:         cubic-bezier(0.22, 1, 0.36, 1);       /* Final_4.html --ease */
+  --transition-fast:     150ms var(--ease-marine);
+  --transition-base:     280ms var(--ease-marine);
+  --transition-slow:     500ms var(--ease-marine);
 
-  /* ── Typography ──────────────────────────────────────────── */
-  --font-display: 'Berlin Sans FB Demi Bold', 'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-body:    'Plus Jakarta Sans', 'Cairo', system-ui, sans-serif;
-  --font-arabic:  'Cairo', 'IBM Plex Sans Arabic', system-ui, sans-serif;
-  --font-mono:    'Consolas', 'Courier New', monospace;
+  /* ── Typography (Final_4.html: 'Poppins','Cairo',sans-serif) ── */
+  --font-arabic:         'Cairo', 'Poppins', system-ui, sans-serif;
+  --font-body:           'Poppins', 'Cairo', system-ui, sans-serif;
+  --font-display:        'Poppins', 'Cairo', system-ui, sans-serif;
+  --font-mono:           ui-monospace, Consolas, monospace;
+
+  /* ── Layout & Header Heights ─────────────────────────────── */
+  --header-height-desktop: 100px;
+  --header-height-mobile:  52px;
+  --scroll-padding:        88px;
 
   /* ── Z-Index Scale ───────────────────────────────────────── */
-  --z-base:    1;
-  --z-overlay: 100;
-  --z-modal:   200;
-  --z-navbar:  120;
-  --z-toast:   300;
+  --z-base:              1;
+  --z-dock:              80;
+  --z-floating:          90;
+  --z-overlay:           100;
+  --z-drawer:            118;
+  --z-navbar:            120;
+  --z-modal:             200;
+  --z-toast:             300;
 }
