@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import duckLogo from '../../shared/assets/icons/Artboard 14.png';
 import { useTranslation } from '../../shared/i18n/index.js';
+import { Button, Badge } from '../../shared/ui/index.js';
 import {
   faHouse,
   faLocationDot,
@@ -73,29 +74,27 @@ export default function Navbar({ onBookClick, onAuthClick }) {
       <div className="hidden min-[901px]:flex items-center justify-between h-10 px-[4vw] bg-brand-navy text-white text-[13px]">
         <div className="flex items-center gap-2">
           {/* Language Toggle */}
-          <button
+          <Button
             type="button"
+            variant="chip"
+            size="xs"
             onClick={() => setLanguage(lang === 'ar' ? 'en' : 'ar')}
-            className="bg-white/10 text-white border border-white/20 rounded-full px-2.5 py-0.5 text-xs font-semibold hover:bg-brand-yellow hover:text-brand-navy hover:border-brand-yellow transition-all duration-200 min-h-[28px] cursor-pointer"
           >
             {t('common.languageSwitch')}
-          </button>
+          </Button>
 
           {/* Currency Group */}
           <div className="inline-flex items-center gap-1" role="group" aria-label="Currency">
             {['EGP', 'USD', 'EUR'].map((cur) => (
-              <button
+              <Button
                 key={cur}
                 type="button"
+                variant={currency === cur ? 'chipActive' : 'chip'}
+                size="xs"
                 onClick={() => setCurrency(cur)}
-                className={`rounded-full px-2.5 py-0.5 text-xs font-semibold border transition-all duration-200 min-h-[28px] cursor-pointer ${
-                  currency === cur
-                    ? 'bg-brand-yellow text-brand-navy border-brand-yellow'
-                    : 'bg-white/10 text-white border-white/20 hover:bg-brand-yellow hover:text-brand-navy hover:border-brand-yellow'
-                }`}
               >
                 {cur === 'EGP' ? t('common.currencyEGP') : cur === 'USD' ? t('common.currencyUSD') : t('common.currencyEUR')}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -156,17 +155,22 @@ export default function Navbar({ onBookClick, onAuthClick }) {
           </a>
 
           {/* Auth Button */}
-          <button
+          <Button
             type="button"
+            variant="subtle"
+            size="sm"
             onClick={onAuthClick}
-            className="hidden min-[901px]:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-surface-mist text-brand-navy border border-[rgba(20,125,159,0.16)] text-[13px] font-bold min-h-[40px] hover:bg-brand-navy hover:text-brand-yellow transition-all duration-200 cursor-pointer"
+            className="hidden min-[901px]:inline-flex"
           >
             {t('common.login')}
-          </button>
+          </Button>
 
           {/* Book Now Button */}
-          <a
+          <Button
+            as="a"
             href="#trips"
+            variant="primary"
+            size="sm"
             onClick={(e) => {
               if (onBookClick) {
                 e.preventDefault();
@@ -175,10 +179,9 @@ export default function Navbar({ onBookClick, onAuthClick }) {
                 handleNavClick('#trips');
               }
             }}
-            className="inline-flex items-center justify-center rounded-full bg-brand-yellow text-brand-navy font-bold px-3.5 min-[901px]:px-4 py-1.5 text-xs min-[901px]:text-[13.5px] min-h-[36px] min-[901px]:min-h-[40px] hover:bg-brand-yellow-hover transition-all duration-200 shadow-sm"
           >
             {t('common.bookNow')}
-          </a>
+          </Button>
 
           {/* Mobile Menu Button */}
           <button
@@ -202,34 +205,40 @@ export default function Navbar({ onBookClick, onAuthClick }) {
         >
           {/* Mobile Top Controls */}
           <div className="flex items-center justify-between gap-2 p-2 bg-white/8 border border-white/14 rounded-[14px] mb-2">
-            <button
+            <Button
               type="button"
+              variant="chip"
+              size="xs"
+              icon={<FontAwesomeIcon icon={faLanguage} />}
               onClick={() => setLanguage(lang === 'ar' ? 'en' : 'ar')}
-              className="bg-white/10 text-white border border-white/20 rounded-full px-2.5 py-1 text-xs font-semibold inline-flex items-center gap-1.5"
             >
-              <FontAwesomeIcon icon={faLanguage} /> {t('common.languageSwitch')}
-            </button>
+              {t('common.languageSwitch')}
+            </Button>
             <div className="inline-flex items-center gap-1">
               {['EGP', 'USD', 'EUR'].map((cur) => (
-                <button
+                <Button
                   key={cur}
                   type="button"
+                  variant={currency === cur ? 'chipActive' : 'chip'}
+                  size="xs"
                   onClick={() => setCurrency(cur)}
-                  className={`rounded-full px-2 py-0.5 text-xs font-semibold border ${
-                    currency === cur
-                      ? 'bg-brand-yellow text-brand-navy border-brand-yellow'
-                      : 'bg-white/10 text-white border-white/20'
-                  }`}
+                  className="px-2"
                 >
                   {cur === 'EGP' ? t('common.currencyEGP') : cur === 'USD' ? t('common.currencyUSD') : t('common.currencyEUR')}
-                </button>
+                </Button>
               ))}
             </div>
-            <span className="text-xs text-white inline-flex items-center gap-1" id="tmpMob">
-              <FontAwesomeIcon icon={faSun} className="text-brand-yellow" />
+            <Badge
+              as="span"
+              variant="weather"
+              size="sm"
+              id="tmpMob"
+              icon={<FontAwesomeIcon icon={faSun} className="text-brand-yellow" />}
+              className="bg-transparent border-0 p-0 text-white gap-1"
+            >
               <b className="text-brand-yellow font-bold">{t('common.aswan')}</b>
               {temp && <span>{temp}{t('common.tempSuffix')}</span>}
-            </span>
+            </Badge>
           </div>
 
           {/* Links */}
@@ -278,8 +287,13 @@ export default function Navbar({ onBookClick, onAuthClick }) {
           </button>
 
           {/* Mobile Primary CTA */}
-          <a
+          <Button
+            as="a"
             href="#trips"
+            variant="primary"
+            size="md"
+            fullWidth
+            icon={<FontAwesomeIcon icon={faCalendarCheck} />}
             onClick={(e) => {
               setIsMobileOpen(false);
               if (onBookClick) {
@@ -287,11 +301,10 @@ export default function Navbar({ onBookClick, onAuthClick }) {
                 onBookClick();
               }
             }}
-            className="flex items-center justify-center min-h-[50px] mt-4 bg-brand-yellow text-brand-navy font-extrabold rounded-full text-base border-0 shadow-lg"
+            className="mt-4 font-extrabold shadow-lg"
           >
-            <FontAwesomeIcon icon={faCalendarCheck} className="me-2" />
             {t('nav.bookTripNow')}
-          </a>
+          </Button>
         </div>
       )}
     </header>

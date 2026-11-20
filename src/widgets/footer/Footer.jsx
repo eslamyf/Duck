@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import duckLogo from '../../shared/assets/icons/Artboard 14.png';
 import { useTranslation } from '../../shared/i18n/index.js';
+import { Button, Badge } from '../../shared/ui/index.js';
 import {
   faInstagram,
   faFacebookF,
@@ -212,12 +213,12 @@ export default function Footer({ onDestinationClick }) {
           </div>
 
           <div className="flex flex-col gap-1.5 mt-3.5">
-            <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-yellow bg-white/6 border border-white/10 px-2.5 py-1 rounded-full w-fit">
-              <FontAwesomeIcon icon={faShieldHalved} /> {t('common.freeCancellation')}
-            </span>
-            <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-yellow bg-white/6 border border-white/10 px-2.5 py-1 rounded-full w-fit">
-              <FontAwesomeIcon icon={faVest} /> {t('common.lifeJackets')}
-            </span>
+            <Badge variant="safety" size="sm" icon={<FontAwesomeIcon icon={faShieldHalved} />}>
+              {t('common.freeCancellation')}
+            </Badge>
+            <Badge variant="safety" size="sm" icon={<FontAwesomeIcon icon={faVest} />}>
+              {t('common.lifeJackets')}
+            </Badge>
           </div>
         </div>
       </div>
@@ -243,16 +244,19 @@ export default function Footer({ onDestinationClick }) {
       </div>
 
       {/* Floating WhatsApp Quick Action Button */}
-      <a
+      <Button
+        as="a"
         href={`https://wa.me/201550061006?text=${encodeURIComponent(t('footer.whatsappPrefill'))}`}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={t('footer.whatsappAction')}
-        className="fixed bottom-6 start-6 z-[90] bg-[#25D366] text-white font-bold text-sm px-4.5 py-2.5 rounded-full shadow-[0_8px_24px_rgba(37,211,102,0.35)] inline-flex items-center gap-2 hover:scale-105 active:scale-95 transition-all duration-200"
+        variant="whatsapp"
+        size="sm"
+        icon={<FontAwesomeIcon icon={faWhatsapp} className="text-lg" />}
+        className="fixed bottom-6 start-6 z-[90] text-sm px-4.5 py-2.5 min-h-[44px]"
       >
-        <FontAwesomeIcon icon={faWhatsapp} className="text-lg" />
         <span>{t('common.whatsapp')}</span>
-      </a>
+      </Button>
     </footer>
   );
 }
