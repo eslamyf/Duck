@@ -90,7 +90,7 @@ The repository is intentionally lean, zero-bloat, and built on **React 19** and 
 | **Language & Types** | JavaScript (`ES2024+` / `.js`, `.jsx`) + `@types/react` | `^19.3.0` | `.jsx` for React components, `.js` for pure logic/services. Document domain models/contracts with JSDoc `@typedef` matching SRS §8 schemas. |
 | **Routing Engine** | Custom / Lightweight Router in `src/app/routes/AppRouter.jsx` *(or `react-router-dom` if explicitly added)* | Native / Configured | Centralize route constants in `src/shared/config/routes.js`. Protect `/admin/*` via `src/app/routes/ProtectedRoute.jsx`. |
 | **State Management** | React Context API + Custom Hooks (`src/app/providers/*`, `src/features/*/model/*`) | Built-in | Do **NOT** install Redux, MobX, or external state libraries. Global state is strictly `AuthProvider`, `LanguageProvider`, `CurrencyProvider`. Checkout state uses `BookingFlowProvider.jsx` + `useSessionStorage.js`. |
-| **Styling System** | Vanilla CSS + CSS Custom Properties (`src/shared/styles/tokens.css`, `reset.css`) | Built-in | Do **NOT** install Tailwind, Bootstrap, MUI, or CSS-in-JS. Consume tokens from `tokens.css`. Purge default Vite boilerplate styles (`#aa3bff` purple and fixed `1126px` `#root` in `src/index.css`). |
+| **Styling System** | Tailwind CSS + Design Tokens (`src/shared/styles/tokens.css`) | `tailwindcss` | Official styling framework: Tailwind CSS. Brand colors, typography, shadows, and radii are defined in `tailwind.config.js` and design tokens. No custom CSS except strictly necessary keyframes and variables. |
 | **Form Validation** | Pure Domain & Shared Validators (`src/shared/utils/validators.js`, `src/entities/booking/lib/*`) | Built-in | Validate synchronously via pure functions (`capacityValidator.js`, `cancellationPolicy.js`, `validators.js`) with bilingual `EN`/`AR` errors. |
 | **i18n & Direction** | Dictionary Engine (`src/shared/i18n/ar.json`, `en.json`, `index.js`) + `LanguageProvider.jsx` | Built-in | Zero hardcoded UI strings in `.jsx`. Update `<html lang dir>` dynamically (`ar`/`rtl` ↔ `en`/`ltr`). |
 | **Icons & Assets** | Inline SVG Components & Sprite (`public/icons.svg`, `public/favicon.svg`) | Built-in | Lightweight inline SVGs with `currentColor`. Mirror directional icons automatically in `[dir="rtl"]`. |
@@ -177,7 +177,7 @@ src/
 | **Feature / Widget / Entity Folders** | `kebab-case` | `src/{pages,widgets,features,entities}/` | `guest-checkout/`, `post-booking-account/`, `b2b-quote/` |
 | **Shared UI Widget Folders** | `PascalCase` | `src/shared/ui/<WidgetName>/` | `QuantityStepper/`, `StickyBar/`, `SectionHeader/`, `DatePicker/` |
 | **React Components (`.jsx`)** | `PascalCase.jsx` | `ui/` or widget root | `PriceBadge.jsx`, `DualPriceSummary.jsx`, `LimitedSeatsBadge.jsx`, `StepGuestInfo.jsx` |
-| **Component Stylesheets (`.css`)** | `PascalCase.css` | Co-located with `.jsx` | `Button.css`, `Input.css` |
+| **Component Stylesheets** | Tailwind Utility Classes in `.jsx` | Colocated in Component | `className="bg-brand-yellow text-brand-navy"` |
 | **Custom Hooks (`.js`)** | `useCamelCase.js` | `shared/hooks/` or `features/*/model/` | `useBookingFlow.js`, `useCurrency.js`, `useSessionStorage.js` |
 | **Domain Calculators & Validators** | `camelCase.js` | `src/entities/*/lib/` | `priceCalculator.js`, `capacityValidator.js`, `cancellationPolicy.js`, `timeSlots.js` |
 | **API Services (`.js`)** | `<entity>Service.js` | `src/entities/*/api/` | `activityService.js`, `bookingService.js`, `quoteService.js` |
