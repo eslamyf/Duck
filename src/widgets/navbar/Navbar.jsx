@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import duckLogo from '../../shared/assets/icons/Artboard 14.png';
+import { useTranslation } from '../../shared/i18n/index.js';
 import {
   faHouse,
   faLocationDot,
@@ -17,10 +18,11 @@ import {
   faArrowRightToBracket,
   faCalendarCheck,
   faArrowLeft,
+  faArrowRight,
 } from '@fortawesome/free-solid-svg-icons';
 
 export default function Navbar({ onBookClick, onAuthClick }) {
-  const [lang, setLang] = useState('ar');
+  const { lang, setLanguage, t } = useTranslation();
   const [currency, setCurrency] = useState('EGP');
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeHash, setActiveHash] = useState('#top');
@@ -32,8 +34,8 @@ export default function Navbar({ onBookClick, onAuthClick }) {
       .then((res) => res.json())
       .then((data) => {
         if (data?.current?.temperature_2m !== undefined) {
-          const t = Math.round(data.current.temperature_2m);
-          setTemp(`${t}°م`);
+          const val = Math.round(data.current.temperature_2m);
+          setTemp(String(val));
         }
       })
       .catch(() => { });
@@ -49,19 +51,21 @@ export default function Navbar({ onBookClick, onAuthClick }) {
   }, []);
 
   const navLinks = [
-    { href: '#top', label: 'الرئيسية', icon: faHouse },
-    { href: '#locations', label: 'الوجهات', icon: faLocationDot },
-    { href: '#trips', label: 'الرحلات', icon: faCompass },
-    { href: '#/groups', label: 'حجز المجموعات', icon: faUsersLine },
-    { href: '#reviews', label: 'آراء الضيوف', icon: faStar },
-    { href: '#faq', label: 'الأسئلة الشائعة', icon: faCircleQuestion },
-    { href: '#/about', label: 'من نحن', icon: faUsers },
+    { href: '#top', label: t('nav.home'), icon: faHouse },
+    { href: '#locations', label: t('nav.destinations'), icon: faLocationDot },
+    { href: '#trips', label: t('nav.trips'), icon: faCompass },
+    { href: '#/groups', label: t('nav.groups'), icon: faUsersLine },
+    { href: '#reviews', label: t('nav.reviews'), icon: faStar },
+    { href: '#faq', label: t('nav.faq'), icon: faCircleQuestion },
+    { href: '#/about', label: t('nav.about'), icon: faUsers },
   ];
 
   const handleNavClick = (href) => {
     setActiveHash(href);
     setIsMobileOpen(false);
   };
+
+  const isRtl = lang === 'ar';
 
   return (
     <header className="fixed top-0 inset-x-0 z-[120] bg-white border-b border-[rgba(20,125,159,0.16)] shadow-[0_8px_24px_rgba(12,18,38,0.06)] font-body">
@@ -71,10 +75,10 @@ export default function Navbar({ onBookClick, onAuthClick }) {
           {/* Language Toggle */}
           <button
             type="button"
-            onClick={() => setLang((l) => (l === 'ar' ? 'en' : 'ar'))}
+            onClick={() => setLanguage(lang === 'ar' ? 'en' : 'ar')}
             className="bg-white/10 text-white border border-white/20 rounded-full px-2.5 py-0.5 text-xs font-semibold hover:bg-brand-yellow hover:text-brand-navy hover:border-brand-yellow transition-all duration-200 min-h-[28px] cursor-pointer"
           >
-            {lang === 'ar' ? 'English' : 'العربية'}
+            {t('common.languageSwitch')}
           </button>
 
           {/* Currency Group */}
@@ -84,12 +88,13 @@ export default function Navbar({ onBookClick, onAuthClick }) {
                 key={cur}
                 type="button"
                 onClick={() => setCurrency(cur)}
-                className={`rounded-full px-2.5 py-0.5 text-xs font-semibold border transition-all duration-200 min-h-[28px] cursor-pointer ${currency === cur
+                className={`rounded-full px-2.5 py-0.5 text-xs font-semibold border transition-all duration-200 min-h-[28px] cursor-pointer ${
+                  currency === cur
                     ? 'bg-brand-yellow text-brand-navy border-brand-yellow'
                     : 'bg-white/10 text-white border-white/20 hover:bg-brand-yellow hover:text-brand-navy hover:border-brand-yellow'
-                  }`}
+                }`}
               >
-                {cur === 'EGP' ? 'EGP' : `~ ${cur}`}
+                {cur === 'EGP' ? t('common.currencyEGP') : cur === 'USD' ? t('common.currencyUSD') : t('common.currencyEUR')}
               </button>
             ))}
           </div>
@@ -97,18 +102,18 @@ export default function Navbar({ onBookClick, onAuthClick }) {
 
         {/* Weather Indicator */}
         <span className="text-white text-[13px] inline-flex items-center gap-1.5" id="tmp">
-          <b className="text-brand-yellow font-bold">أسوان</b>
-          {temp && <span>{temp}</span>}
+          <b className="text-brand-yellow font-bold">{t('common.aswan')}</b>
+          {temp && <span>{temp}{t('common.tempSuffix')}</span>}
         </span>
       </div>
 
       {/* Main Navbar */}
-      <nav className="flex items-center justify-between min-[901px]:justify-start gap-3.5 px-[3vw] py-2 text-[13.5px] font-medium min-h-[52px] min-[901px]:min-h-[58px]" aria-label="القائمة الرئيسية">
+      <nav className="flex items-center justify-between min-[901px]:justify-start gap-3.5 px-[3vw] py-2 text-[13.5px] font-medium min-h-[52px] min-[901px]:min-h-[58px]" aria-label={t('nav.menuAria')}>
         {/* Logo */}
         <a href="#top" className="block focus:outline-none" onClick={() => handleNavClick('#top')}>
           <img
             src={duckLogo}
-            alt="Duck Entertainment"
+            alt={t('nav.logoAlt')}
             width="160"
             height="44"
             className="h-9 min-[901px]:h-[42px] w-auto bg-transparent min-[901px]:bg-white rounded-full py-1 px-2.5"
@@ -124,13 +129,15 @@ export default function Navbar({ onBookClick, onAuthClick }) {
                 key={link.href}
                 href={link.href}
                 onClick={() => handleNavClick(link.href)}
-                className={`relative py-2.5 px-0.5 whitespace-nowrap transition-colors duration-200 group ${isActive ? 'text-brand-blue font-bold' : 'text-brand-navy hover:text-brand-blue'
-                  }`}
+                className={`relative py-2.5 px-0.5 whitespace-nowrap transition-colors duration-200 group ${
+                  isActive ? 'text-brand-blue font-bold' : 'text-brand-navy hover:text-brand-blue'
+                }`}
               >
                 {link.label}
                 <span
-                  className={`absolute bottom-1 start-0 h-[3px] rounded-full bg-brand-yellow transition-all duration-300 ease-out ${isActive ? 'w-full' : 'w-0 group-hover:w-full'
-                    }`}
+                  className={`absolute bottom-1 start-0 h-[3px] rounded-full bg-brand-yellow transition-all duration-300 ease-out ${
+                    isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                  }`}
                 />
               </a>
             );
@@ -144,7 +151,7 @@ export default function Navbar({ onBookClick, onAuthClick }) {
             onClick={() => handleNavClick('#map')}
             className="hidden min-[901px]:inline-block py-2.5 px-0.5 relative text-brand-navy hover:text-brand-blue transition-colors group"
           >
-            الخريطة
+            {t('common.map')}
             <span className="absolute bottom-1 start-0 h-[3px] rounded-full bg-brand-yellow w-0 group-hover:w-full transition-all duration-300 ease-out" />
           </a>
 
@@ -154,7 +161,7 @@ export default function Navbar({ onBookClick, onAuthClick }) {
             onClick={onAuthClick}
             className="hidden min-[901px]:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-surface-mist text-brand-navy border border-[rgba(20,125,159,0.16)] text-[13px] font-bold min-h-[40px] hover:bg-brand-navy hover:text-brand-yellow transition-all duration-200 cursor-pointer"
           >
-            تسجيل الدخول
+            {t('common.login')}
           </button>
 
           {/* Book Now Button */}
@@ -170,7 +177,7 @@ export default function Navbar({ onBookClick, onAuthClick }) {
             }}
             className="inline-flex items-center justify-center rounded-full bg-brand-yellow text-brand-navy font-bold px-3.5 min-[901px]:px-4 py-1.5 text-xs min-[901px]:text-[13.5px] min-h-[36px] min-[901px]:min-h-[40px] hover:bg-brand-yellow-hover transition-all duration-200 shadow-sm"
           >
-            احجز الآن
+            {t('common.bookNow')}
           </a>
 
           {/* Mobile Menu Button */}
@@ -180,7 +187,7 @@ export default function Navbar({ onBookClick, onAuthClick }) {
             className="min-[901px]:hidden grid place-items-center w-[38px] h-[38px] rounded-[10px] border border-[rgba(20,125,159,0.16)] bg-white text-brand-navy text-base shadow-[0_2px_8px_rgba(12,18,38,0.06)] cursor-pointer"
             aria-expanded={isMobileOpen}
             aria-controls="mobile-nav"
-            aria-label="القائمة"
+            aria-label={t('nav.menuAria')}
           >
             <FontAwesomeIcon icon={isMobileOpen ? faXmark : faBars} />
           </button>
@@ -197,10 +204,10 @@ export default function Navbar({ onBookClick, onAuthClick }) {
           <div className="flex items-center justify-between gap-2 p-2 bg-white/8 border border-white/14 rounded-[14px] mb-2">
             <button
               type="button"
-              onClick={() => setLang((l) => (l === 'ar' ? 'en' : 'ar'))}
+              onClick={() => setLanguage(lang === 'ar' ? 'en' : 'ar')}
               className="bg-white/10 text-white border border-white/20 rounded-full px-2.5 py-1 text-xs font-semibold inline-flex items-center gap-1.5"
             >
-              <FontAwesomeIcon icon={faLanguage} /> {lang === 'ar' ? 'English' : 'العربية'}
+              <FontAwesomeIcon icon={faLanguage} /> {t('common.languageSwitch')}
             </button>
             <div className="inline-flex items-center gap-1">
               {['EGP', 'USD', 'EUR'].map((cur) => (
@@ -208,19 +215,20 @@ export default function Navbar({ onBookClick, onAuthClick }) {
                   key={cur}
                   type="button"
                   onClick={() => setCurrency(cur)}
-                  className={`rounded-full px-2 py-0.5 text-xs font-semibold border ${currency === cur
+                  className={`rounded-full px-2 py-0.5 text-xs font-semibold border ${
+                    currency === cur
                       ? 'bg-brand-yellow text-brand-navy border-brand-yellow'
                       : 'bg-white/10 text-white border-white/20'
-                    }`}
+                  }`}
                 >
-                  {cur === 'EGP' ? 'EGP' : `~ ${cur}`}
+                  {cur === 'EGP' ? t('common.currencyEGP') : cur === 'USD' ? t('common.currencyUSD') : t('common.currencyEUR')}
                 </button>
               ))}
             </div>
             <span className="text-xs text-white inline-flex items-center gap-1" id="tmpMob">
               <FontAwesomeIcon icon={faSun} className="text-brand-yellow" />
-              <b className="text-brand-yellow font-bold">أسوان</b>
-              {temp && <span>{temp}</span>}
+              <b className="text-brand-yellow font-bold">{t('common.aswan')}</b>
+              {temp && <span>{temp}{t('common.tempSuffix')}</span>}
             </span>
           </div>
 
@@ -236,7 +244,7 @@ export default function Navbar({ onBookClick, onAuthClick }) {
                 <FontAwesomeIcon icon={link.icon} className="w-5 text-center opacity-90" />
                 {link.label}
               </span>
-              <FontAwesomeIcon icon={faArrowLeft} className="text-xs opacity-60" />
+              <FontAwesomeIcon icon={isRtl ? faArrowLeft : faArrowRight} className="text-xs opacity-60" />
             </a>
           ))}
 
@@ -248,9 +256,9 @@ export default function Navbar({ onBookClick, onAuthClick }) {
           >
             <span className="inline-flex items-center gap-2.5">
               <FontAwesomeIcon icon={faMap} className="w-5 text-center opacity-90" />
-              نقاط الانطلاق والخريطة
+              {t('nav.exploreMapAria')}
             </span>
-            <FontAwesomeIcon icon={faArrowLeft} className="text-xs opacity-60" />
+            <FontAwesomeIcon icon={isRtl ? faArrowLeft : faArrowRight} className="text-xs opacity-60" />
           </a>
 
           {/* Mobile Login Button */}
@@ -264,9 +272,9 @@ export default function Navbar({ onBookClick, onAuthClick }) {
           >
             <span className="inline-flex items-center gap-2.5">
               <FontAwesomeIcon icon={faArrowRightToBracket} className="w-5 text-center opacity-90" />
-              تسجيل الدخول
+              {t('common.login')}
             </span>
-            <FontAwesomeIcon icon={faArrowLeft} className="text-xs opacity-60" />
+            <FontAwesomeIcon icon={isRtl ? faArrowLeft : faArrowRight} className="text-xs opacity-60" />
           </button>
 
           {/* Mobile Primary CTA */}
@@ -281,8 +289,8 @@ export default function Navbar({ onBookClick, onAuthClick }) {
             }}
             className="flex items-center justify-center min-h-[50px] mt-4 bg-brand-yellow text-brand-navy font-extrabold rounded-full text-base border-0 shadow-lg"
           >
-            <FontAwesomeIcon icon={faCalendarCheck} className="ms-2" />
-            احجز رحلتك الآن
+            <FontAwesomeIcon icon={faCalendarCheck} className="me-2" />
+            {t('nav.bookTripNow')}
           </a>
         </div>
       )}
