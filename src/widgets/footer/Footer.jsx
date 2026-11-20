@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import duckLogo from '../../shared/assets/icons/Artboard 14.png';
 import {
   faInstagram,
   faFacebookF,
@@ -30,13 +31,13 @@ export default function Footer({ onDestinationClick }) {
       <div className="grid grid-cols-1 min-[901px]:grid-cols-[1.35fr_1fr_1fr_1.25fr] gap-7 min-[901px]:gap-9 px-[5vw] min-[901px]:px-[6vw] pt-9 min-[901px]:pt-14 pb-6 min-[901px]:pb-10 max-w-[1360px] mx-auto">
         {/* Brand Column */}
         <div className="flex flex-col gap-3.5 items-start">
-          <a href="#top" className="inline-block">
+          <a href="#top" className="inline-block focus:outline-none" aria-label="Duck Entertainment">
             <img
-              src="https://www.duckegy.com/logo-transparent.png"
+              src={duckLogo}
               alt="Duck Entertainment"
-              width="160"
-              height="44"
-              className="bg-white py-1 px-3 rounded-full h-10 w-auto"
+              width={188}
+              height={40}
+              className="h-10 min-[901px]:h-11 w-auto brightness-0 invert opacity-95 hover:opacity-100 transition-opacity object-contain"
             />
           </a>
           <p className="text-sm text-white/78 leading-[1.65] max-w-[38ch] m-0">
@@ -217,7 +218,7 @@ export default function Footer({ onDestinationClick }) {
       </div>
 
       {/* Bottom Sub-bar */}
-      <div className="border-t border-white/8 bg-black/15 px-[5vw] min-[901px]:px-[6vw] py-4 min-[901px]:py-4.5 pb-[calc(56px+env(safe-area-inset-bottom))] min-[901px]:pb-[calc(18px+env(safe-area-inset-bottom))] flex flex-col min-[901px]:flex-row items-center justify-between gap-2.5 min-[901px]:gap-4 text-xs text-white/60 text-center min-[901px]:text-start">
+      <div className="border-t border-white/8 bg-black/15 px-[5vw] min-[901px]:px-[6vw] min-[901px]:ps-36 py-4 min-[901px]:py-4.5 pb-[calc(76px+env(safe-area-inset-bottom))] min-[901px]:pb-[calc(18px+env(safe-area-inset-bottom))] flex flex-col min-[901px]:flex-row items-center justify-between gap-2.5 min-[901px]:gap-4 text-xs text-white/60 text-center min-[901px]:text-start">
         <div>
           © 2026 <strong className="text-white font-bold">Duck Entertainment</strong>. جميع الحقوق محفوظة. · <em className="italic">IN DUCK WE TRUST</em> 🦆
         </div>
