@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import duckLogo from '../../shared/assets/icons/Artboard 14.png';
 import {
   faHouse,
   faLocationDot,
@@ -23,7 +24,7 @@ export default function Navbar({ onBookClick, onAuthClick }) {
   const [currency, setCurrency] = useState('EGP');
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeHash, setActiveHash] = useState('#top');
-  const [temp, setTemp] = useState('أسوان');
+  const [temp, setTemp] = useState('');
 
   // Fetch weather data for Aswan
   useEffect(() => {
@@ -32,10 +33,10 @@ export default function Navbar({ onBookClick, onAuthClick }) {
       .then((data) => {
         if (data?.current?.temperature_2m !== undefined) {
           const t = Math.round(data.current.temperature_2m);
-          setTemp(`${t}°م أسوان`);
+          setTemp(`${t}°م`);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   // Update active hash based on scroll
@@ -83,21 +84,21 @@ export default function Navbar({ onBookClick, onAuthClick }) {
                 key={cur}
                 type="button"
                 onClick={() => setCurrency(cur)}
-                className={`rounded-full px-2.5 py-0.5 text-xs font-semibold border transition-all duration-200 min-h-[28px] cursor-pointer ${
-                  currency === cur
+                className={`rounded-full px-2.5 py-0.5 text-xs font-semibold border transition-all duration-200 min-h-[28px] cursor-pointer ${currency === cur
                     ? 'bg-brand-yellow text-brand-navy border-brand-yellow'
                     : 'bg-white/10 text-white border-white/20 hover:bg-brand-yellow hover:text-brand-navy hover:border-brand-yellow'
-                }`}
+                  }`}
               >
-                {cur} {cur !== 'EGP' ? '~' : ''}
+                {cur === 'EGP' ? 'EGP' : `~ ${cur}`}
               </button>
             ))}
           </div>
         </div>
 
         {/* Weather Indicator */}
-        <span className="text-white text-[13px]">
-          <span className="text-brand-yellow font-bold">{temp}</span>
+        <span className="text-white text-[13px] inline-flex items-center gap-1.5" id="tmp">
+          <b className="text-brand-yellow font-bold">أسوان</b>
+          {temp && <span>{temp}</span>}
         </span>
       </div>
 
@@ -106,7 +107,7 @@ export default function Navbar({ onBookClick, onAuthClick }) {
         {/* Logo */}
         <a href="#top" className="block focus:outline-none" onClick={() => handleNavClick('#top')}>
           <img
-            src="https://www.duckegy.com/logo-transparent.png"
+            src={duckLogo}
             alt="Duck Entertainment"
             width="160"
             height="44"
@@ -123,15 +124,13 @@ export default function Navbar({ onBookClick, onAuthClick }) {
                 key={link.href}
                 href={link.href}
                 onClick={() => handleNavClick(link.href)}
-                className={`relative py-2.5 px-0.5 whitespace-nowrap transition-colors duration-200 group ${
-                  isActive ? 'text-brand-blue font-bold' : 'text-brand-navy hover:text-brand-blue'
-                }`}
+                className={`relative py-2.5 px-0.5 whitespace-nowrap transition-colors duration-200 group ${isActive ? 'text-brand-blue font-bold' : 'text-brand-navy hover:text-brand-blue'
+                  }`}
               >
                 {link.label}
                 <span
-                  className={`absolute bottom-1 start-0 h-[3px] rounded-full bg-brand-yellow transition-all duration-300 ease-out ${
-                    isActive ? 'w-full' : 'w-0 group-hover:w-full'
-                  }`}
+                  className={`absolute bottom-1 start-0 h-[3px] rounded-full bg-brand-yellow transition-all duration-300 ease-out ${isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                    }`}
                 />
               </a>
             );
@@ -209,18 +208,19 @@ export default function Navbar({ onBookClick, onAuthClick }) {
                   key={cur}
                   type="button"
                   onClick={() => setCurrency(cur)}
-                  className={`rounded-full px-2 py-0.5 text-xs font-semibold border ${
-                    currency === cur
+                  className={`rounded-full px-2 py-0.5 text-xs font-semibold border ${currency === cur
                       ? 'bg-brand-yellow text-brand-navy border-brand-yellow'
                       : 'bg-white/10 text-white border-white/20'
-                  }`}
+                    }`}
                 >
-                  {cur}
+                  {cur === 'EGP' ? 'EGP' : `~ ${cur}`}
                 </button>
               ))}
             </div>
-            <span className="text-xs text-brand-yellow inline-flex items-center gap-1">
-              <FontAwesomeIcon icon={faSun} /> <b>أسوان</b>
+            <span className="text-xs text-white inline-flex items-center gap-1" id="tmpMob">
+              <FontAwesomeIcon icon={faSun} className="text-brand-yellow" />
+              <b className="text-brand-yellow font-bold">أسوان</b>
+              {temp && <span>{temp}</span>}
             </span>
           </div>
 
