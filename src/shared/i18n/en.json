@@ -502,5 +502,22 @@
         "a": "We operate daily from sunrise to sunset. Winter is great all day, while summer is best during sunrise and sunset."
       }
     }
+  },
+  "map": {
+    "sectionTitle": "Duck Egypt Launch Points & Map",
+    "sectionSubtitle": "Tap any hub or launch pin on the map to explore photos, location details, meeting points, and trips.",
+    "allHubsChip": "All Hubs in Egypt ({{count}})",
+    "allHubsTitle": "5 Hubs from Nile to Sea ✨",
+    "allHubsDesc": "Select any marker on the map or tap a card to explore launch details and trips:",
+    "availableBadge": "{{count}} Trips Available",
+    "availableBadgeSingle": "1 Trip Available",
+    "soonBadge": "Coming Soon ✨",
+    "meetingPointTitle": "Launch & Meeting Point",
+    "btnExploreTrips": "Explore {{name}} Trips",
+    "btnOpenGoogleMaps": "Open in Google Maps ↗",
+    "btnGroupBooking": "Groups & Corporate Booking",
+    "mapAriaLabel": "Duck Egypt Interactive Launch Points Map",
+    "pinAriaLabel": "{{name}} launch point - {{status}}",
+    "filterTripsAria": "Jump to {{name}} trips"
   }
 }
