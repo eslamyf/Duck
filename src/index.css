@@ -12,6 +12,7 @@
   --color-surface-mist: var(--color-surface-mist);
   --color-surface-mist2: var(--color-surface-mist2);
   --color-surface-light: var(--color-surface-light);
+  --color-surface-sand: var(--color-surface-sand);
   --color-brand-whatsapp: var(--color-whatsapp);
   --color-brand-yellow-hover: var(--color-yellow-hover);
   --color-brand-error: var(--color-error);
@@ -29,7 +30,7 @@
   --shadow-card: var(--shadow-card);
   --shadow-header: var(--shadow-header);
   --shadow-whatsapp: var(--shadow-whatsapp);
-  
+
   --radius-card: var(--radius-card);
   --radius-pill: var(--radius-pill);
 }
@@ -74,8 +75,8 @@ html {
 }
 
 body {
+  margin: 0;
   font-family: var(--font-body);
-  color: var(--color-navy);
   background:
     radial-gradient(1200px 420px at 100% -10%, rgba(20, 125, 159, 0.08), transparent 55%),
     linear-gradient(180deg, var(--color-surface-white) 0%, var(--color-surface-light) 48%, var(--color-surface-white) 100%);
@@ -88,6 +89,7 @@ body {
   0% {
     transform: translate3d(0, 0, 0);
   }
+
   100% {
     transform: translate3d(-50%, 0, 0);
   }
@@ -97,6 +99,7 @@ body {
   from {
     width: 0%;
   }
+
   to {
     width: 100%;
   }
@@ -265,4 +268,3 @@ body {
 .duck-pin.dim {
   opacity: 0.65;
 }
-

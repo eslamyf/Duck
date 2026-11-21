@@ -20,6 +20,7 @@
   --color-surface-mist:  #F3FAFC;   /* Soft sea-mist tint (Final_4.html --t) */
   --color-surface-mist2: #E4F1F6;   /* Deeper sea-mist tint (Final_4.html --t2) */
   --color-surface-light: #F7FBFD;   /* Gradient background mid-tone */
+  --color-surface-sand:  #F7F7F4;   /* Warm desert sand tint for editorial sections */
 
   /* ── State & Feedback Colors ─────────────────────────────── */
   --color-error:         #B3261E;   /* Final_4.html --err */

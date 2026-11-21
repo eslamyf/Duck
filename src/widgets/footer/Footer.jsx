@@ -1,5 +1,9 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import duckLogo from '../../shared/assets/icons/Artboard 14.png';
+import { useTranslation } from '../../shared/i18n/index.js';
+import { Button } from '../../shared/ui/index.js';
+import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
 import {
   faFacebookF,
   faInstagram,
@@ -18,11 +22,6 @@ import {
   faCheck,
   faCertificate,
 } from '@fortawesome/free-solid-svg-icons';
-import duckLogo from '../../shared/assets/icons/Artboard 14.png';
-import { useTranslation } from '../../shared/i18n/index.js';
-import { Button } from '../../shared/ui/index.js';
-import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
-import { buildWhatsAppUrl } from '../../shared/config/constants.js';
 
 export default function Footer({ onDestinationClick }) {
   const { t } = useTranslation();
@@ -34,6 +33,12 @@ export default function Footer({ onDestinationClick }) {
     { id: 'giza', label: t('footer.destGiza'), icon: faLocationDot },
     { id: 'siwa', label: t('footer.destSiwa'), icon: faLocationDot },
   ];
+
+  const buildWhatsAppUrl = (customText) => {
+    const phone = '201550061006';
+    const text = customText || t('footer.whatsappPrefill');
+    return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+  };
 
   return (
     <footer className="bg-brand-navy text-white p-0 text-start border-t border-white/8 font-body">
@@ -136,7 +141,7 @@ export default function Footer({ onDestinationClick }) {
               </Link>
             </li>
             <li>
-              <Link to={sectionLink(SECTIONS.ABOUT)} className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
+              <Link to={ROUTES.ABOUT} className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
                 <FontAwesomeIcon icon={faCircleInfo} className="text-xs text-brand-yellow opacity-85" />
                 {t('nav.about')}
               </Link>

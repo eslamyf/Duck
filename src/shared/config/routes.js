@@ -6,6 +6,7 @@
 export const ROUTES = Object.freeze({
   HOME: '/',
   GROUPS: '/groups',
+  ABOUT: '/about',
 });
 
 export const SECTIONS = Object.freeze({

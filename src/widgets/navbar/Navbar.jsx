@@ -87,16 +87,19 @@ export default function Navbar({ onBookClick, onAuthClick }) {
     { to: ROUTES.GROUPS, label: t('nav.groups'), icon: faUsersLine, isGroups: true },
     { to: sectionLink(SECTIONS.REVIEWS), label: t('nav.reviews'), icon: faStar, sectionId: SECTIONS.REVIEWS },
     { to: sectionLink(SECTIONS.FAQ), label: t('nav.faq'), icon: faCircleQuestion, sectionId: SECTIONS.FAQ },
-    { to: sectionLink(SECTIONS.ABOUT), label: t('nav.about'), icon: faUsers, sectionId: SECTIONS.ABOUT },
+    { to: ROUTES.ABOUT, label: t('nav.about'), icon: faUsers, isAbout: true },
   ];
 
   const isRtl = lang === 'ar';
 
   const checkIsActive = (link) => {
+    if (location.pathname === ROUTES.ABOUT) {
+      return Boolean(link.isAbout);
+    }
     if (location.pathname === ROUTES.GROUPS) {
       return Boolean(link.isGroups);
     }
-    if (link.isGroups) return false;
+    if (link.isAbout || link.isGroups) return false;
     return activeSection === link.sectionId;
   };
 

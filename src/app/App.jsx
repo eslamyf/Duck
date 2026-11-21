@@ -13,8 +13,20 @@ import { ROUTES, sectionLink, SECTIONS } from '../shared/config/routes.js';
 import { useTranslation } from '../shared/i18n/index.js';
 
 const GroupsPage = lazy(() => import('../widgets/groups-page/index.js'));
+const AboutPage = lazy(() => import('../pages/about/index.js'));
 
 function GroupsFallback() {
+  return (
+    <div
+      className="w-full bg-brand-navy min-h-[520px] h-[min(80vh,660px)] flex items-center justify-center text-white/50"
+      aria-busy="true"
+    >
+      <div className="w-10 h-10 border-4 border-brand-yellow/30 border-t-brand-yellow rounded-full animate-spin" />
+    </div>
+  );
+}
+
+function AboutFallback() {
   return (
     <div
       className="w-full bg-brand-navy min-h-[520px] h-[min(80vh,660px)] flex items-center justify-center text-white/50"
@@ -63,6 +75,8 @@ function LegacyHashRedirect() {
       const h = window.location.hash;
       if (h === '#/groups' || h === '#//groups' || h.startsWith('#/groups')) {
         navigate(ROUTES.GROUPS, { replace: true });
+      } else if (h === '#/about' || h === '#//about' || h.startsWith('#/about')) {
+        navigate(ROUTES.ABOUT, { replace: true });
       }
     };
     handleHash();
@@ -80,6 +94,8 @@ function TitleManager() {
   useEffect(() => {
     if (pathname === ROUTES.GROUPS) {
       document.title = `${t('groups.metaTitle')} | ${t('common.brandName')}`;
+    } else if (pathname === ROUTES.ABOUT) {
+      document.title = `${t('about.metaTitle')} | ${t('common.brandName')}`;
     } else {
       document.title = `${t('common.brandName')} - ${t('nav.home')}`;
     }
@@ -134,6 +150,14 @@ export default function App() {
             element={
               <Suspense fallback={<GroupsFallback />}>
                 <GroupsPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path={ROUTES.ABOUT}
+            element={
+              <Suspense fallback={<AboutFallback />}>
+                <AboutPage />
               </Suspense>
             }
           />
