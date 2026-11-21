@@ -176,16 +176,18 @@ export default function DestinationsSection({ onSelectDestination }) {
                   }`}
                 >
                   <span className="font-bold text-brand-yellow text-sm tracking-widest">{item.num}</span>
-                  <span className="[writing-mode:vertical-rl] text-lg min-[1100px]:text-xl font-bold tracking-wide text-white drop-shadow-sm">
-                    {destName}
-                  </span>
-                  {item.soon ? (
-                    <Badge variant="tag" size="xs" className="px-1.5 py-0.5 text-[10px] font-bold">
-                      {t('destinations.badgeSoon')}
-                    </Badge>
-                  ) : (
-                    <span className="w-1.5 h-1.5 rounded-full bg-brand-yellow/80" />
-                  )}
+                  <div className="flex-1 flex items-center justify-center my-auto">
+                    <span className="[writing-mode:vertical-rl] text-lg min-[1100px]:text-xl font-bold tracking-wide text-white drop-shadow-sm select-none">
+                      {destName}
+                    </span>
+                  </div>
+                  <div className="h-6 flex items-center justify-center">
+                    {item.soon ? (
+                      <Badge variant="tag" size="xs" className="px-1.5 py-0.5 text-[10px] font-bold">
+                        {t('destinations.badgeSoon')}
+                      </Badge>
+                    ) : null}
+                  </div>
                 </button>
 
                 {/* Expanded Card Content (Desktop active / Always visible on mobile snap card) */}
