@@ -11,6 +11,11 @@
 
 Every AI coding agent, subagent, or automated workflow operating in this repository **MUST** execute this pre-flight protocol before planning, creating, modifying, or deleting any code:
 
+> ### **القاعدة #1 الصارمة — ممنوع التكرار نهائياً (اعمل الحاجة مرة واحدة فقط واستدعيها / DRY Principle):**
+> - **يُمنع منعًا باتًا إنشاء مجلدات `hooks/` أو `utils/` أو مكونات UI أو دوال مساعدة مكررة داخل `widgets/` أو `pages/`.**
+> - **المرجع الوحيد لأي Hook هو `src/shared/hooks`، ولأي مكون بصري هو `src/shared/ui`، ولأي دالة مساعدة هو `src/shared/utils`، ولأي ثابت أو مسار هو `src/shared/config`.**
+> - **قبل كتابة أو إنشاء أي ملف جديد، يجب إثبات فحص `src/shared/` و `src/entities/` والتأكد من عدم وجود بديل له؛ وإذا وُجد وكان يحتاج توسعة بسيطة يُوسّع مكانه فوراً دون تكرار.**
+
 1. **Read & Cross-Reference First:**
    - Read this `AGENTS.md` file in full.
    - Cross-reference every business requirement, user flow, data contract, and acceptance criterion against [`duck_entertainment_comprehensive_project_brief_srs_for_vibe_coding.md`](./duck_entertainment_comprehensive_project_brief_srs_for_vibe_coding.md) and [`README.md`](./README.md).

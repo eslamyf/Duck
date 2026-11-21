@@ -2,7 +2,7 @@ import { useRef, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShip } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
-import { useGroupStudio } from './hooks/useGroupStudio.js';
+import { useGroupStudio } from '../../shared/hooks/index.js';
 import GroupStage from './GroupStage.jsx';
 import GroupProgressBar from './GroupProgressBar.jsx';
 import GroupForm from './GroupForm.jsx';

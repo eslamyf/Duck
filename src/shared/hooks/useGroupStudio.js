@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
-import { GROUP_TYPES, TIMES_OF_DAY } from '../sceneData.js';
-import { DESTINATIONS } from '../../destinations/destinationsData.js';
-import { buildWhatsAppUrl } from '../../../shared/config/constants.js';
+import { GROUP_TYPES, TIMES_OF_DAY } from '../../widgets/groups-page/sceneData.js';
+import { DESTINATIONS } from '../../widgets/destinations/destinationsData.js';
+import { buildWhatsAppUrl } from '../config/constants.js';
 
 export function useGroupStudio({ t }) {
   const defaultDate = useMemo(() => {
