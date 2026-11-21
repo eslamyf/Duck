@@ -102,5 +102,114 @@
         "alt": "Siwa protected area cold lake amidst the desert sands"
       }
     }
+  },
+  "trips": {
+    "title": "Featured Trips by Verified Operators",
+    "subtitle": "Discover the best water adventures from certified operators — kayak, stand-up paddleboard, and water bikes across Egypt's most stunning waters.",
+    "filterAriaLabel": "Filter trips by destination",
+    "listAriaLabel": "Trips list",
+    "filterAll": "All",
+    "bookTrip": "Book Trip",
+    "bookNow": "Book Now",
+    "details": "Trip Details",
+    "detailsShort": "Details",
+    "foreigner": "Foreigner",
+    "egyptian": "Egyptian",
+    "unified": "Unified",
+    "perHour": "per hour",
+    "currency": "EGP",
+    "includesTitle": "Includes:",
+    "includesMore": "+{{count}} more",
+    "waterbikeLimit": "Only 2 bikes (Max 2)",
+    "availableUnits": "10 units available",
+    "waterbikeAvailable": "Only 2 bikes (Max 2)",
+    "mobileSwipeNotice": "{{current}} / {{total}}  ·  Swipe to explore remaining trips",
+    "activities": {
+      "kayak": "Kayak",
+      "sup": "Stand-Up Paddleboard",
+      "waterbike": "Water Bike"
+    },
+    "durations": {
+      "oneToTwoHours": "1 – 2 Hours",
+      "twoToThreeHours": "2 – 3 Hours",
+      "oneHour": "1 Hour",
+      "asPackage": "Per Package"
+    },
+    "inclusions": {
+      "kayakEquipped": "Fully equipped kayak",
+      "lifeJacket": "Certified life vest & safety gear",
+      "proGuide": "Professional guide",
+      "scenicStops": "Scenic photo stops",
+      "supBoard": "SUP board & paddle",
+      "briefing": "Safety & paddling briefing",
+      "proSupervision": "Professional supervision",
+      "photoStops": "Scenic photo stops",
+      "privateCaptain": "Private captain throughout the trip",
+      "safetyBriefing": "Complete safety guidance",
+      "proCaptain": "Professional captain",
+      "nubianTour": "Authentic Nubian river experience",
+      "safetyGear": "Complete safety gear",
+      "coastalSafety": "Safety support in turquoise waters",
+      "waterbikeUnit": "Equipped water bike unit",
+      "noSwimmingNeeded": "No swimming skills required",
+      "nileScoutsSupport": "Nile Marine Scouts support"
+    },
+    "items": {
+      "botanicalGarden": {
+        "title": "Tour around Botanical Island",
+        "desc": "Kayak around the Botanical Island: serene waters, exotic trees and rare flora from across the world, away from the crowds. Spot native birds and capture unforgettable memories.",
+        "alt": "Kayaking around the Botanical Island in Aswan"
+      },
+      "supNile": {
+        "title": "Nile Stand-Up Paddleboard Experience",
+        "desc": "Paddle tranquil waters around Elephantine Island with vistas of the river, granite islets, and Nubian heritage. No prior experience needed; full safety instruction provided.",
+        "alt": "Stand-up paddleboarding on the Nile in Aswan"
+      },
+      "slougaGhazal": {
+        "title": "Salouga & Ghazal Islands Escape",
+        "desc": "Escape to the pristine beauty of Salouga & Ghazal protected islands. Paddle through peaceful Nile channels, explore hidden archipelagos, and view local wildlife. Daily 7 AM – 6 PM except Fridays.",
+        "alt": "Kayaking in Salouga and Ghazal protected islands in Aswan"
+      },
+      "kayakPrivate": {
+        "title": "Kayak — Private Guided Tour",
+        "desc": "A relaxed, premium experience with a dedicated professional captain accompanying you all the way.",
+        "alt": "Private guided kayak tour on the Nile"
+      },
+      "kayakFree": {
+        "title": "Kayak — Open Free Tour",
+        "desc": "An open kayak tour on the Nile around Elephantine Island in serene, welcoming waters suitable for all.",
+        "alt": "Open kayak tour near Elephantine Island"
+      },
+      "gharbExplorer": {
+        "title": "Gharb Soheil — Explorer Tour",
+        "desc": "A comfortable and safe journey with a licensed captain throughout the tour.",
+        "alt": "Explorer kayak tour in Gharb Soheil"
+      },
+      "gharbAdventure": {
+        "title": "Gharb Soheil — Adventure Tour",
+        "desc": "Crafted for confident paddlers with previous kayaking experience.",
+        "alt": "Adventure kayak tour in Gharb Soheil"
+      },
+      "omElrakham": {
+        "title": "Um El-Rakham Beach Tour",
+        "desc": "An hour of turquoise adventure in crystal-clear waters and striking Mediterranean coastal views. Self-guided for swimmers with basic kayak handling skills.",
+        "alt": "Kayaking in Um El-Rakham beach in Marsa Matrouh"
+      },
+      "ageebaBeach": {
+        "title": "Ageeba Beach Tour",
+        "desc": "An hour of turquoise adventure in crystal-clear waters and striking Mediterranean coastal views. Self-guided for swimmers with basic kayak handling skills.",
+        "alt": "Kayaking in Ageeba beach in Marsa Matrouh"
+      },
+      "waterbikeNile": {
+        "title": "Water Bike on the Nile",
+        "desc": "Exciting water bike ride on the Nile — strictly 2 units available per time slot. Ideal for couples and friends, with certified life vests. No swimming required.",
+        "alt": "Water bike on the Nile at sunset"
+      },
+      "gizaAbbasBridge": {
+        "title": "Giza — Abbas Bridge Tour",
+        "desc": "In the historic heart of Giza on the Nile: a full hour of kayaking for everyone, solo or with friends and family, no prior experience needed. Daily from sunrise to sunset.",
+        "alt": "Kayaking on the Nile near Abbas Bridge in Giza"
+      }
+    }
   }
 }
