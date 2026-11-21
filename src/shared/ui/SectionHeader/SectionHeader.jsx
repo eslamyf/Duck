@@ -3,6 +3,7 @@ export default function SectionHeader({
   subtitle,
   tag,
   align = 'start',
+  theme = 'light',
   className = '',
   titleClassName = '',
   subtitleClassName = '',
@@ -14,6 +15,10 @@ export default function SectionHeader({
   };
 
   const alignClass = alignClasses[align] || alignClasses.start;
+  const isDark = theme === 'dark';
+
+  const defaultTitleClass = isDark ? 'text-white' : 'text-brand-navy';
+  const defaultSubtitleClass = isDark ? 'text-white/80' : 'text-brand-navy/72';
 
   return (
     <header className={`flex flex-col mb-7 min-[901px]:mb-9 ${alignClass} ${className}`.trim()} {...rest}>
@@ -23,12 +28,12 @@ export default function SectionHeader({
         </div>
       )}
       {title && (
-        <h2 className={`text-2xl min-[901px]:text-4xl font-bold text-brand-navy leading-tight tracking-tight mb-2 ${titleClassName}`.trim()}>
+        <h2 className={`text-2xl min-[901px]:text-4xl font-bold leading-tight tracking-tight mb-2 ${defaultTitleClass} ${titleClassName}`.trim()}>
           {title}
         </h2>
       )}
       {subtitle && (
-        <p className={`text-sm min-[901px]:text-base text-brand-navy/72 leading-relaxed max-w-[62ch] ${subtitleClassName}`.trim()}>
+        <p className={`text-sm min-[901px]:text-base leading-relaxed max-w-[62ch] ${defaultSubtitleClass} ${subtitleClassName}`.trim()}>
           {subtitle}
         </p>
       )}
