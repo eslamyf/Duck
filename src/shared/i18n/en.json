@@ -66,5 +66,41 @@
     "stat3Number": "100%",
     "stat3Label": "Certified Life Jackets & Guides",
     "videoPosterAlt": "Duck Kayak Fleet on the Aswan Nile"
+  },
+  "destinations": {
+    "title": "Explore Our Destinations",
+    "subtitle": "Click on any destination to discover the spot, meeting point, and available trips.",
+    "badgeSoon": "Coming Soon",
+    "btnViewTrips": "Explore {{name}} Trips ({{count}}) →",
+    "btnViewTripSingle": "Explore {{name}} Trip (1) →",
+    "tripsComingSoon": "Trips available soon",
+    "tabAriaLabel": "Select a destination",
+    "items": {
+      "aswan": {
+        "name": "Aswan Island",
+        "description": "Elephantine Island in Aswan is one of the most historic and picturesque Nile islands, blending ancient Egyptian heritage with vibrant Nubian culture. Featuring the Temple of Khnum, ancient Nilometers, colorful Nubian heritage villages, palm groves, and tranquil eco-lodges.",
+        "alt": "Nile scenery at Elephantine Island with Duck kayak"
+      },
+      "gharb": {
+        "name": "Gharb Soheil",
+        "description": "A unique Nubian destination on the Nile's West Bank, famous for colorful domed houses and handcrafted souvenirs. Experience warm hospitality, timeless Nubian culture, camel rides, and scenic Nile adventures.",
+        "alt": "Vibrant colorful Nubian village houses in Gharb Soheil"
+      },
+      "matrouh": {
+        "name": "Marsa Matrouh",
+        "description": "The jewel of Egypt's Mediterranean coast. Soft white sands and crystalline turquoise waters creating an unparalleled natural masterpiece. The ideal haven for tranquility and coastal adventure.",
+        "alt": "Crystal clear turquoise waters along the Marsa Matrouh coast"
+      },
+      "giza": {
+        "name": "Giza",
+        "description": "Where timeless history meets the serene Nile. Blending ancient grandeur with modern vitality, offering stunning views and a refreshing river escape right beside historical landmarks.",
+        "alt": "Nile palms and the Great Pyramids in Giza"
+      },
+      "siwa": {
+        "name": "Siwa Oasis",
+        "description": "A timeless sanctuary of desert mystique and history, once known as the Oasis of Amun. Surrounded by date groves, natural cold springs, and salt lakes — a sunset kayak experience suited for everyone.",
+        "alt": "Siwa protected area cold lake amidst the desert sands"
+      }
+    }
   }
 }
