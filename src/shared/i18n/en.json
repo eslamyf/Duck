@@ -436,5 +436,71 @@
     "emptyTitle": "Be the first to share your experience",
     "emptyText": "Real reviews from our guests are collected on Google. Tried an experience with us? Share your review and it will appear here.",
     "viewOnGoogle": "See reviews on Google"
+  },
+  "faq": {
+    "title": "Everything You Need to Know About Duck",
+    "subtitle": "Choose a category to view relevant questions and answers.",
+    "categoriesLabel": "FAQ Categories",
+    "categories": {
+      "safety": "Safety",
+      "beforeTrip": "Before the Trip",
+      "booking": "Booking"
+    },
+    "sideCard": {
+      "title": "Didn't find your answer?",
+      "desc": "Our team is ready to answer on WhatsApp, including groups and corporate requests.",
+      "btn": "Ask us on WhatsApp",
+      "prefill": "Hello, I have a question about Duck: "
+    },
+    "items": {
+      "isSafe": {
+        "q": "Is the activity safe?",
+        "a": "Yes. All our activities are designed to be completely safe. We provide certified life jackets, comprehensive safety briefings before departure, and continuous support throughout the journey."
+      },
+      "needSwim": {
+        "q": "Do I need to know how to swim?",
+        "a": "No, not at all. Certified life jackets keep you safe even if you are not a swimmer."
+      },
+      "duration": {
+        "q": "How long does the trip take?",
+        "a": "Trip duration depends on the package selected. The standard package includes an equipped kayak, life jacket, and paddle."
+      },
+      "maxWeight": {
+        "q": "What is the maximum participant weight?",
+        "a": "Maximum weight limit is 130 kg per participant."
+      },
+      "suitableFor": {
+        "q": "Who is the activity suitable for?",
+        "a": "Our activities are suitable for:<br>• Solo adventurers<br>• Friends<br>• Families<br>• Tourists"
+      },
+      "minAge": {
+        "q": "Is there a minimum age limit?",
+        "a": "Yes. Children must be accompanied by an adult. Requirements may vary depending on activity type."
+      },
+      "whatToWear": {
+        "q": "What should I wear?",
+        "a": "We recommend:<br>• Comfortable clothing<br>• Shorts or activewear<br>• Light shoes or water sandals"
+      },
+      "phoneAllowed": {
+        "q": "Can I bring my phone?",
+        "a": "Yes, but we strongly recommend a waterproof pouch or keeping it safely stored ashore."
+      },
+      "photography": {
+        "q": "Is photography available?",
+        "a": "Professional photography packages are available upon request."
+      },
+      "howToBook": {
+        "q": "How do I book?",
+        "a": "You can book seamlessly through our website. For group and corporate bookings, contact us directly."
+      },
+      "cancellation": {
+        "q": "Can I cancel my booking?",
+        "a": "Yes. Cancellation and refund policy:<br>• Free cancellation up to 24 hours prior (100% full refund)<br>• Less than 24 hours prior: non-refundable<br>• No-show: non-refundable<br>• Adverse weather or force majeure: rescheduled or full refund provided<br>• Delays: we hold an operational grace window; failure to attend is treated as a no-show"
+      },
+      "operatingHours": {
+        "q": "What are the operating hours?",
+        "a": "We operate daily from sunrise to sunset. Winter is great all day, while summer is best during sunrise and sunset."
+      }
+    }
   }
 }

@@ -5,6 +5,7 @@ import HeroSection from '../widgets/hero/HeroSection.jsx';
 import DestinationsSection from '../widgets/destinations/index.js';
 import TripsSection from '../widgets/trips/index.js';
 import ReviewsSection from '../widgets/reviews/index.js';
+import FAQSection from '../widgets/faq/index.js';
 import Footer from '../widgets/footer/Footer.jsx';
 import { ROUTES, sectionLink, SECTIONS } from '../shared/config/routes.js';
 import { useTranslation } from '../shared/i18n/index.js';
@@ -120,6 +121,7 @@ export default function App() {
                   onFilterChange={setSelectedDestinationFilter}
                 />
                 <ReviewsSection />
+                <FAQSection />
               </>
             }
           />
