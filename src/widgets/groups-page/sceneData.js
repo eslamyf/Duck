@@ -11,10 +11,10 @@ import {
   faMoon,
 } from '@fortawesome/free-solid-svg-icons';
 
-import kayakImg from '../../shared/assets/images/trips/kayak-free-160w.webp';
-import supImg from '../../shared/assets/images/trips/sup-nile-160w.webp';
-import waterbikeImg from '../../shared/assets/images/trips/waterbike-nile-160w.webp';
-import mixedImg from '../../shared/assets/images/trips/botanical-garden-160w.webp';
+import kayakImg from '../../shared/assets/images/trips/kayak-free-640w.webp';
+import supImg from '../../shared/assets/images/trips/sup-nile-640w.webp';
+import waterbikeImg from '../../shared/assets/images/trips/waterbike-nile-640w.webp';
+import mixedImg from '../../shared/assets/images/trips/botanical-garden-640w.webp';
 
 export const GROUP_TYPES = [
   {

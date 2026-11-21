@@ -110,7 +110,7 @@ export default function GroupForm({
           />
         </div>
 
-        {/* Activities Selector */}
+        {/* Activities Selector - Full Card Background Photography */}
         <div>
           <label className="block font-bold text-sm min-[901px]:text-base text-brand-navy mb-2.5">
             {t('groupsPage.activityLabel')}
@@ -124,22 +124,41 @@ export default function GroupForm({
                   type="button"
                   onClick={() => setField('act', act.id)}
                   aria-pressed={isSelected}
-                  className={`flex flex-col items-center justify-center p-2.5 min-h-[96px] rounded-2xl border-2 transition-all duration-200 cursor-pointer ${
+                  className={`group relative overflow-hidden flex flex-col items-center justify-end p-3 min-h-[92px] min-[901px]:min-h-[100px] rounded-2xl border-2 transition-all duration-200 cursor-pointer text-white shadow-sm ${
                     isSelected
-                      ? 'bg-brand-navy text-brand-yellow border-brand-navy shadow-md -translate-y-1'
-                      : 'bg-white text-brand-navy border-brand-navy/15 hover:border-brand-blue hover:bg-surface-mist'
+                      ? 'border-brand-yellow ring-2 ring-brand-yellow/50 shadow-lg -translate-y-1'
+                      : 'border-white/20 hover:border-brand-yellow/60 hover:scale-[1.02]'
                   }`}
                 >
-                  <div className="w-12 h-12 rounded-xl overflow-hidden mb-1.5 border border-brand-navy/15 flex-shrink-0 shadow-2xs">
+                  {/* Full Bleed Background Activity Photo */}
+                  {act.image && (
                     <img
                       src={act.image}
                       alt=""
-                      className="w-full h-full object-cover"
+                      aria-hidden="true"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
+                  )}
+
+                  {/* Dark Vignette Overlay for Readability */}
+                  <div
+                    className={`absolute inset-0 transition-colors duration-200 ${
+                      isSelected
+                        ? 'bg-gradient-to-t from-brand-navy/95 via-brand-navy/60 to-brand-navy/30'
+                        : 'bg-gradient-to-t from-brand-navy/90 via-brand-navy/50 to-black/25 group-hover:from-brand-navy/80'
+                    }`}
+                  />
+
+                  {/* Activity Name */}
+                  <div className="relative z-10 flex flex-col items-center justify-center w-full text-center">
+                    <span
+                      className={`font-bold text-xs min-[901px]:text-sm drop-shadow-md leading-tight transition-colors ${
+                        isSelected ? 'text-brand-yellow font-black' : 'text-white'
+                      }`}
+                    >
+                      {t(`groupsPage.activities.${act.i18nKey}`)}
+                    </span>
                   </div>
-                  <span className="font-bold text-xs min-[901px]:text-sm text-center leading-tight">
-                    {t(`groupsPage.activities.${act.i18nKey}`)}
-                  </span>
                 </button>
               );
             })}
