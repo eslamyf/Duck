@@ -206,7 +206,7 @@ body {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: var(--color-yellow, #f5e847);
+  background: var(--color-yellow, #FDFB45);
   border: 3px solid var(--color-navy, #0c1226);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.48);
   overflow: hidden;
@@ -216,9 +216,9 @@ body {
 }
 
 .duck-pin .dava img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
   display: block;
 }
 
@@ -238,17 +238,18 @@ body {
 .duck-pin:hover .dava,
 .duck-pin.on .dava {
   transform: scale(1.18);
-  box-shadow: 0 0 0 6px rgba(245, 232, 71, 0.35), 0 8px 20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 6px rgba(253, 251, 69, 0.4), 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
 .duck-pin:hover .dlbl,
 .duck-pin.on .dlbl {
-  background: var(--color-yellow, #f5e847);
+  background: var(--color-yellow, #FDFB45);
   color: var(--color-navy, #0c1226);
-  border-color: var(--color-yellow, #f5e847);
+  border-color: var(--color-yellow, #FDFB45);
 }
 
 .duck-pin.dim {
-  opacity: 0.55;
+  opacity: 0.65;
+  filter: grayscale(15%);
 }
 

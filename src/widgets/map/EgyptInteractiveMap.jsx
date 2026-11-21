@@ -7,7 +7,6 @@ import { useTranslation } from '../../shared/i18n/index.js';
 import duckPinLogo from '../../shared/assets/icons/duck-pin-logo.png';
 import duckLogo from '../../shared/assets/icons/Artboard 14.png';
 
-const EGYPT_BOUNDS = L.latLngBounds([21.8, 24.6], [31.9, 36.8]);
 const SATELLITE_TILE_URL =
   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
 
@@ -48,19 +47,16 @@ export default function EgyptInteractiveMap({
       keyboard: false,
       zoomSnap: 0.25,
       zoomDelta: 0.5,
-      minZoom: 5.5,
+      minZoom: 5.85,
       maxZoom: 16,
-      maxBounds: EGYPT_BOUNDS,
-      maxBoundsViscosity: 1.0,
       attributionControl: false,
       zoomControl: false,
     });
 
-    // Add ArcGIS High-Resolution World Imagery (Real Satellite Tiles)
+    // Add ArcGIS High-Resolution World Imagery (Seamless Edge-to-Edge Satellite Tiles with NO boundaries)
     L.tileLayer(SATELLITE_TILE_URL, {
       maxZoom: 18,
       noWrap: true,
-      bounds: EGYPT_BOUNDS,
     }).addTo(map);
 
     // Create markers for each pin
@@ -70,7 +66,7 @@ export default function EgyptInteractiveMap({
         className: 'duck-marker',
         html: `
           <div class="duck-pin" data-loc="${p.destId}" role="button" tabindex="0" aria-label="${pinTitle}">
-            <span class="dava"><img src="${duckPinLogo}" alt="Duck" /></span>
+            <span class="dava"><img src="${duckPinLogo}" onerror="this.onerror=null;this.src='/icon-192.png'" alt="Duck" /></span>
             <span class="dlbl">${pinTitle}</span>
           </div>
         `,
@@ -87,7 +83,7 @@ export default function EgyptInteractiveMap({
     });
 
     const group = L.featureGroup(markers);
-    map.fitBounds(group.getBounds(), { padding: [48, 48] });
+    map.fitBounds(group.getBounds(), { padding: [56, 56] });
 
     mapInstanceRef.current = map;
     markersRef.current = markers;
@@ -117,11 +113,14 @@ export default function EgyptInteractiveMap({
 
     // Fly camera
     if (activeIdx < 0 && group) {
-      map.flyToBounds(group.getBounds(), { padding: [48, 48], duration: 0.85 });
+      map.flyToBounds(group.getBounds(), { padding: [56, 56], duration: 0.85 });
     } else {
       const activePin = pins.find((p) => p.destId === activeIdx);
       if (activePin) {
-        map.flyTo([activePin.lat, activePin.lng], 13, { duration: 1 });
+        // Fly directly to the real pinpoint location (flyLat, flyLng)
+        const targetLat = activePin.flyLat ?? activePin.lat;
+        const targetLng = activePin.flyLng ?? activePin.lng;
+        map.flyTo([targetLat, targetLng], 13, { duration: 1 });
       }
     }
 

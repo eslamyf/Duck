@@ -10,9 +10,13 @@ export const MAP_PINS = [
     titleKey: 'destinations.items.aswan.name',
     subAr: 'بجوار مكاني كافيه — النيل',
     subEn: 'Next to Makani Cafe — The Nile',
-    lat: 24.1150,
-    lng: 32.9020,
-    // Coordinate on 1000x850 SVG viewport
+    // Display coordinates on Egypt-wide overview (distinct separation from Gharb Soheil)
+    lat: 24.3200,
+    lng: 33.1200,
+    // Real-world pinpoint coordinates for camera flyTo zoom
+    flyLat: 24.0889,
+    flyLng: 32.8998,
+    // Coordinate on 1000x850 SVG viewport fallback
     x: 712,
     y: 690,
     googleMapsUrl: 'https://maps.app.goo.gl/t4GVSBzuXVRoqhRs5',
@@ -26,8 +30,12 @@ export const MAP_PINS = [
     titleKey: 'destinations.items.gharb.name',
     subAr: 'الشيمة بيتش — قلب النوبة',
     subEn: 'Al-Sheema Beach — Nubian Heart',
-    lat: 24.0350,
-    lng: 32.8620,
+    // Display coordinates on Egypt-wide overview (positioned south-west of Aswan)
+    lat: 23.8200,
+    lng: 32.6500,
+    // Real-world pinpoint coordinates for camera flyTo zoom
+    flyLat: 24.0696,
+    flyLng: 32.8650,
     x: 686,
     y: 720,
     googleMapsUrl: 'https://www.google.com/maps?q=24.0695999,32.8649605',
@@ -43,6 +51,8 @@ export const MAP_PINS = [
     subEn: 'Ageeba & Om El-Rakham Beaches',
     lat: 31.4143,
     lng: 27.0064,
+    flyLat: 31.4143,
+    flyLng: 27.0064,
     x: 250,
     y: 110,
     googleMapsUrl: 'https://www.google.com/maps?q=31.414321,27.0064276',
@@ -58,6 +68,8 @@ export const MAP_PINS = [
     subEn: 'Egyptian Sea Scouts — Abbas Bridge',
     lat: 30.0226,
     lng: 31.2194,
+    flyLat: 30.0226,
+    flyLng: 31.2194,
     x: 578,
     y: 220,
     googleMapsUrl: 'https://maps.app.goo.gl/mcW6d1uyYHAPsbM27',
@@ -73,6 +85,8 @@ export const MAP_PINS = [
     subEn: 'Salt Lakes & Dakrour Mountain',
     lat: 29.2032,
     lng: 25.5196,
+    flyLat: 29.2032,
+    flyLng: 25.5196,
     x: 120,
     y: 285,
     googleMapsUrl: 'https://www.google.com/maps?q=29.2032,25.5196',
