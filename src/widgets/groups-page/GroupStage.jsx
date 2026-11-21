@@ -66,6 +66,27 @@ export default function GroupStage({ state, t, lang }) {
           </div>
         </div>
       </div>
+
+      {/* Organic Nile Wave Divider across the bottom of the Hero Stage */}
+      <div className="absolute bottom-0 inset-x-0 w-full overflow-hidden leading-none z-10 pointer-events-none" aria-hidden="true">
+        <svg
+          viewBox="0 0 1440 120"
+          preserveAspectRatio="none"
+          className="relative block w-full h-12 sm:h-16 md:h-20"
+        >
+          {/* Semi-transparent Nile blue water wave */}
+          <path
+            d="M0,32 C240,95 480,15 720,55 C960,95 1200,20 1440,50 L1440,120 L0,120 Z"
+            fill="var(--color-blue)"
+            fillOpacity="0.4"
+          />
+          {/* Solid white wave transitioning into card and page */}
+          <path
+            d="M0,55 C320,115 640,35 960,85 C1200,115 1360,60 1440,70 L1440,120 L0,120 Z"
+            fill="#ffffff"
+          />
+        </svg>
+      </div>
     </section>
   );
 }

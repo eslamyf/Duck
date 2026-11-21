@@ -7,6 +7,7 @@ import {
   faUsers,
   faCalendarDays,
   faLocationDot,
+  faCheck,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   GROUP_TYPES,
@@ -78,14 +79,20 @@ export default function GroupForm({
                   type="button"
                   onClick={() => setField('type', idx)}
                   aria-pressed={isSelected}
-                  className={`flex flex-col items-center justify-center gap-1.5 p-3 min-h-[76px] rounded-2xl border-2 transition-all duration-200 cursor-pointer ${
+                  className={`relative flex flex-col items-center justify-center gap-1.5 p-3 min-h-[82px] rounded-2xl border-2 transition-all duration-200 cursor-pointer ${
                     isSelected
-                      ? 'bg-brand-navy text-brand-yellow border-brand-navy shadow-md -translate-y-1'
-                      : 'bg-white text-brand-navy border-brand-navy/15 hover:border-brand-blue hover:bg-surface-mist'
+                      ? 'bg-brand-navy text-brand-yellow border-brand-yellow ring-4 ring-brand-yellow/30 shadow-lg -translate-y-1 scale-[1.02] z-10'
+                      : 'bg-white text-brand-navy border-brand-navy/15 hover:border-brand-blue hover:bg-surface-mist opacity-85 hover:opacity-100'
                   }`}
                 >
+                  {/* Distinctive Checkmark Badge */}
+                  {isSelected && (
+                    <span className="absolute top-1.5 end-1.5 w-5 h-5 rounded-full bg-brand-yellow text-brand-navy flex items-center justify-center text-[10px] font-black shadow-sm">
+                      <FontAwesomeIcon icon={faCheck} />
+                    </span>
+                  )}
                   <FontAwesomeIcon icon={type.icon} className={`text-xl ${isSelected ? 'text-brand-yellow' : 'text-brand-blue'}`} />
-                  <span className="font-bold text-xs min-[901px]:text-sm text-center leading-tight">
+                  <span className={`font-bold text-xs min-[901px]:text-sm text-center leading-tight ${isSelected ? 'font-black' : ''}`}>
                     {t(`groupsPage.types.${type.i18nKey}`)}
                   </span>
                 </button>
@@ -124,12 +131,19 @@ export default function GroupForm({
                   type="button"
                   onClick={() => setField('act', act.id)}
                   aria-pressed={isSelected}
-                  className={`group relative overflow-hidden flex flex-col items-center justify-end p-3 min-h-[92px] min-[901px]:min-h-[100px] rounded-2xl border-2 transition-all duration-200 cursor-pointer text-white shadow-sm ${
+                  className={`group relative overflow-hidden flex flex-col items-center justify-end p-3 min-h-[96px] min-[901px]:min-h-[106px] rounded-2xl border-3 transition-all duration-200 cursor-pointer text-white ${
                     isSelected
-                      ? 'border-brand-yellow ring-2 ring-brand-yellow/50 shadow-lg -translate-y-1'
-                      : 'border-white/20 hover:border-brand-yellow/60 hover:scale-[1.02]'
+                      ? 'border-brand-yellow ring-4 ring-brand-yellow/40 shadow-xl -translate-y-1.5 scale-[1.03] z-10'
+                      : 'border-white/20 hover:border-brand-yellow/60 hover:scale-[1.01] opacity-75 hover:opacity-100'
                   }`}
                 >
+                  {/* Distinctive Checkmark Badge */}
+                  {isSelected && (
+                    <span className="absolute top-2 end-2 z-20 w-6 h-6 rounded-full bg-brand-yellow text-brand-navy flex items-center justify-center text-xs font-black shadow-md">
+                      <FontAwesomeIcon icon={faCheck} />
+                    </span>
+                  )}
+
                   {/* Full Bleed Background Activity Photo */}
                   {act.image && (
                     <img
@@ -144,16 +158,18 @@ export default function GroupForm({
                   <div
                     className={`absolute inset-0 transition-colors duration-200 ${
                       isSelected
-                        ? 'bg-gradient-to-t from-brand-navy/95 via-brand-navy/60 to-brand-navy/30'
-                        : 'bg-gradient-to-t from-brand-navy/90 via-brand-navy/50 to-black/25 group-hover:from-brand-navy/80'
+                        ? 'bg-gradient-to-t from-brand-navy/95 via-brand-navy/60 to-brand-navy/20'
+                        : 'bg-gradient-to-t from-brand-navy/90 via-brand-navy/50 to-black/30'
                     }`}
                   />
 
-                  {/* Activity Name */}
+                  {/* Activity Name with Clear Active Pill */}
                   <div className="relative z-10 flex flex-col items-center justify-center w-full text-center">
                     <span
-                      className={`font-bold text-xs min-[901px]:text-sm drop-shadow-md leading-tight transition-colors ${
-                        isSelected ? 'text-brand-yellow font-black' : 'text-white'
+                      className={`font-bold text-xs min-[901px]:text-sm drop-shadow-md leading-tight transition-all px-2.5 py-0.5 rounded-full ${
+                        isSelected
+                          ? 'bg-brand-yellow text-brand-navy font-black shadow-sm'
+                          : 'text-white'
                       }`}
                     >
                       {t(`groupsPage.activities.${act.i18nKey}`)}
@@ -182,12 +198,19 @@ export default function GroupForm({
                   type="button"
                   onClick={() => setField('loc', dest.id)}
                   aria-pressed={isSelected}
-                  className={`group relative overflow-hidden flex flex-col items-center justify-end p-2.5 min-h-[82px] min-[901px]:min-h-[88px] rounded-2xl border-2 transition-all duration-200 cursor-pointer text-white shadow-sm ${
+                  className={`group relative overflow-hidden flex flex-col items-center justify-end p-2.5 min-h-[86px] min-[901px]:min-h-[94px] rounded-2xl border-3 transition-all duration-200 cursor-pointer text-white ${
                     isSelected
-                      ? 'border-brand-yellow ring-2 ring-brand-yellow/40 shadow-lg -translate-y-1'
-                      : 'border-white/20 hover:border-brand-yellow/60 hover:scale-[1.02]'
+                      ? 'border-brand-yellow ring-4 ring-brand-yellow/40 shadow-xl -translate-y-1.5 scale-[1.03] z-10'
+                      : 'border-white/20 hover:border-brand-yellow/60 hover:scale-[1.01] opacity-75 hover:opacity-100'
                   }`}
                 >
+                  {/* Distinctive Checkmark Badge */}
+                  {isSelected && (
+                    <span className="absolute top-2 end-2 z-20 w-6 h-6 rounded-full bg-brand-yellow text-brand-navy flex items-center justify-center text-xs font-black shadow-md">
+                      <FontAwesomeIcon icon={faCheck} />
+                    </span>
+                  )}
+
                   {/* Background Destination Photo */}
                   {imgSrc && (
                     <img
@@ -202,16 +225,18 @@ export default function GroupForm({
                   <div
                     className={`absolute inset-0 transition-colors duration-200 ${
                       isSelected
-                        ? 'bg-gradient-to-t from-brand-navy/95 via-brand-navy/65 to-brand-navy/35'
-                        : 'bg-gradient-to-t from-brand-navy/90 via-brand-navy/55 to-black/30 group-hover:from-brand-navy/80'
+                        ? 'bg-gradient-to-t from-brand-navy/95 via-brand-navy/60 to-brand-navy/20'
+                        : 'bg-gradient-to-t from-brand-navy/90 via-brand-navy/55 to-black/30'
                     }`}
                   />
 
-                  {/* Content */}
+                  {/* Content with Active Pill Highlight */}
                   <div className="relative z-10 flex flex-col items-center justify-center w-full text-center">
                     <span
-                      className={`font-bold text-xs min-[901px]:text-sm drop-shadow-md leading-tight transition-colors ${
-                        isSelected ? 'text-brand-yellow font-black' : 'text-white'
+                      className={`font-bold text-xs min-[901px]:text-sm drop-shadow-md leading-tight transition-all px-2.5 py-0.5 rounded-full ${
+                        isSelected
+                          ? 'bg-brand-yellow text-brand-navy font-black shadow-sm'
+                          : 'text-white'
                       }`}
                     >
                       {name}
@@ -257,12 +282,18 @@ export default function GroupForm({
                     type="button"
                     onClick={() => setField('time', idx)}
                     aria-pressed={isSelected}
-                    className={`flex items-center justify-center gap-2 min-h-[56px] px-3.5 rounded-2xl border-2 font-bold text-xs min-[901px]:text-sm transition-all duration-200 cursor-pointer ${
+                    className={`relative flex items-center justify-center gap-2 min-h-[56px] px-3.5 rounded-2xl border-2 font-bold text-xs min-[901px]:text-sm transition-all duration-200 cursor-pointer ${
                       isSelected
-                        ? 'bg-brand-navy text-brand-yellow border-brand-navy shadow-md -translate-y-0.5'
-                        : 'bg-surface-mist text-brand-navy border-brand-navy/15 hover:border-brand-blue hover:bg-white'
+                        ? 'bg-brand-navy text-brand-yellow border-brand-yellow ring-4 ring-brand-yellow/30 shadow-md -translate-y-0.5 scale-[1.02]'
+                        : 'bg-surface-mist text-brand-navy border-brand-navy/15 hover:border-brand-blue hover:bg-white opacity-85 hover:opacity-100'
                     }`}
                   >
+                    {/* Distinctive Checkmark Badge */}
+                    {isSelected && (
+                      <span className="absolute -top-1.5 -end-1.5 w-5 h-5 rounded-full bg-brand-yellow text-brand-navy flex items-center justify-center text-[10px] font-black shadow-sm">
+                        <FontAwesomeIcon icon={faCheck} />
+                      </span>
+                    )}
                     <FontAwesomeIcon
                       icon={time.icon}
                       className={isSelected ? 'text-brand-yellow text-base' : 'text-brand-blue text-base'}
@@ -282,121 +313,109 @@ export default function GroupForm({
           </p>
         )}
 
-        {/* Step 1 CTA */}
-        <div className="pt-2">
+        {/* Next Button */}
+        <div className="pt-2 flex justify-end">
           <Button
             type="button"
             variant="primary"
-            size="lg"
-            fullWidth
             onClick={handleNext}
-            icon={<FontAwesomeIcon icon={isRtl ? faArrowLeft : faArrowRight} />}
-            iconPosition="end"
-            className="font-black text-lg shadow-md"
+            className="w-full sm:w-auto px-8 py-3.5 text-base font-black flex items-center justify-center gap-2"
           >
-            {t('groupsPage.nextStep')}
+            <span>{t('groupsPage.continue')}</span>
+            <FontAwesomeIcon icon={isRtl ? faArrowLeft : faArrowRight} />
           </Button>
         </div>
       </fieldset>
 
       {/* ==================== STEP 2 ==================== */}
       <fieldset hidden={step !== 1} className={step === 1 ? 'space-y-6 block' : 'hidden'}>
-        {/* Contact Fields */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input
             id="rfq-org"
-            label={t('groupsPage.orgLabel')}
+            label={t('groupsPage.groupEntityName')}
             placeholder={t('groupsPage.orgPlaceholder')}
             value={state.org}
             onChange={(e) => setField('org', e.target.value)}
             error={errors.org}
-            autoComplete="organization"
             required
+            autoComplete="organization"
           />
 
           <Input
-            id="rfq-name"
-            label={t('groupsPage.coordinatorLabel')}
-            placeholder={t('groupsPage.coordinatorPlaceholder')}
+            id="rfq-nm"
+            label={t('groupsPage.contactName')}
+            placeholder={t('groupsPage.contactPlaceholder')}
             value={state.nm}
             onChange={(e) => setField('nm', e.target.value)}
             error={errors.nm}
+            required
             autoComplete="name"
-            required
-          />
-
-          <Input
-            id="rfq-phone"
-            type="tel"
-            dir="ltr"
-            inputMode="tel"
-            label={t('groupsPage.whatsappLabel')}
-            placeholder="+20 100 000 0000"
-            value={state.ph}
-            onChange={(e) => setField('ph', e.target.value)}
-            error={errors.ph}
-            autoComplete="tel"
-            required
           />
         </div>
 
-        {/* Size and Notes */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input
-            id="rfq-exact-count"
-            type="number"
-            min={20}
-            max={150}
-            inputMode="numeric"
-            label={t('groupsPage.exactCountLabel')}
-            value={state.size}
-            onChange={(e) => setSize(e.target.value)}
-            error={errors.size}
-            required
-          />
+        <Input
+          id="rfq-ph"
+          label={t('groupsPage.whatsapp')}
+          type="tel"
+          placeholder={t('groupsPage.phonePlaceholder')}
+          value={state.ph}
+          onChange={(e) => setField('ph', e.target.value)}
+          error={errors.ph}
+          required
+          autoComplete="tel"
+          helperText={t('groupsPage.phoneHelper')}
+        />
 
-          <Input
+        {/* Optional Notes */}
+        <div>
+          <label htmlFor="rfq-notes" className="block font-bold text-sm text-brand-navy mb-1.5">
+            {t('groupsPage.notesOptional')}
+          </label>
+          <textarea
             id="rfq-notes"
-            as="textarea"
-            rows={2}
-            label={t('groupsPage.notesLabel')}
+            rows={3}
+            value={state.notes}
+            onChange={(e) => setField('notes', e.target.value)}
             placeholder={t('groupsPage.notesPlaceholder')}
-            value={state.nt}
-            onChange={(e) => setField('nt', e.target.value)}
+            className="w-full rounded-2xl border-2 border-brand-navy/15 p-3.5 text-sm font-medium focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-yellow transition-all"
           />
         </div>
 
-        {/* Live Trip Summary */}
-        <Card variant="subtle" className="p-4 rounded-2xl border-2 border-dashed border-brand-blue/30 bg-surface-mist">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm font-semibold text-brand-navy">
-            <div className="flex items-center gap-2">
-              <FontAwesomeIcon icon={faUsers} className="text-brand-blue" />
-              <span>
-                <b>{Number(state.size).toLocaleString(lang === 'ar' ? 'ar-EG' : 'en-US')} {t('groupsPage.individuals')}</b> · {t(`groupsPage.types.${currentType.i18nKey}`)}
+        {/* Order Summary Strip */}
+        <Card variant="default" className="bg-surface-mist border border-brand-blue/20 p-4.5 rounded-2xl">
+          <h4 className="font-bold text-sm text-brand-navy mb-2.5 flex items-center gap-2">
+            <FontAwesomeIcon icon={faTags} className="text-brand-blue" />
+            <span>{t('groupsPage.orderSummary')}</span>
+          </h4>
+          <div className="flex flex-wrap gap-2 text-xs font-bold text-brand-navy">
+            <span className="bg-white px-3 py-1.5 rounded-full border border-brand-navy/10 flex items-center gap-1.5">
+              <FontAwesomeIcon icon={currentType.icon} className="text-brand-blue text-xs" />
+              <span>{t(`groupsPage.types.${currentType.i18nKey}`)}</span>
+            </span>
+            <span className="bg-white px-3 py-1.5 rounded-full border border-brand-navy/10 flex items-center gap-1.5">
+              <FontAwesomeIcon icon={faUsers} className="text-brand-blue text-xs" />
+              <span>{state.size} {t('groupsPage.individuals')}</span>
+            </span>
+            <span className="bg-white px-3 py-1.5 rounded-full border border-brand-navy/10 flex items-center gap-1.5">
+              <span>{t(`groupsPage.activities.${currentActivity.i18nKey}`)}</span>
+            </span>
+            <span className="bg-white px-3 py-1.5 rounded-full border border-brand-navy/10 flex items-center gap-1.5">
+              <FontAwesomeIcon icon={faLocationDot} className="text-brand-blue text-xs" />
+              <span>{t(`destinations.items.${currentDestination.key}.name`)}</span>
+            </span>
+            {state.date && (
+              <span className="bg-white px-3 py-1.5 rounded-full border border-brand-navy/10 flex items-center gap-1.5">
+                <FontAwesomeIcon icon={faCalendarDays} className="text-brand-blue text-xs" />
+                <span>{state.date} · {t(`groupsPage.times.${currentTime.i18nKey}`)}</span>
               </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <FontAwesomeIcon icon={faLocationDot} className="text-brand-blue" />
-              <span>
-                {t(`groupsPage.activities.${currentActivity.i18nKey}`)} · {t(`destinations.items.${currentDestination.key}.name`)}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 sm:col-span-2">
-              <FontAwesomeIcon icon={faCalendarDays} className="text-brand-blue" />
-              <span>
-                {state.date} · {t(`groupsPage.times.${currentTime.i18nKey}`)}
-              </span>
-            </div>
+            )}
           </div>
+          <p className="mt-3 text-xs text-brand-navy/70 font-medium">
+            {t('groupsPage.noFixedPriceNotice')}
+          </p>
         </Card>
 
-        {/* No fixed price discount guarantee notice */}
-        <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-brand-yellow/30 border-2 border-brand-yellow text-brand-navy font-bold text-xs min-[901px]:text-sm">
-          <FontAwesomeIcon icon={faTags} className="text-lg text-brand-navy flex-shrink-0" />
-          <span>{t('groupsPage.dealNote')}</span>
-        </div>
-
-        {/* Error message */}
+        {/* Error message if any */}
         {errors.general && (
           <p role="alert" aria-live="assertive" className="text-error font-bold text-sm">
             {errors.general}
@@ -404,29 +423,24 @@ export default function GroupForm({
         )}
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-3 pt-2">
+        <div className="pt-2 flex items-center justify-between gap-3">
           <Button
             type="button"
             variant="outline"
-            size="lg"
             onClick={handleBack}
-            icon={<FontAwesomeIcon icon={isRtl ? faArrowRight : faArrowLeft} />}
-            iconPosition="start"
-            className="border-2 border-brand-navy text-brand-navy hover:bg-surface-mist font-bold"
+            className="px-6 py-3 font-bold text-sm flex items-center gap-2"
           >
-            {t('groupsPage.backBtn')}
+            <FontAwesomeIcon icon={isRtl ? faArrowRight : faArrowLeft} />
+            <span>{t('groupsPage.back')}</span>
           </Button>
 
           <Button
             type="submit"
             variant="primary"
-            size="lg"
-            fullWidth
-            icon={<FontAwesomeIcon icon={faPaperPlane} />}
-            iconPosition="start"
-            className="font-black text-lg shadow-md flex-1"
+            className="px-8 py-3.5 text-base font-black flex items-center gap-2 shadow-md hover:scale-105 active:scale-95"
           >
-            {t('groupsPage.submitBtn')}
+            <span>{t('groupsPage.sendWhatsApp')}</span>
+            <FontAwesomeIcon icon={faPaperPlane} />
           </Button>
         </div>
       </fieldset>
