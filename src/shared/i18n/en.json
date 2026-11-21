@@ -516,6 +516,8 @@
     "btnExploreTrips": "Explore {{name}} Trips",
     "btnOpenGoogleMaps": "Open in Google Maps ↗",
     "btnGroupBooking": "Groups & Corporate Booking",
+    "zoomIn": "Zoom In",
+    "zoomOut": "Zoom Out",
     "mapAriaLabel": "Duck Egypt Interactive Launch Points Map",
     "pinAriaLabel": "{{name}} launch point - {{status}}",
     "filterTripsAria": "Jump to {{name}} trips"

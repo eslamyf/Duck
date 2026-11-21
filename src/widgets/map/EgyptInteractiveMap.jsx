@@ -1,8 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
-import duckIcon from '../../shared/assets/icons/Artboard_8-removebg-preview.png';
+import duckPinLogo from '../../shared/assets/icons/duck-pin-logo.png';
+import duckLogo from '../../shared/assets/icons/Artboard 14.png';
 
 const EGYPT_BOUNDS = L.latLngBounds([21.8, 24.6], [31.9, 36.8]);
 const SATELLITE_TILE_URL =
@@ -20,19 +23,33 @@ export default function EgyptInteractiveMap({
   const groupRef = useRef(null);
   const isEn = lang === 'en';
 
+  const handleZoomIn = useCallback(() => {
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.zoomIn();
+    }
+  }, []);
+
+  const handleZoomOut = useCallback(() => {
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.zoomOut();
+    }
+  }, []);
+
   // 1. Initialize Map
   useEffect(() => {
     if (!mapContainerRef.current || mapInstanceRef.current) return;
 
+    // Fixed steady map: disable accidental wheel scroll, touch zoom, or double-click zooming while scrolling page
     const map = L.map(mapContainerRef.current, {
-      scrollWheelZoom: true,
-      touchZoom: true,
-      doubleClickZoom: true,
+      scrollWheelZoom: false,
+      touchZoom: false,
+      doubleClickZoom: false,
       boxZoom: false,
+      keyboard: false,
       zoomSnap: 0.25,
       zoomDelta: 0.5,
-      minZoom: 5.75,
-      maxZoom: 17,
+      minZoom: 5.5,
+      maxZoom: 16,
       maxBounds: EGYPT_BOUNDS,
       maxBoundsViscosity: 1.0,
       attributionControl: false,
@@ -53,7 +70,7 @@ export default function EgyptInteractiveMap({
         className: 'duck-marker',
         html: `
           <div class="duck-pin" data-loc="${p.destId}" role="button" tabindex="0" aria-label="${pinTitle}">
-            <span class="dava"><img src="${duckIcon}" alt="Duck" /></span>
+            <span class="dava"><img src="${duckPinLogo}" alt="Duck" /></span>
             <span class="dlbl">${pinTitle}</span>
           </div>
         `,
@@ -124,11 +141,54 @@ export default function EgyptInteractiveMap({
   }, [activeIdx, pins]);
 
   return (
-    <div
-      ref={mapContainerRef}
-      id="duckmap"
-      className="absolute inset-0 w-full h-full z-0"
-      aria-label={t('map.mapAriaLabel', 'خريطة مصر التفاعلية لنقاط انطلاق Duck')}
-    />
+    <div className="absolute inset-0 w-full h-full overflow-hidden select-none">
+      {/* Leaflet Satellite Map Container */}
+      <div
+        ref={mapContainerRef}
+        id="duckmap"
+        className="absolute inset-0 w-full h-full z-0"
+        aria-label={t('map.mapAriaLabel', 'خريطة مصر التفاعلية لنقاط انطلاق Duck')}
+      />
+
+      {/* Official Duck Logo Badge */}
+      <div
+        className="absolute top-4 inset-inline-end-4 z-[400] pointer-events-none flex items-center gap-2 bg-brand-navy/90 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/15 shadow-md"
+        aria-hidden="true"
+      >
+        <img
+          src={duckLogo}
+          alt="Duck Entertainment"
+          className="h-5 min-[901px]:h-6 w-auto object-contain"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      {/* Manual Zoom Controls (+ / -) */}
+      <div
+        className="absolute bottom-4 inset-inline-start-4 z-[400] flex flex-col gap-2"
+        role="group"
+        aria-label={t('map.mapAriaLabel', 'التحكم في تكبير وتصغير الخريطة')}
+      >
+        <button
+          type="button"
+          onClick={handleZoomIn}
+          className="w-10 h-10 rounded-xl bg-brand-navy/90 hover:bg-brand-navy active:scale-95 text-brand-yellow hover:text-white border border-white/20 backdrop-blur-md flex items-center justify-center font-bold text-base transition-all cursor-pointer shadow-md select-none outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow"
+          aria-label={t('map.zoomIn', 'تكبير الخريطة')}
+          title={t('map.zoomIn', 'تكبير')}
+        >
+          <FontAwesomeIcon icon={faPlus} />
+        </button>
+        <button
+          type="button"
+          onClick={handleZoomOut}
+          className="w-10 h-10 rounded-xl bg-brand-navy/90 hover:bg-brand-navy active:scale-95 text-brand-yellow hover:text-white border border-white/20 backdrop-blur-md flex items-center justify-center font-bold text-base transition-all cursor-pointer shadow-md select-none outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow"
+          aria-label={t('map.zoomOut', 'تصغير الخريطة')}
+          title={t('map.zoomOut', 'تصغير')}
+        >
+          <FontAwesomeIcon icon={faMinus} />
+        </button>
+      </div>
+    </div>
   );
 }

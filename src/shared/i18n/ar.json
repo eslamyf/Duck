@@ -516,6 +516,8 @@
     "btnExploreTrips": "شوف رحلات {{name}}",
     "btnOpenGoogleMaps": "افتح في Google Maps ↗",
     "btnGroupBooking": "حجز المجموعات والشركات",
+    "zoomIn": "تكبير الخريطة",
+    "zoomOut": "تصغير الخريطة",
     "mapAriaLabel": "خريطة مصر التفاعلية لنقاط انطلاق Duck",
     "pinAriaLabel": "نقطة انطلاق {{name}} - {{status}}",
     "filterTripsAria": "الانتقال إلى رحلات {{name}}"
