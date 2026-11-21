@@ -4,6 +4,7 @@ import Navbar from '../widgets/navbar/Navbar.jsx';
 import HeroSection from '../widgets/hero/HeroSection.jsx';
 import DestinationsSection from '../widgets/destinations/index.js';
 import TripsSection from '../widgets/trips/index.js';
+import GroupsBanner from '../widgets/groups-banner/index.js';
 import MapSection from '../widgets/map/index.js';
 import ReviewsSection from '../widgets/reviews/index.js';
 import FAQSection from '../widgets/faq/index.js';
@@ -121,6 +122,7 @@ export default function App() {
                   externalFilter={selectedDestinationFilter}
                   onFilterChange={setSelectedDestinationFilter}
                 />
+                <GroupsBanner />
                 <MapSection onSelectDestination={handleSelectDestination} />
                 <ReviewsSection />
                 <FAQSection />
