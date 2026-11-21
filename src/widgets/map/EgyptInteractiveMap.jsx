@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
-import duckPinLogo from '../../shared/assets/icons/duck-pin-logo.png';
+import duckPinLogo from '../../shared/assets/icons/Artboard 19.png';
 
 const SATELLITE_TILE_URL =
   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
@@ -35,7 +35,11 @@ export default function EgyptInteractiveMap({
 
   // 1. Initialize Map
   useEffect(() => {
-    if (!mapContainerRef.current || mapInstanceRef.current) return;
+    if (!mapContainerRef.current) return;
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.remove();
+      mapInstanceRef.current = null;
+    }
 
     // Fixed steady map: disable accidental wheel scroll, touch zoom, or double-click zooming while scrolling page
     const map = L.map(mapContainerRef.current, {
@@ -65,7 +69,9 @@ export default function EgyptInteractiveMap({
         className: 'duck-marker',
         html: `
           <div class="duck-pin" data-loc="${p.destId}" role="button" tabindex="0" aria-label="${pinTitle}">
-            <span class="dava"><img src="${duckPinLogo}" onerror="this.onerror=null;this.src='/icon-192.png'" alt="Duck" /></span>
+            <span class="dava" style="background-color: #ffffff; background-image: url('${duckPinLogo}'); background-repeat: no-repeat; background-position: center; background-size: 78% auto;">
+              <img src="${duckPinLogo}" alt="" width="38" height="38" decoding="async" style="display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;transform:scale(1.35)!important;pointer-events:none!important;" />
+            </span>
             <span class="dlbl">${pinTitle}</span>
           </div>
         `,
