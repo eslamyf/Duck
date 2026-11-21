@@ -94,7 +94,7 @@ export default function DestinationsSection({ onSelectDestination }) {
   return (
     <section
       id="locations"
-      className="bg-brand-navy text-white py-12 min-[901px]:py-20 px-[5vw] min-[901px]:px-[6vw] font-body relative select-none border-t border-white/8"
+      className="bg-brand-navy text-white py-12 min-[901px]:py-20 px-[5vw] min-[901px]:px-[6vw] font-body relative select-none border-t border-white/8 scroll-mt-[calc(var(--header-height-mobile)+16px)] min-[901px]:scroll-mt-[calc(var(--header-height-desktop)+20px)]"
       aria-label={t('destinations.title')}
     >
       <div className="max-w-[1360px] mx-auto">
@@ -230,11 +230,16 @@ export default function DestinationsSection({ onSelectDestination }) {
                             onSelectDestination(item.filterKey);
                           }
                         }}
-                        className="w-full min-[901px]:w-fit shadow-md font-bold text-xs min-[901px]:text-sm"
+                        className="w-full min-[901px]:w-fit shadow-md font-bold text-xs min-[901px]:text-sm inline-flex items-center justify-center gap-1"
                       >
-                        {item.tripCount === 1
-                          ? t('destinations.btnViewTripSingle', { name: destName })
-                          : t('destinations.btnViewTrips', { name: destName, count: item.tripCount })}
+                        <span>
+                          {item.tripCount === 1
+                            ? t('destinations.btnViewTripSingle', { name: destName, count: item.tripCount })
+                            : t('destinations.btnViewTrips', { name: destName, count: item.tripCount })}
+                        </span>
+                        <span className="inline-block rtl:rotate-180 transition-transform select-none" aria-hidden="true">
+                          →
+                        </span>
                       </Button>
                     ) : (
                       <Badge

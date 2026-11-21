@@ -71,8 +71,8 @@
     "title": "اكتشف وجهاتنا المميزة",
     "subtitle": "اضغط على أي وجهة وتعرّف على المكان ونقطة اللقاء، وبعدها شوف رحلاتها.",
     "badgeSoon": "قريباً",
-    "btnViewTrips": "شوف رحلات {{name}} ({{count}}) ←",
-    "btnViewTripSingle": "شوف رحلة {{name}} (1) ←",
+    "btnViewTrips": "شوف رحلات {{name}} ({{count}})",
+    "btnViewTripSingle": "شوف رحلة {{name}} (1)",
     "tripsComingSoon": "الرحلات هتتاح قريباً",
     "tabAriaLabel": "اختر وجهة",
     "items": {

@@ -71,8 +71,8 @@
     "title": "Explore Our Destinations",
     "subtitle": "Click on any destination to discover the spot, meeting point, and available trips.",
     "badgeSoon": "Coming Soon",
-    "btnViewTrips": "Explore {{name}} Trips ({{count}}) →",
-    "btnViewTripSingle": "Explore {{name}} Trip (1) →",
+    "btnViewTrips": "Explore {{name}} Trips ({{count}})",
+    "btnViewTripSingle": "Explore {{name}} Trip (1)",
     "tripsComingSoon": "Trips available soon",
     "tabAriaLabel": "Select a destination",
     "items": {

@@ -34,7 +34,7 @@ export const DESTINATIONS = [
     key: 'aswan',
     num: '01',
     soon: false,
-    tripCount: 6,
+    tripCount: 4,
     filterKey: 0,
     aspectRatio: '1080/1440',
     width: 1080,
