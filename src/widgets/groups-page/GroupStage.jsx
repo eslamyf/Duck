@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFlag } from '@fortawesome/free-solid-svg-icons';
+import { faFlag, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { GROUP_TYPES } from './sceneData.js';
 import groupsMainDesktop from '../../shared/assets/images/groups/groups-main-960w.webp';
 import groupsMainMobile from '../../shared/assets/images/groups/groups-main-640w.webp';
@@ -13,25 +13,24 @@ export default function GroupStage({ state, t, lang }) {
       className="relative min-h-[500px] h-[min(72vh,620px)] overflow-hidden bg-brand-navy select-none"
       aria-label={t('groupsPage.stageAria')}
     >
-      {/* Real High-Resolution Group Photo */}
+      {/* Real High-Resolution Group Photo with High Clarity and Vibrancy */}
       <picture className="absolute inset-0 w-full h-full">
         <source media="(max-width: 640px)" srcSet={groupsMainMobile} type="image/webp" />
         <img
           src={groupsMainDesktop}
           alt={t('groupsPage.stageHeroTitle')}
-          className="w-full h-full object-cover object-center scale-[1.02] transition-transform duration-1000"
+          className="w-full h-full object-cover object-center scale-[1.01]"
         />
       </picture>
 
-      {/* Cinematic Vignette & Gradient Overlays for Readability */}
+      {/* Subtle Vignettes focused only on text regions (leaving water & group bright and visible) */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            'linear-gradient(180deg, rgba(12,18,38,0.78) 0%, rgba(12,18,38,0.38) 42%, rgba(12,18,38,0.55) 70%, rgba(12,18,38,0.92) 100%)',
+            'linear-gradient(180deg, rgba(12,18,38,0.72) 0%, rgba(12,18,38,0.22) 36%, rgba(12,18,38,0) 55%, rgba(12,18,38,0.7) 100%)',
         }}
       />
-      <div className="absolute inset-0 pointer-events-none bg-brand-navy/20 mix-blend-multiply" />
 
       {/* Festive Bunting String Colored by Selected Group Type */}
       <div
@@ -61,29 +60,33 @@ export default function GroupStage({ state, t, lang }) {
         </p>
       </div>
 
-      {/* Big Group Count Connected to Slider */}
-      <div
-        className="absolute z-20 bottom-16 inset-s-[5vw] flex items-baseline gap-2.5 text-white pointer-events-none"
-        aria-live="polite"
-      >
-        <b className="text-6xl min-[901px]:text-8xl font-black tabular-nums text-brand-yellow drop-shadow-[0_4px_14px_rgba(0,0,0,0.65)] leading-none">
-          {formattedCount}
-        </b>
-        <span className="text-lg min-[901px]:text-2xl font-bold text-white drop-shadow-md">
-          {t('groupsPage.individuals')}
-        </span>
-      </div>
+      {/* Group Size and Details Indicator (clearly explaining size and dynamic choice) */}
+      <div className="absolute z-20 bottom-6 inset-s-[5vw] flex flex-wrap items-center gap-3">
+        {/* Dynamic Size Indicator with Clear Explanatory Label */}
+        <div className="inline-flex items-center gap-2.5 bg-brand-navy/90 backdrop-blur-md border border-white/20 px-4 py-2.5 rounded-full shadow-xl text-white">
+          <FontAwesomeIcon icon={faUsers} className="text-brand-yellow text-sm" />
+          <span className="text-xs min-[901px]:text-sm font-bold text-white/90">
+            {t('groupsPage.stageCountPrompt')}
+          </span>
+          <b className="text-base min-[901px]:text-xl font-black text-brand-yellow tabular-nums">
+            {formattedCount} {t('groupsPage.individuals')}
+          </b>
+          <span className="hidden sm:inline text-[11px] text-white/60 font-medium">
+            {t('groupsPage.stageCountHint')}
+          </span>
+        </div>
 
-      {/* Dynamic Name Tag Pill */}
-      <div
-        className={`absolute z-20 bottom-6 inset-s-[5vw] inline-flex items-center gap-2 max-w-[70vw] px-4 py-2 rounded-full font-bold text-sm min-[901px]:text-base select-none truncate transition-all duration-300 shadow-lg ${
-          state.org.trim()
-            ? 'bg-brand-yellow text-brand-navy font-black ring-2 ring-brand-yellow/60'
-            : 'bg-white/20 text-white backdrop-blur-md border border-white/30'
-        }`}
-      >
-        <FontAwesomeIcon icon={faFlag} className="text-xs" />
-        <span className="truncate">{state.org.trim() || t('groupsPage.yourGroupNameHere')}</span>
+        {/* Dynamic Name Tag Pill */}
+        <div
+          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full font-bold text-xs min-[901px]:text-sm select-none truncate transition-all duration-300 shadow-xl ${
+            state.org.trim()
+              ? 'bg-brand-yellow text-brand-navy font-black ring-2 ring-brand-yellow/60'
+              : 'bg-brand-navy/90 text-white/80 backdrop-blur-md border border-white/20'
+          }`}
+        >
+          <FontAwesomeIcon icon={faFlag} className="text-xs text-brand-yellow" />
+          <span className="truncate">{state.org.trim() || t('groupsPage.yourGroupNameHere')}</span>
+        </div>
       </div>
     </section>
   );
