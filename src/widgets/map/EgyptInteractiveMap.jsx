@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
 import duckPinLogo from '../../shared/assets/icons/duck-pin-logo.png';
-import duckLogo from '../../shared/assets/icons/Artboard 14.png';
 
 const SATELLITE_TILE_URL =
   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
@@ -148,20 +147,6 @@ export default function EgyptInteractiveMap({
         className="absolute inset-0 w-full h-full z-0"
         aria-label={t('map.mapAriaLabel', 'خريطة مصر التفاعلية لنقاط انطلاق Duck')}
       />
-
-      {/* Official Duck Logo Badge */}
-      <div
-        className="absolute top-4 inset-inline-end-4 z-[400] pointer-events-none flex items-center gap-2 bg-brand-navy/90 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/15 shadow-md"
-        aria-hidden="true"
-      >
-        <img
-          src={duckLogo}
-          alt="Duck Entertainment"
-          className="h-5 min-[901px]:h-6 w-auto object-contain"
-          loading="lazy"
-          decoding="async"
-        />
-      </div>
 
       {/* Manual Zoom Controls (+ / -) */}
       <div
