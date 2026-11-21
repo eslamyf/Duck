@@ -10,9 +10,9 @@ export const MAP_PINS = [
     titleKey: 'destinations.items.aswan.name',
     subAr: 'بجوار مكاني كافيه — النيل',
     subEn: 'Next to Makani Cafe — The Nile',
-    // Display coordinates on Egypt-wide overview (distinct separation from Gharb Soheil)
-    lat: 24.3200,
-    lng: 33.1200,
+    // Display coordinates on Egypt-wide overview (distinct wide separation from Gharb Soheil)
+    lat: 24.8000,
+    lng: 33.4500,
     // Real-world pinpoint coordinates for camera flyTo zoom
     flyLat: 24.0889,
     flyLng: 32.8998,
@@ -30,9 +30,9 @@ export const MAP_PINS = [
     titleKey: 'destinations.items.gharb.name',
     subAr: 'الشيمة بيتش — قلب النوبة',
     subEn: 'Al-Sheema Beach — Nubian Heart',
-    // Display coordinates on Egypt-wide overview (positioned south-west of Aswan)
-    lat: 23.8200,
-    lng: 32.6500,
+    // Display coordinates on Egypt-wide overview (distinct wide separation positioned south-west)
+    lat: 23.3500,
+    lng: 32.3500,
     // Real-world pinpoint coordinates for camera flyTo zoom
     flyLat: 24.0696,
     flyLng: 32.8650,
