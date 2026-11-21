@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { SectionHeader, Button, Badge } from '../../shared/ui/index.js';
 import { DESTINATIONS } from './destinationsData.js';
+import { SECTIONS, sectionLink } from '../../shared/config/routes.js';
 
 export default function DestinationsSection({ onSelectDestination }) {
   const { t, lang } = useTranslation();
@@ -221,14 +223,13 @@ export default function DestinationsSection({ onSelectDestination }) {
                   <div className="pt-1.5">
                     {item.tripCount > 0 ? (
                       <Button
-                        as="a"
-                        href="#trips"
+                        as={Link}
+                        to={sectionLink(SECTIONS.TRIPS)}
                         variant="primary"
                         size="sm"
                         onClick={(e) => {
                           e.stopPropagation();
                           if (onSelectDestination) {
-                            e.preventDefault();
                             onSelectDestination(item.filterKey);
                           }
                         }}

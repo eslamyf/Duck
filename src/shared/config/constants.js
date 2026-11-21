@@ -143,3 +143,16 @@ export function generateQuoteRef() {
   const rand = Math.floor(100 + Math.random() * 900);
   return `${QUOTE_REF_PREFIX}-${year}-${rand}`;
 }
+
+/**
+ * Builds canonical WhatsApp URL with sanitized phone number (digits only) and encoded prefill message
+ * @param {string} [text=''] - Optional message to prefill
+ * @param {string} [phone=CONTACT.PHONE] - Phone number, defaults to official contact phone
+ * @returns {string}
+ */
+export function buildWhatsAppUrl(text = '', phone = CONTACT.PHONE) {
+  const digits = String(phone).replace(/\D/g, '');
+  const base = `https://wa.me/${digits}`;
+  return text ? `${base}?text=${encodeURIComponent(text)}` : base;
+}
+

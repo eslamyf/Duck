@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import duckLogo from '../../shared/assets/icons/Artboard 14.png';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { Button, Badge } from '../../shared/ui/index.js';
+import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
 import {
   faHouse,
   faLocationDot,
@@ -24,9 +26,10 @@ import {
 
 export default function Navbar({ onBookClick, onAuthClick }) {
   const { lang, setLanguage, t } = useTranslation();
+  const location = useLocation();
   const [currency, setCurrency] = useState('EGP');
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [activeHash, setActiveHash] = useState(() => window.location.hash || '#top');
+  const [activeSection, setActiveSection] = useState(SECTIONS.TOP);
   const [temp, setTemp] = useState('');
 
   // Fetch weather data for Aswan
@@ -42,28 +45,18 @@ export default function Navbar({ onBookClick, onAuthClick }) {
       .catch(() => { });
   }, []);
 
-  // Update active hash based on hashchange and scroll
+  // Update active section based on scroll (only when on home page)
   useEffect(() => {
-    const handleHashChange = () => {
-      setActiveHash(window.location.hash || '#top');
-    };
+    if (location.pathname !== ROUTES.HOME) return;
 
     const handleScroll = () => {
-      const hash = window.location.hash || '';
-      // If on a dedicated subpage route (starts with #/), keep that route active
-      if (hash.startsWith('#/')) {
-        setActiveHash(hash);
-        return;
-      }
-
-      // If scrolled near the top of the landing page, activate home
       if (window.scrollY < 120) {
-        setActiveHash('#top');
+        setActiveSection(SECTIONS.TOP);
         return;
       }
 
-      const sectionIds = ['locations', 'trips', 'reviews', 'faq', 'map'];
-      let current = '#top';
+      const sectionIds = [SECTIONS.LOCATIONS, SECTIONS.TRIPS, SECTIONS.REVIEWS, SECTIONS.FAQ, SECTIONS.MAP];
+      let current = SECTIONS.TOP;
       const headerOffset = 220;
 
       for (const id of sectionIds) {
@@ -71,42 +64,41 @@ export default function Navbar({ onBookClick, onAuthClick }) {
         if (el) {
           const rect = el.getBoundingClientRect();
           if (rect.top <= headerOffset) {
-            current = `#${id}`;
+            current = id;
           }
         }
       }
 
-      setActiveHash(current);
+      setActiveSection(current);
     };
 
-    window.addEventListener('hashchange', handleHashChange);
     window.addEventListener('scroll', handleScroll, { passive: true });
-
-    // Initial check on mount
     handleScroll();
 
     return () => {
-      window.removeEventListener('hashchange', handleHashChange);
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [location.pathname]);
 
   const navLinks = [
-    { href: '#top', label: t('nav.home'), icon: faHouse },
-    { href: '#locations', label: t('nav.destinations'), icon: faLocationDot },
-    { href: '#trips', label: t('nav.trips'), icon: faCompass },
-    { href: '#/groups', label: t('nav.groups'), icon: faUsersLine },
-    { href: '#reviews', label: t('nav.reviews'), icon: faStar },
-    { href: '#faq', label: t('nav.faq'), icon: faCircleQuestion },
-    { href: '#/about', label: t('nav.about'), icon: faUsers },
+    { to: sectionLink(SECTIONS.TOP), label: t('nav.home'), icon: faHouse, sectionId: SECTIONS.TOP },
+    { to: sectionLink(SECTIONS.DESTINATIONS), label: t('nav.destinations'), icon: faLocationDot, sectionId: SECTIONS.DESTINATIONS },
+    { to: sectionLink(SECTIONS.TRIPS), label: t('nav.trips'), icon: faCompass, sectionId: SECTIONS.TRIPS },
+    { to: ROUTES.GROUPS, label: t('nav.groups'), icon: faUsersLine, isGroups: true },
+    { to: sectionLink(SECTIONS.REVIEWS), label: t('nav.reviews'), icon: faStar, sectionId: SECTIONS.REVIEWS },
+    { to: sectionLink(SECTIONS.FAQ), label: t('nav.faq'), icon: faCircleQuestion, sectionId: SECTIONS.FAQ },
+    { to: sectionLink(SECTIONS.ABOUT), label: t('nav.about'), icon: faUsers, sectionId: SECTIONS.ABOUT },
   ];
 
-  const handleNavClick = (href) => {
-    setActiveHash(href);
-    setIsMobileOpen(false);
-  };
-
   const isRtl = lang === 'ar';
+
+  const checkIsActive = (link) => {
+    if (location.pathname === ROUTES.GROUPS) {
+      return Boolean(link.isGroups);
+    }
+    if (link.isGroups) return false;
+    return activeSection === link.sectionId;
+  };
 
   return (
     <header className="fixed top-0 inset-x-0 z-[120] bg-white border-b border-[rgba(20,125,159,0.16)] shadow-[0_8px_24px_rgba(12,18,38,0.06)] font-body">
@@ -140,97 +132,97 @@ export default function Navbar({ onBookClick, onAuthClick }) {
         </div>
 
         {/* Weather Indicator */}
-        <span className="text-white text-[13px] inline-flex items-center gap-1.5" id="tmp">
+        <span className="text-white/85 text-xs font-semibold flex items-center gap-1.5" id="tmpDesk">
           <b className="text-brand-yellow font-bold">{t('common.aswan')}</b>
           {temp && <span>{temp}{t('common.tempSuffix')}</span>}
+          <FontAwesomeIcon icon={faSun} className="text-brand-yellow text-sm ms-0.5" />
         </span>
       </div>
 
       {/* Main Navbar */}
-      <nav className="flex items-center justify-between min-[901px]:justify-start gap-3.5 px-[3vw] py-2 text-[13.5px] font-medium min-h-[52px] min-[901px]:min-h-[58px]" aria-label={t('nav.menuAria')}>
-        {/* Logo */}
-        <a href="#top" className="block focus:outline-none" onClick={() => handleNavClick('#top')}>
+      <nav
+        aria-label="Main Navigation"
+        className="flex items-center justify-between h-[52px] min-[901px]:h-[60px] px-[4vw] max-w-[1400px] mx-auto"
+      >
+        {/* Brand Logo */}
+        <Link to={ROUTES.HOME} className="block focus:outline-none" aria-label={t('common.brandName')}>
           <img
             src={duckLogo}
-            alt={t('nav.logoAlt')}
-            width="160"
-            height="44"
-            className="h-9 min-[901px]:h-[42px] w-auto bg-transparent min-[901px]:bg-white rounded-full py-1 px-2.5"
+            alt={t('common.brandName')}
+            width="140"
+            height="38"
+            className="h-[34px] min-[901px]:h-[38px] w-auto object-contain cursor-pointer transition-transform duration-200 hover:scale-102"
           />
-        </a>
+        </Link>
 
-        {/* Desktop Links */}
-        <div className="hidden min-[901px]:flex items-center gap-3.5 me-auto whitespace-nowrap">
+        {/* Desktop Navigation Links */}
+        <div className="hidden min-[901px]:flex items-center gap-1 xl:gap-2">
           {navLinks.map((link) => {
-            const isActive = activeHash === link.href;
+            const isActive = checkIsActive(link);
             return (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => handleNavClick(link.href)}
-                className={`relative py-2.5 px-0.5 whitespace-nowrap transition-colors duration-200 group ${
-                  isActive ? 'text-brand-blue font-bold' : 'text-brand-navy hover:text-brand-blue'
+              <Link
+                key={link.to}
+                to={link.to}
+                className={`relative px-3 py-2 text-[14.5px] font-semibold transition-colors duration-200 ${
+                  isActive
+                    ? 'text-brand-blue font-bold after:content-[""] after:absolute after:bottom-0 after:inset-x-3 after:h-0.5 after:bg-brand-yellow'
+                    : 'text-brand-navy/78 hover:text-brand-blue'
                 }`}
               >
                 {link.label}
-                <span
-                  className={`absolute bottom-1 start-0 h-[3px] rounded-full bg-brand-yellow transition-all duration-300 ease-out ${
-                    isActive ? 'w-full' : 'w-0 group-hover:w-full'
-                  }`}
-                />
-              </a>
+              </Link>
             );
           })}
         </div>
 
-        {/* Desktop Actions */}
-        <div className="flex items-center gap-2 whitespace-nowrap ms-auto min-[901px]:ms-0">
-          <a
-            href="#map"
-            onClick={() => handleNavClick('#map')}
-            className="hidden min-[901px]:inline-block py-2.5 px-0.5 relative text-brand-navy hover:text-brand-blue transition-colors group"
+        {/* Desktop Action Buttons */}
+        <div className="hidden min-[901px]:flex items-center gap-3">
+          {/* Map Link */}
+          <Link
+            to={sectionLink(SECTIONS.MAP)}
+            className="text-xs font-semibold text-brand-navy/75 hover:text-brand-blue transition-colors px-2 py-1"
           >
-            {t('common.map')}
-            <span className="absolute bottom-1 start-0 h-[3px] rounded-full bg-brand-yellow w-0 group-hover:w-full transition-all duration-300 ease-out" />
-          </a>
+            {t('nav.exploreMapAria')}
+          </Link>
 
-          {/* Auth Button */}
+          {/* Login Button */}
           <Button
             type="button"
-            variant="subtle"
+            variant="ghost"
             size="sm"
             onClick={onAuthClick}
-            className="hidden min-[901px]:inline-flex"
+            className="text-brand-navy border border-brand-navy/20 hover:border-brand-blue hover:text-brand-blue"
           >
             {t('common.login')}
           </Button>
 
           {/* Book Now Button */}
           <Button
-            as="a"
-            href="#trips"
+            as={Link}
+            to={sectionLink(SECTIONS.TRIPS)}
             variant="primary"
             size="sm"
             onClick={(e) => {
               if (onBookClick) {
                 e.preventDefault();
                 onBookClick();
-              } else {
-                handleNavClick('#trips');
               }
             }}
+            className="font-bold shadow-sm"
           >
-            {t('common.bookNow')}
+            {t('nav.bookTripNow')}
           </Button>
+        </div>
 
-          {/* Mobile Menu Button */}
+        {/* Mobile Hamburger Button */}
+        <div className="flex items-center gap-2 min-[901px]:hidden">
           <button
             type="button"
             onClick={() => setIsMobileOpen(!isMobileOpen)}
-            className="min-[901px]:hidden grid place-items-center w-[38px] h-[38px] rounded-[10px] border border-[rgba(20,125,159,0.16)] bg-white text-brand-navy text-base shadow-[0_2px_8px_rgba(12,18,38,0.06)] cursor-pointer"
             aria-expanded={isMobileOpen}
             aria-controls="mobile-nav"
-            aria-label={t('nav.menuAria')}
+            aria-label={t('nav.menu')}
+            className="p-2 text-brand-navy text-xl focus:outline-none"
           >
             <FontAwesomeIcon icon={isMobileOpen ? faXmark : faBars} />
           </button>
@@ -283,10 +275,10 @@ export default function Navbar({ onBookClick, onAuthClick }) {
 
           {/* Links */}
           {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={() => handleNavClick(link.href)}
+            <Link
+              key={link.to}
+              to={link.to}
+              onClick={() => setIsMobileOpen(false)}
               className="flex items-center justify-between min-h-[50px] px-3 text-[16px] font-semibold border-b border-white/10 rounded-xl hover:bg-brand-yellow/12 hover:text-brand-yellow transition-colors"
             >
               <span className="inline-flex items-center gap-2.5">
@@ -294,13 +286,13 @@ export default function Navbar({ onBookClick, onAuthClick }) {
                 {link.label}
               </span>
               <FontAwesomeIcon icon={isRtl ? faArrowLeft : faArrowRight} className="text-xs opacity-60" />
-            </a>
+            </Link>
           ))}
 
           {/* Map Link */}
-          <a
-            href="#map"
-            onClick={() => handleNavClick('#map')}
+          <Link
+            to={sectionLink(SECTIONS.MAP)}
+            onClick={() => setIsMobileOpen(false)}
             className="flex items-center justify-between min-h-[50px] px-3 text-[16px] font-semibold border-b border-white/10 rounded-xl hover:bg-brand-yellow/12 hover:text-brand-yellow transition-colors"
           >
             <span className="inline-flex items-center gap-2.5">
@@ -308,7 +300,7 @@ export default function Navbar({ onBookClick, onAuthClick }) {
               {t('nav.exploreMapAria')}
             </span>
             <FontAwesomeIcon icon={isRtl ? faArrowLeft : faArrowRight} className="text-xs opacity-60" />
-          </a>
+          </Link>
 
           {/* Mobile Login Button */}
           <button
@@ -328,8 +320,8 @@ export default function Navbar({ onBookClick, onAuthClick }) {
 
           {/* Mobile Primary CTA */}
           <Button
-            as="a"
-            href="#trips"
+            as={Link}
+            to={sectionLink(SECTIONS.TRIPS)}
             variant="primary"
             size="md"
             fullWidth

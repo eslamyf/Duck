@@ -1,7 +1,9 @@
 import { useState, useRef, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { SectionHeader, Button } from '../../shared/ui/index.js';
 import { TRIPS, DESTINATIONS_FILTER, ACTIVITIES } from './tripsData.js';
+import { SECTIONS, sectionLink } from '../../shared/config/routes.js';
 
 export default function TripsSection({ externalFilter, onFilterChange }) {
   const { t, lang } = useTranslation();
@@ -214,8 +216,8 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                 {/* Buttons */}
                 <div className="flex items-center gap-3">
                   <Button
-                    as="a"
-                    href="#book"
+                    as={Link}
+                    to={sectionLink(SECTIONS.BOOK)}
                     data-trip={selectedTrip.id}
                     variant="primary"
                     size="md"
@@ -224,8 +226,8 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                     {t('trips.bookTrip')}
                   </Button>
                   <Button
-                    as="a"
-                    href={`#/trip/${selectedTrip.id}`}
+                    as={Link}
+                    to={sectionLink(SECTIONS.TRIPS)}
                     variant="outline"
                     size="md"
                     className="font-semibold text-white border-white/50 hover:bg-white/15"
@@ -390,8 +392,8 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                     {/* Action buttons */}
                     <div className="flex items-center gap-2 pt-2">
                       <Button
-                        as="a"
-                        href="#book"
+                        as={Link}
+                        to={sectionLink(SECTIONS.BOOK)}
                         data-trip={trip.id}
                         variant="primary"
                         size="sm"
@@ -400,8 +402,8 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                         {t('trips.bookNow')}
                       </Button>
                       <Button
-                        as="a"
-                        href={`#/trip/${trip.id}`}
+                        as={Link}
+                        to={sectionLink(SECTIONS.TRIPS)}
                         variant="outline"
                         size="sm"
                         className="flex-1 font-semibold py-2.5 text-xs text-white border-white/50 justify-center hover:bg-white/15"

@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import heroVideoDesktop from '../../shared/assets/Videos/hero-desktop.mp4';
 import heroVideoMobile from '../../shared/assets/Videos/hero-mobile.mp4';
 import heroPosterDesktop from '../../shared/assets/images/hero-poster-desktop.webp';
 import heroPosterMobile from '../../shared/assets/images/hero-poster-mobile.webp';
 import { useTranslation } from '../../shared/i18n/index.js';
+import { SECTIONS, sectionLink } from '../../shared/config/routes.js';
 
 export default function HeroSection() {
   const { lang, t } = useTranslation();
@@ -147,18 +149,18 @@ export default function HeroSection() {
 
           {/* Action Buttons */}
           <div className="flex items-center gap-3 flex-wrap">
-            <a
-              href="#trips"
+            <Link
+              to={sectionLink(SECTIONS.TRIPS)}
               className="inline-flex items-center justify-center min-h-[50px] min-[901px]:min-h-[52px] px-7 rounded-full bg-brand-yellow text-brand-navy font-bold text-base hover:bg-brand-yellow-hover hover:-translate-y-0.5 transition-all shadow-[0_12px_32px_rgba(12,18,38,0.08)] active:translate-y-0"
             >
               {t('hero.ctaTrips')}
-            </a>
-            <a
-              href="#trips"
+            </Link>
+            <Link
+              to={sectionLink(SECTIONS.TRIPS)}
               className="inline-flex items-center justify-center min-h-[50px] min-[901px]:min-h-[52px] px-7 rounded-full bg-transparent text-white border border-white/45 font-semibold text-base hover:bg-white/15 transition-all active:bg-white/20"
             >
               {t('hero.ctaBook')}
-            </a>
+            </Link>
           </div>
         </div>
 
