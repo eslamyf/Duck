@@ -94,6 +94,21 @@ export default function EgyptInteractiveMap({
     markersRef.current = markers;
     groupRef.current = group;
 
+    // Handle manual zoom changes: switch between overview and exact real-world pinpoints
+    const handleZoomEnd = () => {
+      const zoom = map.getZoom();
+      const isDetailed = zoom >= 9.5;
+      markersRef.current.forEach((m, idx) => {
+        const pinData = pins[idx];
+        if (m && pinData) {
+          const lat = isDetailed ? (pinData.flyLat ?? pinData.lat) : pinData.lat;
+          const lng = isDetailed ? (pinData.flyLng ?? pinData.lng) : pinData.lng;
+          m.setLatLng([lat, lng]);
+        }
+      });
+    };
+    map.on('zoomend', handleZoomEnd);
+
     // Handle ResizeObserver to keep canvas responsive without glitches
     const resizeObserver = new ResizeObserver(() => {
       map.invalidateSize();
@@ -101,6 +116,7 @@ export default function EgyptInteractiveMap({
     resizeObserver.observe(mapContainerRef.current);
 
     return () => {
+      map.off('zoomend', handleZoomEnd);
       resizeObserver.disconnect();
       map.remove();
       mapInstanceRef.current = null;
@@ -116,16 +132,34 @@ export default function EgyptInteractiveMap({
 
     map.invalidateSize();
 
-    // Fly camera
-    if (activeIdx < 0 && group) {
-      map.flyToBounds(group.getBounds(), { padding: [56, 56], duration: 0.85 });
+    // Fly camera & reposition markers
+    if (activeIdx < 0) {
+      // Overview: return markers to separated overview coordinates so they never overlap
+      markers.forEach((m, idx) => {
+        const pinData = pins[idx];
+        if (m && pinData) {
+          m.setLatLng([pinData.lat, pinData.lng]);
+        }
+      });
+
+      if (group) {
+        map.flyToBounds(group.getBounds(), { padding: [56, 56], duration: 0.85 });
+      }
     } else {
       const activePin = pins.find((p) => p.destId === activeIdx);
       if (activePin) {
-        // Fly directly to the real pinpoint location (flyLat, flyLng)
+        // Move all markers to their exact real-world pinpoint locations in high detail
+        markers.forEach((m, idx) => {
+          const pinData = pins[idx];
+          if (m && pinData) {
+            m.setLatLng([pinData.flyLat ?? pinData.lat, pinData.flyLng ?? pinData.lng]);
+          }
+        });
+
+        // Fly directly to the real pinpoint location in high detail
         const targetLat = activePin.flyLat ?? activePin.lat;
         const targetLng = activePin.flyLng ?? activePin.lng;
-        map.flyTo([targetLat, targetLng], 13, { duration: 1 });
+        map.flyTo([targetLat, targetLng], 13.5, { duration: 1 });
       }
     }
 
