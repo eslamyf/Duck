@@ -1,13 +1,21 @@
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { SectionHeader, Button } from '../../shared/ui/index.js';
 import { TRIPS, DESTINATIONS_FILTER, ACTIVITIES } from './tripsData.js';
 
 export default function TripsSection({ externalFilter, onFilterChange }) {
   const { t, lang } = useTranslation();
+  const isRtl = lang === 'ar';
+  const moveDir = isRtl ? -1 : 1;
+
   const [activeTripId, setActiveTripId] = useState(0);
+  const [displayTripId, setDisplayTripId] = useState(0);
+  const [animPhase, setAnimPhase] = useState('idle'); // 'idle' | 'sucking' | 'expanding'
   const [mobileActiveIdx, setMobileActiveIdx] = useState(0);
+
   const carouselRef = useRef(null);
+  const animTimeoutRef = useRef(null);
+  const animTimeout2Ref = useRef(null);
 
   const activeFilter = externalFilter !== undefined && externalFilter !== null ? externalFilter : 'all';
 
@@ -25,11 +33,44 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
     return TRIPS.filter((trip) => trip.loc === activeFilter);
   }, [activeFilter]);
 
+  // Handle selection with macOS Genie suck & expand animation
+  const handleTripSelect = (newTripId) => {
+    if (newTripId === activeTripId && animPhase === 'idle') return;
+
+    setActiveTripId(newTripId);
+
+    if (animTimeoutRef.current) clearTimeout(animTimeoutRef.current);
+    if (animTimeout2Ref.current) clearTimeout(animTimeout2Ref.current);
+
+    setAnimPhase('sucking');
+
+    animTimeoutRef.current = setTimeout(() => {
+      setDisplayTripId(newTripId);
+      setAnimPhase('expanding');
+
+      animTimeout2Ref.current = setTimeout(() => {
+        setAnimPhase('idle');
+      }, 340);
+    }, 200);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (animTimeoutRef.current) clearTimeout(animTimeoutRef.current);
+      if (animTimeout2Ref.current) clearTimeout(animTimeout2Ref.current);
+    };
+  }, []);
+
   // Currently selected trip for big stage card
   const selectedTrip = useMemo(() => {
-    const found = visibleTrips.find((trip) => trip.id === activeTripId);
+    const found = visibleTrips.find((trip) => trip.id === displayTripId);
     return found || visibleTrips[0] || TRIPS[0];
-  }, [activeTripId, visibleTrips]);
+  }, [displayTripId, visibleTrips]);
+
+  const activeTripKey = useMemo(() => {
+    const found = visibleTrips.some((trip) => trip.id === activeTripId);
+    return found ? activeTripId : selectedTrip.id;
+  }, [visibleTrips, activeTripId, selectedTrip.id]);
 
   // Format currency display
   const formatPrice = (amount) => {
@@ -100,32 +141,62 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
         <div className="hidden min-[901px]:grid min-[901px]:grid-cols-[1.45fr_1fr] min-[901px]:gap-7 items-stretch">
           {/* Big Stage Card */}
           <article
-            className="relative min-h-[580px] rounded-[28px] overflow-hidden bg-brand-navy text-white shadow-xl border border-white/10 flex flex-col justify-end p-8"
+            className="relative min-h-[580px] rounded-[28px] overflow-hidden bg-brand-navy text-white shadow-xl border border-white/10"
             aria-live="polite"
           >
-            {/* Background Image with smooth transition */}
-            <div className="absolute inset-0 z-0 bg-brand-navy">
-              <picture>
-                <source srcSet={selectedTrip.images.srcSet} sizes="(min-width: 901px) 60vw, 100vw" />
-                <img
-                  key={selectedTrip.id}
-                  src={selectedTrip.images.large}
-                  alt={t(`trips.items.${selectedTrip.key}.alt`)}
-                  loading="lazy"
-                  decoding="async"
-                  width={960}
-                  height={580}
-                  className="w-full h-full object-cover transition-opacity duration-500"
+            {/* Animated Stage Content (macOS Genie / Tab Suck & Expand Transition) */}
+            <div
+              className="relative w-full h-full min-h-[580px] flex flex-col justify-end p-8 overflow-hidden transition-all will-change-transform"
+              style={{
+                transform:
+                  animPhase === 'sucking'
+                    ? `scale(0.88) translateX(${moveDir * 55}px) translateY(14px)`
+                    : 'scale(1) translateX(0) translateY(0)',
+                opacity: animPhase === 'sucking' ? 0.05 : 1,
+                filter: animPhase === 'sucking' ? 'blur(3px)' : 'blur(0px)',
+                transformOrigin: isRtl ? 'left center' : 'right center',
+                transitionDuration: animPhase === 'sucking' ? '200ms' : '340ms',
+                transitionTimingFunction:
+                  animPhase === 'expanding'
+                    ? 'cubic-bezier(0.16, 1, 0.3, 1)'
+                    : 'cubic-bezier(0.4, 0, 0.2, 1)',
+              }}
+            >
+              {/* Background Image */}
+              <div className="absolute inset-0 z-0 bg-brand-navy pointer-events-none">
+                <picture>
+                  <source srcSet={selectedTrip.images.srcSet} sizes="(min-width: 901px) 60vw, 100vw" />
+                  <img
+                    src={selectedTrip.images.large}
+                    alt={t(`trips.items.${selectedTrip.key}.alt`)}
+                    loading="lazy"
+                    decoding="async"
+                    width={960}
+                    height={580}
+                    className="w-full h-full object-cover"
+                  />
+                </picture>
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-[#121528] via-[#121528]/80 to-[rgba(6,123,161,0.12)] pointer-events-none"
+                  aria-hidden="true"
                 />
-              </picture>
-              <div
-                className="absolute inset-0 bg-gradient-to-t from-[#121528] via-[#121528]/80 to-[rgba(6,123,161,0.12)] pointer-events-none"
-                aria-hidden="true"
-              />
-            </div>
+              </div>
 
-            {/* Stage Foreground Content */}
-            <div className="relative z-10 flex flex-col gap-3">
+              {/* Stage Foreground Content */}
+              <div
+                className="relative z-10 flex flex-col gap-3 transition-transform"
+                style={{
+                  transform:
+                    animPhase === 'sucking'
+                      ? 'translateY(10px)'
+                      : 'translateY(0)',
+                  transitionDuration: animPhase === 'sucking' ? '200ms' : '340ms',
+                  transitionTimingFunction:
+                    animPhase === 'expanding'
+                      ? 'cubic-bezier(0.16, 1, 0.3, 1)'
+                      : 'cubic-bezier(0.4, 0, 0.2, 1)',
+                }}
+              >
               {/* Meta tags */}
               <div className="flex items-center gap-2 flex-wrap text-xs font-semibold">
                 <span className="bg-white/20 backdrop-blur-md text-white px-3 py-1 rounded-full">
@@ -235,7 +306,8 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                 </div>
               </div>
             </div>
-          </article>
+          </div>
+        </article>
 
           {/* Right Rail List of Trips */}
           <div
@@ -244,16 +316,16 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
             aria-label={t('trips.listAriaLabel')}
           >
             {visibleTrips.map((trip, idx) => {
-              const isTripActive = trip.id === selectedTrip.id;
+              const isTripActive = trip.id === activeTripKey;
               const formattedIdx = String(idx + 1).padStart(2, '0');
 
               return (
                 <button
                   key={trip.id}
                   type="button"
-                  onClick={() => setActiveTripId(trip.id)}
+                  onClick={() => handleTripSelect(trip.id)}
                   aria-pressed={isTripActive}
-                  className={`grid grid-cols-[26px_64px_1fr_auto] gap-3 items-center p-3 rounded-2xl border text-start cursor-pointer transition-all duration-200 ${
+                  className={`grid grid-cols-[26px_64px_1fr_auto] gap-3 items-center p-3 rounded-2xl border text-start cursor-pointer transition-all duration-200 active:scale-[0.98] ${
                     isTripActive
                       ? 'bg-brand-navy text-white border-brand-navy shadow-lg -translate-y-0.5'
                       : 'bg-white text-brand-navy border-[rgba(20,125,159,0.14)] hover:bg-surface-mist hover:shadow-sm'
