@@ -28,6 +28,8 @@ import {
 
 export default function Footer({ onDestinationClick }) {
   const { t } = useTranslation();
+  const homePrefix = window.location.pathname === '/about' ? '/' : '';
+  const homeHref = (hash) => `${homePrefix}${hash}`;
 
   const destinationItems = [
     { id: 0, label: t('footer.destAswan'), icon: faWater },
@@ -43,7 +45,7 @@ export default function Footer({ onDestinationClick }) {
       <div className="grid grid-cols-1 min-[901px]:grid-cols-[1.35fr_1fr_1fr_1.25fr] gap-7 min-[901px]:gap-9 px-[5vw] min-[901px]:px-[6vw] pt-9 min-[901px]:pt-14 pb-6 min-[901px]:pb-10 max-w-[1360px] mx-auto">
         {/* Brand Column */}
         <div className="flex flex-col gap-3.5 items-start">
-          <a href="#top" className="inline-block focus:outline-none" aria-label={t('common.brandName')}>
+          <a href={homeHref('#top')} className="inline-block focus:outline-none" aria-label={t('common.brandName')}>
             <img
               src={duckLogo}
               alt={t('common.brandName')}
@@ -102,43 +104,43 @@ export default function Footer({ onDestinationClick }) {
           </h4>
           <ul className="grid gap-2.5 list-none p-0 m-0">
             <li>
-              <a href="#locations" className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
+              <a href={homeHref('#locations')} className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
                 <FontAwesomeIcon icon={faLocationDot} className="text-xs text-brand-yellow opacity-85" />
                 {t('nav.destinations')}
               </a>
             </li>
             <li>
-              <a href="#trips" className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
+              <a href={homeHref('#trips')} className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
                 <FontAwesomeIcon icon={faCompass} className="text-xs text-brand-yellow opacity-85" />
                 {t('nav.trips')}
               </a>
             </li>
             <li>
-              <a href="#/groups" className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
+              <a href={homeHref('#/groups')} className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
                 <FontAwesomeIcon icon={faBuilding} className="text-xs text-brand-yellow opacity-85" />
                 {t('nav.groups')}
               </a>
             </li>
             <li>
-              <a href="#map" className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
+              <a href={homeHref('#map')} className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
                 <FontAwesomeIcon icon={faMapLocationDot} className="text-xs text-brand-yellow opacity-85" />
                 {t('nav.exploreMapAria')}
               </a>
             </li>
             <li>
-              <a href="#reviews" className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
+              <a href={homeHref('#reviews')} className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
                 <FontAwesomeIcon icon={faStar} className="text-xs text-brand-yellow opacity-85" />
                 {t('nav.reviews')}
               </a>
             </li>
             <li>
-              <a href="#faq" className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
+              <a href={homeHref('#faq')} className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
                 <FontAwesomeIcon icon={faCircleQuestion} className="text-xs text-brand-yellow opacity-85" />
                 {t('nav.faq')}
               </a>
             </li>
             <li>
-              <a href="#/about" className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
+              <a href="/about" className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
                 <FontAwesomeIcon icon={faCircleInfo} className="text-xs text-brand-yellow opacity-85" />
                 {t('nav.about')}
               </a>
@@ -155,7 +157,7 @@ export default function Footer({ onDestinationClick }) {
             {destinationItems.map((loc) => (
               <li key={loc.id}>
                 <a
-                  href="#map"
+                  href={homeHref('#map')}
                   onClick={() => onDestinationClick && onDestinationClick(loc.id)}
                   className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200"
                 >

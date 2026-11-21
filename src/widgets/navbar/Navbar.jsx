@@ -24,6 +24,8 @@ import {
 
 export default function Navbar({ onBookClick, onAuthClick }) {
   const { lang, setLanguage, t } = useTranslation();
+  const homePrefix = window.location.pathname === '/about' ? '/' : '';
+  const homeHref = (hash) => `${homePrefix}${hash}`;
   const [currency, setCurrency] = useState('EGP');
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeHash, setActiveHash] = useState('#top');
@@ -52,13 +54,13 @@ export default function Navbar({ onBookClick, onAuthClick }) {
   }, []);
 
   const navLinks = [
-    { href: '#top', label: t('nav.home'), icon: faHouse },
-    { href: '#locations', label: t('nav.destinations'), icon: faLocationDot },
-    { href: '#trips', label: t('nav.trips'), icon: faCompass },
-    { href: '#/groups', label: t('nav.groups'), icon: faUsersLine },
-    { href: '#reviews', label: t('nav.reviews'), icon: faStar },
-    { href: '#faq', label: t('nav.faq'), icon: faCircleQuestion },
-    { href: '#/about', label: t('nav.about'), icon: faUsers },
+    { href: homeHref('#top'), label: t('nav.home'), icon: faHouse },
+    { href: homeHref('#locations'), label: t('nav.destinations'), icon: faLocationDot },
+    { href: homeHref('#trips'), label: t('nav.trips'), icon: faCompass },
+    { href: homeHref('#/groups'), label: t('nav.groups'), icon: faUsersLine },
+    { href: homeHref('#reviews'), label: t('nav.reviews'), icon: faStar },
+    { href: homeHref('#faq'), label: t('nav.faq'), icon: faCircleQuestion },
+    { href: '/about', label: t('nav.about'), icon: faUsers },
   ];
 
   const handleNavClick = (href) => {
@@ -109,7 +111,7 @@ export default function Navbar({ onBookClick, onAuthClick }) {
       {/* Main Navbar */}
       <nav className="flex items-center justify-between min-[901px]:justify-start gap-3.5 px-[3vw] py-2 text-[13.5px] font-medium min-h-[52px] min-[901px]:min-h-[58px]" aria-label={t('nav.menuAria')}>
         {/* Logo */}
-        <a href="#top" className="block focus:outline-none" onClick={() => handleNavClick('#top')}>
+        <a href={homeHref('#top')} className="block focus:outline-none" onClick={() => handleNavClick(homeHref('#top'))}>
           <img
             src={duckLogo}
             alt={t('nav.logoAlt')}
@@ -146,8 +148,8 @@ export default function Navbar({ onBookClick, onAuthClick }) {
         {/* Desktop Actions */}
         <div className="flex items-center gap-2 whitespace-nowrap ms-auto min-[901px]:ms-0">
           <a
-            href="#map"
-            onClick={() => handleNavClick('#map')}
+            href={homeHref('#map')}
+            onClick={() => handleNavClick(homeHref('#map'))}
             className="hidden min-[901px]:inline-block py-2.5 px-0.5 relative text-brand-navy hover:text-brand-blue transition-colors group"
           >
             {t('common.map')}
@@ -168,7 +170,7 @@ export default function Navbar({ onBookClick, onAuthClick }) {
           {/* Book Now Button */}
           <Button
             as="a"
-            href="#trips"
+            href={homeHref('#trips')}
             variant="primary"
             size="sm"
             onClick={(e) => {
@@ -289,7 +291,7 @@ export default function Navbar({ onBookClick, onAuthClick }) {
           {/* Mobile Primary CTA */}
           <Button
             as="a"
-            href="#trips"
+            href={homeHref('#trips')}
             variant="primary"
             size="md"
             fullWidth
