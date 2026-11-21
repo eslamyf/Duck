@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShip } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { useGroupStudio } from './hooks/useGroupStudio.js';
-import { burstConfetti } from './confetti.js';
 import GroupStage from './GroupStage.jsx';
 import GroupProgressBar from './GroupProgressBar.jsx';
 import GroupForm from './GroupForm.jsx';
@@ -20,6 +19,7 @@ export default function GroupsPage() {
     submitted,
     setSubmitted,
     refCode,
+    waUrl,
     errors,
     setField,
     setSize,
@@ -41,7 +41,6 @@ export default function GroupsPage() {
   const handleSubmit = useCallback(() => {
     const result = submitRequest();
     if (result) {
-      burstConfetti();
       scrollToCard();
     }
   }, [submitRequest, scrollToCard]);
@@ -105,10 +104,12 @@ export default function GroupsPage() {
             />
           ) : (
             <GroupSuccess
+              state={state}
               refCode={refCode}
-              waUrl={submitRequest()?.waUrl || ''}
+              waUrl={waUrl}
               onEditAgain={handleEditAgain}
               t={t}
+              lang={lang}
             />
           )}
         </div>

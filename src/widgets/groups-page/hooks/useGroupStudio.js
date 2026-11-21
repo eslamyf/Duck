@@ -20,16 +20,23 @@ export function useGroupStudio({ t }) {
     org: '',
     nm: '',
     ph: '',
+    notes: '',
     nt: '',
   });
 
   const [step, setStep] = useState(0); // 0 = details & stage, 1 = contact info
   const [submitted, setSubmitted] = useState(false);
   const [refCode, setRefCode] = useState('');
+  const [waUrl, setWaUrl] = useState('');
   const [errors, setErrors] = useState({});
 
   const setField = useCallback((key, value) => {
-    setState((prev) => ({ ...prev, [key]: value }));
+    setState((prev) => {
+      const updated = { ...prev, [key]: value };
+      if (key === 'notes') updated.nt = value;
+      if (key === 'nt') updated.notes = value;
+      return updated;
+    });
     setErrors((prev) => {
       const next = { ...prev };
       delete next[key];
@@ -115,11 +122,13 @@ export function useGroupStudio({ t }) {
       dest: destName,
       date: state.date,
       time: timeName,
-      notes: state.nt.trim() ? `\n• ${t('groupsPage.notesLabel')}: ${state.nt.trim()}` : '',
+      notes: (state.notes || state.nt).trim() ? `\n• ${t('groupsPage.notesLabel')}: ${(state.notes || state.nt).trim()}` : '',
     });
 
+    const url = buildWhatsAppUrl(text);
+    setWaUrl(url);
     setSubmitted(true);
-    return { code, text, waUrl: buildWhatsAppUrl(text) };
+    return { code, text, waUrl: url };
   }, [state, validateStep2, t]);
 
   return {
@@ -129,6 +138,7 @@ export function useGroupStudio({ t }) {
     submitted,
     setSubmitted,
     refCode,
+    waUrl,
     errors,
     setField,
     setSize,
