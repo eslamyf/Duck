@@ -23,7 +23,6 @@ export default function GroupsPage() {
     errors,
     setField,
     setSize,
-    cycleTime,
     validateStep1,
     submitRequest,
   } = useGroupStudio({ t, lang });
@@ -55,10 +54,9 @@ export default function GroupsPage() {
 
   return (
     <div className="w-full font-body">
-      {/* 1. Animated Live SVG Stage */}
+      {/* 1. Hero Group Stage with Real Photo & Dynamic Counter */}
       <GroupStage
         state={state}
-        onCycleTime={cycleTime}
         t={t}
         lang={lang}
       />
@@ -82,8 +80,9 @@ export default function GroupsPage() {
             </div>
           )}
 
-          {/* Progress River */}
+          {/* Dynamic Progress River connected to form state */}
           <GroupProgressBar
+            state={state}
             step={step}
             submitted={submitted}
             t={t}
