@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import duckIcon from '../../shared/assets/icons/Artboard_8-removebg-preview.png';
 
-export default function GroupProgressBar({ state, step, submitted, t, lang }) {
+export default function GroupProgressBar({ state, step, setStep, submitted, t, lang }) {
   // Dynamic percentage calculation based on user interaction & data entry:
   // Step 0: range 14% to 50% as user chooses options
   // Step 1: range 50% to 95% as user types org name, contact name, whatsapp, notes
@@ -67,20 +67,27 @@ export default function GroupProgressBar({ state, step, submitted, t, lang }) {
 
       {/* Step Indicator Labels */}
       <div className="flex items-center justify-between mt-3 text-xs min-[901px]:text-sm font-bold">
-        <span
-          className={`transition-colors duration-300 ${
-            step === 0 && !submitted ? 'text-brand-blue font-extrabold' : 'text-brand-navy/50'
+        <button
+          type="button"
+          onClick={() => setStep && !submitted && setStep(0)}
+          disabled={submitted || step === 0}
+          className={`transition-colors duration-300 text-start ${
+            step === 0 && !submitted
+              ? 'text-brand-blue font-extrabold cursor-default'
+              : 'text-brand-navy/60 hover:text-brand-navy hover:underline cursor-pointer'
           }`}
         >
           {t('groupsPage.progressStep1')}
-        </span>
-        <span
-          className={`transition-colors duration-300 ${
+        </button>
+        <button
+          type="button"
+          disabled
+          className={`transition-colors duration-300 text-end ${
             step === 1 && !submitted ? 'text-brand-blue font-extrabold' : 'text-brand-navy/50'
           }`}
         >
           {t('groupsPage.progressStep2')}
-        </span>
+        </button>
       </div>
     </div>
   );

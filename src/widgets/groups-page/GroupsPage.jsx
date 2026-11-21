@@ -83,6 +83,7 @@ export default function GroupsPage() {
           <GroupProgressBar
             state={state}
             step={step}
+            setStep={handleStepChange}
             submitted={submitted}
             t={t}
             lang={lang}

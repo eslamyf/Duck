@@ -383,12 +383,14 @@ export default function GroupForm({
         )}
 
         {/* Next Button */}
-        <div className="pt-2 flex justify-end">
+        <div className="pt-3">
           <Button
             type="button"
             variant="primary"
+            size="lg"
+            fullWidth
             onClick={handleNext}
-            className="w-full sm:w-auto px-8 py-3.5 text-base font-black flex items-center justify-center gap-2"
+            className="w-full py-4 text-base min-[901px]:text-lg font-black flex items-center justify-center gap-2.5 shadow-md hover:shadow-lg transition-all cursor-pointer"
           >
             <span>{t('groupsPage.continue')}</span>
             <FontAwesomeIcon icon={isRtl ? faArrowLeft : faArrowRight} />
@@ -491,13 +493,14 @@ export default function GroupForm({
           </p>
         )}
 
-        {/* Action Buttons */}
-        <div className="pt-2 flex items-center justify-between gap-3">
+        {/* Action Buttons: Full Width Submit + Previous / Back */}
+        <div className="pt-4 flex flex-col-reverse sm:flex-row items-stretch sm:items-center gap-3 w-full">
           <Button
             type="button"
-            variant="outline"
+            variant="subtle"
+            size="lg"
             onClick={handleBack}
-            className="px-6 py-3 font-bold text-sm flex items-center gap-2"
+            className="w-full sm:w-auto px-6 py-4 font-bold text-sm min-[901px]:text-base border-2 border-brand-navy/20 text-brand-navy bg-white hover:bg-brand-navy hover:text-white transition-all flex items-center justify-center gap-2 shrink-0 cursor-pointer shadow-xs"
           >
             <FontAwesomeIcon icon={isRtl ? faArrowRight : faArrowLeft} />
             <span>{t('groupsPage.back')}</span>
@@ -506,10 +509,12 @@ export default function GroupForm({
           <Button
             type="submit"
             variant="primary"
-            className="px-8 py-3.5 text-base font-black flex items-center gap-2 shadow-md hover:scale-105 active:scale-95"
+            size="lg"
+            fullWidth
+            className="w-full flex-1 py-4 text-base min-[901px]:text-lg font-black flex items-center justify-center gap-2.5 shadow-md hover:shadow-lg hover:scale-[1.005] active:scale-[0.995] transition-all cursor-pointer"
           >
+            <FontAwesomeIcon icon={faPaperPlane} className="text-lg" />
             <span>{t('groupsPage.sendWhatsApp')}</span>
-            <FontAwesomeIcon icon={faPaperPlane} />
           </Button>
         </div>
       </fieldset>
