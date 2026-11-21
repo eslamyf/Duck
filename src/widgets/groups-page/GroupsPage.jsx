@@ -52,23 +52,25 @@ export default function GroupsPage() {
   }, [setSubmitted, setStep, scrollToCard]);
 
   return (
-    <div className="w-full font-body">
+    <div className="w-full font-body print:p-0 print:m-0">
       {/* 1. Hero Group Stage with Real Photo & Dynamic Counter */}
-      <GroupStage
-        state={state}
-        t={t}
-        lang={lang}
-      />
+      <div className="print:hidden">
+        <GroupStage
+          state={state}
+          t={t}
+          lang={lang}
+        />
+      </div>
 
       {/* 2. Main Booking Card Section */}
-      <main className="relative z-30 max-w-[980px] mx-auto -mt-12 sm:-mt-16 px-4 pb-20">
+      <main className="relative z-30 max-w-[980px] mx-auto -mt-12 sm:-mt-16 px-4 pb-20 print:m-0 print:p-0 print:max-w-none print:static">
         <div
           ref={cardRef}
-          className="bg-white rounded-[28px] p-6 sm:p-9 shadow-[0_30px_70px_rgba(12,18,38,0.22)] border border-[rgba(20,125,159,0.14)] scroll-mt-24"
+          className="bg-white rounded-[28px] p-6 sm:p-9 shadow-[0_30px_70px_rgba(12,18,38,0.22)] border border-[rgba(20,125,159,0.14)] scroll-mt-24 print:border-none print:shadow-none print:p-0 print:m-0 print:rounded-none"
         >
-          {/* Card Header (hidden on success) */}
+          {/* Card Header (hidden on success or print) */}
           {!submitted && (
-            <div className="space-y-1 pb-2">
+            <div className="space-y-1 pb-2 print:hidden">
               <h2 className="text-2xl min-[901px]:text-3xl font-black text-brand-navy flex items-center gap-2.5">
                 <FontAwesomeIcon icon={faShip} className="text-brand-blue text-xl" />
                 <span>{t('groupsPage.cardHeading')}</span>
@@ -80,14 +82,16 @@ export default function GroupsPage() {
           )}
 
           {/* Dynamic Progress River connected to form state */}
-          <GroupProgressBar
-            state={state}
-            step={step}
-            setStep={handleStepChange}
-            submitted={submitted}
-            t={t}
-            lang={lang}
-          />
+          <div className="print:hidden">
+            <GroupProgressBar
+              state={state}
+              step={step}
+              setStep={handleStepChange}
+              submitted={submitted}
+              t={t}
+              lang={lang}
+            />
+          </div>
 
           {/* Form or Success State */}
           {!submitted ? (

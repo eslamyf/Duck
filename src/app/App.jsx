@@ -103,8 +103,10 @@ export default function App() {
       <ScrollManager />
       <LegacyHashRedirect />
       <TitleManager />
-      <Navbar />
-      <main id="main" className="flex-1 pt-[52px] min-[901px]:pt-[100px]">
+      <div className="print:hidden">
+        <Navbar />
+      </div>
+      <main id="main" className="flex-1 pt-[52px] min-[901px]:pt-[100px] print:pt-0 print:m-0 print:p-0">
         <Routes>
           <Route
             path={ROUTES.HOME}
@@ -130,7 +132,9 @@ export default function App() {
           <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
         </Routes>
       </main>
-      <Footer />
+      <div className="print:hidden">
+        <Footer />
+      </div>
     </div>
   );
 }

@@ -53,7 +53,7 @@ export default function GroupSuccess({
         className="bg-white border-2 border-brand-navy/15 rounded-3xl p-6 sm:p-8 shadow-[0_12px_36px_rgba(12,18,38,0.08)] relative overflow-hidden"
       >
         {/* Top Watermark / Decorative Accent */}
-        <div className="absolute -top-16 -end-16 w-44 h-44 rounded-full bg-brand-yellow/15 pointer-events-none blur-2xl" />
+        <div className="absolute -top-16 -end-16 w-44 h-44 rounded-full bg-brand-yellow/15 pointer-events-none blur-2xl print:hidden" />
 
         {/* Invoice Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-brand-navy/10 relative z-10">
