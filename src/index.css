@@ -15,6 +15,8 @@
   --color-surface-sand: var(--color-surface-sand);
   --color-brand-whatsapp: var(--color-whatsapp);
   --color-brand-yellow-hover: var(--color-yellow-hover);
+  --color-brand-error: var(--color-error);
+  --color-error: var(--color-error);
 
   --font-arabic: var(--font-arabic);
   --font-body: var(--font-body);
@@ -28,7 +30,7 @@
   --shadow-card: var(--shadow-card);
   --shadow-header: var(--shadow-header);
   --shadow-whatsapp: var(--shadow-whatsapp);
-  
+
   --radius-card: var(--radius-card);
   --radius-pill: var(--radius-pill);
 }
@@ -36,6 +38,40 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: var(--scroll-padding);
+  scrollbar-width: thin;
+  scrollbar-color: #147D9F rgba(20, 125, 159, 0.14);
+}
+
+/* ================= GLOBAL CUSTOM SCROLLBAR ================= */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(20, 125, 159, 0.14);
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #147D9F 0%, #0C1226 100%);
+  border-radius: 99px;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 4px 10px rgba(12, 18, 38, 0.25);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #1ba6d2 0%, #080d1a 100%);
+}
+
+::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 body {
@@ -46,4 +82,190 @@ body {
     linear-gradient(180deg, var(--color-surface-white) 0%, var(--color-surface-light) 48%, var(--color-surface-white) 100%);
   line-height: 1.75;
   min-height: 100vh;
+}
+
+/* ================= REVIEWS ANIMATIONS ================= */
+@keyframes rvScroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes rvStory {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+.animate-rv-scroll {
+  will-change: transform;
+  animation: rvScroll 42s linear infinite;
+}
+
+.animate-rv-story {
+  animation: rvStory 5s linear forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .animate-rv-scroll,
+  .animate-rv-story {
+    animation: none !important;
+  }
+}
+
+/* ================= PRINT STYLES ================= */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    background-image: none !important;
+    color: #0c1226 !important;
+    min-height: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Completely remove navbar, footer, buttons, floating widgets from print */
+  nav,
+  footer,
+  header,
+  .print\:hidden,
+  .fixed,
+  button:not(.print-allow),
+  .pointer-events-none {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* Reset layout structure so only invoice renders on 1 sheet */
+  #main {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+
+  #group-booking-invoice {
+    border: 1.5px solid #0c1226 !important;
+    border-radius: 14px !important;
+    box-shadow: none !important;
+    margin: 0 auto !important;
+    padding: 20px 24px !important;
+    max-width: 100% !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+}
+
+/* ==========================================================================
+   Leaflet Map & Duck Pins Styling (Interactive Satellite Map)
+   ========================================================================== */
+.leaflet-container {
+  font-family: inherit !important;
+  background: var(--color-navy, #0c1226) !important;
+}
+
+.duck-marker {
+  background: none !important;
+  border: 0 !important;
+}
+
+.duck-pin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  outline: none;
+}
+
+.duck-pin .dava {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: var(--color-surface-white, #ffffff);
+  border: 3px solid var(--color-navy, #0c1226);
+  box-shadow: 0 4px 12px rgba(12, 18, 38, 0.25);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  box-sizing: border-box;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s, border-color 0.2s;
+}
+
+.leaflet-container .leaflet-marker-pane .duck-pin .dava img,
+.duck-pin .dava img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  object-fit: contain !important;
+  transform: scale(1.35) !important;
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+.duck-pin .dlbl {
+  background: var(--color-navy, #0c1226);
+  color: var(--color-surface-white, #ffffff);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 99px;
+  padding: 3px 10px;
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 3px 10px rgba(12, 18, 38, 0.35);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.duck-pin:hover .dava,
+.duck-pin:focus-visible .dava,
+.duck-pin.on .dava {
+  transform: scale(1.12);
+  border-color: var(--color-yellow, #fdfb45);
+  box-shadow: 0 0 0 4px rgba(253, 251, 69, 0.4), 0 8px 20px rgba(12, 18, 38, 0.35);
+}
+
+.duck-pin:hover .dlbl,
+.duck-pin:focus-visible .dlbl,
+.duck-pin.on .dlbl {
+  background: var(--color-yellow, #fdfb45);
+  color: var(--color-navy, #0c1226);
+  border-color: var(--color-yellow, #fdfb45);
+}
+
+.duck-pin.dim {
+  opacity: 0.65;
 }
