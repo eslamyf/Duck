@@ -26,7 +26,7 @@ export default function Navbar({ onBookClick, onAuthClick }) {
   const { lang, setLanguage, t } = useTranslation();
   const [currency, setCurrency] = useState('EGP');
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [activeHash, setActiveHash] = useState('#top');
+  const [activeHash, setActiveHash] = useState(() => window.location.hash || '#top');
   const [temp, setTemp] = useState('');
 
   // Fetch weather data for Aswan
@@ -42,13 +42,53 @@ export default function Navbar({ onBookClick, onAuthClick }) {
       .catch(() => { });
   }, []);
 
-  // Update active hash based on scroll
+  // Update active hash based on hashchange and scroll
   useEffect(() => {
     const handleHashChange = () => {
       setActiveHash(window.location.hash || '#top');
     };
+
+    const handleScroll = () => {
+      const hash = window.location.hash || '';
+      // If on a dedicated subpage route (starts with #/), keep that route active
+      if (hash.startsWith('#/')) {
+        setActiveHash(hash);
+        return;
+      }
+
+      // If scrolled near the top of the landing page, activate home
+      if (window.scrollY < 120) {
+        setActiveHash('#top');
+        return;
+      }
+
+      const sectionIds = ['locations', 'trips', 'reviews', 'faq', 'map'];
+      let current = '#top';
+      const headerOffset = 220;
+
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= headerOffset) {
+            current = `#${id}`;
+          }
+        }
+      }
+
+      setActiveHash(current);
+    };
+
     window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Initial check on mount
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const navLinks = [

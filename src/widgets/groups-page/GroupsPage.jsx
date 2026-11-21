@@ -10,8 +10,6 @@ import {
   faLocationDot,
   faPeopleGroup,
   faTrophy,
-  faArrowRight,
-  faArrowLeft,
   faCheckCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
@@ -40,7 +38,7 @@ function getFutureDate(days) {
 
 const TODAY_ISO = new Date().toISOString().split('T')[0];
 
-export default function GroupsPage({ onNavigateHome }) {
+export default function GroupsPage() {
   const { t, lang } = useTranslation();
   const isRtl = lang === 'ar';
 
@@ -156,22 +154,6 @@ export default function GroupsPage({ onNavigateHome }) {
       className="max-w-[1280px] mx-auto px-[4vw] py-6 min-[901px]:py-10 flex flex-col gap-8 min-[901px]:gap-10 font-body text-brand-navy"
       aria-label={t('groupsPage.tag')}
     >
-      {/* Breadcrumb back button */}
-      <div>
-        <button
-          type="button"
-          onClick={onNavigateHome}
-          className="inline-flex items-center gap-2 bg-[#f4f8fb] text-brand-navy border border-[rgba(20,125,159,0.16)] rounded-full px-4 py-1.5 text-xs font-bold hover:bg-brand-navy hover:text-brand-yellow transition-all duration-200 cursor-pointer shadow-sm group"
-        >
-          <FontAwesomeIcon
-            icon={isRtl ? faArrowRight : faArrowLeft}
-            className="text-xs transition-transform group-hover:-translate-x-0.5"
-            aria-hidden="true"
-          />
-          <span>{t('groupsPage.crumb')}</span>
-        </button>
-      </div>
-
       {/* 1. Concise Hero + 3 Real Group Photos */}
       <div className="grid grid-cols-1 min-[960px]:grid-cols-[1.05fr_1.15fr] gap-7 items-center">
         {/* Copy */}

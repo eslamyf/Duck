@@ -42,17 +42,12 @@ export default function App() {
     }
   };
 
-  const handleNavigateHome = () => {
-    window.location.hash = '';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   return (
     <div className="min-h-screen flex flex-col font-body">
       <Navbar />
       <main id="main" className="flex-1 pt-[52px] min-[901px]:pt-[100px]">
         {isGroupsPage ? (
-          <GroupsPage onNavigateHome={handleNavigateHome} />
+          <GroupsPage />
         ) : (
           <>
             <HeroSection />
