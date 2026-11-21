@@ -161,32 +161,62 @@ export default function GroupForm({
             {DESTINATIONS.map((dest) => {
               const isSelected = state.loc === dest.id;
               const name = t(`destinations.items.${dest.key}.name`);
+              const imgSrc = dest.images?.stripSrc || dest.images?.defaultSrc;
+
               return (
                 <button
                   key={dest.id}
                   type="button"
                   onClick={() => setField('loc', dest.id)}
                   aria-pressed={isSelected}
-                  className={`relative flex flex-col items-center justify-center p-3 min-h-[66px] rounded-2xl border-2 transition-all duration-200 cursor-pointer ${
+                  className={`group relative overflow-hidden flex flex-col items-center justify-end p-2.5 min-h-[82px] min-[901px]:min-h-[88px] rounded-2xl border-2 transition-all duration-200 cursor-pointer text-white shadow-sm ${
                     isSelected
-                      ? 'bg-brand-navy text-brand-yellow border-brand-navy shadow-md -translate-y-0.5'
-                      : 'bg-white text-brand-navy border-brand-navy/15 hover:border-brand-blue hover:bg-surface-mist'
+                      ? 'border-brand-yellow ring-2 ring-brand-yellow/40 shadow-lg -translate-y-1'
+                      : 'border-white/20 hover:border-brand-yellow/60 hover:scale-[1.02]'
                   }`}
                 >
-                  <span className="font-bold text-xs min-[901px]:text-sm text-center">{name}</span>
-                  {dest.soon && (
-                    <span className="text-[10px] bg-brand-yellow text-brand-navy font-black rounded-full px-2 py-0.2 mt-1">
-                      {t('common.soonBadge')}
-                    </span>
+                  {/* Background Destination Photo */}
+                  {imgSrc && (
+                    <img
+                      src={imgSrc}
+                      alt=""
+                      aria-hidden="true"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
                   )}
+
+                  {/* Dark Vignette Overlay for Readability */}
+                  <div
+                    className={`absolute inset-0 transition-colors duration-200 ${
+                      isSelected
+                        ? 'bg-gradient-to-t from-brand-navy/95 via-brand-navy/65 to-brand-navy/35'
+                        : 'bg-gradient-to-t from-brand-navy/90 via-brand-navy/55 to-black/30 group-hover:from-brand-navy/80'
+                    }`}
+                  />
+
+                  {/* Content */}
+                  <div className="relative z-10 flex flex-col items-center justify-center w-full text-center">
+                    <span
+                      className={`font-bold text-xs min-[901px]:text-sm drop-shadow-md leading-tight transition-colors ${
+                        isSelected ? 'text-brand-yellow font-black' : 'text-white'
+                      }`}
+                    >
+                      {name}
+                    </span>
+                    {dest.soon && (
+                      <span className="text-[10px] bg-brand-yellow text-brand-navy font-black rounded-full px-2 py-0.5 mt-1 shadow-sm">
+                        {t('common.soonBadge', 'قريباً')}
+                      </span>
+                    )}
+                  </div>
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* Date and Time */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Date and Time - Reordered and balanced sequentially */}
+        <div className="space-y-4">
           <DatePicker
             id="rfq-date"
             label={t('groupsPage.preferredDate')}
@@ -198,10 +228,14 @@ export default function GroupForm({
           />
 
           <div>
-            <label className="block font-bold text-sm min-[901px]:text-base text-brand-navy mb-2">
+            <label className="block font-bold text-sm min-[901px]:text-base text-brand-navy mb-2.5">
               {t('groupsPage.preferredTime')}
             </label>
-            <div className="grid grid-cols-2 gap-2" role="group" aria-label={t('groupsPage.preferredTime')}>
+            <div
+              className="grid grid-cols-2 min-[640px]:grid-cols-4 gap-2.5"
+              role="group"
+              aria-label={t('groupsPage.preferredTime')}
+            >
               {TIMES_OF_DAY.map((time, idx) => {
                 const isSelected = state.time === idx;
                 return (
@@ -210,13 +244,16 @@ export default function GroupForm({
                     type="button"
                     onClick={() => setField('time', idx)}
                     aria-pressed={isSelected}
-                    className={`flex items-center justify-center gap-2 min-h-[56px] px-3 rounded-2xl border-2 font-bold text-xs min-[901px]:text-sm transition-all cursor-pointer ${
+                    className={`flex items-center justify-center gap-2 min-h-[56px] px-3.5 rounded-2xl border-2 font-bold text-xs min-[901px]:text-sm transition-all duration-200 cursor-pointer ${
                       isSelected
-                        ? 'bg-brand-navy text-brand-yellow border-brand-navy shadow-sm'
+                        ? 'bg-brand-navy text-brand-yellow border-brand-navy shadow-md -translate-y-0.5'
                         : 'bg-surface-mist text-brand-navy border-brand-navy/15 hover:border-brand-blue hover:bg-white'
                     }`}
                   >
-                    <FontAwesomeIcon icon={time.icon} className={isSelected ? 'text-brand-yellow' : 'text-brand-blue'} />
+                    <FontAwesomeIcon
+                      icon={time.icon}
+                      className={isSelected ? 'text-brand-yellow text-base' : 'text-brand-blue text-base'}
+                    />
                     <span>{t(`groupsPage.times.${time.i18nKey}`)}</span>
                   </button>
                 );

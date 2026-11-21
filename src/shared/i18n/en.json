@@ -13,7 +13,8 @@
     "currencyUSD": "~ USD",
     "currencyEUR": "~ EUR",
     "freeCancellation": "Free cancellation up to 24h",
-    "lifeJackets": "100% Certified Life Jackets"
+    "lifeJackets": "100% Certified Life Jackets",
+    "soonBadge": "Soon"
   },
   "nav": {
     "home": "Home",
