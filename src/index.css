@@ -216,10 +216,12 @@ body {
 }
 
 .duck-pin .dava img {
-  width: 82%;
-  height: 82%;
+  width: 88%;
+  height: 88%;
   object-fit: contain;
   display: block;
+  pointer-events: none;
+  user-select: none;
 }
 
 .duck-pin .dlbl {
