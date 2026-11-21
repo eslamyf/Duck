@@ -8,8 +8,11 @@ export default function Button({
   fullWidth = false,
   className = '',
   disabled = false,
+  pressed = undefined,
   ...rest
 }) {
+  const isPressed = pressed !== undefined ? pressed : rest['aria-pressed'];
+
   const baseClasses =
     'inline-flex items-center justify-center font-body rounded-full transition-all duration-200 cursor-pointer select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none';
 
@@ -26,10 +29,14 @@ export default function Button({
       'bg-transparent text-inherit hover:bg-white/10',
     whatsapp:
       'bg-[#25D366] text-white font-bold shadow-[0_8px_24px_rgba(37,211,102,0.35)] hover:scale-105 active:scale-95',
-    chip:
-      'bg-white/10 text-white border border-white/20 font-semibold hover:bg-brand-yellow hover:text-brand-navy hover:border-brand-yellow',
+    chip: isPressed
+      ? 'bg-brand-navy text-brand-yellow border-2 border-brand-navy shadow-md font-bold'
+      : 'bg-white text-brand-navy/85 border border-[rgba(20,125,159,0.22)] font-semibold hover:bg-surface-mist hover:text-brand-navy',
     chipActive:
-      'bg-brand-yellow text-brand-navy border border-brand-yellow font-semibold shadow-xs',
+      'bg-brand-navy text-brand-yellow border-2 border-brand-navy shadow-md font-bold',
+    chipDark: isPressed
+      ? 'bg-brand-yellow text-brand-navy border-2 border-brand-yellow font-bold shadow-sm'
+      : 'bg-white/10 text-white border border-white/25 font-semibold hover:bg-white/20',
   };
 
   const sizes = {
@@ -47,6 +54,7 @@ export default function Button({
     <Component
       className={`${baseClasses} ${variantClass} ${sizeClass} ${widthClass} ${className}`.trim()}
       disabled={Component === 'button' ? disabled : undefined}
+      aria-pressed={isPressed !== undefined ? Boolean(isPressed) : undefined}
       {...rest}
     >
       {icon && iconPosition === 'start' && (

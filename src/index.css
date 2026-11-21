@@ -14,6 +14,8 @@
   --color-surface-light: var(--color-surface-light);
   --color-brand-whatsapp: var(--color-whatsapp);
   --color-brand-yellow-hover: var(--color-yellow-hover);
+  --color-brand-error: var(--color-error);
+  --color-error: var(--color-error);
 
   --font-arabic: var(--font-arabic);
   --font-body: var(--font-body);
