@@ -421,5 +421,20 @@
       "sunset": "غروب النيل"
     },
     "whatsappMessage": "أهلاً فريق Duck\nطلب تسجيل مجموعة جديد ({{ref}}):\n• المجموعة/الجهة: {{org}} ({{type}})\n• المسؤول: {{name}}\n• واتساب: {{phone}}\n• العدد: {{size}} فرد\n• النشاط: {{act}}\n• الوجهة: {{dest}}\n• الموعد: {{date}} - {{time}}{{notes}}"
+  },
+  "reviews": {
+    "sectionTitle": "ماذا يقول ضيوفنا",
+    "sectionSubtitle": "تقييمات حقيقية من مغامرين حقيقيين، مباشرةً من جوجل.",
+    "basedOnGoogle": "بناءً على {{count}} تقييم على Google",
+    "starRatingAria": "{{rating}} من 5 نجوم",
+    "storyNavigation": "التنقل بين آراء الضيوف",
+    "reviewIndex": "رأي {{current}} من {{total}}",
+    "prevReview": "الرأي السابق",
+    "nextReview": "الرأي التالي",
+    "tickerAria": "شريط آراء الضيوف المتحرك",
+    "writeReview": "اكتب تقييمك على Google",
+    "emptyTitle": "كن أول من يحكي تجربته",
+    "emptyText": "تقييمات ضيوفنا الحقيقية بتتجمّع على Google. جرّبت رحلة معانا؟ شاركنا رأيك، وهيظهر هنا.",
+    "viewOnGoogle": "شوف التقييمات على Google"
   }
 }

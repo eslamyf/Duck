@@ -83,6 +83,41 @@ body {
   min-height: 100vh;
 }
 
+/* ================= REVIEWS ANIMATIONS ================= */
+@keyframes rvScroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes rvStory {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.animate-rv-scroll {
+  will-change: transform;
+  animation: rvScroll 42s linear infinite;
+}
+
+.animate-rv-story {
+  animation: rvStory 5s linear forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-rv-scroll,
+  .animate-rv-story {
+    animation: none !important;
+  }
+}
+
 /* ================= PRINT STYLES ================= */
 @media print {
   @page {

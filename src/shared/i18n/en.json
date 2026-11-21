@@ -421,5 +421,20 @@
       "sunset": "Nile Sunset"
     },
     "whatsappMessage": "Hello Duck Team\nNew group booking request ({{ref}}):\n• Group/Org: {{org}} ({{type}})\n• Coordinator: {{name}}\n• WhatsApp: {{phone}}\n• Size: {{size}} people\n• Activity: {{act}}\n• Destination: {{dest}}\n• Date & Time: {{date}} - {{time}}{{notes}}"
+  },
+  "reviews": {
+    "sectionTitle": "What Our Guests Say",
+    "sectionSubtitle": "Real reviews from real adventurers, directly from Google.",
+    "basedOnGoogle": "Based on {{count}} reviews on Google",
+    "starRatingAria": "{{rating}} out of 5 stars",
+    "storyNavigation": "Navigate guest reviews",
+    "reviewIndex": "Review {{current}} of {{total}}",
+    "prevReview": "Previous review",
+    "nextReview": "Next review",
+    "tickerAria": "Guest reviews animated ticker",
+    "writeReview": "Write your review on Google",
+    "emptyTitle": "Be the first to share your experience",
+    "emptyText": "Real reviews from our guests are collected on Google. Tried an experience with us? Share your review and it will appear here.",
+    "viewOnGoogle": "See reviews on Google"
   }
 }
