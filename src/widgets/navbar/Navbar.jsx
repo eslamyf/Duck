@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import duckLogo from '../../shared/assets/icons/Artboard 14.png';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { Button, Badge } from '../../shared/ui/index.js';
+import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
 import {
   faHouse,
   faLocationDot,
@@ -24,11 +26,10 @@ import {
 
 export default function Navbar({ onBookClick, onAuthClick }) {
   const { lang, setLanguage, t } = useTranslation();
-  const homePrefix = window.location.pathname === '/about' ? '/' : '';
-  const homeHref = (hash) => `${homePrefix}${hash}`;
+  const location = useLocation();
   const [currency, setCurrency] = useState('EGP');
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [activeHash, setActiveHash] = useState('#top');
+  const [activeSection, setActiveSection] = useState(SECTIONS.TOP);
   const [temp, setTemp] = useState('');
 
   // Fetch weather data for Aswan
@@ -44,31 +45,63 @@ export default function Navbar({ onBookClick, onAuthClick }) {
       .catch(() => { });
   }, []);
 
-  // Update active hash based on scroll
+  // Update active section based on scroll (only when on home page)
   useEffect(() => {
-    const handleHashChange = () => {
-      setActiveHash(window.location.hash || '#top');
+    if (location.pathname !== ROUTES.HOME) return;
+
+    const handleScroll = () => {
+      if (window.scrollY < 120) {
+        setActiveSection(SECTIONS.TOP);
+        return;
+      }
+
+      const sectionIds = [SECTIONS.LOCATIONS, SECTIONS.TRIPS, SECTIONS.REVIEWS, SECTIONS.FAQ, SECTIONS.MAP];
+      let current = SECTIONS.TOP;
+      const headerOffset = 220;
+
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= headerOffset) {
+            current = id;
+          }
+        }
+      }
+
+      setActiveSection(current);
     };
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [location.pathname]);
 
   const navLinks = [
-    { href: homeHref('#top'), label: t('nav.home'), icon: faHouse },
-    { href: homeHref('#locations'), label: t('nav.destinations'), icon: faLocationDot },
-    { href: homeHref('#trips'), label: t('nav.trips'), icon: faCompass },
-    { href: homeHref('#/groups'), label: t('nav.groups'), icon: faUsersLine },
-    { href: homeHref('#reviews'), label: t('nav.reviews'), icon: faStar },
-    { href: homeHref('#faq'), label: t('nav.faq'), icon: faCircleQuestion },
-    { href: '/about', label: t('nav.about'), icon: faUsers },
+    { to: sectionLink(SECTIONS.TOP), label: t('nav.home'), icon: faHouse, sectionId: SECTIONS.TOP },
+    { to: sectionLink(SECTIONS.DESTINATIONS), label: t('nav.destinations'), icon: faLocationDot, sectionId: SECTIONS.DESTINATIONS },
+    { to: sectionLink(SECTIONS.TRIPS), label: t('nav.trips'), icon: faCompass, sectionId: SECTIONS.TRIPS },
+    { to: ROUTES.GROUPS, label: t('nav.groups'), icon: faUsersLine, isGroups: true },
+    { to: sectionLink(SECTIONS.REVIEWS), label: t('nav.reviews'), icon: faStar, sectionId: SECTIONS.REVIEWS },
+    { to: sectionLink(SECTIONS.FAQ), label: t('nav.faq'), icon: faCircleQuestion, sectionId: SECTIONS.FAQ },
+    { to: ROUTES.ABOUT, label: t('nav.about'), icon: faUsers, isAbout: true },
   ];
 
-  const handleNavClick = (href) => {
-    setActiveHash(href);
-    setIsMobileOpen(false);
-  };
-
   const isRtl = lang === 'ar';
+
+  const checkIsActive = (link) => {
+    if (location.pathname === ROUTES.ABOUT) {
+      return Boolean(link.isAbout);
+    }
+    if (location.pathname === ROUTES.GROUPS) {
+      return Boolean(link.isGroups);
+    }
+    if (link.isAbout || link.isGroups) return false;
+    return activeSection === link.sectionId;
+  };
 
   return (
     <header className="fixed top-0 inset-x-0 z-[120] bg-white border-b border-[rgba(20,125,159,0.16)] shadow-[0_8px_24px_rgba(12,18,38,0.06)] font-body">
@@ -105,13 +138,14 @@ export default function Navbar({ onBookClick, onAuthClick }) {
         <span className="text-white text-[13px] inline-flex items-center gap-1.5" id="tmp">
           <b className="text-brand-yellow font-bold">{t('common.aswan')}</b>
           {temp && <span>{temp}{t('common.tempSuffix')}</span>}
+          <FontAwesomeIcon icon={faSun} className="text-brand-yellow text-sm ms-0.5" />
         </span>
       </div>
 
       {/* Main Navbar */}
       <nav className="flex items-center justify-between min-[901px]:justify-start gap-3.5 px-[3vw] py-2 text-[13.5px] font-medium min-h-[52px] min-[901px]:min-h-[58px]" aria-label={t('nav.menuAria')}>
         {/* Logo */}
-        <a href={homeHref('#top')} className="block focus:outline-none" onClick={() => handleNavClick(homeHref('#top'))}>
+        <Link to={ROUTES.HOME} className="block focus:outline-none" aria-label={t('common.brandName')}>
           <img
             src={duckLogo}
             alt={t('nav.logoAlt')}
@@ -119,17 +153,16 @@ export default function Navbar({ onBookClick, onAuthClick }) {
             height="44"
             className="h-9 min-[901px]:h-[42px] w-auto bg-transparent min-[901px]:bg-white rounded-full py-1 px-2.5"
           />
-        </a>
+        </Link>
 
         {/* Desktop Links */}
         <div className="hidden min-[901px]:flex items-center gap-3.5 me-auto whitespace-nowrap">
           {navLinks.map((link) => {
-            const isActive = activeHash === link.href;
+            const isActive = checkIsActive(link);
             return (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => handleNavClick(link.href)}
+              <Link
+                key={link.to}
+                to={link.to}
                 className={`relative py-2.5 px-0.5 whitespace-nowrap transition-colors duration-200 group ${
                   isActive ? 'text-brand-blue font-bold' : 'text-brand-navy hover:text-brand-blue'
                 }`}
@@ -140,21 +173,20 @@ export default function Navbar({ onBookClick, onAuthClick }) {
                     isActive ? 'w-full' : 'w-0 group-hover:w-full'
                   }`}
                 />
-              </a>
+              </Link>
             );
           })}
         </div>
 
         {/* Desktop Actions */}
         <div className="flex items-center gap-2 whitespace-nowrap ms-auto min-[901px]:ms-0">
-          <a
-            href={homeHref('#map')}
-            onClick={() => handleNavClick(homeHref('#map'))}
+          <Link
+            to={sectionLink(SECTIONS.MAP)}
             className="hidden min-[901px]:inline-block py-2.5 px-0.5 relative text-brand-navy hover:text-brand-blue transition-colors group"
           >
             {t('common.map')}
             <span className="absolute bottom-1 start-0 h-[3px] rounded-full bg-brand-yellow w-0 group-hover:w-full transition-all duration-300 ease-out" />
-          </a>
+          </Link>
 
           {/* Auth Button */}
           <Button
@@ -169,16 +201,14 @@ export default function Navbar({ onBookClick, onAuthClick }) {
 
           {/* Book Now Button */}
           <Button
-            as="a"
-            href={homeHref('#trips')}
+            as={Link}
+            to={sectionLink(SECTIONS.TRIPS)}
             variant="primary"
             size="sm"
             onClick={(e) => {
               if (onBookClick) {
                 e.preventDefault();
                 onBookClick();
-              } else {
-                handleNavClick('#trips');
               }
             }}
           >
@@ -245,10 +275,10 @@ export default function Navbar({ onBookClick, onAuthClick }) {
 
           {/* Links */}
           {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={() => handleNavClick(link.href)}
+            <Link
+              key={link.to}
+              to={link.to}
+              onClick={() => setIsMobileOpen(false)}
               className="flex items-center justify-between min-h-[50px] px-3 text-[16px] font-semibold border-b border-white/10 rounded-xl hover:bg-brand-yellow/12 hover:text-brand-yellow transition-colors"
             >
               <span className="inline-flex items-center gap-2.5">
@@ -256,13 +286,13 @@ export default function Navbar({ onBookClick, onAuthClick }) {
                 {link.label}
               </span>
               <FontAwesomeIcon icon={isRtl ? faArrowLeft : faArrowRight} className="text-xs opacity-60" />
-            </a>
+            </Link>
           ))}
 
           {/* Map Link */}
-          <a
-            href="#map"
-            onClick={() => handleNavClick('#map')}
+          <Link
+            to={sectionLink(SECTIONS.MAP)}
+            onClick={() => setIsMobileOpen(false)}
             className="flex items-center justify-between min-h-[50px] px-3 text-[16px] font-semibold border-b border-white/10 rounded-xl hover:bg-brand-yellow/12 hover:text-brand-yellow transition-colors"
           >
             <span className="inline-flex items-center gap-2.5">
@@ -270,7 +300,7 @@ export default function Navbar({ onBookClick, onAuthClick }) {
               {t('nav.exploreMapAria')}
             </span>
             <FontAwesomeIcon icon={isRtl ? faArrowLeft : faArrowRight} className="text-xs opacity-60" />
-          </a>
+          </Link>
 
           {/* Mobile Login Button */}
           <button
@@ -290,8 +320,8 @@ export default function Navbar({ onBookClick, onAuthClick }) {
 
           {/* Mobile Primary CTA */}
           <Button
-            as="a"
-            href={homeHref('#trips')}
+            as={Link}
+            to={sectionLink(SECTIONS.TRIPS)}
             variant="primary"
             size="md"
             fullWidth

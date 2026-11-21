@@ -1,7 +1,5 @@
 import { useState } from 'react';
-
-import { useTranslation } from '../../../shared/i18n/index.js';
-
+import { useTranslation } from '../../shared/i18n/index.js';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const communityImages = [
@@ -45,13 +43,11 @@ export default function AboutCommunity() {
   return (
     <section
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="h-[calc(100svh-100px)] min-h-[560px] overflow-hidden bg-[#F7F7F4] px-4 py-20 sm:px-6 md:px-10 md:py-20"
+      className="h-[calc(100svh-100px)] min-h-[560px] overflow-hidden bg-surface-sand px-4 py-20 sm:px-6 md:px-10 md:py-20"
     >
       <div className="mx-auto flex h-full max-w-7xl flex-col">
-
         {/* Main Image */}
         <div className="group relative min-h-0 flex-1 overflow-hidden rounded-[24px] md:rounded-[30px]">
-
           {/* Animated Image */}
           <AnimatePresence mode="wait">
             <motion.img
@@ -74,16 +70,15 @@ export default function AboutCommunity() {
           </AnimatePresence>
 
           {/* Dark Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#121528]/95 via-[#121528]/35 to-[#121528]/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/95 via-brand-navy/35 to-brand-navy/10" />
 
           {/* Main Content */}
           <div
             dir={isArabic ? 'rtl' : 'ltr'}
             className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-9 md:p-12 lg:p-14"
           >
-
             {/* Image Label */}
-            <span className="mb-3 block text-[10px] font-bold uppercase tracking-[0.25em] text-[#F5E847] sm:text-xs">
+            <span className="mb-3 block text-[10px] font-bold uppercase tracking-[0.25em] text-brand-yellow sm:text-xs">
               {t('about.community.imageLabel')}
             </span>
 
@@ -96,7 +91,6 @@ export default function AboutCommunity() {
             <p className="max-w-2xl text-xs leading-6 text-white/80 sm:text-sm sm:leading-7 md:text-base">
               {t('about.community.description')}
             </p>
-
           </div>
 
           {/* Image Number */}
@@ -112,7 +106,6 @@ export default function AboutCommunity() {
           >
             {String(activeIndex + 1).padStart(2, '0')}
           </span>
-
         </div>
 
         {/* Interactive Gallery */}
@@ -120,7 +113,6 @@ export default function AboutCommunity() {
           dir={isArabic ? 'rtl' : 'ltr'}
           className="mt-3 grid h-[clamp(95px,17vh,145px)] shrink-0 grid-cols-3 gap-3 sm:mt-4 sm:gap-4"
         >
-
           {thumbnails.map((item) => (
             <motion.button
               key={item.key}
@@ -130,9 +122,8 @@ export default function AboutCommunity() {
               aria-label={t(
                 `about.community.gallery.${item.key}`
               )}
-              className="group relative min-h-0 overflow-hidden rounded-[16px] border-2 border-transparent transition-colors duration-300 hover:border-[#F5E847] focus-visible:border-[#F5E847] focus-visible:outline-none sm:rounded-[20px]"
+              className="group relative min-h-0 overflow-hidden rounded-[16px] border-2 border-transparent transition-colors duration-300 hover:border-brand-yellow focus-visible:border-brand-yellow focus-visible:outline-none sm:rounded-[20px]"
             >
-
               {/* Thumbnail Image */}
               <img
                 src={item.image}
@@ -145,18 +136,15 @@ export default function AboutCommunity() {
               />
 
               {/* Thumbnail Overlay */}
-              <div className="absolute inset-0 bg-[#121528]/15 transition-colors duration-300 group-hover:bg-transparent" />
+              <div className="absolute inset-0 bg-brand-navy/15 transition-colors duration-300 group-hover:bg-transparent" />
 
               {/* Thumbnail Number */}
               <span className="absolute bottom-2 left-3 text-xl font-extrabold text-white/70 sm:bottom-3 sm:left-4 sm:text-2xl">
                 {String(item.originalIndex + 1).padStart(2, '0')}
               </span>
-
             </motion.button>
           ))}
-
         </div>
-
       </div>
     </section>
   );

@@ -1,9 +1,7 @@
 import { useState, useRef } from 'react';
-
-import { useTranslation } from '../../../shared/i18n/index.js';
-
-import { ArrowUpRight } from 'lucide-react';
-
+import { useTranslation } from '../../shared/i18n/index.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import {
   motion,
   useScroll,
@@ -84,33 +82,28 @@ export default function AboutJourney() {
   return (
     <section
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="overflow-hidden bg-[#F7F7F4] py-20 md:py-32"
+      className="overflow-hidden bg-surface-sand py-20 md:py-32"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16">
-
         {/* Section Heading */}
         <div className="mb-14 text-center md:mb-20">
-
           {/* Eyebrow */}
-          <span className="mb-5 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-[#067BA1]">
-            <span className="h-[2px] w-8 bg-[#F5E847]" />
-
+          <span className="mb-5 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-brand-blue">
+            <span className="h-[2px] w-8 bg-brand-yellow" />
             {t('about.journey.eyebrow')}
-
-            <span className="h-[2px] w-8 bg-[#F5E847]" />
+            <span className="h-[2px] w-8 bg-brand-yellow" />
           </span>
 
           {/* Title */}
-          <h2 className="font-heading text-4xl font-extrabold uppercase text-[#121528] sm:text-5xl md:text-6xl">
+          <h2 className="font-heading text-4xl font-extrabold uppercase text-brand-navy sm:text-5xl md:text-6xl">
             {t('about.journey.title')}
-            <span className="text-[#067BA1]">.</span>
+            <span className="text-brand-blue">.</span>
           </h2>
 
           {/* Subtitle */}
-          <p className="mx-auto mt-6 max-w-2xl text-sm leading-8 text-[#121528]/60 sm:text-base">
+          <p className="mx-auto mt-6 max-w-2xl text-sm leading-8 text-brand-navy/60 sm:text-base">
             {t('about.journey.subtitle')}
           </p>
-
         </div>
 
         {/* Desktop Timeline */}
@@ -119,9 +112,8 @@ export default function AboutJourney() {
           dir="ltr"
           className="relative hidden md:block"
         >
-
           {/* Base Blue Line */}
-          <div className="absolute bottom-0 left-1/2 top-0 w-[3px] -translate-x-1/2 rounded-full bg-[#067BA1]/20" />
+          <div className="absolute bottom-0 left-1/2 top-0 w-[3px] -translate-x-1/2 rounded-full bg-brand-blue/20" />
 
           {/* Animated Yellow Line */}
           <motion.div
@@ -129,12 +121,11 @@ export default function AboutJourney() {
               height: lineHeight,
               originY: 0,
             }}
-            className="absolute left-1/2 top-0 z-10 w-[3px] -translate-x-1/2 rounded-full bg-[#F5E847] shadow-[0_0_12px_rgba(245,232,71,0.65)]"
+            className="absolute left-1/2 top-0 z-10 w-[3px] -translate-x-1/2 rounded-full bg-brand-yellow shadow-[0_0_12px_rgba(253,251,69,0.65)]"
           />
 
           {/* Timeline Items */}
           <div className="space-y-24">
-
             {journeyItems.map((item, index) => {
               const isLeft = item.position === 'left';
               const isActive = activeIndex >= index;
@@ -144,22 +135,19 @@ export default function AboutJourney() {
                   key={item.key}
                   className="relative grid items-center gap-8 md:grid-cols-2 md:gap-16"
                 >
-
                   {/* Timeline Node */}
                   <motion.div
                     animate={{
                       backgroundColor: isActive
-                        ? '#F5E847'
-                        : '#067BA1',
-
+                        ? 'var(--color-yellow)'
+                        : 'var(--color-blue)',
                       scale: isActive ? 1.25 : 1,
-
                       boxShadow: isActive
-                        ? '0 0 0 7px rgba(245,232,71,0.25), 0 0 18px rgba(245,232,71,0.7)'
-                        : '0 0 0 5px rgba(6,123,161,0.15)',
+                        ? '0 0 0 7px rgba(253,251,69,0.25), 0 0 18px rgba(253,251,69,0.7)'
+                        : '0 0 0 5px rgba(20,125,159,0.15)',
                     }}
                     transition={{ duration: 0.35 }}
-                    className="absolute left-1/2 top-1/2 z-20 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-[#F7F7F4]"
+                    className="absolute left-1/2 top-1/2 z-20 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-surface-sand"
                   />
 
                   {/* Image */}
@@ -182,7 +170,7 @@ export default function AboutJourney() {
                       className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                     />
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#121528]/50 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/50 to-transparent" />
 
                     <span
                       className={`
@@ -207,47 +195,43 @@ export default function AboutJourney() {
                       }
                     `}
                   >
-
                     {/* Year / Number */}
-                    <span className="mb-4 block text-sm font-bold uppercase tracking-[0.2em] text-[#067BA1]">
+                    <span className="mb-4 block text-sm font-bold uppercase tracking-[0.2em] text-brand-blue">
                       {item.year || item.number}
                     </span>
 
                     {/* Highlight */}
                     {item.highlight && (
-                      <div className="mb-3 font-heading text-5xl font-extrabold text-[#067BA1] md:text-6xl">
+                      <div className="mb-3 font-heading text-5xl font-extrabold text-brand-blue md:text-6xl">
                         {item.highlight}
                       </div>
                     )}
 
                     {/* Title */}
-                    <h3 className="mb-5 font-heading text-2xl font-extrabold uppercase leading-tight text-[#121528] md:text-3xl">
+                    <h3 className="mb-5 font-heading text-2xl font-extrabold uppercase leading-tight text-brand-navy md:text-3xl">
                       {t(
                         `about.journey.items.${item.key}.title`
                       )}
                     </h3>
 
                     {/* Description */}
-                    <p className="max-w-lg text-sm leading-8 text-[#121528]/65 md:text-base">
+                    <p className="max-w-lg text-sm leading-8 text-brand-navy/65 md:text-base">
                       {t(
                         `about.journey.items.${item.key}.description`
                       )}
                     </p>
 
                     {/* Arrow */}
-                    <div className="mt-6 flex h-11 w-11 items-center justify-center rounded-full bg-[#F5E847] text-[#121528]">
-                      <ArrowUpRight
-                        size={20}
-                        className={isArabic ? '-rotate-90' : ''}
+                    <div className="mt-6 flex h-11 w-11 items-center justify-center rounded-full bg-brand-yellow text-brand-navy">
+                      <FontAwesomeIcon
+                        icon={faArrowUpRightFromSquare}
+                        className={`text-base ${isArabic ? '-rotate-90' : ''}`}
                       />
                     </div>
-
                   </div>
-
                 </div>
               );
             })}
-
           </div>
         </div>
 
@@ -260,13 +244,11 @@ export default function AboutJourney() {
             className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-5 [&::-webkit-scrollbar]:hidden"
             style={{ scrollbarWidth: 'none' }}
           >
-
             {journeyItems.map((item) => (
               <article
                 key={item.key}
                 className="group relative h-[480px] w-[85vw] max-w-[390px] shrink-0 snap-center overflow-hidden rounded-[28px]"
               >
-
                 {/* Background Image */}
                 <img
                   src={item.image}
@@ -279,40 +261,36 @@ export default function AboutJourney() {
                 />
 
                 {/* Dark Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#121528] via-[#121528]/65 to-[#121528]/10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-navy via-brand-navy/65 to-brand-navy/10" />
 
                 {/* Card Content */}
                 <div
                   dir={isArabic ? 'rtl' : 'ltr'}
                   className="relative flex h-full flex-col justify-between p-6 text-white"
                 >
-
                   {/* Top */}
                   <div className="flex items-start justify-between">
-
                     <span className="text-sm font-bold tracking-[0.2em] text-white/80">
                       {item.year || item.number}
                     </span>
 
-                    <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-white/10 text-[#F5E847] backdrop-blur-sm">
-                      <ArrowUpRight
-                        size={20}
-                        className={isArabic ? '-rotate-90' : ''}
+                    <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-white/10 text-brand-yellow backdrop-blur-sm">
+                      <FontAwesomeIcon
+                        icon={faArrowUpRightFromSquare}
+                        className={`text-base ${isArabic ? '-rotate-90' : ''}`}
                       />
                     </div>
-
                   </div>
 
                   {/* Bottom Content */}
                   <div>
-
                     <span className="mb-4 block text-6xl font-extrabold text-white/20">
                       {item.number}
                     </span>
 
                     {/* Highlight */}
                     {item.highlight && (
-                      <div className="mb-3 font-heading text-5xl font-extrabold text-[#F5E847]">
+                      <div className="mb-3 font-heading text-5xl font-extrabold text-brand-yellow">
                         {item.highlight}
                       </div>
                     )}
@@ -331,29 +309,20 @@ export default function AboutJourney() {
                       )}
                     </p>
 
-                    <div className="mt-6 h-[3px] w-12 rounded-full bg-[#F5E847]" />
-
+                    <div className="mt-6 h-[3px] w-12 rounded-full bg-brand-yellow" />
                   </div>
                 </div>
               </article>
             ))}
-
           </div>
 
           {/* Slider Hint */}
-          <div className="mt-4 flex items-center justify-center gap-3 text-xs font-semibold text-[#121528]/50">
-            <span className="h-[1px] w-8 bg-[#067BA1]/30" />
-
-            {isArabic
-              ? 'اسحب لاكتشاف رحلتنا'
-              : 'SWIPE TO EXPLORE'
-            }
-
-            <span className="h-[1px] w-8 bg-[#067BA1]/30" />
+          <div className="mt-4 flex items-center justify-center gap-3 text-xs font-semibold text-brand-navy/50">
+            <span className="h-[1px] w-8 bg-brand-blue/30" />
+            {t('about.journey.swipeHint', isArabic ? 'اسحب لاكتشاف رحلتنا' : 'SWIPE TO EXPLORE')}
+            <span className="h-[1px] w-8 bg-brand-blue/30" />
           </div>
-
         </div>
-
       </div>
     </section>
   );

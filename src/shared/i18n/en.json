@@ -36,125 +36,124 @@
       "customers": "Adventurers served",
       "destinations": "Destinations"
     },
-     "story": {
-    "eyebrow": "THE STORY OF DUCK",
-    "titleLine1": "A SMALL DUCK.",
-    "titleLine2": "A BIG DREAM.",
-    "paragraph1": "Every big adventure starts with a simple idea.",
-    "paragraph2": "In 2023, one person's passion for the water sparked a dream in Aswan. A dream to help people experience the Nile differently, discover the beauty of nature, and create unforgettable moments on the water.",
-    "paragraph3": "That dream became DUCK. What started as a personal passion grew into a journey built around adventure, connection, and the freedom to explore.",
-    "closing": "AND THIS IS ONLY THE BEGINNING.",
-    "mainImageAlt": "Kayaking adventure on the water",
-    "fact1": "The journey began in Aswan",
-    "fact2Value": "ONE DREAM",
-    "fact2": "Born from a passion for water",
-    "cta": "Discover Our Story",
-    "established": "EST. ASWAN",
-    "imageCaption": "A dream sparked by a deep love for the Nile."
-  },
-  "missionVision": {
-  "eyebrow": "WHAT WE BELIEVE IN",
-  "title": "OUR MISSION & VISION",
-  "missionTitle": "Our Mission",
-  "missionDescription": "To make water adventures more accessible, meaningful, and unforgettable — connecting people with nature, local culture, and the beauty of Egypt.",
-  "visionTitle": "Our Vision",
-  "visionDescription": "To become a leading name in water experiences, inspiring more people to explore Egypt through its rivers, coastlines, and natural destinations.",
-  "footer": "WE BELIEVE IN THE POWER OF ADVENTURE",
-  "imageAlt": "Kayaking adventure on the Nile"
- },
- "principles": {
-  "eyebrow": "THE PRINCIPLES WE BELIEVE IN",
-  "titleLine1": "WHAT WE STAND",
-  "titleLine2": "FOR",
-  "description": "Every great adventure begins with values we believe in and principles that guide every step of our journey.",
-  "highlight": "OUR PRINCIPLE",
-
-  "adventure": {
-    "title": "ADVENTURE",
-    "description": "We believe life is better when you step beyond the ordinary and embrace new experiences."
-  },
-
-  "freedom": {
-    "title": "FREEDOM",
-    "description": "We celebrate the freedom to explore, discover, and experience the water in your own way."
-  },
-
-  "connection": {
-    "title": "CONNECTION",
-    "description": "We bring people closer to nature, local communities, and each other through shared experiences."
-  },
-
-  "safety": {
-    "title": "SAFETY",
-    "description": "We believe every great adventure starts with care, responsibility, and a commitment to safety."
-  }
-},
-"journey": {
-  "eyebrow": "OUR STORY IN MOTION",
-  "title": "OUR JOURNEY",
-  "subtitle": "From a simple idea in Aswan to unforgettable experiences on the water.",
-  "items": {
-    "beginning": {
-      "title": "WHERE IT ALL BEGAN",
-      "description": "Founded in 2023 in Aswan, Egypt, DUCK began with a passion for water and a vision to help people experience the Nile differently.",
-      "imageAlt": "The Nile River and Nubian village in Aswan"
+    "story": {
+      "eyebrow": "THE STORY OF DUCK",
+      "titleLine1": "A SMALL DUCK.",
+      "titleLine2": "A BIG DREAM.",
+      "paragraph1": "Every big adventure starts with a simple idea.",
+      "paragraph2": "In 2023, one person's passion for the water sparked a dream in Aswan. A dream to help people experience the Nile differently, discover the beauty of nature, and create unforgettable moments on the water.",
+      "paragraph3": "That dream became DUCK. What started as a personal passion grew into a journey built around adventure, connection, and the freedom to explore.",
+      "closing": "AND THIS IS ONLY THE BEGINNING.",
+      "mainImageAlt": "Kayaking adventure on the water",
+      "fact1": "The journey began in Aswan",
+      "fact2Value": "ONE DREAM",
+      "fact2": "Born from a passion for water",
+      "cta": "Discover Our Story",
+      "established": "EST. ASWAN",
+      "imageCaption": "A dream sparked by a deep love for the Nile."
     },
-    "experiences": {
-      "title": "BUILDING EXPERIENCES",
-      "description": "We developed a growing collection of water experiences, including Kayaking, Stand-Up Paddle, Water Bike, and curated Nile Tours.",
-      "imageAlt": "People enjoying water activities"
+    "missionVision": {
+      "eyebrow": "WHAT WE BELIEVE IN",
+      "title": "OUR MISSION & VISION",
+      "missionTitle": "Our Mission",
+      "missionDescription": "To make water adventures more accessible, meaningful, and unforgettable — connecting people with nature, local culture, and the beauty of Egypt.",
+      "visionTitle": "Our Vision",
+      "visionDescription": "To become a leading name in water experiences, inspiring more people to explore Egypt through its rivers, coastlines, and natural destinations.",
+      "footer": "WE BELIEVE IN THE POWER OF ADVENTURE",
+      "imageAlt": "Kayaking adventure on the Nile",
+      "badge": "DUCK · WATER EXPERIENCES"
     },
-    "customers": {
-      "title": "MORE THAN 4,000 MOMENTS",
-      "description": "More than 4,000 customers have experienced DUCK, creating memorable moments through water adventures and local discovery.",
-      "imageAlt": "People enjoying a water adventure"
+    "principles": {
+      "eyebrow": "THE PRINCIPLES WE BELIEVE IN",
+      "titleLine1": "WHAT WE STAND",
+      "titleLine2": "FOR",
+      "description": "Every great adventure begins with values we believe in and principles that guide every step of our journey.",
+      "highlight": "OUR PRINCIPLE",
+      "adventure": {
+        "title": "ADVENTURE",
+        "description": "We believe life is better when you step beyond the ordinary and embrace new experiences."
+      },
+      "freedom": {
+        "title": "FREEDOM",
+        "description": "We celebrate the freedom to explore, discover, and experience the water in your own way."
+      },
+      "connection": {
+        "title": "CONNECTION",
+        "description": "We bring people closer to nature, local communities, and each other through shared experiences."
+      },
+      "safety": {
+        "title": "SAFETY",
+        "description": "We believe every great adventure starts with care, responsibility, and a commitment to safety."
+      }
     },
-    "beyond": {
-      "title": "BEYOND ASWAN",
-      "description": "Our next chapter focuses on expanding into new Egyptian destinations, developing experiences, and improving our digital platform.",
-      "imageAlt": "Egyptian natural landscape"
-    }
-  }
-},
-"numbers": {
-  "eyebrow": "OUR IMPACT",
-  "title": "DUCK IN NUMBERS",
-  "subtitle": "Every number tells a story. Every experience creates a memory.",
-  "items": {
-    "founded": {
-      "label": "Founded",
-      "description": "Born in Aswan, Egypt"
+    "journey": {
+      "eyebrow": "OUR STORY IN MOTION",
+      "title": "OUR JOURNEY",
+      "subtitle": "From a simple idea in Aswan to unforgettable experiences on the water.",
+      "items": {
+        "beginning": {
+          "title": "WHERE IT ALL BEGAN",
+          "description": "Founded in 2023 in Aswan, Egypt, DUCK began with a passion for water and a vision to help people experience the Nile differently.",
+          "imageAlt": "The Nile River and Nubian village in Aswan"
+        },
+        "experiences": {
+          "title": "BUILDING EXPERIENCES",
+          "description": "We developed a growing collection of water experiences, including Kayaking, Stand-Up Paddle, Water Bike, and curated Nile Tours.",
+          "imageAlt": "People enjoying water activities"
+        },
+        "customers": {
+          "title": "MORE THAN 4,000 MOMENTS",
+          "description": "More than 4,000 customers have experienced DUCK, creating memorable moments through water adventures and local discovery.",
+          "imageAlt": "People enjoying a water adventure"
+        },
+        "beyond": {
+          "title": "BEYOND ASWAN",
+          "description": "Our next chapter focuses on expanding into new Egyptian destinations, developing experiences, and improving our digital platform.",
+          "imageAlt": "Egyptian natural landscape"
+        }
+      },
+      "swipeHint": "SWIPE TO EXPLORE"
     },
-    "customers": {
-      "label": "Customers Served",
-      "description": "And countless memories created"
+    "numbers": {
+      "eyebrow": "OUR IMPACT",
+      "title": "DUCK IN NUMBERS",
+      "subtitle": "Every number tells a story. Every experience creates a memory.",
+      "items": {
+        "founded": {
+          "label": "Founded",
+          "description": "Born in Aswan, Egypt"
+        },
+        "customers": {
+          "label": "Customers Served",
+          "description": "And countless memories created"
+        },
+        "destinations": {
+          "label": "Destinations & Markets",
+          "description": "And growing beyond"
+        }
+      },
+      "footer": "Every number represents a new adventure and a lasting memory."
     },
-    "destinations": {
-      "label": "Destinations & Markets",
-      "description": "And growing beyond"
-    }
-  },
-  "footer": "Every number represents a new adventure and a lasting memory."
-},
-"community": {
-  "eyebrow": "THE DUCK COMMUNITY",
-  "title": "MORE THAN AN EXPERIENCE. A COMMUNITY",
-  "imageLabel": "CONNECTED BY ADVENTURE",
-  "headline": "MORE THAN AN EXPERIENCE. A COMMUNITY.",
-  "description": "It's about the people you meet, the moments you share, and the memories you create together. At DUCK, every adventure brings people closer to nature and to each other.",
-  "mainImageAlt": "People enjoying outdoor water adventures",
-  "gallery": {
-    "one": "People enjoying a water adventure",
-    "two": "Outdoor adventure and exploration",
-    "three": "Friends sharing memorable moments"
-  }
-},
-"cta": {
-  "eyebrow": "YOUR NEXT ADVENTURE",
-  "title": "YOUR NEXT ADVENTURE STARTS HERE",
-  "description": "Discover the beauty of the Nile from a different perspective. Your next unforgettable experience is waiting.",
-  "button": "EXPLORE ACTIVITIES"
-}
+    "community": {
+      "eyebrow": "THE DUCK COMMUNITY",
+      "title": "MORE THAN AN EXPERIENCE. A COMMUNITY",
+      "imageLabel": "CONNECTED BY ADVENTURE",
+      "headline": "MORE THAN AN EXPERIENCE. A COMMUNITY.",
+      "description": "It's about the people you meet, the moments you share, and the memories you create together. At DUCK, every adventure brings people closer to nature and to each other.",
+      "mainImageAlt": "People enjoying outdoor water adventures",
+      "gallery": {
+        "one": "People enjoying a water adventure",
+        "two": "Outdoor adventure and exploration",
+        "three": "Friends sharing memorable moments"
+      }
+    },
+    "cta": {
+      "eyebrow": "YOUR NEXT ADVENTURE",
+      "title": "YOUR NEXT ADVENTURE STARTS HERE",
+      "description": "Discover the beauty of the Nile from a different perspective. Your next unforgettable experience is waiting.",
+      "button": "EXPLORE ACTIVITIES"
+    },
+    "metaTitle": "About Us"
   },
   "nav": {
     "home": "Home",

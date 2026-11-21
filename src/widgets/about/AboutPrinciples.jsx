@@ -1,12 +1,12 @@
-import { useTranslation } from '../../../shared/i18n/index.js';
-
+import { useTranslation } from '../../shared/i18n/index.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  Compass,
-  Waves,
-  Users,
-  ShieldCheck,
-  ArrowUpRight,
-} from 'lucide-react';
+  faCompass,
+  faWater,
+  faUsers,
+  faShieldHalved,
+  faArrowUpRightFromSquare,
+} from '@fortawesome/free-solid-svg-icons';
 
 export default function AboutPrinciples() {
   const { lang, t } = useTranslation();
@@ -16,7 +16,7 @@ export default function AboutPrinciples() {
     {
       number: '01',
       key: 'adventure',
-      icon: Compass,
+      icon: faCompass,
       image:
         'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=85',
       layout: 'large',
@@ -24,7 +24,7 @@ export default function AboutPrinciples() {
     {
       number: '02',
       key: 'freedom',
-      icon: Waves,
+      icon: faWater,
       image:
         'https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=900&q=85',
       layout: 'small',
@@ -32,7 +32,7 @@ export default function AboutPrinciples() {
     {
       number: '03',
       key: 'connection',
-      icon: Users,
+      icon: faUsers,
       image:
         'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=900&q=85',
       layout: 'small',
@@ -40,7 +40,7 @@ export default function AboutPrinciples() {
     {
       number: '04',
       key: 'safety',
-      icon: ShieldCheck,
+      icon: faShieldHalved,
       image:
         'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1400&q=85',
       layout: 'wide',
@@ -48,8 +48,6 @@ export default function AboutPrinciples() {
   ];
 
   const renderCard = (principle, mobile = false) => {
-    const Icon = principle.icon;
-
     const desktopLayout =
       principle.layout === 'large'
         ? 'lg:col-span-4 lg:row-span-2'
@@ -63,7 +61,7 @@ export default function AboutPrinciples() {
         dir={isArabic ? 'rtl' : 'ltr'}
         className={`
           group relative isolate overflow-hidden rounded-[24px]
-          bg-[#121528] shadow-sm
+          bg-brand-navy shadow-sm
           ${
             mobile
               ? 'h-[420px] w-[85vw] max-w-[380px] shrink-0 snap-center'
@@ -82,7 +80,7 @@ export default function AboutPrinciples() {
 
         {/* Image Overlay */}
         <div
-          className="absolute inset-0 bg-gradient-to-t from-[#121528]/95 via-[#121528]/35 to-[#121528]/10 transition-all duration-500 group-hover:from-[#121528]/90"
+          className="absolute inset-0 bg-gradient-to-t from-brand-navy/95 via-brand-navy/35 to-brand-navy/10 transition-all duration-500 group-hover:from-brand-navy/90"
           aria-hidden="true"
         />
 
@@ -98,8 +96,8 @@ export default function AboutPrinciples() {
               {principle.number}
             </span>
 
-            <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-white/10 text-[#F5E847] backdrop-blur-sm transition-all duration-300 group-hover:rotate-12 group-hover:bg-[#F5E847] group-hover:text-[#121528]">
-              <Icon size={21} strokeWidth={1.8} />
+            <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-white/10 text-brand-yellow backdrop-blur-sm transition-all duration-300 group-hover:rotate-12 group-hover:bg-brand-yellow group-hover:text-brand-navy">
+              <FontAwesomeIcon icon={principle.icon} className="text-lg" />
             </div>
           </div>
 
@@ -114,14 +112,14 @@ export default function AboutPrinciples() {
             </p>
 
             {principle.key === 'adventure' && (
-              <div className="mt-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#F5E847]">
+              <div className="mt-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brand-yellow">
                 <span>
                   {t('about.principles.highlight')}
                 </span>
 
-                <ArrowUpRight
-                  size={16}
-                  className={isArabic ? '-rotate-90' : ''}
+                <FontAwesomeIcon
+                  icon={faArrowUpRightFromSquare}
+                  className={`text-xs ${isArabic ? '-rotate-90' : ''}`}
                 />
               </div>
             )}
@@ -134,17 +132,14 @@ export default function AboutPrinciples() {
   return (
     <section
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="flex min-h-[calc(100svh-100px)] flex-col justify-center bg-[#F7F7F4] py-10 md:py-12 lg:min-h-[calc(100svh-100px)] lg:py-8"
+      className="flex min-h-[calc(100svh-100px)] flex-col justify-center bg-surface-sand py-10 md:py-12 lg:min-h-[calc(100svh-100px)] lg:py-8"
     >
       <div className="mx-auto w-full max-w-7xl px-6 md:px-10 lg:px-16">
-
         {/* Section Heading */}
         <div className="mb-7">
-
           {/* Eyebrow */}
-          <span className="mb-4 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-[#067BA1]">
-            <span className="h-[2px] w-8 bg-[#F5E847]" />
-
+          <span className="mb-4 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-brand-blue">
+            <span className="h-[2px] w-8 bg-brand-yellow" />
             {t('about.principles.eyebrow')}
           </span>
 
@@ -153,13 +148,12 @@ export default function AboutPrinciples() {
             dir="ltr"
             className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between"
           >
-
             {/* Title */}
             <h2
               dir={isArabic ? 'rtl' : 'ltr'}
               className={`
                 w-full max-w-2xl font-heading text-4xl font-extrabold
-                uppercase leading-tight text-[#121528]
+                uppercase leading-tight text-brand-navy
                 sm:text-5xl md:w-1/2 md:text-6xl
                 ${isArabic
                   ? 'text-right md:order-2'
@@ -171,7 +165,7 @@ export default function AboutPrinciples() {
                 {t('about.principles.titleLine1')}
               </span>
 
-              <span className="block text-[#067BA1]">
+              <span className="block text-brand-blue">
                 {t('about.principles.titleLine2')}
               </span>
             </h2>
@@ -181,7 +175,7 @@ export default function AboutPrinciples() {
               dir={isArabic ? 'rtl' : 'ltr'}
               className={`
                 w-full max-w-md pb-2 text-sm leading-7
-                text-[#121528]/60 sm:text-base md:w-1/2
+                text-brand-navy/60 sm:text-base md:w-1/2
                 ${isArabic
                   ? 'text-right md:order-1'
                   : 'text-left md:order-2'
@@ -190,7 +184,6 @@ export default function AboutPrinciples() {
             >
               {t('about.principles.description')}
             </p>
-
           </div>
         </div>
 
@@ -220,11 +213,10 @@ export default function AboutPrinciples() {
           {principles.map((principle) => (
             <span
               key={principle.key}
-              className="h-1.5 w-6 rounded-full bg-[#067BA1]/20"
+              className="h-1.5 w-6 rounded-full bg-brand-blue/20"
             />
           ))}
         </div>
-
       </div>
     </section>
   );
