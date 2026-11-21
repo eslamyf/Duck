@@ -26,49 +26,86 @@ import {
 /* Dedicated Vector Icons for Water Sports */
 function KayakIcon({ className = 'w-8 h-8' }) {
   return (
-    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      <path d="M4 16C8 10 24 10 28 16C24 22 8 22 4 16Z" fill="currentColor" fillOpacity="0.2" strokeWidth="2.2" />
-      <ellipse cx="16" cy="16" rx="3.5" ry="2" fill="currentColor" />
-      <line x1="7" y1="7" x2="25" y2="25" strokeWidth="2.2" />
-      <path d="M5 5L9 9M23 23L27 27" strokeWidth="3.4" />
+    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      {/* Gentle water ripples */}
+      <path d="M3 26C7 24.5 11 27.5 15 26C19 24.5 23 27.5 29 26" strokeWidth="1.5" opacity="0.5" />
+      {/* Kayak hull */}
+      <path d="M3 19C7 23.5 25 23.5 29 19C25 21 7 21 3 19Z" fill="currentColor" fillOpacity="0.2" strokeWidth="1.8" />
+      {/* Cockpit opening */}
+      <path d="M12 18C14 16.8 18 16.8 20 18" strokeWidth="1.6" />
+      {/* Paddler silhouette */}
+      <circle cx="16" cy="9" r="2.3" fill="currentColor" />
+      <path d="M13.5 17.5L14 13C14 12 18 12 18 13L18.5 17.5" strokeWidth="1.8" />
+      {/* Double-bladed paddle */}
+      <line x1="7" y1="21" x2="25" y2="7" strokeWidth="1.8" />
+      {/* Lower blade */}
+      <path d="M4.5 23C4 21 6 19.5 7.5 20L5.5 24C4.8 24.5 4.5 24 4.5 23Z" fill="currentColor" />
+      {/* Upper blade */}
+      <path d="M24.5 8L26.5 4C28 4.5 28 6 27 7.5C26 9 25 8.5 24.5 8Z" fill="currentColor" />
     </svg>
   );
 }
 
 function SupIcon({ className = 'w-8 h-8' }) {
   return (
-    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      <path d="M12 4C14 2 18 2 20 4C22 10 22 24 20 28C18 30 14 30 12 28C10 24 10 10 12 4Z" fill="currentColor" fillOpacity="0.2" strokeWidth="2" />
-      <path d="M6 24C9 22 13 25 16 23C19 21 23 24 26 22" strokeWidth="1.6" opacity="0.6" />
-      <line x1="16" y1="8" x2="16" y2="22" strokeWidth="2" />
-      <path d="M13.5 6H18.5" strokeWidth="2" />
-      <path d="M14 22C14 24.5 16 26.5 16 26.5C16 26.5 18 24.5 18 22Z" fill="currentColor" />
+    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      {/* Gentle water ripples */}
+      <path d="M2 27C6 25.5 10 28.5 14 27C18 25.5 22 28.5 26 27C28 26.2 30 27 31 27.5" strokeWidth="1.5" opacity="0.5" />
+      {/* Stand-up paddleboard */}
+      <path d="M4 23.5C10 25.5 22 25.5 28 23.5C24 22 8 22 4 23.5Z" fill="currentColor" fillOpacity="0.2" strokeWidth="1.8" />
+      {/* Standing paddler */}
+      <circle cx="13" cy="6.5" r="2.2" fill="currentColor" />
+      <line x1="13" y1="9" x2="13" y2="15.5" strokeWidth="2" />
+      <path d="M11.5 22L13 15.5L14.5 22" strokeWidth="1.8" />
+      {/* Arms holding paddle */}
+      <path d="M13 11L17 8.5" strokeWidth="1.8" />
+      <path d="M13 13L17 14.5" strokeWidth="1.8" />
+      {/* Paddle */}
+      <line x1="15.5" y1="8" x2="18.5" y2="9" strokeWidth="2" />
+      <line x1="17" y1="8.5" x2="18.5" y2="24" strokeWidth="1.8" />
+      <path d="M17.5 24C17.5 26.5 20 26.5 20 24Z" fill="currentColor" />
     </svg>
   );
 }
 
 function WaterbikeIcon({ className = 'w-8 h-8' }) {
   return (
-    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      <rect x="4" y="24" width="24" height="3" rx="1.5" fill="currentColor" fillOpacity="0.25" strokeWidth="1.8" />
-      <circle cx="10" cy="18" r="3.5" strokeWidth="2" />
-      <circle cx="22" cy="18" r="3.5" strokeWidth="2" />
-      <path d="M10 18L15 11H19L22 18" strokeWidth="2" />
-      <path d="M15 11L13 7H11" strokeWidth="2" />
-      <path d="M19 11L18 8H21" strokeWidth="2" />
-      <circle cx="16" cy="18" r="1.5" fill="currentColor" />
+    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      {/* Water ripples */}
+      <path d="M2 28C6 27 10 29 14 28C18 27 22 29 26 28C28 27.5 30 28 31 28.5" strokeWidth="1.4" opacity="0.5" />
+      {/* Pontoon Floats */}
+      <rect x="4" y="23" width="24" height="3.5" rx="1.75" fill="currentColor" fillOpacity="0.2" strokeWidth="1.8" />
+      {/* Frame Support Struts */}
+      <line x1="9" y1="23" x2="12" y2="17" strokeWidth="1.8" />
+      <line x1="22" y1="23" x2="20" y2="16" strokeWidth="1.8" />
+      {/* Bike Frame */}
+      <circle cx="15" cy="18" r="2" strokeWidth="1.8" fill="currentColor" fillOpacity="0.25" />
+      <path d="M12 17L15 18L19 13H14L12 17Z" strokeWidth="1.8" />
+      {/* Saddle */}
+      <line x1="15" y1="18" x2="13" y2="11" strokeWidth="1.8" />
+      <path d="M10.5 11C11.5 10.2 14.5 10.2 15.5 11" strokeWidth="2.4" />
+      {/* Handlebars */}
+      <line x1="19" y1="13" x2="21" y2="8" strokeWidth="1.8" />
+      <path d="M19 8H23" strokeWidth="2.2" />
     </svg>
   );
 }
 
 function MixedIcon({ className = 'w-8 h-8' }) {
   return (
-    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
-      <path d="M4 22C8 20 12 24 16 22C20 20 24 24 28 22" strokeWidth="2.2" />
-      <path d="M4 26C8 24 12 28 16 26C20 24 24 28 28 26" strokeWidth="1.8" opacity="0.6" />
-      <circle cx="16" cy="11" r="5" fill="currentColor" fillOpacity="0.25" strokeWidth="2" />
-      <path d="M16 3V5M8 6L9.5 7.5M24 6L22.5 7.5M5 11H7M25 11H27" strokeWidth="2" />
-      <line x1="8" y1="18" x2="24" y2="14" strokeWidth="2.2" strokeLinecap="round" />
+    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      {/* Warm sun in the sky */}
+      <path d="M12 10A4 4 0 0 1 20 10" fill="currentColor" fillOpacity="0.25" strokeWidth="1.8" />
+      <path d="M16 3V5M9 6L10.5 7.5M23 6L21.5 7.5" strokeWidth="1.8" />
+      {/* Crossed sports paddles */}
+      <line x1="6" y1="21" x2="26" y2="9" strokeWidth="1.8" />
+      <path d="M4.5 22.5C4 21 5.5 19.5 7 20L5.5 23.5Z" fill="currentColor" />
+      <path d="M25 10L26.5 6.5C28 7 28 8.5 27 9.5Z" fill="currentColor" />
+      <line x1="9" y1="9" x2="23" y2="21" strokeWidth="1.8" />
+      <path d="M22.5 20.5L24 23.5C23 24.5 21.5 24 21 22.5Z" fill="currentColor" />
+      {/* Flowing Nile waves */}
+      <path d="M3 25C7 23.5 11 26.5 15 25C19 23.5 23 26.5 29 25" strokeWidth="1.8" />
+      <path d="M5 28C9 27 13 29 17 28C21 27 25 29 28 28" strokeWidth="1.4" opacity="0.5" />
     </svg>
   );
 }
