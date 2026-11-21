@@ -3,6 +3,7 @@ import Navbar from '../widgets/navbar/Navbar.jsx';
 import HeroSection from '../widgets/hero/HeroSection.jsx';
 import DestinationsSection from '../widgets/destinations/index.js';
 import TripsSection from '../widgets/trips/index.js';
+import GroupsBanner from '../widgets/groups-banner/index.js';
 import Footer from '../widgets/footer/Footer.jsx';
 
 export default function App() {
@@ -26,6 +27,7 @@ export default function App() {
           externalFilter={selectedDestinationFilter}
           onFilterChange={setSelectedDestinationFilter}
         />
+        <GroupsBanner />
       </main>
       <Footer />
     </div>
