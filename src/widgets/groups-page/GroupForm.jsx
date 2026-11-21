@@ -101,7 +101,7 @@ export default function GroupForm({
             onChange={setSize}
             min={20}
             max={150}
-            step={5}
+            step={1}
             label={t('groupsPage.groupSizeLabel')}
             presets={[20, 30, 50, 75, 100]}
             lang={lang}

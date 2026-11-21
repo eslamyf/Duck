@@ -3,7 +3,7 @@ export default function QuantityStepper({
   onChange,
   min = 20,
   max = 150,
-  step = 5,
+  step = 1,
   label,
   id = 'quantity-stepper',
   showSlider = true,
@@ -27,6 +27,14 @@ export default function QuantityStepper({
     onChange(Number(e.target.value));
   };
 
+  const handleInputChange = (e) => {
+    if (disabled || !onChange) return;
+    const val = parseInt(e.target.value, 10);
+    if (!isNaN(val)) {
+      onChange(Math.max(min, Math.min(max, val)));
+    }
+  };
+
   const formatNum = (n) => Number(n).toLocaleString(lang === 'ar' ? 'ar-EG' : 'en-US');
 
   const percent = Math.max(0, Math.min(100, ((currentVal - min) / (max - min)) * 100));
@@ -43,19 +51,19 @@ export default function QuantityStepper({
       )}
 
       {/* Stepper Row */}
-      <div className="flex items-center gap-3.5">
+      <div className="flex items-center gap-2.5 sm:gap-3.5">
         <button
           type="button"
           onClick={() => handleStep(-1)}
           disabled={disabled || currentVal <= min}
           aria-label={decrementLabel}
-          className="w-12 h-12 rounded-full border-2 border-brand-navy bg-white text-brand-navy font-bold text-2xl flex items-center justify-center cursor-pointer transition-all hover:bg-brand-yellow hover:scale-105 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:scale-100 flex-shrink-0"
+          className="w-11 h-11 min-[901px]:w-12 min-[901px]:h-12 rounded-full border-2 border-brand-navy bg-white text-brand-navy font-bold text-2xl flex items-center justify-center cursor-pointer transition-all hover:bg-brand-yellow hover:scale-105 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:scale-100 flex-shrink-0"
         >
           −
         </button>
 
         {showSlider && (
-          <div className="flex-1 px-1">
+          <div className="flex-1 px-1 min-w-[100px]">
             <input
               type="range"
               id={id}
@@ -82,13 +90,27 @@ export default function QuantityStepper({
           onClick={() => handleStep(1)}
           disabled={disabled || currentVal >= max}
           aria-label={incrementLabel}
-          className="w-12 h-12 rounded-full border-2 border-brand-navy bg-white text-brand-navy font-bold text-2xl flex items-center justify-center cursor-pointer transition-all hover:bg-brand-yellow hover:scale-105 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:scale-100 flex-shrink-0"
+          className="w-11 h-11 min-[901px]:w-12 min-[901px]:h-12 rounded-full border-2 border-brand-navy bg-white text-brand-navy font-bold text-2xl flex items-center justify-center cursor-pointer transition-all hover:bg-brand-yellow hover:scale-105 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:scale-100 flex-shrink-0"
         >
           +
         </button>
 
-        <div className="min-w-[72px] text-center font-black text-2xl min-[901px]:text-3xl tabular-nums text-brand-navy select-none">
-          {formatNum(currentVal)}
+        {/* Direct Number Input Box */}
+        <div className="flex items-center gap-1.5 flex-shrink-0">
+          <input
+            type="number"
+            min={min}
+            max={max}
+            step={step}
+            value={currentVal}
+            onChange={handleInputChange}
+            disabled={disabled}
+            aria-label={label || 'Enter custom number of people'}
+            className="w-16 min-[901px]:w-20 h-11 min-[901px]:h-12 text-center font-black text-lg min-[901px]:text-xl tabular-nums text-brand-navy bg-surface-mist border-2 border-brand-navy/25 rounded-2xl focus:border-brand-navy focus:bg-white focus:ring-2 focus:ring-brand-yellow focus:outline-none transition-all shadow-xs"
+          />
+          <span className="text-xs min-[901px]:text-sm font-bold text-brand-navy/70 select-none hidden min-[400px]:inline">
+            {lang === 'ar' ? 'فرد' : 'ppl'}
+          </span>
         </div>
       </div>
 

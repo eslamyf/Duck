@@ -10,7 +10,7 @@ export default function GroupStage({ state, t, lang }) {
 
   return (
     <section
-      className="relative min-h-[500px] h-[min(72vh,620px)] overflow-hidden bg-brand-navy select-none"
+      className="relative min-h-[520px] h-[min(78vh,660px)] overflow-hidden bg-brand-navy select-none"
       aria-label={t('groupsPage.stageAria')}
     >
       {/* Real High-Resolution Group Photo with High Clarity and Vibrancy */}
@@ -28,7 +28,7 @@ export default function GroupStage({ state, t, lang }) {
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            'linear-gradient(180deg, rgba(12,18,38,0.72) 0%, rgba(12,18,38,0.22) 36%, rgba(12,18,38,0) 55%, rgba(12,18,38,0.7) 100%)',
+            'linear-gradient(180deg, rgba(12,18,38,0.78) 0%, rgba(12,18,38,0.3) 38%, rgba(12,18,38,0) 58%, rgba(12,18,38,0.65) 100%)',
         }}
       />
 
@@ -49,43 +49,40 @@ export default function GroupStage({ state, t, lang }) {
         ))}
       </div>
 
-      {/* Hero Text */}
-      <div className="absolute z-20 top-10 min-[901px]:top-16 inset-x-[5vw] max-w-[680px] text-white pointer-events-none">
-        <h1 className="text-3xl min-[901px]:text-5xl font-black leading-tight drop-shadow-lg">
+      {/* Hero Text & Clear Indicator Pills */}
+      <div className="absolute z-20 top-8 min-[901px]:top-14 inset-x-[5vw] max-w-[760px] text-white">
+        <h1 className="text-3xl min-[901px]:text-5xl font-black leading-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]">
           {t('groupsPage.stageHeroTitle')}{' '}
-          <span className="text-brand-yellow drop-shadow-md">{t('groupsPage.stageHeroHighlight')}</span>
+          <span className="text-brand-yellow drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">{t('groupsPage.stageHeroHighlight')}</span>
         </h1>
-        <p className="text-sm min-[901px]:text-lg mt-3 text-white/95 drop-shadow-md font-medium leading-relaxed">
+        <p className="text-sm min-[901px]:text-lg mt-2.5 text-white/95 drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)] font-medium leading-relaxed">
           {t('groupsPage.stageHeroDesc')}
         </p>
-      </div>
 
-      {/* Group Size and Details Indicator (clearly explaining size and dynamic choice) */}
-      <div className="absolute z-20 bottom-6 inset-s-[5vw] flex flex-wrap items-center gap-3">
-        {/* Dynamic Size Indicator with Clear Explanatory Label */}
-        <div className="inline-flex items-center gap-2.5 bg-brand-navy/90 backdrop-blur-md border border-white/20 px-4 py-2.5 rounded-full shadow-xl text-white">
-          <FontAwesomeIcon icon={faUsers} className="text-brand-yellow text-sm" />
-          <span className="text-xs min-[901px]:text-sm font-bold text-white/90">
-            {t('groupsPage.stageCountPrompt')}
-          </span>
-          <b className="text-base min-[901px]:text-xl font-black text-brand-yellow tabular-nums">
-            {formattedCount} {t('groupsPage.individuals')}
-          </b>
-          <span className="hidden sm:inline text-[11px] text-white/60 font-medium">
-            {t('groupsPage.stageCountHint')}
-          </span>
-        </div>
+        {/* Dynamic Indicator Pills - placed safely here so they are ALWAYS 100% visible and NEVER covered by the booking card */}
+        <div className="mt-4 sm:mt-5 flex flex-wrap items-center gap-2.5 sm:gap-3">
+          {/* Dynamic Size Indicator */}
+          <div className="inline-flex items-center gap-2.5 bg-brand-navy/90 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full shadow-xl text-white">
+            <FontAwesomeIcon icon={faUsers} className="text-brand-yellow text-sm" />
+            <span className="text-xs min-[901px]:text-sm font-bold text-white/90">
+              {t('groupsPage.stageCountPrompt')}
+            </span>
+            <b className="text-base min-[901px]:text-xl font-black text-brand-yellow tabular-nums">
+              {formattedCount} {t('groupsPage.individuals')}
+            </b>
+          </div>
 
-        {/* Dynamic Name Tag Pill */}
-        <div
-          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full font-bold text-xs min-[901px]:text-sm select-none truncate transition-all duration-300 shadow-xl ${
-            state.org.trim()
-              ? 'bg-brand-yellow text-brand-navy font-black ring-2 ring-brand-yellow/60'
-              : 'bg-brand-navy/90 text-white/80 backdrop-blur-md border border-white/20'
-          }`}
-        >
-          <FontAwesomeIcon icon={faFlag} className="text-xs text-brand-yellow" />
-          <span className="truncate">{state.org.trim() || t('groupsPage.yourGroupNameHere')}</span>
+          {/* Dynamic Name Tag */}
+          <div
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full font-bold text-xs min-[901px]:text-sm select-none truncate transition-all duration-300 shadow-xl ${
+              state.org.trim()
+                ? 'bg-brand-yellow text-brand-navy font-black ring-2 ring-brand-yellow/60'
+                : 'bg-brand-navy/90 text-white/80 backdrop-blur-md border border-white/20'
+            }`}
+          >
+            <FontAwesomeIcon icon={faFlag} className="text-xs text-brand-yellow" />
+            <span className="truncate">{state.org.trim() || t('groupsPage.yourGroupNameHere')}</span>
+          </div>
         </div>
       </div>
     </section>
