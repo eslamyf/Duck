@@ -2,6 +2,7 @@ import { useState, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { SectionHeader, Button } from '../../shared/ui/index.js';
+import { useCustomScrollbar } from '../../shared/hooks/index.js';
 import { TRIPS, DESTINATIONS_FILTER, ACTIVITIES } from './tripsData.js';
 import { SECTIONS, sectionLink } from '../../shared/config/routes.js';
 
@@ -10,6 +11,19 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
   const [activeTripId, setActiveTripId] = useState(0);
   const [mobileActiveIdx, setMobileActiveIdx] = useState(0);
   const carouselRef = useRef(null);
+
+  const {
+    listRef,
+    trackRef,
+    thumbRef,
+    thumbHeight,
+    isHidden,
+    isDragging,
+    handleThumbPointerDown,
+    handleThumbPointerMove,
+    handleThumbPointerUp,
+    handleTrackPointerDown,
+  } = useCustomScrollbar();
 
   const activeFilter = externalFilter !== undefined && externalFilter !== null ? externalFilter : 'all';
 
@@ -239,75 +253,110 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
             </div>
           </article>
 
-          {/* Right Rail List of Trips */}
-          <div
-            className="flex flex-col gap-2.5 max-h-[580px] overflow-y-auto pe-1.5 scrollbar-thin"
-            role="group"
-            aria-label={t('trips.listAriaLabel')}
-          >
-            {visibleTrips.map((trip, idx) => {
-              const isTripActive = trip.id === selectedTrip.id;
-              const formattedIdx = String(idx + 1).padStart(2, '0');
+          {/* Right Rail List of Trips with Custom Scrollbar */}
+          <div className="grid grid-cols-[1fr_8px] gap-2.5 max-h-[580px] items-stretch relative">
+            {/* The scrollable list */}
+            <div
+              ref={listRef}
+              className="flex flex-col gap-2.5 overflow-y-auto overscroll-contain pe-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              role="group"
+              aria-label={t('trips.listAriaLabel')}
+            >
+              {visibleTrips.map((trip, idx) => {
+                const isTripActive = trip.id === selectedTrip.id;
+                const formattedIdx = String(idx + 1).padStart(2, '0');
 
-              return (
-                <button
-                  key={trip.id}
-                  type="button"
-                  onClick={() => setActiveTripId(trip.id)}
-                  aria-pressed={isTripActive}
-                  className={`grid grid-cols-[26px_64px_1fr_auto] gap-3 items-center p-3 rounded-2xl border text-start cursor-pointer transition-all duration-200 ${
-                    isTripActive
-                      ? 'bg-brand-navy text-white border-brand-navy shadow-lg -translate-y-0.5'
-                      : 'bg-white text-brand-navy border-[rgba(20,125,159,0.14)] hover:bg-surface-mist hover:shadow-sm'
-                  }`}
-                >
-                  {/* Index Number */}
-                  <span className={`text-xs font-bold ${isTripActive ? 'text-white/60' : 'text-brand-navy/40'}`}>
-                    {formattedIdx}
-                  </span>
-
-                  {/* Thumbnail */}
-                  <div className="w-16 h-16 rounded-[14px] overflow-hidden bg-brand-navy/20 shrink-0">
-                    <img
-                      src={trip.images.thumb}
-                      alt={t(`trips.items.${trip.key}.title`)}
-                      loading="lazy"
-                      decoding="async"
-                      width={64}
-                      height={64}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-
-                  {/* Title & Meta */}
-                  <div className="min-w-0 flex flex-col gap-0.5">
-                    <b className="text-sm font-bold truncate">
-                      {t(`trips.items.${trip.key}.title`)}
-                    </b>
-                    <small className={`text-xs ${isTripActive ? 'text-white/75' : 'text-brand-navy/70'} truncate`}>
-                      {t(`destinations.items.${trip.destKey}.name`)} · {t(`trips.activities.${trip.act}`)} · {t(`trips.durations.${trip.durKey}`)}
-                    </small>
-                    {trip.act === 'waterbike' && (
-                      <span className="w-fit text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-brand-yellow text-brand-navy mt-0.5">
-                        {t('trips.waterbikeLimit')}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Price Block */}
-                  <div className="text-end shrink-0 ps-2">
-                    <span className={`font-bold text-xs ${isTripActive ? 'text-brand-yellow' : 'text-brand-blue'} block`}>
-                      {formatPrice(trip.price)}
+                return (
+                  <button
+                    key={trip.id}
+                    type="button"
+                    onClick={() => setActiveTripId(trip.id)}
+                    aria-pressed={isTripActive}
+                    className={`grid grid-cols-[26px_64px_1fr_auto] gap-3 items-center p-3 rounded-2xl border text-start cursor-pointer transition-all duration-200 ${
+                      isTripActive
+                        ? 'bg-brand-navy text-white border-brand-navy shadow-lg -translate-y-0.5'
+                        : 'bg-white text-brand-navy border-[rgba(20,125,159,0.14)] hover:bg-surface-mist hover:shadow-sm'
+                    }`}
+                  >
+                    {/* Index Number */}
+                    <span className={`text-xs font-bold ${isTripActive ? 'text-white/60' : 'text-brand-navy/40'}`}>
+                      {formattedIdx}
                     </span>
-                    {trip.priceEg && (
-                      <small className={`text-[10px] ${isTripActive ? 'text-white/80' : 'text-brand-navy/65'} block`}>
-                        {t('trips.egyptian')} {formatPrice(trip.priceEg)}
+
+                    {/* Thumbnail */}
+                    <div className="w-16 h-16 rounded-[14px] overflow-hidden bg-brand-navy/20 shrink-0">
+                      <img
+                        src={trip.images.thumb}
+                        alt={t(`trips.items.${trip.key}.title`)}
+                        loading="lazy"
+                        decoding="async"
+                        width={64}
+                        height={64}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+
+                    {/* Title & Meta */}
+                    <div className="min-w-0 flex flex-col gap-0.5">
+                      <b className="text-sm font-bold truncate">
+                        {t(`trips.items.${trip.key}.title`)}
+                      </b>
+                      <small className={`text-xs ${isTripActive ? 'text-white/75' : 'text-brand-navy/70'} truncate`}>
+                        {t(`destinations.items.${trip.destKey}.name`)} · {t(`trips.activities.${trip.act}`)} · {t(`trips.durations.${trip.durKey}`)}
                       </small>
-                    )}
-                  </div>
-                </button>
-              );
-            })}
+                      {trip.act === 'waterbike' && (
+                        <span className="w-fit text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-brand-yellow text-brand-navy mt-0.5">
+                          {t('trips.waterbikeLimit')}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Price Block */}
+                    <div className="text-end shrink-0 ps-2">
+                      <span className={`font-bold text-xs ${isTripActive ? 'text-brand-yellow' : 'text-brand-blue'} block`}>
+                        {formatPrice(trip.price)}
+                      </span>
+                      {trip.priceEg && (
+                        <small className={`text-[10px] ${isTripActive ? 'text-white/80' : 'text-brand-navy/65'} block`}>
+                          {t('trips.egyptian')} {formatPrice(trip.priceEg)}
+                        </small>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Custom Scrollbar Track: 8px capsule, light transparent teal */}
+            <div
+              ref={trackRef}
+              onPointerDown={handleTrackPointerDown}
+              className={`relative w-2 h-full rounded-full bg-[rgba(20,125,159,0.14)] touch-none cursor-pointer transition-opacity duration-200 select-none ${
+                isHidden ? 'opacity-0 pointer-events-none' : 'opacity-100'
+              }`}
+              aria-hidden="true"
+            >
+              {/* Custom Scrollbar Thumb: vertical teal-to-navy gradient with 2px white ring & floating shadow */}
+              <div
+                ref={thumbRef}
+                onPointerDown={handleThumbPointerDown}
+                onPointerMove={handleThumbPointerMove}
+                onPointerUp={handleThumbPointerUp}
+                onPointerCancel={handleThumbPointerUp}
+                style={{
+                  height: `${thumbHeight}px`,
+                }}
+                className={`absolute top-0 start-0 w-2 rounded-full bg-gradient-to-b from-[#147D9F] to-[#0C1226] shadow-[0_0_0_2px_#ffffff,0_4px_10px_rgba(12,18,38,0.25)] select-none will-change-transform touch-none ${
+                  isDragging ? 'cursor-grabbing' : 'cursor-grab'
+                }`}
+              >
+                {/* 4x4px Yellow Dot in center, 6px from top */}
+                <span
+                  className="absolute top-[6px] start-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#FDFB45] pointer-events-none"
+                  aria-hidden="true"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
