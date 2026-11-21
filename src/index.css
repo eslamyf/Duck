@@ -37,6 +37,40 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: var(--scroll-padding);
+  scrollbar-width: thin;
+  scrollbar-color: #147D9F rgba(20, 125, 159, 0.14);
+}
+
+/* ================= GLOBAL CUSTOM SCROLLBAR ================= */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(20, 125, 159, 0.14);
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #147D9F 0%, #0C1226 100%);
+  border-radius: 99px;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 4px 10px rgba(12, 18, 38, 0.25);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #1ba6d2 0%, #080d1a 100%);
+}
+
+::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 body {
