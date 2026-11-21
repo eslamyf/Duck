@@ -1,5 +1,5 @@
 /**
- * Scene data, color palettes, and icons for GroupStudio
+ * Scene data, color palettes, icons, and activity images for GroupStudio
  */
 import {
   faPeopleGroup,
@@ -10,6 +10,11 @@ import {
   faSun,
   faMoon,
 } from '@fortawesome/free-solid-svg-icons';
+
+import kayakImg from '../../shared/assets/images/trips/kayak-free-160w.webp';
+import supImg from '../../shared/assets/images/trips/sup-nile-160w.webp';
+import waterbikeImg from '../../shared/assets/images/trips/waterbike-nile-160w.webp';
+import mixedImg from '../../shared/assets/images/trips/botanical-garden-160w.webp';
 
 export const GROUP_TYPES = [
   {
@@ -39,10 +44,10 @@ export const GROUP_TYPES = [
 ];
 
 export const GROUP_ACTIVITIES = [
-  { id: 'kayak', i18nKey: 'kayak' },
-  { id: 'sup', i18nKey: 'sup' },
-  { id: 'waterbike', i18nKey: 'waterbike' },
-  { id: 'mixed', i18nKey: 'mixed' },
+  { id: 'kayak', i18nKey: 'kayak', image: kayakImg },
+  { id: 'sup', i18nKey: 'sup', image: supImg },
+  { id: 'waterbike', i18nKey: 'waterbike', image: waterbikeImg },
+  { id: 'mixed', i18nKey: 'mixed', image: mixedImg },
 ];
 
 export const TIMES_OF_DAY = [

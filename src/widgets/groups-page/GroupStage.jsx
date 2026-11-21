@@ -1,16 +1,14 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFlag, faUsers } from '@fortawesome/free-solid-svg-icons';
-import { GROUP_TYPES } from './sceneData.js';
 import groupsMainDesktop from '../../shared/assets/images/groups/groups-main-960w.webp';
 import groupsMainMobile from '../../shared/assets/images/groups/groups-main-640w.webp';
 
 export default function GroupStage({ state, t, lang }) {
-  const currentPalette = GROUP_TYPES[state.type]?.palette || GROUP_TYPES[0].palette;
   const formattedCount = Number(state.size).toLocaleString(lang === 'ar' ? 'ar-EG' : 'en-US');
 
   return (
     <section
-      className="relative min-h-[520px] h-[min(78vh,660px)] overflow-hidden bg-brand-navy select-none"
+      className="relative min-h-[500px] h-[min(78vh,660px)] overflow-hidden bg-brand-navy select-none"
       aria-label={t('groupsPage.stageAria')}
     >
       {/* Real High-Resolution Group Photo with High Clarity and Vibrancy */}
@@ -31,23 +29,6 @@ export default function GroupStage({ state, t, lang }) {
             'linear-gradient(180deg, rgba(12,18,38,0.78) 0%, rgba(12,18,38,0.3) 38%, rgba(12,18,38,0) 58%, rgba(12,18,38,0.65) 100%)',
         }}
       />
-
-      {/* Festive Bunting String Colored by Selected Group Type */}
-      <div
-        className="absolute z-10 top-0 inset-x-0 flex h-10 pointer-events-none border-t border-white/30"
-        aria-hidden="true"
-      >
-        {Array.from({ length: 18 }).map((_, i) => (
-          <i
-            key={i}
-            className="flex-1 mx-0.5 h-8 origin-top transition-colors duration-500"
-            style={{
-              clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
-              backgroundColor: currentPalette[i % currentPalette.length],
-            }}
-          />
-        ))}
-      </div>
 
       {/* Hero Text & Clear Indicator Pills */}
       <div className="absolute z-20 top-8 min-[901px]:top-14 inset-x-[5vw] max-w-[760px] text-white">

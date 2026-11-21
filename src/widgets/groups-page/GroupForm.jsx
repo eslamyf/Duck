@@ -124,26 +124,20 @@ export default function GroupForm({
                   type="button"
                   onClick={() => setField('act', act.id)}
                   aria-pressed={isSelected}
-                  className={`flex flex-col items-center justify-center gap-2 p-3 min-h-[76px] rounded-2xl border-2 transition-all duration-200 cursor-pointer ${
+                  className={`flex flex-col items-center justify-center p-2.5 min-h-[96px] rounded-2xl border-2 transition-all duration-200 cursor-pointer ${
                     isSelected
-                      ? 'bg-brand-navy text-white border-brand-navy shadow-md -translate-y-1'
+                      ? 'bg-brand-navy text-brand-yellow border-brand-navy shadow-md -translate-y-1'
                       : 'bg-white text-brand-navy border-brand-navy/15 hover:border-brand-blue hover:bg-surface-mist'
                   }`}
                 >
-                  <svg viewBox="-34 -28 68 44" className="w-14 h-8 overflow-visible" aria-hidden="true">
-                    <g transform="translate(0 4)">
-                      {act.id === 'mixed' ? (
-                        <>
-                          <use href="#b-kayak" x="-20" y="2" style={{ color: '#FDFB45' }} />
-                          <use href="#b-sup" x="22" y="-6" style={{ color: '#147D9F' }} />
-                          <use href="#b-waterbike" x="4" y="14" style={{ color: '#ff7a59' }} />
-                        </>
-                      ) : (
-                        <use href={`#b-${act.id}`} style={{ color: isSelected ? '#FDFB45' : '#147D9F' }} />
-                      )}
-                    </g>
-                  </svg>
-                  <span className="font-bold text-xs min-[901px]:text-sm text-center">
+                  <div className="w-12 h-12 rounded-xl overflow-hidden mb-1.5 border border-brand-navy/15 flex-shrink-0 shadow-2xs">
+                    <img
+                      src={act.image}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <span className="font-bold text-xs min-[901px]:text-sm text-center leading-tight">
                     {t(`groupsPage.activities.${act.i18nKey}`)}
                   </span>
                 </button>
