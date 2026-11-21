@@ -37,8 +37,12 @@ export function I18nProvider({ children }) {
     }
   }, [lang]);
 
-  const t = useCallback((path, fallback = '') => {
+  const t = useCallback((path, paramsOrFallback = {}, maybeFallback = '') => {
     if (!path || typeof path !== 'string') return '';
+    const isParamsObj = paramsOrFallback && typeof paramsOrFallback === 'object' && !Array.isArray(paramsOrFallback);
+    const params = isParamsObj ? paramsOrFallback : {};
+    const fallback = typeof paramsOrFallback === 'string' ? paramsOrFallback : maybeFallback;
+
     const keys = path.split('.');
     let current = translations[lang];
     for (const key of keys) {
@@ -51,7 +55,21 @@ export function I18nProvider({ children }) {
         return fallback || path;
       }
     }
-    return current !== undefined ? current : (fallback || path);
+
+    let result = current !== undefined ? current : (fallback || path);
+    if (typeof result === 'string') {
+      result = result.replace(/\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/g, (match, paramKey) => {
+        if (paramKey in params) {
+          return String(params[paramKey]);
+        }
+        if (import.meta.env?.DEV) {
+          console.warn(`[i18n] Missing param "${paramKey}" for translation key "${path}" in language "${lang}"`);
+        }
+        return '';
+      });
+    }
+
+    return result;
   }, [lang]);
 
   return (
