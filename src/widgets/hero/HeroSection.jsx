@@ -1,18 +1,25 @@
 import { useState, useRef, useEffect } from 'react';
-import heroVideo from '../../shared/assets/Videos/hero-v2.mp4';
-import heroPoster from '../../shared/assets/images/hero-poster.webp';
+import heroVideoDesktop from '../../shared/assets/Videos/hero-desktop.mp4';
+import heroVideoMobile from '../../shared/assets/Videos/hero-mobile.mp4';
+import heroPosterDesktop from '../../shared/assets/images/hero-poster-desktop.webp';
+import heroPosterMobile from '../../shared/assets/images/hero-poster-mobile.webp';
 import { useTranslation } from '../../shared/i18n/index.js';
 
 export default function HeroSection() {
   const { lang, t } = useTranslation();
-  const [videoError, setVideoError] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    }
-    return false;
-  });
   const [isDesktop, setIsDesktop] = useState(() => (typeof window !== 'undefined' ? window.innerWidth > 900 : true));
+  const [videoError, setVideoError] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const isSaveData = connection?.saveData === true;
+    const isSlowConnection = connection?.effectiveType === '2g' || connection?.effectiveType === 'slow-2g';
+    return mediaQuery.matches || isSaveData || isSlowConnection;
+  });
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const videoRef = useRef(null);
+  const sectionRef = useRef(null);
 
   const isRtl = lang === 'ar';
 
@@ -24,15 +31,78 @@ export default function HeroSection() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Listen to prefers-reduced-motion changes
+  // Performance & Accessibility Guard:
+  // - prefers-reduced-motion
+  // - navigator.connection.saveData
+  // - 2g or slow-2g connections
+  // If any of these apply, never load the video and stick to the high-performance poster.
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-      const handleMotionChange = (e) => setVideoError(e.matches);
-      mediaQuery.addEventListener('change', handleMotionChange);
-      return () => mediaQuery.removeEventListener('change', handleMotionChange);
+    if (typeof window === 'undefined') return;
+
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const checkMotion = () => mediaQuery.matches;
+
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const isSaveData = connection?.saveData === true;
+    const isSlowConnection = connection?.effectiveType === '2g' || connection?.effectiveType === 'slow-2g';
+
+    if (checkMotion() || isSaveData || isSlowConnection) {
+      return;
+    }
+
+    const handleMotionChange = (e) => {
+      if (e.matches) {
+        setVideoError(true);
+      }
+    };
+    mediaQuery.addEventListener('change', handleMotionChange);
+
+    // Defer video loading until browser is idle or after initial render to maximize LCP
+    const startVideoLoad = () => {
+      if (!checkMotion() && !isSaveData && !isSlowConnection) {
+        setShouldLoadVideo(true);
+      }
+    };
+
+    if ('requestIdleCallback' in window) {
+      const idleId = window.requestIdleCallback(startVideoLoad, { timeout: 1500 });
+      return () => {
+        mediaQuery.removeEventListener('change', handleMotionChange);
+        if ('cancelIdleCallback' in window) {
+          window.cancelIdleCallback(idleId);
+        }
+      };
+    } else {
+      const timerId = setTimeout(startVideoLoad, 1000);
+      return () => {
+        mediaQuery.removeEventListener('change', handleMotionChange);
+        clearTimeout(timerId);
+      };
     }
   }, []);
+
+  // IntersectionObserver: Pause video when scrolled out of view, resume when visible
+  useEffect(() => {
+    if (!shouldLoadVideo || !sectionRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (videoRef.current) {
+            if (entry.isIntersecting) {
+              videoRef.current.play().catch(() => {});
+            } else {
+              videoRef.current.pause();
+            }
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, [shouldLoadVideo]);
 
   // Diagonal clip paths matching Final_4.html
   const outerClipPath = isDesktop
@@ -48,7 +118,7 @@ export default function HeroSection() {
     : 'none';
 
   return (
-    <section className="relative w-full bg-brand-navy font-body" aria-label="Hero">
+    <section ref={sectionRef} className="relative w-full bg-brand-navy font-body" aria-label="Hero">
       {/* Hero Visual Container */}
       <div
         id="top"
@@ -120,34 +190,44 @@ export default function HeroSection() {
               aria-hidden="true"
             />
 
-            {/* HTML5 Background Video */}
-            {!videoError ? (
+            {/* Poster / Primary LCP Element (Responsive picture for instant visual paint) */}
+            <picture className="absolute inset-0 w-full h-full">
+              <source media="(min-width: 901px)" srcSet={heroPosterDesktop} />
+              <source media="(max-width: 900px)" srcSet={heroPosterMobile} />
+              <img
+                src={heroPosterDesktop}
+                alt={t('hero.videoPosterAlt')}
+                width={isDesktop ? 960 : 400}
+                height={isDesktop ? 960 : 824}
+                fetchPriority="high"
+                decoding="async"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            </picture>
+
+            {/* Deferred HTML5 Background Video */}
+            {shouldLoadVideo && !videoError ? (
               <video
+                key={isDesktop ? 'desktop-video' : 'mobile-video'}
                 ref={videoRef}
                 autoPlay
                 muted
                 loop
                 playsInline
-                preload="metadata"
-                poster={heroPoster}
+                preload="auto"
+                onPlaying={() => setIsVideoPlaying(true)}
                 onError={() => setVideoError(true)}
-                className="absolute inset-0 w-full h-full object-cover"
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+                  isVideoPlaying ? 'opacity-100' : 'opacity-0'
+                }`}
                 aria-hidden="true"
               >
-                <source src={heroVideo} type="video/mp4" />
+                <source
+                  src={isDesktop ? heroVideoDesktop : heroVideoMobile}
+                  type="video/mp4"
+                />
               </video>
             ) : null}
-
-            {/* Poster / Fallback Image */}
-            <img
-              src={heroPoster}
-              alt={t('hero.videoPosterAlt')}
-              width={1280}
-              height={720}
-              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-                videoError ? 'opacity-100' : 'opacity-0'
-              }`}
-            />
           </div>
         </div>
       </div>
