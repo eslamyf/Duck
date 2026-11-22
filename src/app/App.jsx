@@ -11,6 +11,7 @@ import Footer from '../widgets/footer/Footer.jsx';
 import { TRIPS } from '../widgets/trips/tripsData.js';
 import { ROUTES, sectionLink, SECTIONS } from '../shared/config/routes.js';
 import { useTranslation } from '../shared/i18n/index.js';
+import { ErrorBoundary } from '../shared/ui/index.js';
 
 const MapSection = lazy(() => import('../widgets/map/index.js'));
 const ReviewsSection = lazy(() => import('../widgets/reviews/index.js'));
@@ -220,68 +221,70 @@ export default function App() {
         id="main"
         className="flex-1 pt-[52px] min-[901px]:pt-[100px] print:pt-0 print:m-0 print:p-0"
       >
-        <Routes>
-          <Route
-            path={ROUTES.HOME}
-            element={
-              <>
-                <HeroSection />
+        <ErrorBoundary>
+          <Routes>
+            <Route
+              path={ROUTES.HOME}
+              element={
+                <>
+                  <HeroSection />
 
-                <DestinationsSection
-                  onSelectDestination={handleSelectDestination}
-                />
+                  <DestinationsSection
+                    onSelectDestination={handleSelectDestination}
+                  />
 
-                <TripsSection
-                  externalFilter={selectedDestinationFilter}
-                  onFilterChange={setSelectedDestinationFilter}
-                />
+                  <TripsSection
+                    externalFilter={selectedDestinationFilter}
+                    onFilterChange={setSelectedDestinationFilter}
+                  />
 
-                <GroupsBanner />
+                  <GroupsBanner />
 
-                <Suspense fallback={<MapFallback />}>
-                  <MapSection onSelectDestination={handleSelectDestination} />
+                  <Suspense fallback={<MapFallback />}>
+                    <MapSection onSelectDestination={handleSelectDestination} />
+                  </Suspense>
+
+                  <Suspense fallback={<ReviewsFallback />}>
+                    <ReviewsSection />
+                  </Suspense>
+
+                  <Suspense fallback={<FAQFallback />}>
+                    <FAQSection />
+                  </Suspense>
+                </>
+              }
+            />
+
+            <Route
+              path={ROUTES.TRIP_DETAILS}
+              element={
+                <Suspense fallback={<TripDetailsFallback />}>
+                  <TripDetailsPage />
                 </Suspense>
+              }
+            />
 
-                <Suspense fallback={<ReviewsFallback />}>
-                  <ReviewsSection />
+            <Route
+              path={ROUTES.GROUPS}
+              element={
+                <Suspense fallback={<GroupsFallback />}>
+                  <GroupsPage />
                 </Suspense>
+              }
+            />
 
-                <Suspense fallback={<FAQFallback />}>
-                  <FAQSection />
+            <Route
+              path={ROUTES.ABOUT}
+              element={
+                <Suspense fallback={<AboutFallback />}>
+                  <AboutPage />
                 </Suspense>
-              </>
-            }
-          />
+              }
+            />
 
-          <Route
-            path={ROUTES.TRIP_DETAILS}
-            element={
-              <Suspense fallback={<TripDetailsFallback />}>
-                <TripDetailsPage />
-              </Suspense>
-            }
-          />
-
-          <Route
-            path={ROUTES.GROUPS}
-            element={
-              <Suspense fallback={<GroupsFallback />}>
-                <GroupsPage />
-              </Suspense>
-            }
-          />
-
-          <Route
-            path={ROUTES.ABOUT}
-            element={
-              <Suspense fallback={<AboutFallback />}>
-                <AboutPage />
-              </Suspense>
-            }
-          />
-
-          <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
-        </Routes>
+            <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
+          </Routes>
+        </ErrorBoundary>
       </main>
 
       <div className="print:hidden">

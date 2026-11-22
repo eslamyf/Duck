@@ -114,11 +114,11 @@ export default function AboutNumbers() {
               </div>
 
               <span className="text-xs font-bold uppercase tracking-wider text-brand-yellow sm:text-sm">
-                {t(`about.numbers.${stat.key}.label`)}
+                {t(`about.numbers.items.${stat.key}.label`, t(`about.numbers.${stat.key}.label`))}
               </span>
 
               <p className="mt-2 text-xs text-white/60">
-                {t(`about.numbers.${stat.key}.description`)}
+                {t(`about.numbers.items.${stat.key}.description`, t(`about.numbers.${stat.key}.description`))}
               </p>
             </div>
           ))}

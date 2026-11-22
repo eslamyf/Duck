@@ -45,6 +45,8 @@
       "paragraph2": "In 2023, one person's passion for the water sparked a dream in Aswan. A dream to help people experience the Nile differently, discover the beauty of nature, and create unforgettable moments on the water.",
       "paragraph3": "That dream became DUCK. What started as a personal passion grew into a journey built around adventure, connection, and the freedom to explore.",
       "closing": "AND THIS IS ONLY THE BEGINNING.",
+      "imageAlt": "Kayaking adventure on the water",
+      "imageTag": "Aswan, Egypt",
       "mainImageAlt": "Kayaking adventure on the water",
       "fact1": "The journey began in Aswan",
       "fact2Value": "ONE DREAM",
@@ -119,6 +121,18 @@
       "eyebrow": "OUR IMPACT",
       "title": "DUCK IN NUMBERS",
       "subtitle": "Every number tells a story. Every experience creates a memory.",
+      "founded": {
+        "label": "Founded",
+        "description": "Born in Aswan, Egypt"
+      },
+      "customers": {
+        "label": "Customers Served",
+        "description": "And countless memories created"
+      },
+      "destinations": {
+        "label": "Destinations & Markets",
+        "description": "And growing beyond"
+      },
       "items": {
         "founded": {
           "label": "Founded",
@@ -164,6 +178,7 @@
     "reviews": "Guest Reviews",
     "faq": "FAQ",
     "about": "About Us",
+    "menu": "Menu",
     "menuAria": "Menu",
     "exploreMapAria": "Launch Points & Map",
     "bookTripNow": "Book Your Trip Now",

@@ -99,7 +99,7 @@ export default function AboutStory() {
         >
           <img
             src={mainImage}
-            alt={t('about.story.imageAlt')}
+            alt={t('about.story.mainImageAlt', t('about.story.imageAlt', 'مغامرة كاياك على المياه'))}
             className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
             loading="lazy"
             decoding="async"
@@ -113,7 +113,7 @@ export default function AboutStory() {
               isArabic ? 'right-6' : 'left-6'
             }`}
           >
-            {t('about.story.imageTag')}
+            {t('about.story.imageTag', t('about.story.established', 'أسوان، مصر'))}
           </div>
         </div>
       </div>
