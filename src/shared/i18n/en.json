@@ -933,7 +933,7 @@
     },
     "reviewPay": {
       "title": "Review & Payment Options",
-      "subtitle": "Review your booking details and choose your flexible payment plan",
+      "subtitle": "Pay in full or pay a 50% deposit to confirm your booking",
       "summaryTitle": "Booking Summary",
       "officialRate": "Official Approved Rates",
       "tripLabel": "Trip",
@@ -947,7 +947,7 @@
       "applyPromo": "Apply",
       "removePromo": "Remove",
       "invalidPromo": "Invalid or expired promo code",
-      "howMuchToPayTitle": "How much would you like to pay? (Flexible Payment)",
+      "howMuchToPayTitle": "Payment Options",
       "subtotal": "Subtotal",
       "discountApplied": "Promo Discount",
       "totalAmount": "Total Amount",
@@ -1024,6 +1024,7 @@
     "nav": {
       "previous": "Previous",
       "nextToReview": "Next: Review & Confirm",
+      "nextToInvoice": "Confirm Booking & View Invoice",
       "confirmAndPayInstaPay": "Confirm Booking & Pay via InstaPay"
     },
     "errors": {

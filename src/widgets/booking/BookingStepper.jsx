@@ -24,7 +24,7 @@ export default function BookingStepper({
   return (
     <nav
       aria-label={t('booking.stepperAria')}
-      className="w-full max-w-3xl mx-auto px-4 py-4"
+      className="w-full max-w-3xl mx-auto px-4 py-2"
     >
       <ol className="flex items-center justify-between relative">
         {/* Background track line */}

@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalendarCheck,
   faCalendarDays,
-  faClock,
   faSailboat,
   faShip,
   faUsers,
@@ -12,8 +11,11 @@ import {
   faCircleExclamation,
   faChild,
   faUser,
+  faCheck,
+  faPlus,
+  faMinus,
 } from '@fortawesome/free-solid-svg-icons';
-import { Input, DatePicker, QuantityStepper, Button } from '../../shared/ui/index.js';
+import { Input, DatePicker, Button } from '../../shared/ui/index.js';
 import { isValidPhone, isNonEmpty } from '../../shared/utils/validators.js';
 
 function getIsoDate(offsetDays = 0) {
@@ -76,26 +78,12 @@ export default function StepGuestDetails({
     return `${h}:${m} ${isPm ? 'PM' : 'AM'}`;
   };
 
-  // Format date readable
-  const formatReadableDate = (isoStr) => {
-    if (!isoStr) return '';
-    try {
-      const d = new Date(isoStr + 'T12:00:00');
-      return d.toLocaleDateString(isArabic ? 'ar-EG' : 'en-US', {
-        weekday: 'short',
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
-      });
-    } catch {
-      return isoStr;
-    }
-  };
+
 
   // Total guests calculation
   const totalGuests = (bookingData.adults || 1) + (bookingData.kids1to6 || 0) + (bookingData.kids7to12 || 0);
 
-  // Handle guest counts with 30 max limit
+  // Handle guest counts with 30 max limit - without any presets
   const handleGuestChange = (type, nextVal) => {
     const current = {
       adults: bookingData.adults || 1,
@@ -175,22 +163,22 @@ export default function StepGuestDetails({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-3xl mx-auto space-y-8 font-body">
-      {/* Step Header */}
-      <div className="text-center space-y-1.5">
-        <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-brand-navy">
+    <form onSubmit={handleSubmit} className="w-full max-w-4xl mx-auto space-y-4 font-body">
+      {/* Step Header - Compact */}
+      <div className="text-center space-y-1">
+        <h2 className="text-xl sm:text-2xl font-heading font-extrabold text-brand-navy">
           {t('booking.guestDetails.title')}
         </h2>
-        <p className="text-sm sm:text-base text-brand-navy/70">
+        <p className="text-xs sm:text-sm text-brand-navy/70">
           {t('booking.guestDetails.subtitle')}
         </p>
       </div>
 
-      {/* Selected Trip Bar (Quick reminder) */}
+      {/* Selected Trip Bar (Compact) */}
       {selectedTrip && (
-        <div className="bg-surface-mist border border-[rgba(20,125,159,0.2)] p-4 rounded-2xl flex items-center justify-between gap-3 shadow-xs">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="w-12 h-12 rounded-xl overflow-hidden flex-none bg-brand-navy">
+        <div className="bg-surface-mist border border-[rgba(20,125,159,0.2)] p-3 rounded-2xl flex items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-10 h-10 rounded-xl overflow-hidden flex-none bg-brand-navy">
               <img
                 src={selectedTrip.images?.thumb || selectedTrip.images?.medium}
                 alt={selectedTrip.slug}
@@ -198,10 +186,10 @@ export default function StepGuestDetails({
               />
             </div>
             <div className="min-w-0">
-              <span className="text-[11px] font-bold text-brand-blue uppercase tracking-wide block">
+              <span className="text-[10px] font-bold text-brand-blue uppercase tracking-wide block">
                 {t('booking.guestDetails.selectedTripLabel')}
               </span>
-              <p className="font-extrabold text-sm sm:text-base text-brand-navy truncate">
+              <p className="font-extrabold text-xs sm:text-sm text-brand-navy truncate">
                 {t(`trips.items.${selectedTrip.key}.title`, selectedTrip.slug)}
               </p>
             </div>
@@ -209,348 +197,326 @@ export default function StepGuestDetails({
           <button
             type="button"
             onClick={onBack}
-            className="text-xs sm:text-sm font-bold text-brand-blue hover:text-brand-navy hover:underline flex-none cursor-pointer"
+            className="text-xs font-bold text-brand-blue hover:text-brand-navy hover:underline flex-none cursor-pointer"
           >
             {t('booking.guestDetails.changeTrip')}
           </button>
         </div>
       )}
 
-      {/* SECTION 1: Contact Information */}
-      <section className="bg-white p-5 sm:p-7 rounded-3xl border border-black/10 shadow-sm space-y-4">
-        <div className="flex items-center gap-2 pb-2 border-b border-black/5">
-          <FontAwesomeIcon icon={faUser} className="text-brand-blue" />
-          <h3 className="font-heading font-extrabold text-lg text-brand-navy">
-            {t('booking.guestDetails.contactSectionTitle')}
-          </h3>
-        </div>
+      {/* SECTION 1: 2-Column Responsive Layout for Contact & Date/Time (Saves massive vertical space) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Contact Info Card */}
+        <section className="bg-white p-4 sm:p-5 rounded-2xl border border-black/10 shadow-xs space-y-3 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center gap-2 pb-2 border-b border-black/5">
+              <FontAwesomeIcon icon={faUser} className="text-brand-blue text-sm" />
+              <h3 className="font-heading font-extrabold text-sm sm:text-base text-brand-navy">
+                {t('booking.guestDetails.contactSectionTitle')}
+              </h3>
+            </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Input
-            id="book-fullName"
-            label={t('booking.guestDetails.fullName')}
-            value={bookingData.fullName || ''}
-            onChange={(e) => {
-              updateBookingData({ fullName: e.target.value });
-              if (errors.fullName) setErrors((prev) => ({ ...prev, fullName: '' }));
-            }}
-            placeholder={t('booking.guestDetails.fullNamePlaceholder')}
-            error={errors.fullName}
-            required
-          />
+            <div className="space-y-3 mt-3">
+              <Input
+                id="book-fullName"
+                label={t('booking.guestDetails.fullName')}
+                value={bookingData.fullName || ''}
+                onChange={(e) => {
+                  updateBookingData({ fullName: e.target.value });
+                  if (errors.fullName) setErrors((prev) => ({ ...prev, fullName: '' }));
+                }}
+                placeholder={t('booking.guestDetails.fullNamePlaceholder')}
+                error={errors.fullName}
+                required
+              />
 
-          <Input
-            id="book-phone"
-            type="tel"
-            dir="ltr"
-            label={t('booking.guestDetails.phone')}
-            value={bookingData.phone || ''}
-            onChange={(e) => {
-              updateBookingData({ phone: e.target.value });
-              if (errors.phone) setErrors((prev) => ({ ...prev, phone: '' }));
-            }}
-            placeholder="01012345678 / +20..."
-            error={errors.phone}
-            helperText={t('booking.guestDetails.phoneHelper')}
-            required
-          />
-        </div>
-      </section>
-
-      {/* SECTION 2: Date & Time */}
-      <section className="bg-white p-5 sm:p-7 rounded-3xl border border-black/10 shadow-sm space-y-5">
-        <div className="flex items-center gap-2 pb-2 border-b border-black/5">
-          <FontAwesomeIcon icon={faCalendarCheck} className="text-brand-blue" />
-          <h3 className="font-heading font-extrabold text-lg text-brand-navy">
-            {t('booking.guestDetails.dateTimeSectionTitle')}
-          </h3>
-        </div>
-
-        {/* Date Selection */}
-        <div className="space-y-3">
-          <label className="block font-bold text-sm text-brand-navy">
-            {t('booking.guestDetails.bookingDate')} <span className="text-error">*</span>
-          </label>
-
-          {/* Quick Date Pills */}
-          <div className="flex items-center gap-2.5 flex-wrap">
-            <button
-              type="button"
-              onClick={() => {
-                updateBookingData({ date: todayIso });
-                if (errors.date) setErrors((prev) => ({ ...prev, date: '' }));
-              }}
-              className={`px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                bookingData.date === todayIso
-                  ? 'bg-brand-navy text-brand-yellow shadow-md ring-2 ring-brand-yellow'
-                  : 'bg-surface-mist hover:bg-slate-200 text-brand-navy'
-              }`}
-            >
-              <FontAwesomeIcon icon={faCalendarDays} className="text-xs" />
-              <span>{t('booking.guestDetails.today')}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                updateBookingData({ date: tomorrowIso });
-                if (errors.date) setErrors((prev) => ({ ...prev, date: '' }));
-              }}
-              className={`px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                bookingData.date === tomorrowIso
-                  ? 'bg-brand-navy text-brand-yellow shadow-md ring-2 ring-brand-yellow'
-                  : 'bg-surface-mist hover:bg-slate-200 text-brand-navy'
-              }`}
-            >
-              <FontAwesomeIcon icon={faCalendarCheck} className="text-xs" />
-              <span>{t('booking.guestDetails.tomorrow')}</span>
-            </button>
+              <Input
+                id="book-phone"
+                type="tel"
+                dir="ltr"
+                label={t('booking.guestDetails.phone')}
+                value={bookingData.phone || ''}
+                onChange={(e) => {
+                  updateBookingData({ phone: e.target.value });
+                  if (errors.phone) setErrors((prev) => ({ ...prev, phone: '' }));
+                }}
+                placeholder="01012345678 / +20..."
+                error={errors.phone}
+                helperText={t('booking.guestDetails.phoneHelper')}
+                required
+              />
+            </div>
           </div>
+        </section>
 
-          <DatePicker
-            id="book-date"
-            value={bookingData.date || todayIso}
-            min={todayIso}
-            onChange={(e) => {
-              updateBookingData({ date: e.target.value });
-              if (errors.date) setErrors((prev) => ({ ...prev, date: '' }));
-            }}
-            error={errors.date}
-            required
-          />
-        </div>
-
-        {/* Time Slot Selection (6:00 AM - 6:30 PM, half-hour steps) */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <label className="block font-bold text-sm text-brand-navy">
-              {t('booking.guestDetails.bookingTime')} <span className="text-error">*</span>
-            </label>
-            <span className="text-xs text-brand-navy/60 font-medium">
+        {/* Date & Time Card */}
+        <section className="bg-white p-4 sm:p-5 rounded-2xl border border-black/10 shadow-xs space-y-3">
+          <div className="flex items-center justify-between pb-2 border-b border-black/5">
+            <div className="flex items-center gap-2">
+              <FontAwesomeIcon icon={faCalendarCheck} className="text-brand-blue text-sm" />
+              <h3 className="font-heading font-extrabold text-sm sm:text-base text-brand-navy">
+                {t('booking.guestDetails.dateTimeSectionTitle')}
+              </h3>
+            </div>
+            <span className="text-[11px] text-brand-navy/60 font-semibold">
               {t('booking.guestDetails.operatingHoursNotice')}
             </span>
           </div>
 
-          <div
-            className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 max-h-48 overflow-y-auto p-1 border border-black/10 rounded-2xl bg-surface-mist/50"
-            role="group"
-            aria-label={t('booking.guestDetails.timeSlotAria')}
-          >
-            {TIME_SLOTS.map((slot) => {
-              const isSelected = bookingData.time === slot;
-              return (
-                <button
-                  key={slot}
-                  type="button"
-                  onClick={() => {
-                    updateBookingData({ time: slot });
-                    if (errors.time) setErrors((prev) => ({ ...prev, time: '' }));
-                  }}
-                  aria-pressed={isSelected}
-                  className={`py-2 px-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer text-center ${
-                    isSelected
-                      ? 'bg-brand-navy text-brand-yellow shadow-sm scale-102 ring-2 ring-brand-yellow font-black'
-                      : 'bg-white hover:bg-slate-100 text-brand-navy border border-black/5'
-                  }`}
-                >
-                  {formatTimeSlot(slot)}
-                </button>
-              );
-            })}
-          </div>
+          {/* Quick Date Pills with Checkmark on selection */}
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  updateBookingData({ date: todayIso });
+                  if (errors.date) setErrors((prev) => ({ ...prev, date: '' }));
+                }}
+                className={`flex-1 py-1.5 px-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                  bookingData.date === todayIso
+                    ? 'bg-brand-navy text-brand-yellow shadow-xs ring-1 ring-brand-yellow'
+                    : 'bg-surface-mist hover:bg-slate-200 text-brand-navy border border-black/5'
+                }`}
+              >
+                {bookingData.date === todayIso && (
+                  <FontAwesomeIcon icon={faCheck} className="text-xs text-brand-yellow shrink-0" />
+                )}
+                <FontAwesomeIcon icon={faCalendarDays} className="text-[11px]" />
+                <span>{t('booking.guestDetails.today')}</span>
+              </button>
 
-          {errors.time && (
-            <p className="text-error text-xs font-bold">{errors.time}</p>
-          )}
-
-          {/* Live confirmation message under time slot */}
-          {bookingData.date && bookingData.time && (
-            <div className="p-3 bg-brand-yellow/20 border border-brand-yellow/60 rounded-xl flex items-center gap-2.5 text-xs sm:text-sm font-bold text-brand-navy animate-in fade-in duration-200">
-              <FontAwesomeIcon icon={faClock} className="text-brand-navy text-base flex-none" />
-              <span>
-                {t('booking.guestDetails.liveConfirmationNotice', {
-                  date: formatReadableDate(bookingData.date),
-                  time: formatTimeSlot(bookingData.time),
-                })}
-              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  updateBookingData({ date: tomorrowIso });
+                  if (errors.date) setErrors((prev) => ({ ...prev, date: '' }));
+                }}
+                className={`flex-1 py-1.5 px-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                  bookingData.date === tomorrowIso
+                    ? 'bg-brand-navy text-brand-yellow shadow-xs ring-1 ring-brand-yellow'
+                    : 'bg-surface-mist hover:bg-slate-200 text-brand-navy border border-black/5'
+                }`}
+              >
+                {bookingData.date === tomorrowIso && (
+                  <FontAwesomeIcon icon={faCheck} className="text-xs text-brand-yellow shrink-0" />
+                )}
+                <FontAwesomeIcon icon={faCalendarCheck} className="text-[11px]" />
+                <span>{t('booking.guestDetails.tomorrow')}</span>
+              </button>
             </div>
-          )}
-        </div>
-      </section>
 
-      {/* SECTION 3: Equipment & Duration */}
-      <section className="bg-white p-5 sm:p-7 rounded-3xl border border-black/10 shadow-sm space-y-5">
-        <div className="flex items-center gap-2 pb-2 border-b border-black/5">
-          <FontAwesomeIcon icon={faSailboat} className="text-brand-blue" />
-          <h3 className="font-heading font-extrabold text-lg text-brand-navy">
-            {t('booking.guestDetails.equipmentDurationTitle')}
-          </h3>
-        </div>
-
-        {/* Equipment Selector */}
-        <div className="space-y-2">
-          <label className="block font-bold text-sm text-brand-navy">
-            {t('booking.guestDetails.equipmentType')}
-          </label>
-          <div className="grid grid-cols-3 gap-2.5">
-            {[
-              { id: 'kayak', label: t('booking.tripSelect.kayak'), icon: faSailboat },
-              { id: 'sup', label: t('booking.tripSelect.sup'), icon: faSailboat },
-              { id: 'waterbike', label: t('booking.tripSelect.waterbike'), icon: faShip },
-            ].map((eq) => {
-              const isChosen = (bookingData.equipment || selectedTrip?.act || 'kayak') === eq.id;
-              return (
-                <button
-                  key={eq.id}
-                  type="button"
-                  onClick={() => updateBookingData({ equipment: eq.id })}
-                  className={`p-3 rounded-2xl flex flex-col items-center gap-1.5 border-2 transition-all cursor-pointer ${
-                    isChosen
-                      ? 'border-brand-navy bg-brand-navy text-brand-yellow shadow-md'
-                      : 'border-black/10 bg-white hover:bg-surface-mist text-brand-navy'
-                  }`}
-                >
-                  <FontAwesomeIcon icon={eq.icon} className="text-lg" />
-                  <span className="text-xs font-extrabold">{eq.label}</span>
-                </button>
-              );
-            })}
+            <DatePicker
+              id="book-date"
+              value={bookingData.date || todayIso}
+              min={todayIso}
+              onChange={(e) => {
+                updateBookingData({ date: e.target.value });
+                if (errors.date) setErrors((prev) => ({ ...prev, date: '' }));
+              }}
+              error={errors.date}
+              required
+            />
           </div>
-        </div>
 
-        {/* Duration Selector (1 to 6 hours) */}
-        <div className="space-y-2">
-          <label className="block font-bold text-sm text-brand-navy">
-            {t('booking.guestDetails.duration')}
-          </label>
-          <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-            {DURATION_OPTIONS.map((hrs) => {
-              const isSelected = (bookingData.duration || 1) === hrs;
-              return (
-                <button
-                  key={hrs}
-                  type="button"
-                  onClick={() => updateBookingData({ duration: hrs })}
-                  className={`py-2.5 px-2 rounded-xl text-xs sm:text-sm font-extrabold border-2 transition-all cursor-pointer text-center ${
-                    isSelected
-                      ? 'border-brand-navy bg-brand-yellow text-brand-navy shadow-sm ring-2 ring-brand-navy/20'
-                      : 'border-black/10 bg-surface-mist hover:bg-slate-200 text-brand-navy'
-                  }`}
-                >
-                  {isArabic
-                    ? hrs === 1
-                      ? 'ساعة واحدة'
-                      : hrs === 2
-                      ? 'ساعتان'
-                      : `${hrs} ساعات`
-                    : `${hrs} ${hrs === 1 ? 'Hour' : 'Hours'}`}
-                </button>
-              );
-            })}
+          {/* Time Slot Selector - Compact Grid */}
+          <div className="space-y-1.5">
+            <label className="block font-bold text-xs text-brand-navy">
+              {t('booking.guestDetails.bookingTime')} <span className="text-error">*</span>
+            </label>
+            <div
+              className="grid grid-cols-4 sm:grid-cols-6 gap-1 max-h-28 overflow-y-auto p-1.5 border border-black/10 rounded-xl bg-surface-mist/40"
+              role="group"
+              aria-label={t('booking.guestDetails.timeSlotAria')}
+            >
+              {TIME_SLOTS.map((slot) => {
+                const isSelected = bookingData.time === slot;
+                return (
+                  <button
+                    key={slot}
+                    type="button"
+                    onClick={() => {
+                      updateBookingData({ time: slot });
+                      if (errors.time) setErrors((prev) => ({ ...prev, time: '' }));
+                    }}
+                    aria-pressed={isSelected}
+                    className={`py-1 px-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer flex items-center justify-center gap-1 text-center ${
+                      isSelected
+                        ? 'bg-brand-navy text-brand-yellow shadow-xs ring-1 ring-brand-yellow font-black'
+                        : 'bg-white hover:bg-slate-100 text-brand-navy border border-black/5'
+                    }`}
+                  >
+                    {isSelected && (
+                      <FontAwesomeIcon icon={faCheck} className="text-[9px] text-brand-yellow shrink-0" />
+                    )}
+                    <span>{formatTimeSlot(slot)}</span>
+                  </button>
+                );
+              })}
+            </div>
+            {errors.time && (
+              <p className="text-error text-xs font-bold">{errors.time}</p>
+            )}
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
-      {/* SECTION 4: Guests Breakdown & Dual Pricing Nationalities */}
-      <section className="bg-white p-5 sm:p-7 rounded-3xl border border-black/10 shadow-sm space-y-6">
+      {/* SECTION 2: GUEST COUNTS - SIDE-BY-SIDE CARDS WITHOUT ANY PRESETS */}
+      <section className="bg-white p-4 sm:p-5 rounded-2xl border border-black/10 shadow-xs space-y-3">
         <div className="flex items-center justify-between pb-2 border-b border-black/5">
           <div className="flex items-center gap-2">
-            <FontAwesomeIcon icon={faUsers} className="text-brand-blue" />
-            <h3 className="font-heading font-extrabold text-lg text-brand-navy">
+            <FontAwesomeIcon icon={faUsers} className="text-brand-blue text-sm" />
+            <h3 className="font-heading font-extrabold text-sm sm:text-base text-brand-navy">
               {t('booking.guestDetails.guestsSectionTitle')}
             </h3>
           </div>
-          <span className="text-xs font-black px-3 py-1 bg-brand-yellow/30 text-brand-navy rounded-full">
+          <span className="text-xs font-black px-2.5 py-0.5 bg-brand-yellow/30 text-brand-navy rounded-full">
             {t('booking.guestDetails.totalGuests', { count: totalGuests })} / 30
           </span>
         </div>
 
-        {/* Steppers */}
-        <div className="space-y-4">
-          {/* Adults */}
-          <div className="flex items-center justify-between gap-3 p-3 bg-surface-mist rounded-2xl">
-            <div>
-              <p className="font-extrabold text-sm sm:text-base text-brand-navy">
-                {t('booking.guestDetails.adults')}
-              </p>
-              <p className="text-xs text-brand-navy/60 font-medium">
-                {t('booking.guestDetails.adultsDesc')}
-              </p>
+        {/* 3 Columns Side-by-Side on Tablet/Desktop with Neat Inline Stepper [-] count [+] */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {/* 1. Adults */}
+          <div className="p-3.5 bg-surface-mist rounded-xl border border-black/5 flex flex-col justify-between space-y-2.5">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-brand-navy/10 text-brand-navy flex items-center justify-center flex-none">
+                <FontAwesomeIcon icon={faUser} className="text-xs" />
+              </div>
+              <div className="min-w-0">
+                <p className="font-extrabold text-xs sm:text-sm text-brand-navy truncate">
+                  {t('booking.guestDetails.adults')}
+                </p>
+                <p className="text-[11px] text-brand-navy/60 font-medium truncate">
+                  {t('booking.guestDetails.adultsDesc')}
+                </p>
+              </div>
             </div>
-            <QuantityStepper
-              value={bookingData.adults || 1}
-              min={1}
-              max={30}
-              onChange={(val) => handleGuestChange('adults', val)}
-              showSlider={false}
-              lang={lang}
-              className="w-auto flex-none"
-            />
+
+            {/* Custom Inline Stepper (Zero preset pills) */}
+            <div className="flex items-center justify-between bg-white rounded-xl p-1.5 border border-black/10 shadow-2xs">
+              <button
+                type="button"
+                onClick={() => handleGuestChange('adults', Math.max(1, (bookingData.adults || 1) - 1))}
+                disabled={(bookingData.adults || 1) <= 1}
+                className="w-7 h-7 rounded-lg bg-slate-100 text-brand-navy flex items-center justify-center hover:bg-brand-navy hover:text-white transition disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                aria-label="Decrease adults"
+              >
+                <FontAwesomeIcon icon={faMinus} className="text-[10px]" />
+              </button>
+              <span className="font-heading font-black text-sm sm:text-base text-brand-navy tabular-nums">
+                {bookingData.adults || 1}
+              </span>
+              <button
+                type="button"
+                onClick={() => handleGuestChange('adults', (bookingData.adults || 1) + 1)}
+                disabled={totalGuests >= 30}
+                className="w-7 h-7 rounded-lg bg-brand-navy text-brand-yellow flex items-center justify-center hover:bg-brand-blue hover:text-white transition disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                aria-label="Increase adults"
+              >
+                <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
+              </button>
+            </div>
           </div>
 
-          {/* Kids 1 to 6 */}
-          <div className="flex items-center justify-between gap-3 p-3 bg-surface-mist rounded-2xl">
-            <div>
-              <div className="flex items-center gap-1.5">
-                <FontAwesomeIcon icon={faChild} className="text-brand-blue text-xs" />
-                <p className="font-extrabold text-sm sm:text-base text-brand-navy">
+          {/* 2. Kids 1 to 6 */}
+          <div className="p-3.5 bg-surface-mist rounded-xl border border-black/5 flex flex-col justify-between space-y-2.5">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-brand-blue/10 text-brand-blue flex items-center justify-center flex-none">
+                <FontAwesomeIcon icon={faChild} className="text-xs" />
+              </div>
+              <div className="min-w-0">
+                <p className="font-extrabold text-xs sm:text-sm text-brand-navy truncate">
                   {t('booking.guestDetails.kids1to6')}
                 </p>
-              </div>
-              <p className="text-xs text-brand-blue font-bold mt-0.5">
-                {t('booking.guestDetails.kidsSamePriceNotice')}
-              </p>
-            </div>
-            <QuantityStepper
-              value={bookingData.kids1to6 || 0}
-              min={0}
-              max={29}
-              onChange={(val) => handleGuestChange('kids1to6', val)}
-              showSlider={false}
-              lang={lang}
-              className="w-auto flex-none"
-            />
-          </div>
-
-          {/* Kids 7 to 12 */}
-          <div className="flex items-center justify-between gap-3 p-3 bg-surface-mist rounded-2xl">
-            <div>
-              <div className="flex items-center gap-1.5">
-                <FontAwesomeIcon icon={faChild} className="text-brand-blue text-xs" />
-                <p className="font-extrabold text-sm sm:text-base text-brand-navy">
-                  {t('booking.guestDetails.kids7to12')}
+                <p className="text-[11px] text-brand-blue font-bold truncate">
+                  {t('booking.guestDetails.kidsSamePriceNotice')}
                 </p>
               </div>
-              <p className="text-xs text-brand-navy/60 font-medium">
-                {t('booking.guestDetails.kids7to12Desc')}
-              </p>
             </div>
-            <QuantityStepper
-              value={bookingData.kids7to12 || 0}
-              min={0}
-              max={29}
-              onChange={(val) => handleGuestChange('kids7to12', val)}
-              showSlider={false}
-              lang={lang}
-              className="w-auto flex-none"
-            />
+
+            {/* Custom Inline Stepper (Zero preset pills) */}
+            <div className="flex items-center justify-between bg-white rounded-xl p-1.5 border border-black/10 shadow-2xs">
+              <button
+                type="button"
+                onClick={() => handleGuestChange('kids1to6', Math.max(0, (bookingData.kids1to6 || 0) - 1))}
+                disabled={(bookingData.kids1to6 || 0) <= 0}
+                className="w-7 h-7 rounded-lg bg-slate-100 text-brand-navy flex items-center justify-center hover:bg-brand-navy hover:text-white transition disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                aria-label="Decrease kids 1 to 6"
+              >
+                <FontAwesomeIcon icon={faMinus} className="text-[10px]" />
+              </button>
+              <span className="font-heading font-black text-sm sm:text-base text-brand-navy tabular-nums">
+                {bookingData.kids1to6 || 0}
+              </span>
+              <button
+                type="button"
+                onClick={() => handleGuestChange('kids1to6', (bookingData.kids1to6 || 0) + 1)}
+                disabled={totalGuests >= 30}
+                className="w-7 h-7 rounded-lg bg-brand-navy text-brand-yellow flex items-center justify-center hover:bg-brand-blue hover:text-white transition disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                aria-label="Increase kids 1 to 6"
+              >
+                <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
+              </button>
+            </div>
           </div>
 
-          {errors.guests && (
-            <div className="p-3 bg-error/10 border border-error/30 rounded-xl flex items-center gap-2 text-xs font-bold text-error">
-              <FontAwesomeIcon icon={faCircleExclamation} />
-              <span>{errors.guests}</span>
+          {/* 3. Kids 7 to 12 */}
+          <div className="p-3.5 bg-surface-mist rounded-xl border border-black/5 flex flex-col justify-between space-y-2.5">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-brand-yellow/30 text-brand-navy flex items-center justify-center flex-none">
+                <FontAwesomeIcon icon={faChild} className="text-xs" />
+              </div>
+              <div className="min-w-0">
+                <p className="font-extrabold text-xs sm:text-sm text-brand-navy truncate">
+                  {t('booking.guestDetails.kids7to12')}
+                </p>
+                <p className="text-[11px] text-brand-navy/60 font-medium truncate">
+                  {t('booking.guestDetails.kids7to12Desc')}
+                </p>
+              </div>
             </div>
-          )}
+
+            {/* Custom Inline Stepper (Zero preset pills) */}
+            <div className="flex items-center justify-between bg-white rounded-xl p-1.5 border border-black/10 shadow-2xs">
+              <button
+                type="button"
+                onClick={() => handleGuestChange('kids7to12', Math.max(0, (bookingData.kids7to12 || 0) - 1))}
+                disabled={(bookingData.kids7to12 || 0) <= 0}
+                className="w-7 h-7 rounded-lg bg-slate-100 text-brand-navy flex items-center justify-center hover:bg-brand-navy hover:text-white transition disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                aria-label="Decrease kids 7 to 12"
+              >
+                <FontAwesomeIcon icon={faMinus} className="text-[10px]" />
+              </button>
+              <span className="font-heading font-black text-sm sm:text-base text-brand-navy tabular-nums">
+                {bookingData.kids7to12 || 0}
+              </span>
+              <button
+                type="button"
+                onClick={() => handleGuestChange('kids7to12', (bookingData.kids7to12 || 0) + 1)}
+                disabled={totalGuests >= 30}
+                className="w-7 h-7 rounded-lg bg-brand-navy text-brand-yellow flex items-center justify-center hover:bg-brand-blue hover:text-white transition disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                aria-label="Increase kids 7 to 12"
+              >
+                <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
+              </button>
+            </div>
+          </div>
         </div>
 
-        {/* Nationalities (Dual Pricing Selection) */}
-        <div className="space-y-3 pt-3 border-t border-black/5">
-          <label className="block font-bold text-sm text-brand-navy">
+        {errors.guests && (
+          <div className="p-2.5 bg-error/10 border border-error/30 rounded-xl flex items-center gap-2 text-xs font-bold text-error">
+            <FontAwesomeIcon icon={faCircleExclamation} />
+            <span>{errors.guests}</span>
+          </div>
+        )}
+
+        {/* Nationalities Selector with Checkmarks on Selected Option */}
+        <div className="space-y-2 pt-2 border-t border-black/5">
+          <label className="block font-bold text-xs sm:text-sm text-brand-navy">
             {t('booking.guestDetails.nationalityTitle')}
           </label>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {[
               { id: 'all_egyptian', label: t('booking.guestDetails.allEgyptian') },
               { id: 'all_foreign', label: t('booking.guestDetails.allForeign') },
@@ -577,13 +543,16 @@ export default function StepGuestDetails({
                     }
                     if (errors.nationality) setErrors((prev) => ({ ...prev, nationality: '' }));
                   }}
-                  className={`p-3.5 rounded-2xl border-2 font-extrabold text-xs sm:text-sm transition-all cursor-pointer text-center ${
+                  className={`py-2 px-3 rounded-xl border font-bold text-xs sm:text-sm transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                     isSelected
-                      ? 'border-brand-navy bg-brand-navy text-brand-yellow shadow-md'
+                      ? 'border-brand-navy bg-brand-navy text-brand-yellow shadow-xs ring-1 ring-brand-yellow'
                       : 'border-black/10 bg-surface-mist hover:bg-slate-200 text-brand-navy'
                   }`}
                 >
-                  {nat.label}
+                  {isSelected && (
+                    <FontAwesomeIcon icon={faCheck} className="text-xs text-brand-yellow shrink-0" />
+                  )}
+                  <span>{nat.label}</span>
                 </button>
               );
             })}
@@ -591,11 +560,11 @@ export default function StepGuestDetails({
 
           {/* Mixed details breakdown */}
           {bookingData.nationality === 'mixed' && (
-            <div className="p-4 bg-brand-blue/5 border border-brand-blue/20 rounded-2xl space-y-3 animate-in fade-in duration-200">
+            <div className="p-3 bg-brand-blue/5 border border-brand-blue/20 rounded-xl space-y-2 animate-in fade-in duration-200">
               <p className="text-xs font-bold text-brand-navy">
                 {t('booking.guestDetails.mixedNotice', { total: totalGuests })}
               </p>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2">
                 <Input
                   id="book-egCount"
                   type="number"
@@ -631,18 +600,84 @@ export default function StepGuestDetails({
         </div>
       </section>
 
-      {/* SECTION 5: Optional Questions */}
-      <section className="bg-white p-5 sm:p-7 rounded-3xl border border-black/10 shadow-sm space-y-4">
-        <h3 className="font-heading font-extrabold text-base sm:text-lg text-brand-navy">
-          {t('booking.guestDetails.optionalSectionTitle')}
-        </h3>
+      {/* SECTION 3: Duration & Equipment - Compact */}
+      <section className="bg-white p-4 sm:p-5 rounded-2xl border border-black/10 shadow-xs space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Equipment */}
+          <div className="space-y-1.5">
+            <label className="block font-bold text-xs sm:text-sm text-brand-navy">
+              {t('booking.guestDetails.equipmentType')}
+            </label>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { id: 'kayak', label: t('booking.tripSelect.kayak'), icon: faSailboat },
+                { id: 'sup', label: t('booking.tripSelect.sup'), icon: faSailboat },
+                { id: 'waterbike', label: t('booking.tripSelect.waterbike'), icon: faShip },
+              ].map((eq) => {
+                const isChosen = (bookingData.equipment || selectedTrip?.act || 'kayak') === eq.id;
+                return (
+                  <button
+                    key={eq.id}
+                    type="button"
+                    onClick={() => updateBookingData({ equipment: eq.id })}
+                    className={`py-2 px-1.5 rounded-xl flex items-center justify-center gap-1.5 border transition-all cursor-pointer ${
+                      isChosen
+                        ? 'border-brand-navy bg-brand-navy text-brand-yellow shadow-xs ring-1 ring-brand-yellow'
+                        : 'border-black/10 bg-surface-mist hover:bg-slate-200 text-brand-navy'
+                    }`}
+                  >
+                    {isChosen && (
+                      <FontAwesomeIcon icon={faCheck} className="text-xs text-brand-yellow shrink-0" />
+                    )}
+                    <FontAwesomeIcon icon={eq.icon} className="text-xs" />
+                    <span className="text-xs font-bold">{eq.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
-        {/* Previous experience */}
-        <div className="space-y-2">
-          <label className="block text-xs sm:text-sm font-bold text-brand-navy/80">
-            {t('booking.guestDetails.triedBeforeQuestion')}
-          </label>
-          <div className="flex items-center gap-2">
+          {/* Duration Selector (1 to 6 hours) with Checkmarks */}
+          <div className="space-y-1.5">
+            <label className="block font-bold text-xs sm:text-sm text-brand-navy">
+              {t('booking.guestDetails.duration')}
+            </label>
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
+              {DURATION_OPTIONS.map((hrs) => {
+                const isSelected = (bookingData.duration || 1) === hrs;
+                return (
+                  <button
+                    key={hrs}
+                    type="button"
+                    onClick={() => updateBookingData({ duration: hrs })}
+                    className={`py-2 px-1 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center justify-center gap-1 text-center ${
+                      isSelected
+                        ? 'border-brand-navy bg-brand-navy text-brand-yellow shadow-xs ring-1 ring-brand-yellow'
+                        : 'border-black/10 bg-surface-mist hover:bg-slate-200 text-brand-navy'
+                    }`}
+                  >
+                    {isSelected && (
+                      <FontAwesomeIcon icon={faCheck} className="text-[10px] text-brand-yellow shrink-0" />
+                    )}
+                    <span>
+                      {hrs} {isArabic ? (hrs === 1 ? 'س' : hrs === 2 ? 'ساعتان' : 'ساعات') : 'h'}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 4: Optional Questions - Compact Row */}
+      <section className="bg-white p-3.5 sm:p-4 rounded-2xl border border-black/10 shadow-xs space-y-2.5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          {/* Previous experience */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-xs font-bold text-brand-navy/80">
+              {t('booking.guestDetails.triedBeforeQuestion')}
+            </span>
             {[
               { val: 'yes', label: t('booking.guestDetails.yes') },
               { val: 'no', label: t('booking.guestDetails.no') },
@@ -653,39 +688,43 @@ export default function StepGuestDetails({
                   key={opt.val}
                   type="button"
                   onClick={() => updateBookingData({ triedBefore: opt.val })}
-                  className={`px-4 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer ${
+                  className={`px-3 py-1 rounded-full text-xs font-bold border transition-all cursor-pointer flex items-center gap-1 ${
                     isSelected
-                      ? 'bg-brand-navy text-white border-brand-navy shadow-xs'
+                      ? 'bg-brand-navy text-brand-yellow border-brand-navy shadow-xs ring-1 ring-brand-yellow'
                       : 'bg-surface-mist hover:bg-slate-200 text-brand-navy border-black/5'
                   }`}
                 >
-                  {opt.label}
+                  {isSelected && (
+                    <FontAwesomeIcon icon={faCheck} className="text-[10px] text-brand-yellow" />
+                  )}
+                  <span>{opt.label}</span>
                 </button>
               );
             })}
           </div>
-        </div>
 
-        {/* How did you hear about us */}
-        <div className="space-y-2 pt-2 border-t border-black/5">
-          <label className="block text-xs sm:text-sm font-bold text-brand-navy/80">
-            {t('booking.guestDetails.howHeardQuestion')}
-          </label>
-          <div className="flex items-center gap-2 flex-wrap">
-            {HEAR_OPTIONS.map((opt) => {
+          {/* How heard */}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-xs font-bold text-brand-navy/80">
+              {t('booking.guestDetails.howHeardQuestion')}:
+            </span>
+            {HEAR_OPTIONS.slice(0, 4).map((opt) => {
               const isSelected = bookingData.howHeard === opt.id;
               return (
                 <button
                   key={opt.id}
                   type="button"
                   onClick={() => updateBookingData({ howHeard: opt.id })}
-                  className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all cursor-pointer ${
+                  className={`px-2.5 py-1 rounded-full text-[11px] font-bold border transition-all cursor-pointer flex items-center gap-1 ${
                     isSelected
                       ? 'bg-brand-blue text-white border-brand-blue shadow-xs'
                       : 'bg-surface-mist hover:bg-slate-200 text-brand-navy border-black/5'
                   }`}
                 >
-                  {t(`booking.guestDetails.hearOptions.${opt.labelKey}`, opt.id)}
+                  {isSelected && (
+                    <FontAwesomeIcon icon={faCheck} className="text-[9px] text-white" />
+                  )}
+                  <span>{t(`booking.guestDetails.hearOptions.${opt.labelKey}`, opt.id)}</span>
                 </button>
               );
             })}
@@ -694,13 +733,13 @@ export default function StepGuestDetails({
       </section>
 
       {/* Navigation Buttons */}
-      <div className="flex items-center justify-between gap-4 pt-4">
+      <div className="flex items-center justify-between gap-4 pt-2">
         <Button
           type="button"
           variant="outline"
           size="md"
           onClick={onBack}
-          className="font-bold gap-2 px-6"
+          className="font-bold gap-2 px-5 py-2"
         >
           <FontAwesomeIcon icon={ArrowBack} />
           <span>{t('booking.nav.previous')}</span>
@@ -710,7 +749,7 @@ export default function StepGuestDetails({
           type="submit"
           variant="primary"
           size="md"
-          className="font-black gap-2 px-8 bg-brand-yellow text-brand-navy shadow-md hover:bg-brand-navy hover:text-white"
+          className="font-black gap-2 px-7 py-2.5 bg-brand-yellow text-brand-navy shadow-md hover:bg-brand-navy hover:text-white"
         >
           <span>{t('booking.nav.nextToReview')}</span>
           <FontAwesomeIcon icon={ArrowNext} />

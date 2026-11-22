@@ -124,9 +124,9 @@ export default function BookingPage() {
   return (
     <div
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="min-h-screen bg-surface-sand text-brand-navy pt-28 min-[901px]:pt-36 pb-20 px-4 sm:px-6 relative isolate selection:bg-brand-yellow selection:text-brand-navy font-body"
+      className="min-h-screen bg-surface-sand text-brand-navy pt-16 sm:pt-20 min-[901px]:pt-24 pb-8 px-4 sm:px-6 relative isolate selection:bg-brand-yellow selection:text-brand-navy font-body print:p-0 print:m-0 print:bg-white"
     >
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-4xl mx-auto space-y-4">
         {/* Visual Stepper (Only on steps 1, 2, 3, 4) */}
         <div className="print:hidden">
           <BookingStepper
