@@ -10,6 +10,7 @@ import { TRIPS } from '../widgets/trips/tripsData.js';
 import { useTranslation } from '../shared/i18n/index.js';
 import { ROUTES, SECTIONS, sectionLink } from '../shared/config/routes.js';
 import { ErrorBoundary, ScrollProgress } from '../shared/ui/index.js';
+import { PendingBookingPopup } from '../widgets/booking/index.js';
 
 const MapSection = lazy(() => import('../widgets/map/index.js'));
 const ReviewsSection = lazy(() => import('../widgets/reviews/index.js'));
@@ -51,6 +52,17 @@ function AboutFallback() {
       <SectionSpinner
         className="min-h-[400px] text-brand-navy/30"
         borderClass="border-brand-blue/30 border-t-brand-blue"
+      />
+    </div>
+  );
+}
+
+function BookingFallback() {
+  return (
+    <div className="min-h-screen bg-surface-sand pt-28 pb-16">
+      <SectionSpinner
+        className="min-h-[400px] text-brand-navy/30"
+        borderClass="border-brand-yellow/30 border-t-brand-yellow"
       />
     </div>
   );
@@ -267,6 +279,11 @@ export default function App() {
       <TitleManager />
 
       {!isAuthPage && <ScrollProgress />}
+      {!isAuthPage && (
+        <div className="print:hidden">
+          <PendingBookingPopup />
+        </div>
+      )}
 
       {!isAuthPage && (
         <div className="print:hidden">
@@ -346,11 +363,14 @@ export default function App() {
             <Route
               path={ROUTES.BOOKING}
               element={
-                <Suspense fallback={<TripDetailsFallback />}>
+                <Suspense fallback={<BookingFallback />}>
                   <BookingPage />
                 </Suspense>
               }
             />
+
+            {/* Alias /booking -> /book */}
+            <Route path="/booking" element={<Navigate to={ROUTES.BOOKING} replace />} />
 
             {/* Public Auth Routes */}
             <Route

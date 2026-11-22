@@ -1,75 +1,198 @@
-import { useSearchParams, Link } from 'react-router-dom';
+import { useState, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { TRIPS } from '../../widgets/trips/tripsData.js';
-import { ROUTES } from '../../shared/config/routes.js';
-import { buildWhatsAppUrl } from '../../shared/config/constants.js';
+import { generateBookingRef } from '../../shared/config/constants.js';
+import {
+  BookingStepper,
+  StepTripSelect,
+  StepGuestDetails,
+  StepReviewPay,
+  StepPaymentInvoice,
+} from '../../widgets/booking/index.js';
 
 export default function BookingPage() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { t, lang } = useTranslation();
   const isArabic = lang === 'ar';
-  const tripSlug = searchParams.get('trip');
-  const trip = TRIPS.find((item) => item.slug === tripSlug);
 
-  const tripTitle = trip ? t(`trips.items.${trip.key}.title`) : '';
-  const waMessage = trip
-    ? (isArabic
-        ? `مرحباً DUCK، أود حجز رحلة: ${tripTitle}`
-        : `Hello DUCK, I would like to book the trip: ${tripTitle}`)
-    : (isArabic
-        ? 'مرحباً DUCK، أود الاستفسار عن حجز رحلة'
-        : 'Hello DUCK, I would like to inquire about booking a trip');
-  const waUrl = buildWhatsAppUrl(waMessage);
+  const tripSlug = searchParams.get('trip');
+  const refParam = searchParams.get('ref');
+  const stepParam = parseInt(searchParams.get('step') || '0', 10);
+
+  // 1. Initial Trip match
+  const initialTrip = useMemo(() => {
+    if (!tripSlug) return null;
+    return TRIPS.find((item) => item.slug === tripSlug) || null;
+  }, [tripSlug]);
+
+  const [userSelectedTrip, setUserSelectedTrip] = useState(null);
+  const selectedTrip = userSelectedTrip || initialTrip;
+
+  // 2. Initial Step
+  // If trip is in URL: start on step 2 (guest details) as per spec. If refParam & step=4: start on 4.
+  const [currentStep, setCurrentStep] = useState(() => {
+    if (stepParam >= 1 && stepParam <= 4) return stepParam;
+    if (initialTrip) return 2;
+    return 1;
+  });
+
+  // 3. Unique Booking Ref (generated when reaching step 4 or restored from URL)
+  const [bookingRef, setBookingRef] = useState(() => {
+    if (refParam) return refParam;
+    return generateBookingRef();
+  });
+
+  // Today ISO
+  const [todayIso] = useState(() => new Date().toISOString().split('T')[0]);
+
+  // 4. Central Booking Form State
+  const [bookingData, setBookingData] = useState({
+    fullName: '',
+    phone: '',
+    date: new Date().toISOString().split('T')[0],
+    time: '10:00',
+    duration: 1,
+    equipment: initialTrip?.act || 'kayak',
+    adults: 1,
+    kids1to6: 0,
+    kids7to12: 0,
+    nationality: 'all_egyptian',
+    egyptianCount: 1,
+    foreignCount: 0,
+    triedBefore: null,
+    howHeard: null,
+    appliedPromo: null,
+    paymentType: 'full',
+    customPayAmount: null,
+    subtotal: 0,
+    discount: 0,
+    totalAmount: 0,
+    amountToPay: 0,
+    remainingBalance: 0,
+  });
+
+  // Scroll to top on step transition
+  const goToStep = (stepNumber) => {
+    setCurrentStep(stepNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const updateBookingData = (fields) => {
+    setBookingData((prev) => ({ ...prev, ...fields }));
+  };
+
+  // Step 1: select trip
+  const handleSelectTrip = (trip) => {
+    setUserSelectedTrip(trip);
+    updateBookingData({ equipment: trip.act || 'kayak' });
+    goToStep(2);
+  };
+
+  // Reset booking flow
+  const handleResetBooking = () => {
+    setUserSelectedTrip(null);
+    setBookingRef(generateBookingRef());
+    setSearchParams({});
+    setBookingData({
+      fullName: '',
+      phone: '',
+      date: todayIso,
+      time: '10:00',
+      duration: 1,
+      equipment: 'kayak',
+      adults: 1,
+      kids1to6: 0,
+      kids7to12: 0,
+      nationality: 'all_egyptian',
+      egyptianCount: 1,
+      foreignCount: 0,
+      triedBefore: null,
+      howHeard: null,
+      appliedPromo: null,
+      paymentType: 'full',
+      customPayAmount: null,
+      subtotal: 0,
+      discount: 0,
+      totalAmount: 0,
+      amountToPay: 0,
+      remainingBalance: 0,
+    });
+    goToStep(1);
+  };
 
   return (
     <div
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="min-h-[70vh] flex items-center justify-center p-6 bg-surface-sand"
+      className="min-h-screen bg-surface-sand text-brand-navy pt-28 min-[901px]:pt-36 pb-20 px-4 sm:px-6 relative isolate selection:bg-brand-yellow selection:text-brand-navy font-body"
     >
-      <div className="max-w-md w-full bg-white p-8 rounded-3xl shadow-md border border-[rgba(20,125,159,0.18)] text-center">
-        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-brand-yellow/30 flex items-center justify-center text-3xl">
-          🛶
+      <div className="max-w-4xl mx-auto space-y-8">
+        {/* Visual Stepper (Only on steps 1, 2, 3, 4) */}
+        <div className="print:hidden">
+          <BookingStepper
+            currentStep={currentStep}
+            onStepClick={(step) => {
+              if (step < currentStep) goToStep(step);
+            }}
+            t={t}
+          />
         </div>
-        <h1 className="text-2xl font-heading font-extrabold text-brand-navy mb-2">
-          {isArabic ? 'صفحة الحجز' : 'Booking Page'}
-        </h1>
-        {trip && (
-          <p className="text-base font-bold text-brand-blue mb-2">
-            {tripTitle}
-          </p>
+
+        {/* STEP 1: Select Trip */}
+        {currentStep === 1 && (
+          <div className="animate-in fade-in duration-300">
+            <StepTripSelect
+              selectedTrip={selectedTrip}
+              onSelectTrip={handleSelectTrip}
+              t={t}
+              lang={lang}
+            />
+          </div>
         )}
-        <p className="text-sm text-brand-navy/65 mb-6 leading-relaxed">
-          {isArabic
-            ? 'سيتم إطلاق نظام الحجز الإلكتروني قريباً. للحجز والاستفسار الفوري تواصل معنا عبر واتساب.'
-            : 'Online booking is launching soon. For immediate bookings and inquiries, contact us on WhatsApp.'}
-        </p>
 
-        <div className="flex flex-col gap-3">
-          <a
-            href={waUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-brand-yellow text-brand-navy font-bold text-sm shadow hover:bg-brand-navy hover:text-white transition-colors"
-          >
-            {isArabic ? 'الحجز عبر واتساب ↗' : 'Book via WhatsApp ↗'}
-          </a>
+        {/* STEP 2: Guest & Booking Details */}
+        {currentStep === 2 && (
+          <div className="animate-in fade-in duration-300">
+            <StepGuestDetails
+              bookingData={bookingData}
+              updateBookingData={updateBookingData}
+              selectedTrip={selectedTrip}
+              onNext={() => goToStep(3)}
+              onBack={() => goToStep(1)}
+              t={t}
+              lang={lang}
+            />
+          </div>
+        )}
 
-          {trip ? (
-            <Link
-              to={ROUTES.tripDetails(trip.slug)}
-              className="inline-flex items-center justify-center px-6 py-2.5 rounded-full border border-brand-navy/20 text-brand-navy font-semibold text-sm hover:bg-surface-mist transition-colors"
-            >
-              {isArabic ? 'العودة لتفاصيل الرحلة' : 'Back to Trip Details'}
-            </Link>
-          ) : (
-            <Link
-              to={ROUTES.HOME}
-              className="inline-flex items-center justify-center px-6 py-2.5 rounded-full border border-brand-navy/20 text-brand-navy font-semibold text-sm hover:bg-surface-mist transition-colors"
-            >
-              {isArabic ? 'الرئيسية' : 'Home'}
-            </Link>
-          )}
-        </div>
+        {/* STEP 3: Review & Payment Options */}
+        {currentStep === 3 && (
+          <div className="animate-in fade-in duration-300">
+            <StepReviewPay
+              bookingData={bookingData}
+              updateBookingData={updateBookingData}
+              selectedTrip={selectedTrip}
+              onNext={() => goToStep(4)}
+              onBack={() => goToStep(2)}
+              t={t}
+              lang={lang}
+            />
+          </div>
+        )}
+
+        {/* STEP 4: Payment & Invoice */}
+        {currentStep === 4 && (
+          <div className="animate-in fade-in duration-300">
+            <StepPaymentInvoice
+              bookingRef={bookingRef}
+              bookingData={bookingData}
+              selectedTrip={selectedTrip}
+              onResetBooking={handleResetBooking}
+              t={t}
+              lang={lang}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

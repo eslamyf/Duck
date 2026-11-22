@@ -281,7 +281,7 @@ export default function Navbar({ onBookClick }) {
           {/* Book Now Button */}
           <Button
             as={Link}
-            to={sectionLink(SECTIONS.TRIPS)}
+            to={ROUTES.BOOKING}
             variant="primary"
             size="sm"
             onClick={(e) => {
@@ -441,7 +441,7 @@ export default function Navbar({ onBookClick }) {
           {/* Mobile Primary CTA */}
           <Button
             as={Link}
-            to={sectionLink(SECTIONS.TRIPS)}
+            to={ROUTES.BOOKING}
             variant="primary"
             size="md"
             fullWidth

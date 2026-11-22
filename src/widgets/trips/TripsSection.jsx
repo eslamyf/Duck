@@ -4,7 +4,7 @@ import { useTranslation } from '../../shared/i18n/index.js';
 import { SectionHeader, Button } from '../../shared/ui/index.js';
 import { useCustomScrollbar } from '../../shared/hooks/index.js';
 import { TRIPS, DESTINATIONS_FILTER, ACTIVITIES } from './tripsData.js';
-import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
+import { ROUTES } from '../../shared/config/routes.js';
 
 export default function TripsSection({ externalFilter, onFilterChange }) {
   const { t, lang } = useTranslation();
@@ -231,7 +231,7 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                 <div className="flex items-center gap-3">
                   <Button
                     as={Link}
-                    to={sectionLink(SECTIONS.BOOK)}
+                    to={ROUTES.booking(selectedTrip.slug)}
                     data-trip={selectedTrip.id}
                     variant="primary"
                     size="md"
@@ -442,7 +442,7 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                     <div className="flex items-center gap-2 pt-2">
                       <Button
                         as={Link}
-                        to={sectionLink(SECTIONS.BOOK)}
+                        to={ROUTES.booking(trip.slug)}
                         data-trip={trip.id}
                         variant="primary"
                         size="sm"
