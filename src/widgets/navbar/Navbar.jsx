@@ -270,7 +270,7 @@ export default function Navbar({ onBookClick }) {
           {/* Login Button */}
           <Button
             as={Link}
-            to="/login"
+            to={ROUTES.LOGIN}
             variant="ghost"
             size="sm"
             className="text-brand-navy border border-brand-navy/20 hover:border-brand-blue hover:text-brand-blue"
@@ -420,7 +420,7 @@ export default function Navbar({ onBookClick }) {
 
           {/* Mobile Login Button */}
           <Link
-            to="/login"
+            to={ROUTES.LOGIN}
             onClick={() => setIsMobileOpen(false)}
             className="flex items-center justify-between w-full min-h-[48px] px-3.5 mt-2 bg-white/8 text-white border border-white/16 rounded-xl text-[15px] font-semibold hover:bg-brand-yellow/12 hover:text-brand-yellow transition-colors"
           >

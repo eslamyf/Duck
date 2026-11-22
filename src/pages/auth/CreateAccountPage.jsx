@@ -1,29 +1,34 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  Eye,
-  EyeOff,
-  User,
-  Mail,
-  Phone,
-  Lock,
-  ArrowLeft,
-  ArrowRight,
-  CheckCircle2,
-} from 'lucide-react';
-
+  faUserPlus,
+  faEye,
+  faEyeSlash,
+  faCircleCheck,
+} from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
+import { ROUTES } from '../../shared/config/routes.js';
+import { Input, Button, Checkbox } from '../../shared/ui/index.js';
+import {
+  isValidEmail,
+  isValidPhone,
+  isValidPassword,
+  isNonEmpty,
+} from '../../shared/utils/validators.js';
+import AuthVisualSide from './components/AuthVisualSide.jsx';
+import AuthTopBar from './components/AuthTopBar.jsx';
+import AuthRoleSelector from './components/AuthRoleSelector.jsx';
 
-import kayakImage from '../../shared/assets/images/trips/botanical-garden-960w.webp';
-
-function CreateAccountPage() {
+export default function CreateAccountPage() {
   const { t, lang } = useTranslation();
-
   const isArabic = lang === 'ar';
 
+  const [role, setRole] = useState('customer');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -35,321 +40,188 @@ function CreateAccountPage() {
   });
 
   const [errors, setErrors] = useState({});
-  const [success, setSuccess] = useState(false);
 
   const updateField = (e) => {
     const { name, value, checked, type } = e.target;
-
     setFormData((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
 
-    setErrors((prev) => ({
-      ...prev,
-      [name]: '',
-    }));
-
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: '',
+      }));
+    }
     setSuccess(false);
   };
 
-  const validateForm = () => {
+  const validate = () => {
     const newErrors = {};
 
-    if (!formData.fullName.trim()) {
-      newErrors.fullName = t('auth.signup.required');
+    if (!isNonEmpty(formData.fullName)) {
+      newErrors.fullName = t('auth.errors.required');
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = t('auth.signup.required');
-    } else if (
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
-    ) {
-      newErrors.email = t('auth.signup.invalidEmail');
+      newErrors.email = t('auth.errors.emailRequired');
+    } else if (!isValidEmail(formData.email)) {
+      newErrors.email = t('auth.errors.invalidEmail');
     }
 
     if (!formData.phone.trim()) {
-      newErrors.phone = t('auth.signup.required');
+      newErrors.phone = t('auth.errors.required');
+    } else if (!isValidPhone(formData.phone)) {
+      newErrors.phone = t('auth.errors.invalidPhone');
     }
 
     if (!formData.password) {
-      newErrors.password = t('auth.signup.required');
-    } else if (formData.password.length < 8) {
-      newErrors.password = t('auth.signup.passwordMin');
+      newErrors.password = t('auth.errors.passwordRequired');
+    } else if (!isValidPassword(formData.password, 8)) {
+      newErrors.password = t('auth.errors.passwordMin');
     }
 
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = t('auth.signup.required');
-    } else if (
-      formData.password !== formData.confirmPassword
-    ) {
-      newErrors.confirmPassword = t('auth.signup.passwordMismatch');
+      newErrors.confirmPassword = t('auth.errors.required');
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = t('auth.errors.passwordMismatch');
     }
 
     if (!formData.terms) {
-      newErrors.terms = t('auth.signup.termsRequired');
+      newErrors.terms = t('auth.errors.termsRequired');
     }
 
     setErrors(newErrors);
-
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!validate() || isSubmitting) return;
 
-    if (!validateForm()) return;
+    setIsSubmitting(true);
 
-    // Frontend demonstration only. No account is created.
-    setSuccess(true);
+    // Mock secure signup handshake (safe demo, no storage of sensitive data)
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setSuccess(true);
+    }, 800);
   };
 
-  const inputClasses = `
-    w-full h-12 px-4
-    bg-[#F7F7F4]
-    border border-gray-200
-    rounded-xl
-    text-[#121528]
-    placeholder:text-gray-400
-    outline-none
-    transition-all duration-200
-    focus:border-[#067BA1]
-    focus:ring-2 focus:ring-[#067BA1]/10
-  `;
-
   return (
-    <main
+    <div
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="relative isolate min-h-[calc(100vh-52px)] lg:min-h-[calc(100vh-100px)] flex items-center justify-center p-4 md:p-8 overflow-hidden"
+      className="min-h-screen w-full bg-brand-navy/95 p-3 sm:p-6 lg:p-8 flex items-center justify-center font-body selection:bg-brand-yellow selection:text-brand-navy"
     >
-      {/* ASWAN BACKGROUND IMAGE */}
+      {/* Outer Split-Screen Card */}
+      <div className="w-full max-w-[1340px] min-h-[680px] max-h-[960px] my-auto bg-white rounded-[24px] lg:rounded-[32px] overflow-hidden shadow-2xl grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] border border-brand-navy/15">
+        
+        {/* Branded Visual Storytelling Side */}
+        <AuthVisualSide mode="signup" />
 
-      <img
-        src={kayakImage}
-        alt="Aswan background"
-        className="absolute inset-0 z-0 w-full h-full object-cover"
-      />
+        {/* Interactive Signup Form Side */}
+        <section className="relative flex flex-col justify-between p-5 sm:p-6 lg:p-7 xl:p-8 overflow-y-auto bg-surface-white">
+          <div className="w-full max-w-md mx-auto">
+            {/* Top Navigation & Language */}
+            <AuthTopBar />
 
-      {/* BACKGROUND OVERLAY */}
-
-      <div className="absolute inset-0 z-0 bg-[#121528]/45" />
-
-      <div className="relative z-10 w-full max-w-7xl min-h-[720px] grid grid-cols-1 lg:grid-cols-2 overflow-hidden rounded-[28px] bg-white shadow-2xl">
-
-        {/* IMAGE SIDE */}
-
-        <section className="relative hidden lg:block min-h-full overflow-hidden">
-
-          <img
-            src={kayakImage}
-            alt={isArabic ? 'مغامرة كاياك على النيل' : 'Kayaking adventure on the Nile'}
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-
-          <div className="absolute inset-0 bg-gradient-to-t from-[#121528] via-[#121528]/45 to-black/10" />
-
-          <div className="absolute top-10 left-10 right-10 flex justify-between items-center">
-
-            <span className="text-[#F5E847] font-black text-3xl tracking-widest">
-              DUCK.
-            </span>
-
-            <span className="text-white/80 text-sm tracking-widest">
-              IN DUCK WE TRUST
-            </span>
-
-          </div>
-
-          <div className="absolute bottom-12 left-10 right-10 text-white">
-
-            <div className="w-14 h-1 bg-[#F5E847] rounded-full mb-6" />
-
-            <h2 className="text-4xl xl:text-5xl font-black leading-tight mb-5">
-
-              {isArabic
-                ? 'مغامرتك القادمة تبدأ من هنا.'
-                : 'Your Next Adventure Starts Here.'}
-
-            </h2>
-
-            <p className="text-white/75 text-lg leading-8 max-w-md">
-
-              {isArabic
-                ? 'اكتشف جمال المياه، واستمتع بتجارب استثنائية مع DUCK.'
-                : 'Discover the beauty of the water and enjoy extraordinary experiences with DUCK.'}
-
-            </p>
-
-            <div className="flex items-center gap-3 mt-9">
-
-              <span className="w-2 h-2 rounded-full bg-[#F5E847]" />
-
-              <span className="text-sm text-white/70">
-
-                {isArabic
-                  ? 'اكتشف العالم من منظور مختلف'
-                  : 'Explore the world from a different perspective'}
-
+            {/* Header Titles */}
+            <div className="mb-4">
+              <span className="inline-block px-3 py-0.5 rounded-full bg-brand-blue/10 text-brand-blue font-bold text-xs mb-1.5">
+                {role === 'customer'
+                  ? t('auth.roles.customerBadge')
+                  : t('auth.roles.partnerBadge')}
               </span>
 
-            </div>
-
-          </div>
-
-        </section>
-
-
-        {/* FORM SIDE */}
-
-        <section className="flex flex-col justify-center px-6 py-10 sm:px-10 lg:px-12 xl:px-16">
-
-          {/* Mobile Brand */}
-
-          <div className="lg:hidden mb-8 text-center">
-
-            <span className="text-[#121528] font-black text-3xl tracking-widest">
-              DUCK.
-            </span>
-
-          </div>
-
-
-          <div className="max-w-md w-full mx-auto">
-
-            {/* Heading */}
-
-            <div className="mb-8">
-
-              <span className="inline-block text-[#067BA1] font-bold text-sm mb-3 tracking-wider">
-                IN DUCK WE TRUST
-              </span>
-
-              <h1 className="text-3xl sm:text-4xl font-black text-[#121528] mb-3">
+              <h2 className="text-2xl sm:text-3xl font-black text-brand-navy tracking-tight leading-tight mb-1">
                 {t('auth.signup.title')}
-              </h1>
+              </h2>
 
-              <p className="text-gray-500 leading-7">
+              <p className="text-brand-navy/60 text-xs sm:text-sm leading-relaxed">
                 {t('auth.signup.subtitle')}
               </p>
-
             </div>
 
+            {/* 2-Role Selector (Customer vs Partner per SRS §7.3) */}
+            <AuthRoleSelector role={role} onChange={setRole} />
 
-            {/* Success Message */}
-
+            {/* Success Feedback */}
             {success && (
-
-              <div className="mb-6 p-4 rounded-xl bg-green-50 border border-green-200 flex items-start gap-3">
-
-                <CheckCircle2
-                  className="text-green-600 shrink-0 mt-1"
-                  size={20}
+              <div
+                role="status"
+                className="mb-4 p-3.5 rounded-2xl bg-surface-mist border border-brand-blue/30 flex items-start gap-3 animate-fadeIn"
+              >
+                <FontAwesomeIcon
+                  icon={faCircleCheck}
+                  className="text-brand-blue text-lg shrink-0 mt-0.5"
                 />
-
-                <p className="text-green-700 text-sm leading-6">
-
-                  {isArabic
-                    ? 'تم التحقق من البيانات بنجاح! هذه تجربة واجهة فقط، ولم يتم إنشاء حساب حقيقي.'
-                    : 'Your information has been validated! This is a frontend demo; no real account was created.'}
-
+                <p className="text-brand-navy text-xs sm:text-sm font-semibold leading-relaxed">
+                  {t('auth.signup.successMessage')}
                 </p>
-
               </div>
-
             )}
 
-
-            {/* Form */}
-
-            <form
-              onSubmit={handleSubmit}
-              noValidate
-              className="space-y-4"
-            >
-
+            {/* Main Form */}
+            <form onSubmit={handleSubmit} noValidate className="space-y-2.5 sm:space-y-3">
               {/* Full Name */}
-
-              <FormField
+              <Input
                 label={t('auth.signup.fullName')}
-                icon={<User size={19} />}
+                id="signup-name"
+                name="fullName"
+                type="text"
+                value={formData.fullName}
+                onChange={updateField}
+                placeholder={t('auth.signup.fullNamePlaceholder')}
+                required
                 error={errors.fullName}
-              >
-
-                <input
-                  type="text"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={updateField}
-                  placeholder={t('auth.signup.fullNamePlaceholder')}
-                  autoComplete="name"
-                  className={inputClasses}
-                />
-
-              </FormField>
-
+                autoComplete="name"
+              />
 
               {/* Email */}
-
-              <FormField
+              <Input
                 label={t('auth.signup.email')}
-                icon={<Mail size={19} />}
+                id="signup-email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={updateField}
+                placeholder={t('auth.signup.emailPlaceholder')}
+                required
                 error={errors.email}
-              >
-
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={updateField}
-                  placeholder={t('auth.signup.emailPlaceholder')}
-                  autoComplete="email"
-                  className={inputClasses}
-                />
-
-              </FormField>
-
+                autoComplete="email"
+                dir={formData.email ? 'ltr' : undefined}
+              />
 
               {/* Phone */}
-
-              <FormField
+              <Input
                 label={t('auth.signup.phone')}
-                icon={<Phone size={19} />}
+                id="signup-phone"
+                name="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={updateField}
+                placeholder={t('auth.signup.phonePlaceholder')}
+                required
                 error={errors.phone}
-              >
-
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={updateField}
-                  placeholder={t('auth.signup.phonePlaceholder')}
-                  autoComplete="tel"
-                  className={inputClasses}
-                />
-
-              </FormField>
-
+                autoComplete="tel"
+                dir={formData.phone ? 'ltr' : undefined}
+              />
 
               {/* Password */}
-
-              <FormField
+              <Input
                 label={t('auth.signup.password')}
-                icon={<Lock size={19} />}
+                id="signup-password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                value={formData.password}
+                onChange={updateField}
+                placeholder={t('auth.signup.passwordPlaceholder')}
+                required
                 error={errors.password}
-              >
-
-                <div className="relative">
-
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    name="password"
-                    value={formData.password}
-                    onChange={updateField}
-                    placeholder={t('auth.signup.passwordPlaceholder')}
-                    autoComplete="new-password"
-                    className={`${inputClasses} ${isArabic ? 'pl-12' : 'pr-12'}`}
-                  />
-
+                autoComplete="new-password"
+                dir={formData.password ? 'ltr' : undefined}
+                endAdornment={
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
@@ -358,178 +230,103 @@ function CreateAccountPage() {
                         ? t('auth.signup.hidePassword')
                         : t('auth.signup.showPassword')
                     }
-                    className={`absolute top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#067BA1] ${
-                      isArabic ? 'left-4' : 'right-4'
-                    }`}
+                    className="text-brand-navy/45 hover:text-brand-blue transition-colors cursor-pointer p-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue rounded-lg"
                   >
-
-                    {showPassword ? (
-                      <EyeOff size={19} />
-                    ) : (
-                      <Eye size={19} />
-                    )}
-
+                    <FontAwesomeIcon
+                      icon={showPassword ? faEyeSlash : faEye}
+                      className="text-sm"
+                    />
                   </button>
-
-                </div>
-
-              </FormField>
-
+                }
+              />
 
               {/* Confirm Password */}
-
-              <FormField
+              <Input
                 label={t('auth.signup.confirmPassword')}
-                icon={<Lock size={19} />}
+                id="signup-confirm-password"
+                name="confirmPassword"
+                type={showConfirmPassword ? 'text' : 'password'}
+                value={formData.confirmPassword}
+                onChange={updateField}
+                placeholder={t('auth.signup.confirmPasswordPlaceholder')}
+                required
                 error={errors.confirmPassword}
-              >
-
-                <div className="relative">
-
-                  <input
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={updateField}
-                    placeholder={t('auth.signup.confirmPasswordPlaceholder')}
-                    autoComplete="new-password"
-                    className={`${inputClasses} ${isArabic ? 'pl-12' : 'pr-12'}`}
-                  />
-
+                autoComplete="new-password"
+                dir={formData.confirmPassword ? 'ltr' : undefined}
+                endAdornment={
                   <button
                     type="button"
-                    onClick={() =>
-                      setShowConfirmPassword(!showConfirmPassword)
-                    }
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     aria-label={
                       showConfirmPassword
                         ? t('auth.signup.hidePassword')
                         : t('auth.signup.showPassword')
                     }
-                    className={`absolute top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#067BA1] ${
-                      isArabic ? 'left-4' : 'right-4'
-                    }`}
+                    className="text-brand-navy/45 hover:text-brand-blue transition-colors cursor-pointer p-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue rounded-lg"
                   >
-
-                    {showConfirmPassword
-                      ? <EyeOff size={19} />
-                      : <Eye size={19} />}
-
+                    <FontAwesomeIcon
+                      icon={showConfirmPassword ? faEyeSlash : faEye}
+                      className="text-sm"
+                    />
                   </button>
+                }
+              />
 
-                </div>
-
-              </FormField>
-
-
-              {/* Terms */}
-
-              <div className="pt-2">
-
-                <label className="flex items-start gap-3 cursor-pointer">
-
-                  <input
-                    type="checkbox"
-                    name="terms"
-                    checked={formData.terms}
-                    onChange={updateField}
-                    className="mt-1 w-4 h-4 accent-[#067BA1] shrink-0"
-                  />
-
-                  <span className="text-sm text-gray-600 leading-6">
-                    {t('auth.signup.terms')}
-                  </span>
-
-                </label>
-
-                {errors.terms && (
-
-                  <p className="text-red-500 text-xs mt-2">
-                    {errors.terms}
-                  </p>
-
-                )}
-
+              {/* Terms & Conditions Checkbox */}
+              <div className="pt-1.5">
+                <Checkbox
+                  id="signup-terms"
+                  name="terms"
+                  checked={formData.terms}
+                  onChange={updateField}
+                  label={t('auth.signup.terms')}
+                  error={errors.terms}
+                  required
+                />
               </div>
 
-
-              {/* Submit */}
-
-              <button
+              {/* Submit Button */}
+              <Button
                 type="submit"
-                className="w-full h-14 mt-3 flex items-center justify-center gap-3 rounded-xl bg-[#F5E847] hover:bg-[#e9dc35] text-[#121528] font-black text-base transition-all duration-200 hover:-translate-y-0.5 shadow-lg shadow-[#F5E847]/15"
+                variant="primary"
+                size="md"
+                fullWidth
+                disabled={isSubmitting}
+                className="mt-3 font-black shadow-md hover:shadow-lg transition-all"
+                icon={
+                  isSubmitting ? (
+                    <div className="w-5 h-5 border-2 border-brand-navy/30 border-t-brand-navy rounded-full animate-spin" />
+                  ) : (
+                    <FontAwesomeIcon icon={faUserPlus} />
+                  )
+                }
               >
-
-                {t('auth.signup.submit')}
-
-                {isArabic
-                  ? <ArrowLeft size={20} />
-                  : <ArrowRight size={20} />}
-
-              </button>
-
+                {isSubmitting
+                  ? t('auth.common.submitting')
+                  : t('auth.signup.submit')}
+              </Button>
             </form>
 
-
-            {/* Login Link */}
-
-            <div className="mt-8 text-center text-sm text-gray-500">
-
-              {t('auth.signup.alreadyHaveAccount')}
-
-              <Link
-                to="/login"
-                className="font-bold text-[#067BA1] hover:text-[#121528] transition-colors ms-2"
-              >
-                {t('auth.signup.login')}
-              </Link>
-
+            {/* Switch to Login */}
+            <div className="mt-6 pt-5 border-t border-brand-navy/10 text-center">
+              <p className="text-xs sm:text-sm text-brand-navy/70">
+                {t('auth.signup.alreadyHaveAccount')}{' '}
+                <Link
+                  to={ROUTES.LOGIN}
+                  className="font-bold text-brand-blue hover:text-brand-navy hover:underline transition-colors ms-1"
+                >
+                  {t('auth.signup.login')}
+                </Link>
+              </p>
             </div>
-
           </div>
 
+          {/* Bottom Security / Privacy Note */}
+          <div className="mt-6 pt-3 border-t border-brand-navy/5 text-center text-[11px] text-brand-navy/40">
+            {t('auth.common.demoNotice')}
+          </div>
         </section>
-
       </div>
-
-    </main>
-  );
-}
-
-
-function FormField({ label, icon, error, children }) {
-  return (
-
-    <div>
-
-      <label className="block text-sm font-bold text-[#121528] mb-2">
-
-        <span className="flex items-center gap-2">
-
-          <span className="text-[#067BA1]">
-            {icon}
-          </span>
-
-          {label}
-
-        </span>
-
-      </label>
-
-      {children}
-
-      {error && (
-
-        <p className="text-red-500 text-xs mt-2">
-          {error}
-        </p>
-
-      )}
-
     </div>
-
   );
 }
-
-
-export default CreateAccountPage;

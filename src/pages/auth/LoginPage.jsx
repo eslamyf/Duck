@@ -1,16 +1,31 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faArrowRightToBracket,
+  faEye,
+  faEyeSlash,
+  faCircleCheck,
+} from '@fortawesome/free-solid-svg-icons';
+import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
+import { ROUTES } from '../../shared/config/routes.js';
+import { Input, Button, Checkbox } from '../../shared/ui/index.js';
+import { isValidEmail } from '../../shared/utils/validators.js';
+import AuthVisualSide from './components/AuthVisualSide.jsx';
+import AuthTopBar from './components/AuthTopBar.jsx';
+import AuthRoleSelector from './components/AuthRoleSelector.jsx';
 
-import kayakImage from '../../shared/assets/images/trips/botanical-garden-960w.webp';
-
-function LoginPage() {
-  const { lang } = useTranslation();
-
+export default function LoginPage() {
+  const { t, lang } = useTranslation();
   const isArabic = lang === 'ar';
 
+  const [role, setRole] = useState('customer');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
+  const [showForgotNotice, setShowForgotNotice] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const [formData, setFormData] = useState({
     email: '',
@@ -18,640 +33,239 @@ function LoginPage() {
   });
 
   const [errors, setErrors] = useState({});
-  const [success, setSuccess] = useState(false);
 
   const updateField = (e) => {
     const { name, value } = e.target;
-
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
 
-    setErrors((prev) => ({
-      ...prev,
-      [name]: '',
-    }));
-
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: '',
+      }));
+    }
     setSuccess(false);
   };
 
-  const validateForm = () => {
+  const validate = () => {
     const newErrors = {};
 
     if (!formData.email.trim()) {
-      newErrors.email = isArabic
-        ? 'البريد الإلكتروني مطلوب'
-        : 'Email address is required';
-    } else if (
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
-    ) {
-      newErrors.email = isArabic
-        ? 'أدخل بريدًا إلكترونيًا صحيحًا'
-        : 'Please enter a valid email address';
+      newErrors.email = t('auth.errors.emailRequired');
+    } else if (!isValidEmail(formData.email)) {
+      newErrors.email = t('auth.errors.invalidEmail');
     }
 
     if (!formData.password) {
-      newErrors.password = isArabic
-        ? 'كلمة المرور مطلوبة'
-        : 'Password is required';
+      newErrors.password = t('auth.errors.passwordRequired');
     }
 
     setErrors(newErrors);
-
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!validate() || isSubmitting) return;
 
-    if (!validateForm()) return;
+    setIsSubmitting(true);
 
-    // Frontend demonstration only.
-    // Real authentication will be connected later.
-    setSuccess(true);
+    // Mock secure authentication handshake (safe demo, no storage of sensitive data)
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setSuccess(true);
+    }, 700);
   };
 
-  const inputClasses = `
-    w-full h-[48px]
-    bg-[#F7F7F4]
-    border border-[#E7E8ED]
-    rounded-xl
-    px-5
-    text-[#121528]
-    placeholder:text-gray-400
-    outline-none
-    transition-all duration-300
-    focus:bg-white
-    focus:border-[#067BA1]
-    focus:ring-4
-    focus:ring-[#067BA1]/10
-  `;
-
   return (
-    <main
+    <div
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="relative w-full h-[100dvh] min-h-0 overflow-hidden p-2 sm:p-4 lg:p-6 flex items-center justify-center"
+      className="min-h-screen w-full bg-brand-navy/95 p-3 sm:p-6 lg:p-8 flex items-center justify-center font-body selection:bg-brand-yellow selection:text-brand-navy"
     >
+      {/* Outer Card Container */}
+      <div className="w-full max-w-[1340px] min-h-[640px] max-h-[920px] bg-white rounded-[24px] lg:rounded-[32px] overflow-hidden shadow-2xl grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] border border-brand-navy/15">
+        
+        {/* Visual Storytelling Side */}
+        <AuthVisualSide mode="login" />
 
-      {/* FULL SCREEN ASWAN BACKGROUND */}
+        {/* Form Interactive Side */}
+        <section className="relative flex flex-col justify-between p-6 sm:p-10 lg:p-12 xl:p-16 overflow-y-auto bg-surface-white">
+          <div className="w-full max-w-md mx-auto">
+            {/* Top Navigation & Language */}
+            <AuthTopBar />
 
-      <img
-        src={kayakImage}
-        alt={isArabic ? 'مناظر طبيعية من أسوان' : 'Aswan landscape'}
-        className="absolute inset-0 w-full h-full object-cover"
-      />
-
-      <div className="absolute inset-0 bg-[#121528]/65" />
-
-      <div className="absolute inset-0 bg-gradient-to-br from-[#121528]/50 via-transparent to-[#067BA1]/20" />
-
-
-      {/* MAIN LOGIN CARD */}
-
-      <div className="relative z-10 w-full max-w-[1400px] h-full max-h-[850px] min-h-0 bg-white rounded-[22px] lg:rounded-[32px] overflow-hidden shadow-2xl grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr]">
-
-
-        {/* LEFT SIDE - ADVENTURE IMAGE */}
-
-        <section className="relative hidden lg:block overflow-hidden">
-
-          <img
-            src={kayakImage}
-            alt={isArabic ? 'مغامرة كاياك في أسوان' : 'Kayaking adventure in Aswan'}
-            className="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-[1500ms]"
-          />
-
-          <div className="absolute inset-0 bg-gradient-to-t from-[#090D1C] via-[#121528]/50 to-[#121528]/15" />
-
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#121528]/15" />
-
-
-          {/* BRAND LOGO */}
-
-          <div className="absolute top-9 left-10 right-10 flex items-center justify-between">
-
-            <Link
-              to="/"
-              className="text-white text-4xl font-black tracking-[5px]"
-            >
-              DUCK<span className="text-[#F5E847]">.</span>
-            </Link>
-
-            <span className="text-white/70 text-[10px] tracking-[4px] font-bold">
-              ADVENTURE BEGINS HERE
-            </span>
-
-          </div>
-
-
-          {/* ADVENTURE CONTENT */}
-
-          <div className="absolute bottom-10 left-10 right-10 text-white">
-
-            <div className="flex items-center gap-3 mb-5">
-
-              <span className="w-12 h-[3px] bg-[#F5E847]" />
-
-              <span className="text-[#F5E847] uppercase tracking-[4px] text-xs font-bold">
-                {isArabic ? 'مرحبًا بعودتك' : 'WELCOME BACK'}
+            {/* Header Titles */}
+            <div className="mb-6">
+              <span className="inline-block px-3 py-1 rounded-full bg-brand-blue/10 text-brand-blue font-bold text-xs mb-3">
+                {role === 'customer'
+                  ? t('auth.roles.customerBadge')
+                  : t('auth.roles.partnerBadge')}
               </span>
 
-            </div>
-
-
-            <h1 className="text-4xl xl:text-[58px] font-black leading-[1.15] mb-5 max-w-xl">
-
-              {isArabic ? (
-                <>
-                  مستعد لمغامرتك
-
-                  <span className="text-[#F5E847] block">
-                    القادمة؟
-                  </span>
-                </>
-              ) : (
-                <>
-                  THE ADVENTURE
-
-                  <span className="text-[#F5E847] block">
-                    NEVER ENDS.
-                  </span>
-                </>
-              )}
-
-            </h1>
-
-
-            <p className="text-white/75 text-base xl:text-lg leading-8 max-w-md">
-
-              {isArabic
-                ? 'سعداء بعودتك! سجل دخولك واكتشف تجارب جديدة تنتظرك مع DUCK.'
-                : 'Great to have you back. Sign in and discover new experiences waiting for you with DUCK.'}
-
-            </p>
-
-
-            {/* ADVENTURE COMMUNITY */}
-
-            <div className="flex items-center gap-5 mt-8">
-
-              <div className="flex -space-x-3 rtl:space-x-reverse">
-
-                {['A', 'M', 'D', 'K'].map((letter, index) => (
-                  <div
-                    key={index}
-                    className="w-10 h-10 rounded-full border-2 border-[#121528] bg-[#F5E847] flex items-center justify-center text-[#121528] font-bold text-sm"
-                  >
-                    {letter}
-                  </div>
-                ))}
-
-              </div>
-
-              <div>
-
-                <p className="text-white text-sm font-bold">
-                  {isArabic
-                    ? 'المغامرة أجمل مع الأصدقاء'
-                    : 'Adventure is better together'}
-                </p>
-
-                <p className="text-white/50 text-xs mt-1">
-                  DUCK EXPERIENCE
-                </p>
-
-              </div>
-
-            </div>
-
-          </div>
-
-
-          {/* DECORATIVE CIRCLES */}
-
-          <div className="absolute top-1/2 right-[-60px] w-40 h-40 rounded-full border border-[#F5E847]/20" />
-
-          <div className="absolute top-1/2 right-[-35px] w-28 h-28 rounded-full border border-[#F5E847]/20" />
-
-        </section>
-
-
-
-        {/* RIGHT SIDE - LOGIN FORM */}
-
-        <section className="relative flex items-center justify-center px-4 py-3 sm:px-8 lg:px-10 xl:px-14 min-h-0 overflow-hidden">
-
-          {/* DECORATIVE BACKGROUND */}
-
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#067BA1]/5 rounded-full blur-3xl pointer-events-none" />
-
-
-          <div className="relative w-full max-w-[430px]">
-
-
-            {/* MOBILE LOGO */}
-
-            <div className="lg:hidden text-center mb-4">
-
-              <Link
-                to="/"
-                className="text-[#121528] text-3xl font-black tracking-[5px]"
-              >
-                DUCK<span className="text-[#067BA1]">.</span>
-              </Link>
-
-            </div>
-
-
-
-            {/* HEADING */}
-
-            <div className="mb-5">
-
-              <h2 className="text-[30px] sm:text-[36px] lg:text-[38px] font-black text-[#121528] tracking-tight mb-3 leading-tight">
-
-                {isArabic ? (
-                  <>
-                    مغامرتك القادمة
-
-                    <span className="block text-[#067BA1]">
-                      تبدأ من هنا.
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    YOUR NEXT ADVENTURE
-
-                    <span className="block text-[#067BA1]">
-                      STARTS HERE.
-                    </span>
-                  </>
-                )}
-
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-brand-navy tracking-tight leading-tight mb-2">
+                {t('auth.login.title')}
               </h2>
 
-
-              <p className="text-gray-500 text-sm sm:text-base leading-7">
-
-                {isArabic
-                  ? 'سجل الدخول إلى حسابك لمتابعة مغامراتك.'
-                  : 'Sign in to your account and continue your adventure.'}
-
+              <p className="text-brand-navy/60 text-sm leading-relaxed">
+                {t('auth.login.subtitle')}
               </p>
-
             </div>
 
+            {/* 2-Role Selector (Customer vs Partner per SRS §7.3) */}
+            <AuthRoleSelector role={role} onChange={setRole} />
 
-
-            {/* SUCCESS MESSAGE */}
-
+            {/* Success Feedback */}
             {success && (
-
-              <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-xl">
-
-                <p className="text-green-700 text-xs sm:text-sm leading-6">
-
-                  {isArabic
-                    ? 'تم التحقق من البيانات بنجاح! تسجيل الدخول الحقيقي سيتاح بعد ربط نظام المصادقة.'
-                    : 'Your information has been validated! Real sign-in will be available once authentication is connected.'}
-
+              <div
+                role="status"
+                className="mb-6 p-4 rounded-2xl bg-surface-mist border border-brand-blue/30 flex items-start gap-3 animate-fadeIn"
+              >
+                <FontAwesomeIcon
+                  icon={faCircleCheck}
+                  className="text-brand-blue text-lg shrink-0 mt-0.5"
+                />
+                <p className="text-brand-navy text-xs sm:text-sm font-semibold leading-relaxed">
+                  {t('auth.login.successMessage')}
                 </p>
-
               </div>
-
             )}
 
-
-
-            {/* LOGIN FORM */}
-
-            <form
-              onSubmit={handleSubmit}
-              noValidate
-              className="space-y-4"
-            >
-
-
-              {/* EMAIL */}
-
-              <div>
-
-                <label className="block text-sm font-bold text-[#121528] mb-2">
-
-                  {isArabic ? 'البريد الإلكتروني' : 'Email Address'}
-
-                </label>
-
-
-                <div className="relative">
-
-                  <span
-                    className={`absolute top-1/2 -translate-y-1/2 text-gray-400 ${
-                      isArabic ? 'right-5' : 'left-5'
-                    }`}
-                  >
-                    @
-                  </span>
-
-
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={updateField}
-                    placeholder="example@email.com"
-                    autoComplete="email"
-                    className={`${inputClasses} ${
-                      isArabic ? 'pr-12' : 'pl-12'
-                    }`}
-                  />
-
-                </div>
-
-
-                {errors.email && (
-
-                  <p className="text-red-500 text-xs mt-2">
-                    {errors.email}
-                  </p>
-
-                )}
-
+            {/* Forgot Password Help Box */}
+            {showForgotNotice && (
+              <div
+                role="region"
+                aria-label="Password Reset Help"
+                className="mb-6 p-4 rounded-2xl bg-brand-yellow/15 border border-brand-yellow/50 flex flex-col gap-2"
+              >
+                <p className="text-xs sm:text-sm font-bold text-brand-navy">
+                  {t('auth.login.forgotPasswordNotice')}
+                </p>
+                <a
+                  href="https://wa.me/201000000000"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-xs font-bold text-brand-navy bg-brand-yellow hover:bg-brand-yellow-hover px-3 py-1.5 rounded-xl w-fit transition-all shadow-sm"
+                >
+                  <FontAwesomeIcon icon={faWhatsapp} className="text-sm" />
+                  <span>{t('tripDetails.bookViaWhatsApp')}</span>
+                </a>
               </div>
+            )}
 
+            {/* Main Form */}
+            <form onSubmit={handleSubmit} noValidate className="space-y-4">
+              {/* Email */}
+              <Input
+                label={t('auth.login.email')}
+                id="login-email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={updateField}
+                placeholder={t('auth.login.emailPlaceholder')}
+                required
+                error={errors.email}
+                autoComplete="email"
+                dir={formData.email ? 'ltr' : undefined}
+              />
 
-
-              {/* PASSWORD */}
-
+              {/* Password */}
               <div>
-
-                <div className="flex items-center justify-between mb-2">
-
-                  <label className="text-sm font-bold text-[#121528]">
-
-                    {isArabic ? 'كلمة المرور' : 'Password'}
-
-                  </label>
-
-
-                  <button
-                    type="button"
-                    className="text-xs font-bold text-[#067BA1] hover:text-[#121528] transition-colors"
-                    onClick={() => {
-                      alert(
-                        isArabic
-                          ? 'ميزة استعادة كلمة المرور سيتم إضافتها لاحقًا.'
-                          : 'Password recovery will be added later.'
-                      );
-                    }}
-                  >
-
-                    {isArabic
-                      ? 'نسيت كلمة المرور؟'
-                      : 'Forgot Password?'}
-
-                  </button>
-
-                </div>
-
-
-                <div className="relative">
-
-                  {/* LOCK ICON */}
-
-                  <span
-                    className={`absolute top-1/2 -translate-y-1/2 text-gray-400 ${
-                      isArabic ? 'right-5' : 'left-5'
-                    }`}
-                  >
-
-                    <svg
-                      width="19"
-                      height="19"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                <Input
+                  label={t('auth.login.password')}
+                  id="login-password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={formData.password}
+                  onChange={updateField}
+                  placeholder={t('auth.login.passwordPlaceholder')}
+                  required
+                  error={errors.password}
+                  autoComplete="current-password"
+                  dir={formData.password ? 'ltr' : undefined}
+                  endAdornment={
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={
+                        showPassword
+                          ? t('auth.signup.hidePassword')
+                          : t('auth.signup.showPassword')
+                      }
+                      className="text-brand-navy/45 hover:text-brand-blue transition-colors cursor-pointer p-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue rounded-lg"
                     >
-                      <rect x="3" y="11" width="18" height="11" rx="2" />
-                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                    </svg>
+                      <FontAwesomeIcon
+                        icon={showPassword ? faEyeSlash : faEye}
+                        className="text-sm"
+                      />
+                    </button>
+                  }
+                />
 
-                  </span>
-
-
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    name="password"
-                    value={formData.password}
-                    onChange={updateField}
-                    placeholder={
-                      isArabic
-                        ? 'أدخل كلمة المرور'
-                        : 'Enter your password'
-                    }
-                    autoComplete="current-password"
-                    className={`${inputClasses} ${
-                      isArabic ? 'pr-12 pl-14' : 'pl-12 pr-14'
-                    }`}
-                  />
-
-
-                  {/* SHOW / HIDE PASSWORD */}
-
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    aria-label={
-                      showPassword
-                        ? 'Hide password'
-                        : 'Show password'
-                    }
-                    className={`absolute top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#067BA1] transition-colors ${
-                      isArabic ? 'left-5' : 'right-5'
-                    }`}
-                  >
-
-                    {showPassword ? (
-
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                      >
-                        <path d="M3 3l18 18" />
-                        <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8" />
-                        <path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c5 0 9 5 9 7s-4 7-9 7a9.8 9.8 0 0 1-5.1-1.5" />
-                        <path d="M6.2 6.2C4.1 7.6 3 10 3 12c0 1.2 1 2.8 2.5 4.2" />
-                      </svg>
-
-                    ) : (
-
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                      >
-                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
-                        <circle cx="12" cy="12" r="3" />
-                      </svg>
-
-                    )}
-
-                  </button>
-
-                </div>
-
-
-                {errors.password && (
-
-                  <p className="text-red-500 text-xs mt-2">
-                    {errors.password}
-                  </p>
-
-                )}
-
-              </div>
-
-
-
-              {/* REMEMBER ME */}
-
-              <div className="flex items-center justify-between pt-1">
-
-                <label className="flex items-center gap-3 cursor-pointer">
-
-                  <input
-                    type="checkbox"
+                <div className="flex items-center justify-between mt-2.5">
+                  <Checkbox
+                    id="login-remember"
+                    name="remember"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
-                    className="w-4 h-4 accent-[#067BA1] cursor-pointer"
+                    label={t('auth.login.rememberMe')}
                   />
 
-                  <span className="text-sm text-gray-500">
-                    {isArabic ? 'تذكرني' : 'Remember me'}
-                  </span>
-
-                </label>
-
+                  <button
+                    type="button"
+                    onClick={() => setShowForgotNotice((prev) => !prev)}
+                    className="text-xs font-bold text-brand-blue hover:text-brand-navy transition-colors whitespace-nowrap cursor-pointer focus:outline-none focus-visible:underline"
+                  >
+                    {t('auth.login.forgotPassword')}
+                  </button>
+                </div>
               </div>
 
-
-
-              {/* LOGIN BUTTON */}
-
-              <button
+              {/* Submit Button */}
+              <Button
                 type="submit"
-                className="group relative w-full h-[52px] overflow-hidden rounded-xl bg-[#121528] text-white font-black text-base transition-all duration-300 hover:shadow-xl hover:shadow-[#121528]/20 hover:-translate-y-0.5"
+                variant="primary"
+                size="md"
+                fullWidth
+                disabled={isSubmitting}
+                className="mt-4 font-black shadow-md hover:shadow-lg transition-all"
+                icon={
+                  isSubmitting ? (
+                    <div className="w-5 h-5 border-2 border-brand-navy/30 border-t-brand-navy rounded-full animate-spin" />
+                  ) : (
+                    <FontAwesomeIcon icon={faArrowRightToBracket} />
+                  )
+                }
               >
-
-                <span className="absolute inset-0 bg-[#067BA1] translate-x-full rtl:-translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
-
-
-                <span className="relative z-10 flex items-center justify-center gap-3">
-
-                  {isArabic ? 'تسجيل الدخول' : 'Sign In'}
-
-
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
-                  >
-                    <path d={isArabic ? 'M19 12H5' : 'M5 12h14'} />
-                    <path d={isArabic ? 'm12 5-7 7 7 7' : 'm12 5 7 7-7 7'} />
-                  </svg>
-
-                </span>
-
-              </button>
-
+                {isSubmitting
+                  ? t('auth.common.submitting')
+                  : t('auth.login.submit')}
+              </Button>
             </form>
 
-
-
-            {/* SIGN UP DIVIDER */}
-
-            <div className="flex items-center gap-4 my-4">
-
-              <div className="flex-1 h-px bg-gray-200" />
-
-              <span className="text-gray-400 text-[10px] font-bold tracking-wider">
-                {isArabic ? 'جديد في DUCK؟' : 'NEW TO DUCK?'}
-              </span>
-
-              <div className="flex-1 h-px bg-gray-200" />
-
-            </div>
-
-
-
-            {/* SIGN UP CTA */}
-
-            <div className="p-3 rounded-xl bg-[#F7F7F4] border border-[#E7E8ED] text-center">
-
-              <p className="text-xs sm:text-sm text-gray-600 mb-3">
-
-                {isArabic
-                  ? 'لسه معندكش حساب في DUCK؟'
-                  : "Don't have an account with DUCK yet?"}
-
+            {/* Switch to Sign Up */}
+            <div className="mt-8 pt-6 border-t border-brand-navy/10 text-center">
+              <p className="text-xs sm:text-sm text-brand-navy/70">
+                {t('auth.login.noAccount')}{' '}
+                <Link
+                  to={ROUTES.SIGNUP}
+                  className="font-bold text-brand-blue hover:text-brand-navy hover:underline transition-colors ms-1"
+                >
+                  {t('auth.login.signup')}
+                </Link>
               </p>
-
-
-              <Link
-                to="/create-account"
-                className="group w-full min-h-[46px] flex items-center justify-center gap-2 rounded-xl bg-[#F5E847] hover:bg-[#e9dc35] text-[#121528] font-black text-sm transition-all duration-300 hover:-translate-y-0.5 shadow-sm"
-              >
-
-                {isArabic
-                  ? 'أنشئ حسابك وابدأ المغامرة'
-                  : 'CREATE YOUR ACCOUNT'}
-
-
-                <span className="text-lg transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1">
-                  ↗
-                </span>
-
-              </Link>
-
             </div>
-
-
-
-            {/* FOOTER */}
-
-            <div className="mt-3 text-center">
-
-              <p className="text-[9px] text-gray-400 tracking-[3px] font-bold">
-                DUCK ENTERTAINMENT
-              </p>
-
-            </div>
-
           </div>
 
+          {/* Bottom Security / Privacy Note */}
+          <div className="mt-8 pt-4 border-t border-brand-navy/5 text-center text-[11px] text-brand-navy/40">
+            {t('auth.common.demoNotice')}
+          </div>
         </section>
-
       </div>
-
-    </main>
+    </div>
   );
 }
-
-export default LoginPage;

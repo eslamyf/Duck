@@ -6,7 +6,7 @@ import HeroSection from '../widgets/hero/HeroSection.jsx';
 import DestinationsSection from '../widgets/destinations/DestinationsSection.jsx';
 import TripsSection from '../widgets/trips/TripsSection.jsx';
 import GroupsBanner from '../widgets/groups-banner/GroupsBanner.jsx';
-import { TRIPS } from '../entities/trip/index.js';
+import { TRIPS } from '../widgets/trips/tripsData.js';
 import { useTranslation } from '../shared/i18n/index.js';
 import { ROUTES, SECTIONS, sectionLink } from '../shared/config/routes.js';
 import { ErrorBoundary, ScrollProgress } from '../shared/ui/index.js';
