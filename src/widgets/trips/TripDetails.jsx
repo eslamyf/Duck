@@ -1,5 +1,14 @@
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Clock, MapPin, Compass, CheckCircle2, Users } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faArrowLeft,
+  faArrowRight,
+  faClock,
+  faLocationDot,
+  faCompass,
+  faCircleCheck,
+  faUsers,
+} from '@fortawesome/free-solid-svg-icons';
 
 import { TRIPS, ACTIVITIES } from './tripsData.js';
 import { useTranslation } from '../../shared/i18n/index.js';
@@ -51,7 +60,7 @@ function TripDetails() {
     t(`trips.inclusions.${key}`)
   );
 
-  const BackIcon = isArabic ? ArrowRight : ArrowLeft;
+  const BackIcon = isArabic ? faArrowRight : faArrowLeft;
 
   const formatPrice = (price) =>
     new Intl.NumberFormat(isArabic ? 'ar-EG' : 'en-US').format(price);
@@ -78,7 +87,7 @@ function TripDetails() {
             to={sectionLink(SECTIONS.TRIPS)}
             className="inline-flex items-center gap-2 text-white/80 hover:text-[#F5E847] transition-colors mb-10"
           >
-            <BackIcon size={20} />
+            <FontAwesomeIcon icon={BackIcon} className="text-base" />
             <span>
               {isArabic ? 'العودة إلى الرحلات' : 'Back to Trips'}
             </span>
@@ -137,32 +146,32 @@ function TripDetails() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
                 <InfoCard
-                  icon={<MapPin />}
+                  icon={<FontAwesomeIcon icon={faLocationDot} className="text-xl" />}
                   label={isArabic ? 'الوجهة' : 'Destination'}
                   value={destination}
                 />
 
                 <InfoCard
-                  icon={<Compass />}
+                  icon={<FontAwesomeIcon icon={faCompass} className="text-xl" />}
                   label={isArabic ? 'النشاط' : 'Activity'}
                   value={t(`trips.activities.${trip.act}`)}
                 />
 
                 <InfoCard
-                  icon={<Clock />}
+                  icon={<FontAwesomeIcon icon={faClock} className="text-xl" />}
                   label={isArabic ? 'المدة' : 'Duration'}
                   value={duration}
                 />
 
                 <InfoCard
-                  icon={<Users />}
+                  icon={<FontAwesomeIcon icon={faUsers} className="text-xl" />}
                   label={isArabic ? 'الجهة المنظمة' : 'Operator'}
                   value={trip.op}
                 />
 
                 {trip.min && (
                   <InfoCard
-                    icon={<Users />}
+                    icon={<FontAwesomeIcon icon={faUsers} className="text-xl" />}
                     label={isArabic ? 'الحد الأدنى للأفراد' : 'Minimum Participants'}
                     value={formatPrice(trip.min)}
                   />
@@ -170,7 +179,7 @@ function TripDetails() {
 
                 {trip.max && (
                   <InfoCard
-                    icon={<Users />}
+                    icon={<FontAwesomeIcon icon={faUsers} className="text-xl" />}
                     label={isArabic ? 'الحد الأقصى للأفراد' : 'Maximum Participants'}
                     value={formatPrice(trip.max)}
                   />
@@ -194,9 +203,9 @@ function TripDetails() {
                     key={index}
                     className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl p-4"
                   >
-                    <CheckCircle2
-                      className="text-[#F5E847] shrink-0"
-                      size={21}
+                    <FontAwesomeIcon
+                      icon={faCircleCheck}
+                      className="text-[#F5E847] shrink-0 text-xl"
                     />
 
                     <span className="text-white/80">
@@ -270,9 +279,9 @@ function TripDetails() {
                 {isArabic ? 'احجز رحلتك الآن' : 'Book Your Trip'}
 
                 {isArabic ? (
-                  <ArrowLeft size={20} />
+                  <FontAwesomeIcon icon={faArrowLeft} className="text-base" />
                 ) : (
-                  <ArrowRight size={20} />
+                  <FontAwesomeIcon icon={faArrowRight} className="text-base" />
                 )}
               </Link>
 

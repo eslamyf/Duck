@@ -254,7 +254,7 @@ export default function App() {
           />
 
           <Route
-            path="/trips/:slug"
+            path={ROUTES.TRIP_DETAILS}
             element={
               <Suspense fallback={<TripDetailsFallback />}>
                 <TripDetails />

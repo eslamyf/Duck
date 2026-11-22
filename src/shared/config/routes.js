@@ -7,6 +7,8 @@ export const ROUTES = Object.freeze({
   HOME: '/',
   GROUPS: '/groups',
   ABOUT: '/about',
+  TRIP_DETAILS: '/trips/:slug',
+  tripDetails: (slug) => `/trips/${slug}`,
 });
 
 export const SECTIONS = Object.freeze({
