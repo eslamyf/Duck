@@ -19,6 +19,9 @@ const FAQSection = lazy(() => import('../widgets/faq/index.js'));
 const GroupsPage = lazy(() => import('../widgets/groups-page/index.js'));
 const AboutPage = lazy(() => import('../pages/about/index.js'));
 const TripDetailsPage = lazy(() => import('../pages/trip-details/index.js'));
+const BookingPage = lazy(() =>
+  import('../pages/booking/index.js').then((m) => ({ default: m.BookingPage }))
+);
 
 function SectionSpinner({
   className = 'text-white/50',
@@ -278,6 +281,15 @@ export default function App() {
               element={
                 <Suspense fallback={<AboutFallback />}>
                   <AboutPage />
+                </Suspense>
+              }
+            />
+
+            <Route
+              path={ROUTES.BOOKING}
+              element={
+                <Suspense fallback={<TripDetailsFallback />}>
+                  <BookingPage />
                 </Suspense>
               }
             />

@@ -1029,6 +1029,11 @@
     max-width: 220px;
   }
 
+  /* Lift floating WhatsApp button above the sticky mobile bottom bar */
+  body:has(.dbar) .fixed.bottom-5 {
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
   .pvn {
     display: none;
   }
