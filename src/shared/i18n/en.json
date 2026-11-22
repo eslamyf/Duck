@@ -661,5 +661,33 @@
     "mapAriaLabel": "Duck Egypt Interactive Launch Points Map",
     "pinAriaLabel": "{{name}} launch point - {{status}}",
     "filterTripsAria": "Jump to {{name}} trips"
+  },
+  "tripDetails": {
+    "metaTitle": "Trip Details",
+    "backToTrips": "Back to Trips",
+    "breadcrumbHome": "Home",
+    "breadcrumbTrips": "Trips",
+    "aboutTrip": "About This Trip",
+    "tripInfo": "Trip Information",
+    "destination": "Destination",
+    "activity": "Activity",
+    "duration": "Duration",
+    "operator": "Operator",
+    "minParticipants": "Minimum Participants",
+    "maxParticipants": "Maximum Participants",
+    "includesTitle": "What's Included",
+    "tripPrice": "Trip Price",
+    "egyptianPrice": "Egyptian Price:",
+    "pricePerHour": "Price per hour",
+    "location": "Location",
+    "bookNow": "Book Your Trip Now",
+    "bookViaWhatsApp": "Book via WhatsApp",
+    "whatsappPrefill": "Hello DUCK, I would like to book the trip: {title} ({destination})",
+    "getReady": "Get ready for your next adventure with DUCK",
+    "freeCancellation": "Free cancellation up to 24 hours before trip",
+    "lifeJacketIncluded": "Life jackets & full safety gear included",
+    "notFoundTitle": "Trip Not Found",
+    "notFoundDesc": "Sorry, we could not find the requested trip. Please check the URL or browse all available trips.",
+    "notFoundButton": "Back to Trips"
   }
 }

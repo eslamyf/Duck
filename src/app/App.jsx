@@ -17,7 +17,7 @@ const ReviewsSection = lazy(() => import('../widgets/reviews/index.js'));
 const FAQSection = lazy(() => import('../widgets/faq/index.js'));
 const GroupsPage = lazy(() => import('../widgets/groups-page/index.js'));
 const AboutPage = lazy(() => import('../pages/about/index.js'));
-const TripDetails = lazy(() => import('../widgets/trips/TripDetails.jsx'));
+const TripDetailsPage = lazy(() => import('../pages/trip-details/index.js'));
 
 function SectionSpinner({
   className = 'text-white/50',
@@ -158,7 +158,7 @@ function TitleManager() {
         const tripTitle = t(`trips.items.${trip.key}.title`);
         document.title = `${tripTitle} | ${t('common.brandName')}`;
       } else {
-        document.title = `Trip Not Found | ${t('common.brandName')}`;
+        document.title = `${t('tripDetails.notFoundTitle')} | ${t('common.brandName')}`;
       }
     } else {
       document.title = `${t('common.brandName')} - ${t('nav.home')}`;
@@ -257,7 +257,7 @@ export default function App() {
             path={ROUTES.TRIP_DETAILS}
             element={
               <Suspense fallback={<TripDetailsFallback />}>
-                <TripDetails />
+                <TripDetailsPage />
               </Suspense>
             }
           />

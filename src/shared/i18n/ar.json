@@ -661,5 +661,33 @@
     "mapAriaLabel": "خريطة مصر التفاعلية لنقاط انطلاق Duck",
     "pinAriaLabel": "نقطة انطلاق {{name}} - {{status}}",
     "filterTripsAria": "الانتقال إلى رحلات {{name}}"
+  },
+  "tripDetails": {
+    "metaTitle": "تفاصيل الرحلة",
+    "backToTrips": "العودة إلى الرحلات",
+    "breadcrumbHome": "الرئيسية",
+    "breadcrumbTrips": "الرحلات",
+    "aboutTrip": "عن الرحلة",
+    "tripInfo": "معلومات الرحلة",
+    "destination": "الوجهة",
+    "activity": "نوع النشاط",
+    "duration": "المدة",
+    "operator": "الجهة المنظمة",
+    "minParticipants": "الحد الأدنى للأفراد",
+    "maxParticipants": "الحد الأقصى للأفراد",
+    "includesTitle": "ما تشمله الرحلة",
+    "tripPrice": "سعر الرحلة",
+    "egyptianPrice": "للمصريين:",
+    "pricePerHour": "السعر للساعة",
+    "location": "الموقع",
+    "bookNow": "احجز رحلتك الآن",
+    "bookViaWhatsApp": "احجز عبر واتساب",
+    "whatsappPrefill": "مرحباً DUCK، أود حجز رحلة: {title} ({destination})",
+    "getReady": "استعد لمغامرتك القادمة مع DUCK",
+    "freeCancellation": "إلغاء مجاني حتى 24 ساعة قبل الرحلة",
+    "lifeJacketIncluded": "سترة النجاة ومعدات الأمان مشمولة بالكامل",
+    "notFoundTitle": "الرحلة غير موجودة",
+    "notFoundDesc": "عذراً، لم نتمكن من العثور على الرحلة المطلوبة. تأكد من صحة الرابط أو تصفح باقي رحلاتنا المتاحة.",
+    "notFoundButton": "العودة إلى الرحلات"
   }
 }
