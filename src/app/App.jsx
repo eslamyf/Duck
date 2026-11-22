@@ -11,7 +11,7 @@ import Footer from '../widgets/footer/Footer.jsx';
 import { TRIPS } from '../widgets/trips/tripsData.js';
 import { ROUTES, sectionLink, SECTIONS } from '../shared/config/routes.js';
 import { useTranslation } from '../shared/i18n/index.js';
-import { ErrorBoundary } from '../shared/ui/index.js';
+import { ErrorBoundary, ScrollProgress } from '../shared/ui/index.js';
 
 const MapSection = lazy(() => import('../widgets/map/index.js'));
 const ReviewsSection = lazy(() => import('../widgets/reviews/index.js'));
@@ -215,6 +215,7 @@ export default function App() {
       <ScrollManager />
       <LegacyHashRedirect />
       <TitleManager />
+      <ScrollProgress />
 
       <div className="print:hidden">
         <Navbar />

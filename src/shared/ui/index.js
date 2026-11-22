@@ -8,3 +8,4 @@ export { default as DatePicker } from './DatePicker/index.js';
 export { default as Accordion } from './Accordion/index.js';
 export { default as WaveDivider } from './WaveDivider.jsx';
 export { default as ErrorBoundary } from './ErrorBoundary/index.js';
+export { default as ScrollProgress } from './ScrollProgress/index.js';
