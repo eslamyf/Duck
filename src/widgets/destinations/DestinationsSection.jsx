@@ -96,7 +96,7 @@ export default function DestinationsSection({ onSelectDestination }) {
   return (
     <section
       id="locations"
-      className="bg-brand-navy text-white py-12 min-[901px]:py-20 px-[5vw] min-[901px]:px-[6vw] font-body relative select-none border-t border-white/8 scroll-mt-[calc(var(--header-height-mobile)+16px)] min-[901px]:scroll-mt-[calc(var(--header-height-desktop)+20px)]"
+      className="bg-brand-navy text-white py-12 min-[901px]:py-20 px-[5vw] min-[901px]:px-[6vw] font-body relative border-t border-white/8 scroll-mt-[calc(var(--header-height-mobile)+16px)] min-[901px]:scroll-mt-[calc(var(--header-height-desktop)+20px)]"
       aria-label={t('destinations.title')}
     >
       <div className="max-w-[1360px] mx-auto">
@@ -179,7 +179,7 @@ export default function DestinationsSection({ onSelectDestination }) {
                 >
                   <span className="font-bold text-brand-yellow text-sm tracking-widest">{item.num}</span>
                   <div className="flex-1 flex items-center justify-center my-auto">
-                    <span className="[writing-mode:vertical-rl] text-lg min-[1100px]:text-xl font-bold tracking-wide text-white drop-shadow-sm select-none">
+                    <span className="[writing-mode:vertical-rl] text-lg min-[1100px]:text-xl font-bold tracking-wide text-white drop-shadow-sm">
                       {destName}
                     </span>
                   </div>

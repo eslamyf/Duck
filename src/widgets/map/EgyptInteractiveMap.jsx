@@ -210,7 +210,7 @@ export default function EgyptInteractiveMap({
   }, [activeIdx, pins]);
 
   return (
-    <div className="absolute inset-0 w-full h-full overflow-hidden select-none bg-[#f2efe9]">
+    <div className="absolute inset-0 w-full h-full overflow-hidden select-none bg-[#f2efe9] isolate">
       <div
         ref={mapContainerRef}
         id="duckmap"

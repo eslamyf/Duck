@@ -15,7 +15,7 @@ export default function AuthVisualSide({ mode = 'login' }) {
 
   return (
     <section
-      className="relative hidden lg:flex flex-col justify-between p-6 xl:p-8 overflow-hidden bg-brand-navy text-white select-none"
+      className="relative hidden lg:flex flex-col justify-between p-6 xl:p-8 overflow-hidden bg-brand-navy text-white"
       aria-hidden="true"
     >
       {/* Background Hero Image with Teammate's smooth zoom effect */}

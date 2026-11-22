@@ -8,7 +8,7 @@ export default function GroupStage({ state, t, lang }) {
 
   return (
     <section
-      className="relative min-h-[500px] h-[min(78vh,660px)] overflow-hidden bg-brand-navy select-none"
+      className="relative min-h-[500px] h-[min(78vh,660px)] overflow-hidden bg-brand-navy"
       aria-label={t('groupsPage.stageAria')}
     >
       {/* Real High-Resolution Group Photo with High Clarity and Vibrancy */}

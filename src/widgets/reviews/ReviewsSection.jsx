@@ -86,7 +86,7 @@ export default function ReviewsSection() {
   return (
     <section
       id="reviews"
-      className="bg-white text-brand-navy py-12 min-[901px]:py-20 px-[5vw] min-[901px]:px-[6vw] font-body relative overflow-hidden border-t border-[rgba(20,125,159,0.12)] scroll-mt-[calc(var(--header-height-mobile)+16px)] min-[901px]:scroll-mt-[calc(var(--header-height-desktop)+20px)] select-none"
+      className="bg-white text-brand-navy py-12 min-[901px]:py-20 px-[5vw] min-[901px]:px-[6vw] font-body relative overflow-hidden border-t border-[rgba(20,125,159,0.12)] scroll-mt-[calc(var(--header-height-mobile)+16px)] min-[901px]:scroll-mt-[calc(var(--header-height-desktop)+20px)]"
       aria-label={t('reviews.sectionTitle', 'ماذا يقول ضيوفنا')}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}

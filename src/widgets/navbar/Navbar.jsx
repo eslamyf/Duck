@@ -151,7 +151,7 @@ export default function Navbar({ onBookClick }) {
   };
 
   return (
-    <header className="fixed top-0 inset-x-0 z-[120] bg-white border-b border-[rgba(20,125,159,0.16)] shadow-[0_8px_24px_rgba(12,18,38,0.06)] font-body">
+    <header className="fixed top-0 inset-x-0 z-[9999] bg-white border-b border-[rgba(20,125,159,0.16)] shadow-[0_8px_24px_rgba(12,18,38,0.06)] font-body">
 
       {/* Top Bar (Hidden on Mobile < 900px) */}
       <div className="hidden min-[901px]:flex items-center justify-between h-10 px-[4vw] bg-brand-navy text-white text-[13px]">
@@ -315,7 +315,7 @@ export default function Navbar({ onBookClick }) {
       {isMobileOpen && (
         <div
           id="mobile-nav"
-          className="min-[901px]:hidden fixed inset-x-0 top-[52px] bottom-0 z-[118] bg-brand-navy text-white px-[6vw] py-4 pb-[calc(88px+env(safe-area-inset-bottom))] flex flex-col gap-1 overflow-y-auto shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200"
+          className="min-[901px]:hidden fixed inset-x-0 top-[52px] bottom-0 z-[10000] bg-brand-navy text-white px-[6vw] py-4 pb-[calc(88px+env(safe-area-inset-bottom))] flex flex-col gap-1 overflow-y-auto shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200"
         >
 
           {/* Mobile Top Controls */}

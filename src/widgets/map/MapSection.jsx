@@ -13,7 +13,7 @@ export default function MapSection({ onSelectDestination }) {
   return (
     <section
       id="map"
-      className="bg-brand-navy text-white py-12 min-[901px]:py-20 px-[5vw] min-[901px]:px-[6vw] font-body relative overflow-hidden border-t border-white/8 scroll-mt-[calc(var(--header-height-mobile)+16px)] min-[901px]:scroll-mt-[calc(var(--header-height-desktop)+20px)]"
+      className="bg-brand-navy text-white py-12 min-[901px]:py-20 px-[5vw] min-[901px]:px-[6vw] font-body relative overflow-hidden isolate z-0 border-t border-white/8 scroll-mt-[calc(var(--header-height-mobile)+16px)] min-[901px]:scroll-mt-[calc(var(--header-height-desktop)+20px)]"
       aria-label={t('map.sectionTitle', 'خريطة فروع ونقاط انطلاق Duck في مصر')}
     >
       <div className="max-w-[1360px] mx-auto">
