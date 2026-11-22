@@ -9,9 +9,7 @@
 }
 
 .dtop {
-  position: sticky;
-  top: 52px;
-  z-index: 30;
+  position: static;
   display: flex;
   align-items: center;
   gap: 14px;
@@ -19,12 +17,6 @@
   background: #ffffff;
   border-bottom: 1px solid rgba(20, 125, 159, 0.18);
   justify-content: flex-start;
-}
-
-@media (min-width: 901px) {
-  .dtop {
-    top: 60px;
-  }
 }
 
 .dback,
@@ -484,7 +476,9 @@
 /* ================= BOOKING CARD (.dq) ================= */
 .dq {
   position: sticky;
-  top: 80px;
+  top: 120px;
+  scroll-margin-top: 120px;
+  z-index: 20;
   border: 1px solid rgba(20, 125, 159, 0.18);
   border-radius: 28px;
   box-shadow: 0 14px 40px rgba(12, 18, 38, 0.1);
