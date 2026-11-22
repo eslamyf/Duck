@@ -796,10 +796,12 @@
       "joinTitle": "مستعد لمغامرتك القادمة؟",
       "fullName": "الاسم بالكامل",
       "fullNamePlaceholder": "أدخل اسمك بالكامل",
+      "businessName": "اسم المزود / الشركة",
+      "businessNamePlaceholder": "مثال: EgyRow أو Blue Kayak",
       "email": "البريد الإلكتروني",
       "emailPlaceholder": "example@email.com",
-      "phone": "رقم الهاتف",
-      "phonePlaceholder": "01XXXXXXXXX",
+      "phone": "رقم الواتساب",
+      "phonePlaceholder": "+2010XXXXXXXX",
       "password": "كلمة المرور",
       "passwordPlaceholder": "أنشئ كلمة مرور قوية",
       "confirmPassword": "تأكيد كلمة المرور",
@@ -807,21 +809,30 @@
       "showPassword": "إظهار كلمة المرور",
       "hidePassword": "إخفاء كلمة المرور",
       "terms": "أوافق على الشروط والأحكام وسياسة الخصوصية",
-      "submit": "إنشاء حساب",
+      "submit": "إنشاء حساب جديد",
       "alreadyHaveAccount": "لديك حساب بالفعل؟",
       "login": "تسجيل الدخول",
       "successMessage": "تم التحقق من البيانات بنجاح! هذه تجربة واجهة فقط، ولم يتم إنشاء حساب حقيقي."
     },
     "roles": {
       "accountType": "نوع الحساب",
-      "customer": "عميل (أفراد وحجوزات)",
-      "partner": "شريك / منظم رحلات (B2B)",
-      "customerBadge": "أفراد وعائلات",
-      "partnerBadge": "شركات ومنظمين"
+      "customer": "مستخدم / عميل",
+      "partner": "مزود خدمة (Partner)",
+      "customerBadge": "👤 حسابي / أفراد",
+      "partnerBadge": "🤝 بوابة المزود",
+      "customerDescSignup": "أنشئ حسابك لمتابعة حجوزاتك وتذاكرك بسهولة",
+      "partnerDescSignup": "سجل نشاطك للانضمام لشبكة مزودي Duck",
+      "customerDescLogin": "سجل دخولك لمتابعة رحلاتك وتذاكرك برمز QR",
+      "partnerDescLogin": "سجل دخولك كمزود خدمة بالبريد وكلمة المرور"
     },
     "common": {
+      "inDuckWeTrust": "IN DUCK WE TRUST",
+      "journeyStartsHere": "رحلتك على النيل والبحر تبدأ من هنا",
+      "journeyDesc": "تابع تذاكرك وحجوزاتك برمز QR، أو أدر رحلاتك وطاقة أسطولك كمزود خدمة معتمد.",
       "backToHome": "العودة للرئيسية",
-      "continueAsGuest": "المتابعة كزائر",
+      "continueAsGuest": "المتابعة كزائر (احجز بدون حساب)",
+      "orContinueWith": "أو المتابعة عبر",
+      "continueWithGoogle": "المتابعة باستخدام Google",
       "brandTagline": "المغامرة تبدأ من هنا",
       "quote": "المغامرة أجمل مع الأصدقاء",
       "quoteSub": "تجربة DUCK الاستثنائية",
@@ -829,7 +840,11 @@
       "badge1": "سترات نجاة ومعدات أمان معتمدة",
       "badge2": "مرشدين معتمدين وسلامة أولاً",
       "submitting": "جاري التحقق...",
-      "demoNotice": "هذه نسخة تجريبية لواجهة المستخدم، لا يتم تخزين أي كلمات مرور."
+      "demoNotice": "هذه نسخة تجريبية لواجهة المستخدم، لا يتم تخزين أي كلمات مرور.",
+      "officialPhone": "+201550061006",
+      "newToDuck": "جديد في DUCK؟",
+      "noAccountYet": "لسه معندكش حساب في DUCK؟",
+      "createAccountCta": "أنشئ حسابك وابدأ المغامرة ↗"
     },
     "errors": {
       "required": "هذا الحقل مطلوب",
@@ -839,7 +854,8 @@
       "passwordMismatch": "كلمتا المرور غير متطابقتين",
       "termsRequired": "يجب الموافقة على الشروط والأحكام للمتابعة",
       "emailRequired": "البريد الإلكتروني مطلوب",
-      "passwordRequired": "كلمة المرور مطلوبة"
+      "passwordRequired": "كلمة المرور مطلوبة",
+      "businessNameRequired": "اسم المزود أو الشركة مطلوب لحسابات الشركاء"
     }
   }
 }

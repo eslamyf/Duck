@@ -796,10 +796,12 @@
       "joinTitle": "Ready for Your Next Adventure?",
       "fullName": "Full Name",
       "fullNamePlaceholder": "Enter your full name",
+      "businessName": "Business / Provider Name",
+      "businessNamePlaceholder": "e.g. EgyRow or Blue Kayak",
       "email": "Email Address",
       "emailPlaceholder": "example@email.com",
-      "phone": "Phone Number",
-      "phonePlaceholder": "01XXXXXXXXX",
+      "phone": "WhatsApp Phone",
+      "phonePlaceholder": "+2010XXXXXXXX",
       "password": "Password",
       "passwordPlaceholder": "Create a strong password",
       "confirmPassword": "Confirm Password",
@@ -814,14 +816,23 @@
     },
     "roles": {
       "accountType": "Account Type",
-      "customer": "Customer (Trips & Bookings)",
-      "partner": "Partner / Tour Operator (B2B)",
-      "customerBadge": "Individuals & Families",
-      "partnerBadge": "Companies & Operators"
+      "customer": "User / Guest",
+      "partner": "Service Provider",
+      "customerBadge": "👤 My Account / Guest",
+      "partnerBadge": "🤝 Provider Portal",
+      "customerDescSignup": "Create a personal account to track bookings",
+      "partnerDescSignup": "Register as an approved activity provider",
+      "customerDescLogin": "Sign in to view your bookings & QR tickets",
+      "partnerDescLogin": "Sign in with your provider email and password"
     },
     "common": {
+      "inDuckWeTrust": "IN DUCK WE TRUST",
+      "journeyStartsHere": "Your Water Journey Starts Here",
+      "journeyDesc": "Manage your kayak, SUP and water-bike bookings or grow your water-sports business with Duck.",
       "backToHome": "Back to Home",
-      "continueAsGuest": "Continue as Guest",
+      "continueAsGuest": "Continue as Guest (Book without account)",
+      "orContinueWith": "or continue with",
+      "continueWithGoogle": "Continue with Google",
       "brandTagline": "Adventure Begins Here",
       "quote": "Adventure is better together",
       "quoteSub": "DUCK Experience",
@@ -829,7 +840,11 @@
       "badge1": "Certified life jackets & full safety gear",
       "badge2": "Certified guides & safety first",
       "submitting": "Validating...",
-      "demoNotice": "Frontend demo mode: passwords are never stored."
+      "demoNotice": "Frontend demo mode: passwords are never stored.",
+      "officialPhone": "+201550061006",
+      "newToDuck": "NEW TO DUCK?",
+      "noAccountYet": "Don't have an account with DUCK yet?",
+      "createAccountCta": "CREATE YOUR ACCOUNT ↗"
     },
     "errors": {
       "required": "This field is required",
@@ -839,7 +854,8 @@
       "passwordMismatch": "Passwords do not match",
       "termsRequired": "You must agree to the Terms and Conditions to proceed",
       "emailRequired": "Email address is required",
-      "passwordRequired": "Password is required"
+      "passwordRequired": "Password is required",
+      "businessNameRequired": "Business / Provider Name is required for partner accounts"
     }
   }
 }
