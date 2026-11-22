@@ -74,7 +74,7 @@ export default function Accordion({
 
                 {/* Title */}
                 <span className="flex-1 font-semibold text-[16.5px] min-[901px]:text-[19px] text-brand-navy group-hover:text-brand-blue transition-colors leading-snug">
-                  {item.title}
+                  {item.title || item.question}
                 </span>
 
                 {/* Plus / Minus Circular Indicator */}
@@ -103,13 +103,13 @@ export default function Accordion({
             >
               <div className="overflow-hidden">
                 <div className="ps-8 min-[901px]:ps-10 pe-2 pb-5 text-brand-navy/80 text-[14.5px] min-[901px]:text-base leading-relaxed max-w-[68ch]">
-                  {typeof item.content === 'string' ? (
+                  {typeof (item.content || item.answer) === 'string' ? (
                     <div
-                      dangerouslySetInnerHTML={{ __html: item.content }}
+                      dangerouslySetInnerHTML={{ __html: item.content || item.answer }}
                       className="[&>ul]:list-disc [&>ul]:ps-5 [&>ul]:space-y-1 [&>p]:mb-2 [&_b]:text-brand-navy [&_strong]:text-brand-navy"
                     />
                   ) : (
-                    item.content
+                    item.content || item.answer
                   )}
                 </div>
               </div>
