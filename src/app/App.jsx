@@ -256,7 +256,7 @@ export default function App() {
 
   return (
     <div
-      className={`font-body ${
+      className={`font-body selection:bg-brand-yellow selection:text-brand-navy ${
         isAuthPage
           ? 'h-screen max-h-screen overflow-hidden flex flex-col'
           : 'min-h-screen flex flex-col'

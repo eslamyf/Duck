@@ -35,6 +35,27 @@
   --radius-pill: var(--radius-pill);
 }
 
+/* ================= GLOBAL BRAND TEXT SELECTION ================= */
+::selection {
+  background-color: var(--color-yellow);
+  color: var(--color-navy);
+}
+
+*::selection {
+  background-color: var(--color-yellow);
+  color: var(--color-navy);
+}
+
+::-moz-selection {
+  background-color: var(--color-yellow);
+  color: var(--color-navy);
+}
+
+*::-moz-selection {
+  background-color: var(--color-yellow);
+  color: var(--color-navy);
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: var(--scroll-padding);
