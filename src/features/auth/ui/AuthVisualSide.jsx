@@ -15,7 +15,7 @@ export default function AuthVisualSide({ mode = 'login' }) {
 
   return (
     <section
-      className="relative hidden lg:flex flex-col justify-between p-10 xl:p-12 overflow-hidden bg-brand-navy text-white select-none"
+      className="relative hidden lg:flex flex-col justify-between p-6 xl:p-8 overflow-hidden bg-brand-navy text-white select-none"
       aria-hidden="true"
     >
       {/* Background Hero Image with Teammate's smooth zoom effect */}
@@ -54,41 +54,41 @@ export default function AuthVisualSide({ mode = 'login' }) {
       </div>
 
       {/* Center Storytelling (Final_4.html + Teammate Content) */}
-      <div className="relative z-10 my-auto py-8 max-w-lg">
-        <div className="inline-flex items-center gap-2.5 mb-3">
-          <span className="w-10 h-1 bg-brand-yellow rounded-full" />
-          <span className="text-brand-yellow uppercase tracking-widest text-xs font-black">
+      <div className="relative z-10 my-auto py-3 max-w-lg">
+        <div className="inline-flex items-center gap-2 mb-2">
+          <span className="w-8 h-1 bg-brand-yellow rounded-full" />
+          <span className="text-brand-yellow uppercase tracking-widest text-[11px] font-black">
             {mode === 'login' ? t('auth.login.welcomeBack') : t('auth.signup.joinTitle')}
           </span>
         </div>
 
-        <h1 className="text-3xl xl:text-4xl font-black leading-tight mb-4 tracking-tight text-white">
+        <h1 className="text-2xl xl:text-3xl font-black leading-tight mb-2 tracking-tight text-white">
           {t('auth.common.journeyStartsHere')}
         </h1>
 
-        <p className="text-white/85 text-sm xl:text-base leading-relaxed mb-6 max-w-md">
+        <p className="text-white/85 text-xs xl:text-sm leading-relaxed mb-4 max-w-md">
           {t('auth.common.journeyDesc')}
         </p>
 
         {/* Safety & Value Badges */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-6">
-          <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-xs font-bold text-white">
-            <span className="w-7 h-7 rounded-lg bg-brand-yellow/20 text-brand-yellow flex items-center justify-center shrink-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
+          <div className="flex items-center gap-2 p-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-xs font-bold text-white">
+            <span className="w-6 h-6 rounded-lg bg-brand-yellow/20 text-brand-yellow flex items-center justify-center shrink-0">
               <FontAwesomeIcon icon={faLifeRing} className="text-xs" />
             </span>
-            <span>{t('auth.common.badge1')}</span>
+            <span className="text-[11px] xl:text-xs">{t('auth.common.badge1')}</span>
           </div>
 
-          <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-xs font-bold text-white">
-            <span className="w-7 h-7 rounded-lg bg-brand-yellow/20 text-brand-yellow flex items-center justify-center shrink-0">
+          <div className="flex items-center gap-2 p-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-xs font-bold text-white">
+            <span className="w-6 h-6 rounded-lg bg-brand-yellow/20 text-brand-yellow flex items-center justify-center shrink-0">
               <FontAwesomeIcon icon={faShieldHalved} className="text-xs" />
             </span>
-            <span>{t('auth.common.badge2')}</span>
+            <span className="text-[11px] xl:text-xs">{t('auth.common.badge2')}</span>
           </div>
         </div>
 
         {/* Community Proof (from Teammate's Design) */}
-        <div className="flex items-center gap-3 pt-4 border-t border-white/15">
+        <div className="flex items-center gap-3 pt-3 border-t border-white/15">
           <div className="flex -space-x-2 rtl:space-x-reverse">
             {['ن', 'م', 'D', 'K'].map((char, idx) => (
               <div

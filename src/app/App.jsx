@@ -255,7 +255,13 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col font-body">
+    <div
+      className={`font-body ${
+        isAuthPage
+          ? 'h-screen max-h-screen overflow-hidden flex flex-col'
+          : 'min-h-screen flex flex-col'
+      }`}
+    >
       <ScrollManager />
       <LegacyHashRedirect />
       <TitleManager />
@@ -270,7 +276,11 @@ export default function App() {
 
       <main
         id="main"
-        className={`flex-1 ${isAuthPage ? '' : 'pt-[52px] min-[901px]:pt-[100px]'} print:pt-0 print:m-0 print:p-0`}
+        className={`flex-1 ${
+          isAuthPage
+            ? 'h-full max-h-screen overflow-hidden p-0 m-0'
+            : 'pt-[52px] min-[901px]:pt-[100px]'
+        } print:pt-0 print:m-0 print:p-0`}
       >
         <ErrorBoundary>
           <Routes>

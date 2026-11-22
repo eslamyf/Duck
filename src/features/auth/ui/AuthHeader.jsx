@@ -14,7 +14,7 @@ export default function AuthHeader() {
   const isArabic = lang === 'ar';
 
   return (
-    <header className="w-full mb-4 sm:mb-5">
+    <header className="w-full mb-2.5 sm:mb-3">
       {/* Top Action Bar: Back to Home & Language Switcher */}
       <div className="flex items-center justify-between gap-3">
         {/* Back to Home Link */}

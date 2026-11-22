@@ -15,6 +15,8 @@ export default function Input({
   dir,
   className = '',
   inputClassName = '',
+  labelClassName = '',
+  size = 'md',
   startAdornment = null,
   endAdornment = null,
   as: Component = 'input',
@@ -31,7 +33,9 @@ export default function Input({
       {label && (
         <label
           htmlFor={inputId}
-          className="flex items-center justify-between gap-2 font-bold text-sm min-[901px]:text-base text-brand-navy mb-2"
+          className={`flex items-center justify-between gap-2 font-bold text-brand-navy ${
+            size === 'sm' ? 'text-xs sm:text-sm mb-1' : 'text-sm min-[901px]:text-base mb-2'
+          } ${labelClassName}`.trim()}
         >
           <span>
             {label}
@@ -63,9 +67,17 @@ export default function Input({
           aria-invalid={Boolean(error)}
           aria-describedby={describedBy}
           aria-required={required ? 'true' : undefined}
-          className={`w-full rounded-2xl border-2 transition-all duration-200 font-semibold text-base text-brand-navy placeholder:text-brand-navy/40 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none ${
-            Component === 'textarea' ? 'min-h-[84px] py-3 px-4 resize-y' : 'min-h-[46px] sm:min-h-[50px] py-2 sm:py-2.5'
-          } ${startAdornment ? 'ps-11' : 'ps-4'} ${endAdornment ? 'pe-12' : 'pe-4'} ${
+          className={`w-full border-2 transition-all duration-200 font-semibold text-brand-navy placeholder:text-brand-navy/40 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none ${
+            size === 'sm'
+              ? Component === 'textarea'
+                ? 'min-h-[72px] py-2 px-3 text-sm rounded-xl'
+                : 'min-h-[38px] sm:min-h-[40px] py-1.5 sm:py-2 text-sm rounded-xl'
+              : Component === 'textarea'
+                ? 'min-h-[84px] py-3 px-4 text-base rounded-2xl'
+                : 'min-h-[46px] sm:min-h-[50px] py-2 sm:py-2.5 text-base rounded-2xl'
+          } ${startAdornment ? 'ps-11' : size === 'sm' ? 'ps-3.5' : 'ps-4'} ${
+            endAdornment ? 'pe-12' : size === 'sm' ? 'pe-3.5' : 'pe-4'
+          } ${
             error
               ? 'border-error bg-surface-mist focus:border-error focus:ring-2 focus:ring-error/20'
               : 'border-brand-navy/15 bg-surface-mist hover:border-brand-navy/30 focus:border-brand-blue focus:bg-white'

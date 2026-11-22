@@ -21,7 +21,7 @@ export default function AuthRoleSelector({ role, onChange }) {
   ];
 
   return (
-    <div className="w-full mb-5">
+    <div className="w-full mb-2.5 sm:mb-3">
       <div
         className="grid grid-cols-2 gap-1.5 p-1 bg-surface-mist rounded-2xl border border-brand-navy/10"
         role="tablist"
@@ -36,7 +36,7 @@ export default function AuthRoleSelector({ role, onChange }) {
               role="tab"
               aria-selected={isActive}
               onClick={() => onChange(item.id)}
-              className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl transition-all duration-200 select-none cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue ${
+              className={`flex items-center justify-center gap-2 py-1.5 sm:py-2 px-3 rounded-xl transition-all duration-200 select-none cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue ${
                 isActive
                   ? 'bg-brand-navy text-white shadow-sm font-bold'
                   : 'bg-transparent text-brand-navy/70 hover:bg-white hover:text-brand-navy font-semibold'

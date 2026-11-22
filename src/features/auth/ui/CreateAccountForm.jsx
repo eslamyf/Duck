@@ -129,11 +129,11 @@ export default function CreateAccountForm() {
         <AuthRoleSelector role={role} onChange={handleRoleChange} />
 
         {/* Header Titles */}
-        <div className="mb-4 text-start">
-          <h2 className="text-2xl sm:text-3xl font-black text-brand-navy tracking-tight leading-tight mb-1">
+        <div className="mb-2 text-start">
+          <h2 className="text-xl sm:text-2xl font-black text-brand-navy tracking-tight leading-tight mb-0.5">
             {t('auth.signup.title')}
           </h2>
-          <p className="text-brand-navy/65 text-xs sm:text-sm leading-relaxed">
+          <p className="text-brand-navy/65 text-xs leading-relaxed">
             {role === 'Partner'
               ? t('auth.roles.partnerDescSignup')
               : t('auth.roles.customerDescSignup')}
@@ -144,22 +144,23 @@ export default function CreateAccountForm() {
         {success && (
           <div
             role="status"
-            className="mb-4 p-3.5 rounded-2xl bg-surface-mist border border-brand-blue/30 flex items-start gap-2.5 animate-fadeIn"
+            className="mb-2.5 p-2.5 rounded-xl bg-surface-mist border border-brand-blue/30 flex items-start gap-2 animate-fadeIn"
           >
             <FontAwesomeIcon
               icon={faCircleCheck}
-              className="text-brand-blue text-base shrink-0 mt-0.5"
+              className="text-brand-blue text-sm shrink-0 mt-0.5"
             />
-            <p className="text-brand-navy text-xs sm:text-sm font-semibold leading-relaxed">
+            <p className="text-brand-navy text-xs font-semibold leading-relaxed">
               {t('auth.signup.successMessage')}
             </p>
           </div>
         )}
 
         {/* Main Form */}
-        <form onSubmit={handleSubmit} noValidate className="space-y-2.5 sm:space-y-3">
+        <form onSubmit={handleSubmit} noValidate className="space-y-1.5 sm:space-y-2">
           {/* Full Name */}
           <Input
+            size="sm"
             label={t('auth.signup.fullName')}
             id="signup-name"
             name="fullName"
@@ -175,6 +176,7 @@ export default function CreateAccountForm() {
           {/* Business / Provider Name (Final_4.html line 1907 - ONLY when role is Partner) */}
           {role === 'Partner' && (
             <Input
+              size="sm"
               label={t('auth.signup.businessName')}
               id="signup-business"
               name="businessName"
@@ -190,6 +192,7 @@ export default function CreateAccountForm() {
 
           {/* WhatsApp Phone */}
           <Input
+            size="sm"
             label={t('auth.signup.phone')}
             id="signup-phone"
             name="phone"
@@ -205,6 +208,7 @@ export default function CreateAccountForm() {
 
           {/* Email */}
           <Input
+            size="sm"
             label={t('auth.signup.email')}
             id="signup-email"
             name="email"
@@ -220,6 +224,7 @@ export default function CreateAccountForm() {
 
           {/* Password */}
           <Input
+            size="sm"
             label={t('auth.signup.password')}
             id="signup-password"
             name="password"
@@ -252,6 +257,7 @@ export default function CreateAccountForm() {
 
           {/* Confirm Password */}
           <Input
+            size="sm"
             label={t('auth.signup.confirmPassword')}
             id="signup-confirm-password"
             name="confirmPassword"
@@ -283,7 +289,7 @@ export default function CreateAccountForm() {
           />
 
           {/* Terms & Conditions Checkbox */}
-          <div className="pt-1">
+          <div className="pt-0.5">
             <Checkbox
               id="signup-terms"
               name="terms"
@@ -302,12 +308,12 @@ export default function CreateAccountForm() {
             size="md"
             fullWidth
             disabled={isSubmitting}
-            className="mt-2 font-black shadow-md hover:shadow-lg transition-all"
+            className="mt-1.5 font-black shadow-md hover:shadow-lg transition-all min-h-[38px] sm:min-h-[40px] py-1.5 text-xs sm:text-sm"
             icon={
               isSubmitting ? (
-                <div className="w-5 h-5 border-2 border-brand-navy/30 border-t-brand-navy rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-brand-navy/30 border-t-brand-navy rounded-full animate-spin" />
               ) : (
-                <FontAwesomeIcon icon={faUserPlus} />
+                <FontAwesomeIcon icon={faUserPlus} className="text-xs" />
               )
             }
           >
@@ -318,9 +324,9 @@ export default function CreateAccountForm() {
         </form>
 
         {/* Divider (Final_4.html line 1913) */}
-        <div className="flex items-center gap-3 my-3.5">
+        <div className="flex items-center gap-2.5 my-2">
           <div className="flex-1 h-px bg-brand-navy/15" />
-          <span className="text-brand-navy/45 text-xs font-bold uppercase tracking-wider">
+          <span className="text-brand-navy/45 text-[11px] font-bold uppercase tracking-wider">
             {t('auth.common.orContinueWith')}
           </span>
           <div className="flex-1 h-px bg-brand-navy/15" />
@@ -336,17 +342,15 @@ export default function CreateAccountForm() {
               setSuccess(true);
             }, 600);
           }}
-          className="w-full min-h-[44px] rounded-2xl border-2 border-brand-navy/15 bg-white text-brand-navy font-bold text-sm flex items-center justify-center gap-3 hover:bg-surface-mist hover:border-brand-blue transition-all cursor-pointer shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue"
+          className="w-full min-h-[36px] sm:min-h-[38px] rounded-xl border-2 border-brand-navy/15 bg-white text-brand-navy font-bold text-xs flex items-center justify-center gap-2.5 hover:bg-surface-mist hover:border-brand-blue transition-all cursor-pointer shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue"
         >
-          <FontAwesomeIcon icon={faGoogle} className="text-brand-blue text-base" />
+          <FontAwesomeIcon icon={faGoogle} className="text-brand-blue text-sm" />
           <span>{t('auth.common.continueWithGoogle')}</span>
         </button>
 
-
-
         {/* Switch to Login (Final_4.html line 1915) */}
-        <div className="mt-4 pt-3.5 border-t border-brand-navy/10 text-center">
-          <p className="text-xs sm:text-sm text-brand-navy/70">
+        <div className="mt-2.5 pt-2 border-t border-brand-navy/10 text-center">
+          <p className="text-xs text-brand-navy/70">
             {t('auth.signup.alreadyHaveAccount')}{' '}
             <Link
               to={ROUTES.LOGIN}
@@ -359,7 +363,7 @@ export default function CreateAccountForm() {
       </div>
 
       {/* Bottom Footer Note */}
-      <div className="mt-4 pt-2 border-t border-brand-navy/5 text-center text-[11px] text-brand-navy/40">
+      <div className="mt-2 pt-1 border-t border-brand-navy/5 text-center text-[10px] text-brand-navy/40">
         {t('auth.common.demoNotice')}
       </div>
     </div>

@@ -100,8 +100,8 @@ export default function LoginForm() {
         <AuthRoleSelector role={role} onChange={handleRoleChange} />
 
         {/* Header Titles */}
-        <div className="mb-5 text-start">
-          <h2 className="text-2xl sm:text-3xl font-black text-brand-navy tracking-tight leading-tight mb-1.5">
+        <div className="mb-3 text-start">
+          <h2 className="text-xl sm:text-2xl font-black text-brand-navy tracking-tight leading-tight mb-1">
             {t('auth.login.title')}
           </h2>
           <p className="text-brand-navy/65 text-xs sm:text-sm leading-relaxed">
@@ -115,11 +115,11 @@ export default function LoginForm() {
         {success && (
           <div
             role="status"
-            className="mb-5 p-3.5 rounded-2xl bg-surface-mist border border-brand-blue/30 flex items-start gap-2.5 animate-fadeIn"
+            className="mb-3.5 p-3 rounded-xl bg-surface-mist border border-brand-blue/30 flex items-start gap-2.5 animate-fadeIn"
           >
             <FontAwesomeIcon
               icon={faCircleCheck}
-              className="text-brand-blue text-base shrink-0 mt-0.5"
+              className="text-brand-blue text-sm shrink-0 mt-0.5"
             />
             <p className="text-brand-navy text-xs sm:text-sm font-semibold leading-relaxed">
               {t('auth.login.successMessage')}
@@ -132,9 +132,9 @@ export default function LoginForm() {
           <div
             role="region"
             aria-label="Password Reset Assistance"
-            className="mb-5 p-3.5 rounded-2xl bg-brand-yellow/15 border border-brand-yellow/50 flex flex-col gap-2"
+            className="mb-3.5 p-3 rounded-xl bg-brand-yellow/15 border border-brand-yellow/50 flex flex-col gap-2"
           >
-            <p className="text-xs sm:text-sm font-bold text-brand-navy leading-normal">
+            <p className="text-xs font-bold text-brand-navy leading-normal">
               {t('auth.login.forgotPasswordNotice')}
             </p>
             <a
@@ -150,9 +150,10 @@ export default function LoginForm() {
         )}
 
         {/* Main Form */}
-        <form onSubmit={handleSubmit} noValidate className="space-y-3.5">
+        <form onSubmit={handleSubmit} noValidate className="space-y-2.5">
           {/* Email */}
           <Input
+            size="sm"
             label={t('auth.login.email')}
             id="login-email"
             name="email"
@@ -169,6 +170,7 @@ export default function LoginForm() {
           {/* Password */}
           <div>
             <Input
+              size="sm"
               label={t('auth.login.password')}
               id="login-password"
               name="password"
@@ -199,7 +201,7 @@ export default function LoginForm() {
               }
             />
 
-            <div className="flex items-center justify-between mt-2">
+            <div className="flex items-center justify-between mt-1.5">
               <Checkbox
                 id="login-remember"
                 name="remember"
@@ -225,12 +227,12 @@ export default function LoginForm() {
             size="md"
             fullWidth
             disabled={isSubmitting}
-            className="mt-2 font-black shadow-md hover:shadow-lg transition-all"
+            className="mt-1 font-black shadow-md hover:shadow-lg transition-all min-h-[40px] sm:min-h-[42px] py-2 text-xs sm:text-sm"
             icon={
               isSubmitting ? (
-                <div className="w-5 h-5 border-2 border-brand-navy/30 border-t-brand-navy rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-brand-navy/30 border-t-brand-navy rounded-full animate-spin" />
               ) : (
-                <FontAwesomeIcon icon={faArrowRightToBracket} />
+                <FontAwesomeIcon icon={faArrowRightToBracket} className="text-xs" />
               )
             }
           >
@@ -241,7 +243,7 @@ export default function LoginForm() {
         </form>
 
         {/* Divider (Final_4.html line 1913) */}
-        <div className="flex items-center gap-3 my-4">
+        <div className="flex items-center gap-3 my-3">
           <div className="flex-1 h-px bg-brand-navy/15" />
           <span className="text-brand-navy/45 text-xs font-bold uppercase tracking-wider">
             {t('auth.common.orContinueWith')}
@@ -259,22 +261,22 @@ export default function LoginForm() {
               setSuccess(true);
             }, 600);
           }}
-          className="w-full min-h-[46px] rounded-2xl border-2 border-brand-navy/15 bg-white text-brand-navy font-bold text-sm flex items-center justify-center gap-3 hover:bg-surface-mist hover:border-brand-blue transition-all cursor-pointer shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue"
+          className="w-full min-h-[40px] sm:min-h-[42px] rounded-xl border-2 border-brand-navy/15 bg-white text-brand-navy font-bold text-xs sm:text-sm flex items-center justify-center gap-3 hover:bg-surface-mist hover:border-brand-blue transition-all cursor-pointer shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue"
         >
-          <FontAwesomeIcon icon={faGoogle} className="text-brand-blue text-base" />
+          <FontAwesomeIcon icon={faGoogle} className="text-brand-blue text-sm" />
           <span>{t('auth.common.continueWithGoogle')}</span>
         </button>
 
 
 
         {/* Teammate's Branded "جديد في DUCK؟" CTA Box */}
-        <div className="mt-5 p-3.5 rounded-2xl bg-surface-sand border border-brand-navy/10 text-center">
-          <p className="text-xs font-bold text-brand-navy/80 mb-2">
+        <div className="mt-3.5 p-3 rounded-xl bg-surface-sand border border-brand-navy/10 text-center">
+          <p className="text-xs font-bold text-brand-navy/80 mb-1.5">
             {t('auth.common.noAccountYet')}
           </p>
           <Link
             to={ROUTES.SIGNUP}
-            className="w-full min-h-[42px] flex items-center justify-center gap-2 rounded-xl bg-brand-yellow hover:bg-brand-yellow-hover text-brand-navy font-black text-xs sm:text-sm transition-all duration-200 hover:-translate-y-0.5 shadow-sm"
+            className="w-full min-h-[38px] sm:min-h-[40px] flex items-center justify-center gap-2 rounded-xl bg-brand-yellow hover:bg-brand-yellow-hover text-brand-navy font-black text-xs sm:text-sm transition-all duration-200 hover:-translate-y-0.5 shadow-sm"
           >
             <span>{t('auth.common.createAccountCta')}</span>
           </Link>
@@ -282,7 +284,7 @@ export default function LoginForm() {
       </div>
 
       {/* Bottom Footer Note */}
-      <div className="mt-5 pt-3 border-t border-brand-navy/5 text-center text-[11px] text-brand-navy/40">
+      <div className="mt-3 pt-2 border-t border-brand-navy/5 text-center text-[10px] text-brand-navy/40">
         {t('auth.common.demoNotice')}
       </div>
     </div>
