@@ -241,7 +241,7 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                   </Button>
                   <Button
                     as={Link}
-                    to={sectionLink(SECTIONS.TRIPS)}
+                    to={`/trips/${selectedTrip.slug}`}
                     variant="outline"
                     size="md"
                     className="font-semibold text-white border-white/50 hover:bg-white/15"
@@ -452,7 +452,7 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                       </Button>
                       <Button
                         as={Link}
-                        to={sectionLink(SECTIONS.TRIPS)}
+                        to={`/trips/${trip.slug}`}
                         variant="outline"
                         size="sm"
                         className="flex-1 font-semibold py-2.5 text-xs text-white border-white/50 justify-center hover:bg-white/15"
