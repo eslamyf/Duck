@@ -6,7 +6,6 @@ import {
   faEye,
   faEyeSlash,
   faCircleCheck,
-  faCompass,
 } from '@fortawesome/free-solid-svg-icons';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useTranslation } from '../../../shared/i18n/index.js';
@@ -19,7 +18,7 @@ import {
   isNonEmpty,
 } from '../../../shared/utils/validators.js';
 import AuthRoleSelector from './AuthRoleSelector.jsx';
-import duckLogo from '../../../shared/assets/icons/Artboard 14.png';
+import AuthHeader from './AuthHeader.jsx';
 
 export default function CreateAccountForm() {
   const { t } = useTranslation();
@@ -123,19 +122,8 @@ export default function CreateAccountForm() {
   return (
     <div className="w-full max-w-md mx-auto flex flex-col justify-between h-full">
       <div>
-        {/* Mobile Logo & Tagline */}
-        <div className="lg:hidden text-center mb-5">
-          <Link to={ROUTES.HOME} className="inline-block focus:outline-none mb-2">
-            <img
-              src={duckLogo}
-              alt={t('common.brandName')}
-              className="h-8 w-auto object-contain mx-auto"
-            />
-          </Link>
-          <span className="inline-block px-3 py-0.5 rounded-full bg-brand-yellow/30 text-brand-navy font-bold text-xs">
-            {t('auth.common.inDuckWeTrust')}
-          </span>
-        </div>
+        {/* Header Navigation & Mobile Branding */}
+        <AuthHeader />
 
         {/* 2-Role Segmented Selector (Final_4.html line 1901) */}
         <AuthRoleSelector role={role} onChange={handleRoleChange} />
@@ -354,16 +342,7 @@ export default function CreateAccountForm() {
           <span>{t('auth.common.continueWithGoogle')}</span>
         </button>
 
-        {/* Continue as Guest Link */}
-        <div className="mt-2.5 text-center">
-          <Link
-            to={ROUTES.HOME}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-navy/70 hover:text-brand-blue transition-colors focus:outline-none focus-visible:underline"
-          >
-            <FontAwesomeIcon icon={faCompass} className="text-xs text-brand-blue" />
-            <span>{t('auth.common.continueAsGuest')}</span>
-          </Link>
-        </div>
+
 
         {/* Switch to Login (Final_4.html line 1915) */}
         <div className="mt-4 pt-3.5 border-t border-brand-navy/10 text-center">

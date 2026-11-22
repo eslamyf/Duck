@@ -6,7 +6,6 @@ import {
   faEye,
   faEyeSlash,
   faCircleCheck,
-  faCompass,
 } from '@fortawesome/free-solid-svg-icons';
 import { faGoogle, faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import { useTranslation } from '../../../shared/i18n/index.js';
@@ -14,7 +13,7 @@ import { ROUTES } from '../../../shared/config/routes.js';
 import { Input, Button, Checkbox } from '../../../shared/ui/index.js';
 import { isValidEmail } from '../../../shared/utils/validators.js';
 import AuthRoleSelector from './AuthRoleSelector.jsx';
-import duckLogo from '../../../shared/assets/icons/Artboard 14.png';
+import AuthHeader from './AuthHeader.jsx';
 
 export default function LoginForm() {
   const { t } = useTranslation();
@@ -94,19 +93,8 @@ export default function LoginForm() {
   return (
     <div className="w-full max-w-md mx-auto flex flex-col justify-between h-full">
       <div>
-        {/* Mobile Logo & Tagline */}
-        <div className="lg:hidden text-center mb-5">
-          <Link to={ROUTES.HOME} className="inline-block focus:outline-none mb-2">
-            <img
-              src={duckLogo}
-              alt={t('common.brandName')}
-              className="h-8 w-auto object-contain mx-auto"
-            />
-          </Link>
-          <span className="inline-block px-3 py-0.5 rounded-full bg-brand-yellow/30 text-brand-navy font-bold text-xs">
-            {t('auth.common.inDuckWeTrust')}
-          </span>
-        </div>
+        {/* Header Navigation & Mobile Branding */}
+        <AuthHeader />
 
         {/* 2-Role Segmented Selector (Final_4.html line 1901) */}
         <AuthRoleSelector role={role} onChange={handleRoleChange} />
@@ -277,16 +265,7 @@ export default function LoginForm() {
           <span>{t('auth.common.continueWithGoogle')}</span>
         </button>
 
-        {/* Continue as Guest (SRS & Final_4.html requirement) */}
-        <div className="mt-3 text-center">
-          <Link
-            to={ROUTES.HOME}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-navy/70 hover:text-brand-blue transition-colors focus:outline-none focus-visible:underline"
-          >
-            <FontAwesomeIcon icon={faCompass} className="text-xs text-brand-blue" />
-            <span>{t('auth.common.continueAsGuest')}</span>
-          </Link>
-        </div>
+
 
         {/* Teammate's Branded "جديد في DUCK؟" CTA Box */}
         <div className="mt-5 p-3.5 rounded-2xl bg-surface-sand border border-brand-navy/10 text-center">

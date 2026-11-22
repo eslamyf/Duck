@@ -207,6 +207,18 @@ function TitleManager() {
 export default function App() {
   const [selectedDestinationFilter, setSelectedDestinationFilter] = useState('all');
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  const isAuthPage = [
+    ROUTES.LOGIN,
+    ROUTES.SIGNUP,
+    ROUTES.CREATE_ACCOUNT,
+    ROUTES.AUTH,
+    '/login',
+    '/signup',
+    '/create-account',
+    '/auth',
+  ].includes(pathname);
 
   // Idle prewarm for below-the-fold dynamic chunks
   useEffect(() => {
@@ -248,15 +260,17 @@ export default function App() {
       <LegacyHashRedirect />
       <TitleManager />
 
-      <ScrollProgress />
+      {!isAuthPage && <ScrollProgress />}
 
-      <div className="print:hidden">
-        <Navbar />
-      </div>
+      {!isAuthPage && (
+        <div className="print:hidden">
+          <Navbar />
+        </div>
+      )}
 
       <main
         id="main"
-        className="flex-1 pt-[52px] min-[901px]:pt-[100px] print:pt-0 print:m-0 print:p-0"
+        className={`flex-1 ${isAuthPage ? '' : 'pt-[52px] min-[901px]:pt-[100px]'} print:pt-0 print:m-0 print:p-0`}
       >
         <ErrorBoundary>
           <Routes>
@@ -362,9 +376,11 @@ export default function App() {
         </ErrorBoundary>
       </main>
 
-      <div className="print:hidden">
-        <Footer />
-      </div>
+      {!isAuthPage && (
+        <div className="print:hidden">
+          <Footer />
+        </div>
+      )}
     </div>
   );
 }

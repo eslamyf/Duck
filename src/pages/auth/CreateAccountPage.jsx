@@ -18,7 +18,7 @@ export default function CreateAccountPage() {
   return (
     <div
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="relative min-h-[calc(100vh-52px)] min-[901px]:min-h-[calc(100vh-100px)] w-full flex items-center justify-center p-3 sm:p-6 lg:p-8 overflow-hidden font-body selection:bg-brand-yellow selection:text-brand-navy"
+      className="relative min-h-screen w-full flex items-center justify-center p-3 sm:p-6 lg:p-8 overflow-hidden font-body selection:bg-brand-yellow selection:text-brand-navy"
     >
       {/* Full-bleed Atmospheric Nile Background (Teammate's Original Aesthetic) */}
       <img

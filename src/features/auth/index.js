@@ -1,1 +1,7 @@
-export { LoginForm, CreateAccountForm, AuthVisualSide, AuthRoleSelector } from './ui/index.js';
+export {
+  LoginForm,
+  CreateAccountForm,
+  AuthVisualSide,
+  AuthRoleSelector,
+  AuthHeader,
+} from './ui/index.js';
