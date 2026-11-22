@@ -76,7 +76,7 @@ export default function MapSection({ onSelectDestination }) {
         {/* 2-Column Responsive Grid: Map Frame & Destination Preview Card */}
         <div className="grid grid-cols-1 min-[901px]:grid-cols-[1.1fr_1fr] gap-6 items-stretch">
           {/* Map Frame (.egframe) */}
-          <div className="rounded-[26px] overflow-hidden border border-brand-yellow/35 shadow-card bg-brand-navy relative p-0 min-h-[460px] min-[901px]:min-h-[540px] flex items-center justify-center">
+          <div className="rounded-[26px] overflow-hidden border border-brand-yellow/35 shadow-card bg-[#f2efe9] relative p-0 min-h-[460px] min-[901px]:min-h-[540px] flex items-center justify-center">
             <EgyptInteractiveMap
               pins={MAP_PINS}
               destinations={DESTINATIONS}

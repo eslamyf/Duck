@@ -186,7 +186,7 @@ body {
    ========================================================================== */
 .leaflet-container {
   font-family: inherit !important;
-  background: var(--color-navy, #0c1226) !important;
+  background: #f2efe9 !important;
 }
 
 .duck-marker {
