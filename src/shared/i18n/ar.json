@@ -661,5 +661,33 @@
     "mapAriaLabel": "خريطة مصر التفاعلية لنقاط انطلاق Duck",
     "pinAriaLabel": "نقطة انطلاق {{name}} - {{status}}",
     "filterTripsAria": "الانتقال إلى رحلات {{name}}"
+  },
+  "auth": {
+  "signup": {
+    "metaTitle": "إنشاء حساب",
+    "title": "انضم إلى DUCK",
+    "subtitle": "أنشئ حسابك وابدأ مغامرتك القادمة على المياه.",
+    "fullName": "الاسم بالكامل",
+    "fullNamePlaceholder": "أدخل اسمك بالكامل",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "example@email.com",
+    "phone": "رقم الهاتف",
+    "phonePlaceholder": "أدخل رقم هاتفك",
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "أنشئ كلمة مرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "confirmPasswordPlaceholder": "أعد إدخال كلمة المرور",
+    "showPassword": "إظهار كلمة المرور",
+    "hidePassword": "إخفاء كلمة المرور",
+    "terms": "أوافق على الشروط والأحكام وسياسة الخصوصية",
+    "submit": "إنشاء حساب",
+    "alreadyHaveAccount": "لديك حساب بالفعل؟",
+    "login": "تسجيل الدخول",
+    "required": "هذا الحقل مطلوب",
+    "invalidEmail": "أدخل بريدًا إلكترونيًا صحيحًا",
+    "passwordMismatch": "كلمتا المرور غير متطابقتين",
+    "passwordMin": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
+    "termsRequired": "يجب الموافقة على الشروط والأحكام"
   }
+}
 }

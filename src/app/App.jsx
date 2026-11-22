@@ -14,6 +14,8 @@ const ReviewsSection = lazy(() => import('../widgets/reviews/index.js'));
 const FAQSection = lazy(() => import('../widgets/faq/index.js'));
 const GroupsPage = lazy(() => import('../widgets/groups-page/index.js'));
 const AboutPage = lazy(() => import('../pages/about/index.js'));
+const CreateAccountPage = lazy(() => import('../pages/auth/CreateAccountPage.jsx'));
+const LoginPage = lazy(() => import('../pages/auth/LoginPage.jsx'));
 
 function SectionSpinner({ className = 'text-white/50', borderClass = 'border-brand-yellow/30 border-t-brand-yellow' }) {
   return (
@@ -113,7 +115,11 @@ function TitleManager() {
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (pathname === ROUTES.GROUPS) {
+    if (pathname === '/login') {
+      document.title = `${t('common.login')} | ${t('common.brandName')}`;
+    } else if (pathname === '/create-account') {
+      document.title = `${t('auth.signup.metaTitle')} | ${t('common.brandName')}`;
+    } else if (pathname === ROUTES.GROUPS) {
       document.title = `${t('groups.metaTitle')} | ${t('common.brandName')}`;
     } else if (pathname === ROUTES.ABOUT) {
       document.title = `${t('about.metaTitle')} | ${t('common.brandName')}`;
@@ -128,6 +134,10 @@ function TitleManager() {
 export default function App() {
   const [selectedDestinationFilter, setSelectedDestinationFilter] = useState('all');
   const navigate = useNavigate();
+
+  const { pathname } = useLocation();
+
+  const isAuthPage = ['/login', '/create-account'].includes(pathname);
 
   // Idle prewarm for below-the-fold dynamic chunks
   useEffect(() => {
@@ -163,10 +173,19 @@ export default function App() {
       <ScrollManager />
       <LegacyHashRedirect />
       <TitleManager />
-      <div className="print:hidden">
-        <Navbar />
-      </div>
-      <main id="main" className="flex-1 pt-[52px] min-[901px]:pt-[100px] print:pt-0 print:m-0 print:p-0">
+
+      {!isAuthPage && (
+        <div className="print:hidden">
+          <Navbar />
+        </div>
+      )}
+
+      <main
+        id="main"
+        className={`flex-1 ${
+          isAuthPage ? '' : 'pt-[52px] min-[901px]:pt-[100px]'
+        } print:pt-0 print:m-0 print:p-0`}
+      >
         <Routes>
           <Route
             path={ROUTES.HOME}
@@ -191,6 +210,7 @@ export default function App() {
               </>
             }
           />
+
           <Route
             path={ROUTES.GROUPS}
             element={
@@ -199,6 +219,7 @@ export default function App() {
               </Suspense>
             }
           />
+
           <Route
             path={ROUTES.ABOUT}
             element={
@@ -207,12 +228,36 @@ export default function App() {
               </Suspense>
             }
           />
+
+          {/* Login Page */}
+          <Route
+            path="/login"
+            element={
+              <Suspense fallback={<GroupsFallback />}>
+                <LoginPage />
+              </Suspense>
+            }
+          />
+
+          {/* Create Account Page */}
+          <Route
+            path="/create-account"
+            element={
+              <Suspense fallback={<GroupsFallback />}>
+                <CreateAccountPage />
+              </Suspense>
+            }
+          />
+
           <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
         </Routes>
       </main>
-      <div className="print:hidden">
-        <Footer />
-      </div>
+
+      {!isAuthPage && (
+        <div className="print:hidden">
+          <Footer />
+        </div>
+      )}
     </div>
   );
 }

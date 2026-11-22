@@ -24,7 +24,7 @@ import {
   faArrowRight,
 } from '@fortawesome/free-solid-svg-icons';
 
-export default function Navbar({ onBookClick, onAuthClick }) {
+export default function Navbar({ onBookClick }) {
   const { lang, setLanguage, t } = useTranslation();
   const location = useLocation();
   const [currency, setCurrency] = useState('EGP');
@@ -42,7 +42,7 @@ export default function Navbar({ onBookClick, onAuthClick }) {
           setTemp(String(val));
         }
       })
-      .catch(() => { });
+      .catch(() => {});
   }, []);
 
   // Update active section based on scroll (only when on home page)
@@ -55,14 +55,23 @@ export default function Navbar({ onBookClick, onAuthClick }) {
         return;
       }
 
-      const sectionIds = [SECTIONS.LOCATIONS, SECTIONS.TRIPS, SECTIONS.REVIEWS, SECTIONS.FAQ, SECTIONS.MAP];
+      const sectionIds = [
+        SECTIONS.LOCATIONS,
+        SECTIONS.TRIPS,
+        SECTIONS.REVIEWS,
+        SECTIONS.FAQ,
+        SECTIONS.MAP,
+      ];
+
       let current = SECTIONS.TOP;
       const headerOffset = 220;
 
       for (const id of sectionIds) {
         const el = document.getElementById(id);
+
         if (el) {
           const rect = el.getBoundingClientRect();
+
           if (rect.top <= headerOffset) {
             current = id;
           }
@@ -81,13 +90,48 @@ export default function Navbar({ onBookClick, onAuthClick }) {
   }, [location.pathname]);
 
   const navLinks = [
-    { to: sectionLink(SECTIONS.TOP), label: t('nav.home'), icon: faHouse, sectionId: SECTIONS.TOP },
-    { to: sectionLink(SECTIONS.DESTINATIONS), label: t('nav.destinations'), icon: faLocationDot, sectionId: SECTIONS.DESTINATIONS },
-    { to: sectionLink(SECTIONS.TRIPS), label: t('nav.trips'), icon: faCompass, sectionId: SECTIONS.TRIPS },
-    { to: ROUTES.GROUPS, label: t('nav.groups'), icon: faUsersLine, isGroups: true },
-    { to: sectionLink(SECTIONS.REVIEWS), label: t('nav.reviews'), icon: faStar, sectionId: SECTIONS.REVIEWS },
-    { to: sectionLink(SECTIONS.FAQ), label: t('nav.faq'), icon: faCircleQuestion, sectionId: SECTIONS.FAQ },
-    { to: ROUTES.ABOUT, label: t('nav.about'), icon: faUsers, isAbout: true },
+    {
+      to: sectionLink(SECTIONS.TOP),
+      label: t('nav.home'),
+      icon: faHouse,
+      sectionId: SECTIONS.TOP,
+    },
+    {
+      to: sectionLink(SECTIONS.DESTINATIONS),
+      label: t('nav.destinations'),
+      icon: faLocationDot,
+      sectionId: SECTIONS.DESTINATIONS,
+    },
+    {
+      to: sectionLink(SECTIONS.TRIPS),
+      label: t('nav.trips'),
+      icon: faCompass,
+      sectionId: SECTIONS.TRIPS,
+    },
+    {
+      to: ROUTES.GROUPS,
+      label: t('nav.groups'),
+      icon: faUsersLine,
+      isGroups: true,
+    },
+    {
+      to: sectionLink(SECTIONS.REVIEWS),
+      label: t('nav.reviews'),
+      icon: faStar,
+      sectionId: SECTIONS.REVIEWS,
+    },
+    {
+      to: sectionLink(SECTIONS.FAQ),
+      label: t('nav.faq'),
+      icon: faCircleQuestion,
+      sectionId: SECTIONS.FAQ,
+    },
+    {
+      to: ROUTES.ABOUT,
+      label: t('nav.about'),
+      icon: faUsers,
+      isAbout: true,
+    },
   ];
 
   const isRtl = lang === 'ar';
@@ -96,18 +140,24 @@ export default function Navbar({ onBookClick, onAuthClick }) {
     if (location.pathname === ROUTES.ABOUT) {
       return Boolean(link.isAbout);
     }
+
     if (location.pathname === ROUTES.GROUPS) {
       return Boolean(link.isGroups);
     }
+
     if (link.isAbout || link.isGroups) return false;
+
     return activeSection === link.sectionId;
   };
 
   return (
     <header className="fixed top-0 inset-x-0 z-[120] bg-white border-b border-[rgba(20,125,159,0.16)] shadow-[0_8px_24px_rgba(12,18,38,0.06)] font-body">
+
       {/* Top Bar (Hidden on Mobile < 900px) */}
       <div className="hidden min-[901px]:flex items-center justify-between h-10 px-[4vw] bg-brand-navy text-white text-[13px]">
+
         <div className="flex items-center gap-2">
+
           {/* Language Toggle */}
           <Button
             type="button"
@@ -119,7 +169,11 @@ export default function Navbar({ onBookClick, onAuthClick }) {
           </Button>
 
           {/* Currency Group */}
-          <div className="inline-flex items-center gap-1" role="group" aria-label="Currency">
+          <div
+            className="inline-flex items-center gap-1"
+            role="group"
+            aria-label="Currency"
+          >
             {['EGP', 'USD', 'EUR'].map((cur) => (
               <Button
                 key={cur}
@@ -128,17 +182,35 @@ export default function Navbar({ onBookClick, onAuthClick }) {
                 size="xs"
                 onClick={() => setCurrency(cur)}
               >
-                {cur === 'EGP' ? t('common.currencyEGP') : cur === 'USD' ? t('common.currencyUSD') : t('common.currencyEUR')}
+                {cur === 'EGP'
+                  ? t('common.currencyEGP')
+                  : cur === 'USD'
+                    ? t('common.currencyUSD')
+                    : t('common.currencyEUR')}
               </Button>
             ))}
           </div>
         </div>
 
         {/* Weather Indicator */}
-        <span className="text-white/85 text-xs font-semibold flex items-center gap-1.5" id="tmpDesk">
-          <b className="text-brand-yellow font-bold">{t('common.aswan')}</b>
-          {temp && <span>{temp}{t('common.tempSuffix')}</span>}
-          <FontAwesomeIcon icon={faSun} className="text-brand-yellow text-sm ms-0.5" />
+        <span
+          className="text-white/85 text-xs font-semibold flex items-center gap-1.5"
+          id="tmpDesk"
+        >
+          <b className="text-brand-yellow font-bold">
+            {t('common.aswan')}
+          </b>
+
+          {temp && (
+            <span>
+              {temp}{t('common.tempSuffix')}
+            </span>
+          )}
+
+          <FontAwesomeIcon
+            icon={faSun}
+            className="text-brand-yellow text-sm ms-0.5"
+          />
         </span>
       </div>
 
@@ -147,8 +219,13 @@ export default function Navbar({ onBookClick, onAuthClick }) {
         aria-label="Main Navigation"
         className="flex items-center justify-between h-[52px] min-[901px]:h-[60px] px-[4vw] max-w-[1400px] mx-auto"
       >
+
         {/* Brand Logo */}
-        <Link to={ROUTES.HOME} className="block focus:outline-none" aria-label={t('common.brandName')}>
+        <Link
+          to={ROUTES.HOME}
+          className="block focus:outline-none"
+          aria-label={t('common.brandName')}
+        >
           <img
             src={duckLogo}
             alt={t('common.brandName')}
@@ -162,6 +239,7 @@ export default function Navbar({ onBookClick, onAuthClick }) {
         <div className="hidden min-[901px]:flex items-center gap-1 xl:gap-2">
           {navLinks.map((link) => {
             const isActive = checkIsActive(link);
+
             return (
               <Link
                 key={link.to}
@@ -180,6 +258,7 @@ export default function Navbar({ onBookClick, onAuthClick }) {
 
         {/* Desktop Action Buttons */}
         <div className="hidden min-[901px]:flex items-center gap-3">
+
           {/* Map Link */}
           <Link
             to={sectionLink(SECTIONS.MAP)}
@@ -190,10 +269,10 @@ export default function Navbar({ onBookClick, onAuthClick }) {
 
           {/* Login Button */}
           <Button
-            type="button"
+            as={Link}
+            to="/login"
             variant="ghost"
             size="sm"
-            onClick={onAuthClick}
             className="text-brand-navy border border-brand-navy/20 hover:border-brand-blue hover:text-brand-blue"
           >
             {t('common.login')}
@@ -224,7 +303,7 @@ export default function Navbar({ onBookClick, onAuthClick }) {
             onClick={() => setIsMobileOpen(!isMobileOpen)}
             aria-expanded={isMobileOpen}
             aria-controls="mobile-nav"
-            aria-label={t('nav.menu')}
+            aria-label={t('nav.menuAria')}
             className="p-2 text-brand-navy text-xl focus:outline-none"
           >
             <FontAwesomeIcon icon={isMobileOpen ? faXmark : faBars} />
@@ -238,8 +317,10 @@ export default function Navbar({ onBookClick, onAuthClick }) {
           id="mobile-nav"
           className="min-[901px]:hidden fixed inset-x-0 top-[52px] bottom-0 z-[118] bg-brand-navy text-white px-[6vw] py-4 pb-[calc(88px+env(safe-area-inset-bottom))] flex flex-col gap-1 overflow-y-auto shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200"
         >
+
           {/* Mobile Top Controls */}
           <div className="flex items-center justify-between gap-2 p-2 bg-white/8 border border-white/14 rounded-[14px] mb-2">
+
             <Button
               type="button"
               variant="chip"
@@ -249,6 +330,7 @@ export default function Navbar({ onBookClick, onAuthClick }) {
             >
               {t('common.languageSwitch')}
             </Button>
+
             <div className="inline-flex items-center gap-1">
               {['EGP', 'USD', 'EUR'].map((cur) => (
                 <Button
@@ -259,20 +341,37 @@ export default function Navbar({ onBookClick, onAuthClick }) {
                   onClick={() => setCurrency(cur)}
                   className="px-2"
                 >
-                  {cur === 'EGP' ? t('common.currencyEGP') : cur === 'USD' ? t('common.currencyUSD') : t('common.currencyEUR')}
+                  {cur === 'EGP'
+                    ? t('common.currencyEGP')
+                    : cur === 'USD'
+                      ? t('common.currencyUSD')
+                      : t('common.currencyEUR')}
                 </Button>
               ))}
             </div>
+
             <Badge
               as="span"
               variant="weather"
               size="sm"
               id="tmpMob"
-              icon={<FontAwesomeIcon icon={faSun} className="text-brand-yellow" />}
+              icon={
+                <FontAwesomeIcon
+                  icon={faSun}
+                  className="text-brand-yellow"
+                />
+              }
               className="bg-transparent border-0 p-0 text-white gap-1"
             >
-              <b className="text-brand-yellow font-bold">{t('common.aswan')}</b>
-              {temp && <span>{temp}{t('common.tempSuffix')}</span>}
+              <b className="text-brand-yellow font-bold">
+                {t('common.aswan')}
+              </b>
+
+              {temp && (
+                <span>
+                  {temp}{t('common.tempSuffix')}
+                </span>
+              )}
             </Badge>
           </div>
 
@@ -285,10 +384,17 @@ export default function Navbar({ onBookClick, onAuthClick }) {
               className="flex items-center justify-between min-h-[50px] px-3 text-[16px] font-semibold border-b border-white/10 rounded-xl hover:bg-brand-yellow/12 hover:text-brand-yellow transition-colors"
             >
               <span className="inline-flex items-center gap-2.5">
-                <FontAwesomeIcon icon={link.icon} className="w-5 text-center opacity-90" />
+                <FontAwesomeIcon
+                  icon={link.icon}
+                  className="w-5 text-center opacity-90"
+                />
                 {link.label}
               </span>
-              <FontAwesomeIcon icon={isRtl ? faArrowLeft : faArrowRight} className="text-xs opacity-60" />
+
+              <FontAwesomeIcon
+                icon={isRtl ? faArrowLeft : faArrowRight}
+                className="text-xs opacity-60"
+              />
             </Link>
           ))}
 
@@ -299,27 +405,38 @@ export default function Navbar({ onBookClick, onAuthClick }) {
             className="flex items-center justify-between min-h-[50px] px-3 text-[16px] font-semibold border-b border-white/10 rounded-xl hover:bg-brand-yellow/12 hover:text-brand-yellow transition-colors"
           >
             <span className="inline-flex items-center gap-2.5">
-              <FontAwesomeIcon icon={faMap} className="w-5 text-center opacity-90" />
+              <FontAwesomeIcon
+                icon={faMap}
+                className="w-5 text-center opacity-90"
+              />
               {t('nav.exploreMapAria')}
             </span>
-            <FontAwesomeIcon icon={isRtl ? faArrowLeft : faArrowRight} className="text-xs opacity-60" />
+
+            <FontAwesomeIcon
+              icon={isRtl ? faArrowLeft : faArrowRight}
+              className="text-xs opacity-60"
+            />
           </Link>
 
           {/* Mobile Login Button */}
-          <button
-            type="button"
-            onClick={() => {
-              setIsMobileOpen(false);
-              if (onAuthClick) onAuthClick();
-            }}
-            className="flex items-center justify-between w-full min-h-[48px] px-3.5 mt-2 bg-white/8 text-white border border-white/16 rounded-xl text-[15px] font-semibold cursor-pointer hover:bg-brand-yellow/12 hover:text-brand-yellow transition-colors"
+          <Link
+            to="/login"
+            onClick={() => setIsMobileOpen(false)}
+            className="flex items-center justify-between w-full min-h-[48px] px-3.5 mt-2 bg-white/8 text-white border border-white/16 rounded-xl text-[15px] font-semibold hover:bg-brand-yellow/12 hover:text-brand-yellow transition-colors"
           >
             <span className="inline-flex items-center gap-2.5">
-              <FontAwesomeIcon icon={faArrowRightToBracket} className="w-5 text-center opacity-90" />
+              <FontAwesomeIcon
+                icon={faArrowRightToBracket}
+                className="w-5 text-center opacity-90"
+              />
               {t('common.login')}
             </span>
-            <FontAwesomeIcon icon={isRtl ? faArrowLeft : faArrowRight} className="text-xs opacity-60" />
-          </button>
+
+            <FontAwesomeIcon
+              icon={isRtl ? faArrowLeft : faArrowRight}
+              className="text-xs opacity-60"
+            />
+          </Link>
 
           {/* Mobile Primary CTA */}
           <Button
@@ -331,6 +448,7 @@ export default function Navbar({ onBookClick, onAuthClick }) {
             icon={<FontAwesomeIcon icon={faCalendarCheck} />}
             onClick={(e) => {
               setIsMobileOpen(false);
+
               if (onBookClick) {
                 e.preventDefault();
                 onBookClick();

@@ -661,5 +661,33 @@
     "mapAriaLabel": "Duck Egypt Interactive Launch Points Map",
     "pinAriaLabel": "{{name}} launch point - {{status}}",
     "filterTripsAria": "Jump to {{name}} trips"
+  },
+  "auth": {
+  "signup": {
+    "metaTitle": "Create Account",
+    "title": "Join DUCK",
+    "subtitle": "Create your account and start your next water adventure.",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Enter your full name",
+    "email": "Email Address",
+    "emailPlaceholder": "example@email.com",
+    "phone": "Phone Number",
+    "phonePlaceholder": "Enter your phone number",
+    "password": "Password",
+    "passwordPlaceholder": "Create a password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Re-enter your password",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "terms": "I agree to the Terms & Conditions and Privacy Policy",
+    "submit": "Create Account",
+    "alreadyHaveAccount": "Already have an account?",
+    "login": "Log In",
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "passwordMismatch": "Passwords do not match",
+    "passwordMin": "Password must be at least 8 characters",
+    "termsRequired": "You must accept the terms and conditions"
   }
+}
 }
