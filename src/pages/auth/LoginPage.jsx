@@ -1,16 +1,21 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
 import { useTranslation } from '../../shared/i18n/index.js';
+import { loginUser } from '../../entities/user/api/authService.js';
 
 import kayakImage from '../../shared/assets/images/trips/botanical-garden-960w.webp';
 
 function LoginPage() {
   const { lang } = useTranslation();
-
   const isArabic = lang === 'ar';
+
+  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [generalError, setGeneralError] = useState('');
 
   const [formData, setFormData] = useState({
     email: '',
@@ -18,7 +23,6 @@ function LoginPage() {
   });
 
   const [errors, setErrors] = useState({});
-  const [success, setSuccess] = useState(false);
 
   const updateField = (e) => {
     const { name, value } = e.target;
@@ -33,7 +37,7 @@ function LoginPage() {
       [name]: '',
     }));
 
-    setSuccess(false);
+    setGeneralError('');
   };
 
   const validateForm = () => {
@@ -62,14 +66,45 @@ function LoginPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) return;
 
-    // Frontend demonstration only.
-    // Real authentication will be connected later.
-    setSuccess(true);
+    setIsSubmitting(true);
+    setGeneralError('');
+
+    try {
+      await loginUser({
+        email: formData.email,
+        password: formData.password,
+        rememberMe,
+      });
+
+      navigate('/dashboard', { replace: true });
+    } catch (error) {
+      if (error.message === 'INVALID_CREDENTIALS') {
+        setGeneralError(
+          isArabic
+            ? 'البريد الإلكتروني أو كلمة المرور غير صحيحة.'
+            : 'Incorrect email address or password.'
+        );
+      } else if (error.message === 'SECURE_CRYPTO_UNAVAILABLE') {
+        setGeneralError(
+          isArabic
+            ? 'تعذر تشغيل التحقق الآمن على هذا المتصفح.'
+            : 'Secure verification is unavailable in this browser.'
+        );
+      } else {
+        setGeneralError(
+          isArabic
+            ? 'حدث خطأ أثناء تسجيل الدخول. حاول مرة أخرى.'
+            : 'Something went wrong. Please try again.'
+        );
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inputClasses = `
@@ -93,7 +128,6 @@ function LoginPage() {
       dir={isArabic ? 'rtl' : 'ltr'}
       className="relative w-full h-[100dvh] min-h-0 overflow-hidden p-2 sm:p-4 lg:p-6 flex items-center justify-center"
     >
-
       {/* FULL SCREEN ASWAN BACKGROUND */}
 
       <img
@@ -106,11 +140,9 @@ function LoginPage() {
 
       <div className="absolute inset-0 bg-gradient-to-br from-[#121528]/50 via-transparent to-[#067BA1]/20" />
 
-
       {/* MAIN LOGIN CARD */}
 
       <div className="relative z-10 w-full max-w-[1400px] h-full max-h-[850px] min-h-0 bg-white rounded-[22px] lg:rounded-[32px] overflow-hidden shadow-2xl grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr]">
-
 
         {/* LEFT SIDE - ADVENTURE IMAGE */}
 
@@ -125,7 +157,6 @@ function LoginPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#090D1C] via-[#121528]/50 to-[#121528]/15" />
 
           <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#121528]/15" />
-
 
           {/* BRAND LOGO */}
 
@@ -144,7 +175,6 @@ function LoginPage() {
 
           </div>
 
-
           {/* ADVENTURE CONTENT */}
 
           <div className="absolute bottom-10 left-10 right-10 text-white">
@@ -158,7 +188,6 @@ function LoginPage() {
               </span>
 
             </div>
-
 
             <h1 className="text-4xl xl:text-[58px] font-black leading-[1.15] mb-5 max-w-xl">
 
@@ -182,7 +211,6 @@ function LoginPage() {
 
             </h1>
 
-
             <p className="text-white/75 text-base xl:text-lg leading-8 max-w-md">
 
               {isArabic
@@ -190,7 +218,6 @@ function LoginPage() {
                 : 'Great to have you back. Sign in and discover new experiences waiting for you with DUCK.'}
 
             </p>
-
 
             {/* ADVENTURE COMMUNITY */}
 
@@ -227,7 +254,6 @@ function LoginPage() {
 
           </div>
 
-
           {/* DECORATIVE CIRCLES */}
 
           <div className="absolute top-1/2 right-[-60px] w-40 h-40 rounded-full border border-[#F5E847]/20" />
@@ -235,8 +261,6 @@ function LoginPage() {
           <div className="absolute top-1/2 right-[-35px] w-28 h-28 rounded-full border border-[#F5E847]/20" />
 
         </section>
-
-
 
         {/* RIGHT SIDE - LOGIN FORM */}
 
@@ -246,9 +270,7 @@ function LoginPage() {
 
           <div className="absolute top-0 right-0 w-64 h-64 bg-[#067BA1]/5 rounded-full blur-3xl pointer-events-none" />
 
-
           <div className="relative w-full max-w-[430px]">
-
 
             {/* MOBILE LOGO */}
 
@@ -262,8 +284,6 @@ function LoginPage() {
               </Link>
 
             </div>
-
-
 
             {/* HEADING */}
 
@@ -291,7 +311,6 @@ function LoginPage() {
 
               </h2>
 
-
               <p className="text-gray-500 text-sm sm:text-base leading-7">
 
                 {isArabic
@@ -302,27 +321,15 @@ function LoginPage() {
 
             </div>
 
+            {/* LOGIN ERROR MESSAGE */}
 
-
-            {/* SUCCESS MESSAGE */}
-
-            {success && (
-
-              <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-xl">
-
-                <p className="text-green-700 text-xs sm:text-sm leading-6">
-
-                  {isArabic
-                    ? 'تم التحقق من البيانات بنجاح! تسجيل الدخول الحقيقي سيتاح بعد ربط نظام المصادقة.'
-                    : 'Your information has been validated! Real sign-in will be available once authentication is connected.'}
-
+            {generalError && (
+              <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-3">
+                <p className="text-xs leading-6 text-red-600 sm:text-sm">
+                  {generalError}
                 </p>
-
               </div>
-
             )}
-
-
 
             {/* LOGIN FORM */}
 
@@ -332,17 +339,13 @@ function LoginPage() {
               className="space-y-4"
             >
 
-
               {/* EMAIL */}
 
               <div>
 
                 <label className="block text-sm font-bold text-[#121528] mb-2">
-
                   {isArabic ? 'البريد الإلكتروني' : 'Email Address'}
-
                 </label>
-
 
                 <div className="relative">
 
@@ -353,7 +356,6 @@ function LoginPage() {
                   >
                     @
                   </span>
-
 
                   <input
                     type="email"
@@ -369,18 +371,13 @@ function LoginPage() {
 
                 </div>
 
-
                 {errors.email && (
-
                   <p className="text-red-500 text-xs mt-2">
                     {errors.email}
                   </p>
-
                 )}
 
               </div>
-
-
 
               {/* PASSWORD */}
 
@@ -389,11 +386,8 @@ function LoginPage() {
                 <div className="flex items-center justify-between mb-2">
 
                   <label className="text-sm font-bold text-[#121528]">
-
                     {isArabic ? 'كلمة المرور' : 'Password'}
-
                   </label>
-
 
                   <button
                     type="button"
@@ -406,15 +400,12 @@ function LoginPage() {
                       );
                     }}
                   >
-
                     {isArabic
                       ? 'نسيت كلمة المرور؟'
                       : 'Forgot Password?'}
-
                   </button>
 
                 </div>
-
 
                 <div className="relative">
 
@@ -442,7 +433,6 @@ function LoginPage() {
 
                   </span>
 
-
                   <input
                     type={showPassword ? 'text' : 'password'}
                     name="password"
@@ -458,7 +448,6 @@ function LoginPage() {
                       isArabic ? 'pr-12 pl-14' : 'pl-12 pr-14'
                     }`}
                   />
-
 
                   {/* SHOW / HIDE PASSWORD */}
 
@@ -476,7 +465,6 @@ function LoginPage() {
                   >
 
                     {showPassword ? (
-
                       <svg
                         width="20"
                         height="20"
@@ -490,9 +478,7 @@ function LoginPage() {
                         <path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c5 0 9 5 9 7s-4 7-9 7a9.8 9.8 0 0 1-5.1-1.5" />
                         <path d="M6.2 6.2C4.1 7.6 3 10 3 12c0 1.2 1 2.8 2.5 4.2" />
                       </svg>
-
                     ) : (
-
                       <svg
                         width="20"
                         height="20"
@@ -504,25 +490,19 @@ function LoginPage() {
                         <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
                         <circle cx="12" cy="12" r="3" />
                       </svg>
-
                     )}
 
                   </button>
 
                 </div>
 
-
                 {errors.password && (
-
                   <p className="text-red-500 text-xs mt-2">
                     {errors.password}
                   </p>
-
                 )}
 
               </div>
-
-
 
               {/* REMEMBER ME */}
 
@@ -545,22 +525,25 @@ function LoginPage() {
 
               </div>
 
-
-
               {/* LOGIN BUTTON */}
 
               <button
                 type="submit"
-                className="group relative w-full h-[52px] overflow-hidden rounded-xl bg-[#121528] text-white font-black text-base transition-all duration-300 hover:shadow-xl hover:shadow-[#121528]/20 hover:-translate-y-0.5"
+                disabled={isSubmitting}
+                className="group relative w-full h-[52px] overflow-hidden rounded-xl bg-[#121528] text-white font-black text-base transition-all duration-300 hover:shadow-xl hover:shadow-[#121528]/20 hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed"
               >
 
                 <span className="absolute inset-0 bg-[#067BA1] translate-x-full rtl:-translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
 
-
                 <span className="relative z-10 flex items-center justify-center gap-3">
 
-                  {isArabic ? 'تسجيل الدخول' : 'Sign In'}
-
+                  {isSubmitting
+                    ? isArabic
+                      ? 'جاري تسجيل الدخول...'
+                      : 'Signing in...'
+                    : isArabic
+                      ? 'تسجيل الدخول'
+                      : 'Sign In'}
 
                   <svg
                     width="20"
@@ -583,8 +566,6 @@ function LoginPage() {
 
             </form>
 
-
-
             {/* SIGN UP DIVIDER */}
 
             <div className="flex items-center gap-4 my-4">
@@ -599,49 +580,37 @@ function LoginPage() {
 
             </div>
 
-
-
             {/* SIGN UP CTA */}
 
             <div className="p-3 rounded-xl bg-[#F7F7F4] border border-[#E7E8ED] text-center">
 
               <p className="text-xs sm:text-sm text-gray-600 mb-3">
-
                 {isArabic
                   ? 'لسه معندكش حساب في DUCK؟'
                   : "Don't have an account with DUCK yet?"}
-
               </p>
-
 
               <Link
                 to="/create-account"
                 className="group w-full min-h-[46px] flex items-center justify-center gap-2 rounded-xl bg-[#F5E847] hover:bg-[#e9dc35] text-[#121528] font-black text-sm transition-all duration-300 hover:-translate-y-0.5 shadow-sm"
               >
-
                 {isArabic
                   ? 'أنشئ حسابك وابدأ المغامرة'
                   : 'CREATE YOUR ACCOUNT'}
 
-
                 <span className="text-lg transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1">
                   ↗
                 </span>
-
               </Link>
 
             </div>
 
-
-
             {/* FOOTER */}
 
             <div className="mt-3 text-center">
-
               <p className="text-[9px] text-gray-400 tracking-[3px] font-bold">
                 DUCK ENTERTAINMENT
               </p>
-
             </div>
 
           </div>

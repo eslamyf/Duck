@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
   Eye,
@@ -10,20 +11,25 @@ import {
   Lock,
   ArrowLeft,
   ArrowRight,
-  CheckCircle2,
 } from 'lucide-react';
 
 import { useTranslation } from '../../shared/i18n/index.js';
+
+import { registerUser } from '../../entities/user/api/authService.js';
 
 import kayakImage from '../../shared/assets/images/trips/botanical-garden-960w.webp';
 
 function CreateAccountPage() {
   const { t, lang } = useTranslation();
+  const navigate = useNavigate();
 
   const isArabic = lang === 'ar';
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [generalError, setGeneralError] = useState('');
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -35,8 +41,8 @@ function CreateAccountPage() {
   });
 
   const [errors, setErrors] = useState({});
-  const [success, setSuccess] = useState(false);
 
+  // Update form fields
   const updateField = (e) => {
     const { name, value, checked, type } = e.target;
 
@@ -50,9 +56,10 @@ function CreateAccountPage() {
       [name]: '',
     }));
 
-    setSuccess(false);
+    setGeneralError('');
   };
 
+  // Validate form
   const validateForm = () => {
     const newErrors = {};
 
@@ -63,7 +70,7 @@ function CreateAccountPage() {
     if (!formData.email.trim()) {
       newErrors.email = t('auth.signup.required');
     } else if (
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())
     ) {
       newErrors.email = t('auth.signup.invalidEmail');
     }
@@ -80,9 +87,7 @@ function CreateAccountPage() {
 
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = t('auth.signup.required');
-    } else if (
-      formData.password !== formData.confirmPassword
-    ) {
+    } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = t('auth.signup.passwordMismatch');
     }
 
@@ -95,13 +100,49 @@ function CreateAccountPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  // Register user
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validateForm()) return;
+    if (isSubmitting || !validateForm()) return;
 
-    // Frontend demonstration only. No account is created.
-    setSuccess(true);
+    setIsSubmitting(true);
+    setGeneralError('');
+
+    try {
+      await registerUser({
+        fullName: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        password: formData.password,
+      });
+
+      // Registration is frontend-only for now.
+      navigate('/dashboard', { replace: true });
+    } catch (error) {
+      if (error.message === 'EMAIL_ALREADY_EXISTS') {
+        setErrors((prev) => ({
+          ...prev,
+          email: isArabic
+            ? 'هذا البريد الإلكتروني مسجل بالفعل.'
+            : 'This email is already registered.',
+        }));
+      } else if (error.message === 'SECURE_CRYPTO_UNAVAILABLE') {
+        setGeneralError(
+          isArabic
+            ? 'المتصفح لا يدعم عملية إنشاء الحساب. استخدم متصفحًا حديثًا.'
+            : 'Your browser does not support account creation. Please use a modern browser.'
+        );
+      } else {
+        setGeneralError(
+          isArabic
+            ? 'حدث خطأ أثناء إنشاء الحساب. حاول مرة أخرى.'
+            : 'Something went wrong while creating your account. Please try again.'
+        );
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inputClasses = `
@@ -165,19 +206,15 @@ function CreateAccountPage() {
             <div className="w-14 h-1 bg-[#F5E847] rounded-full mb-6" />
 
             <h2 className="text-4xl xl:text-5xl font-black leading-tight mb-5">
-
               {isArabic
                 ? 'مغامرتك القادمة تبدأ من هنا.'
                 : 'Your Next Adventure Starts Here.'}
-
             </h2>
 
             <p className="text-white/75 text-lg leading-8 max-w-md">
-
               {isArabic
                 ? 'اكتشف جمال المياه، واستمتع بتجارب استثنائية مع DUCK.'
                 : 'Discover the beauty of the water and enjoy extraordinary experiences with DUCK.'}
-
             </p>
 
             <div className="flex items-center gap-3 mt-9">
@@ -185,11 +222,9 @@ function CreateAccountPage() {
               <span className="w-2 h-2 rounded-full bg-[#F5E847]" />
 
               <span className="text-sm text-white/70">
-
                 {isArabic
                   ? 'اكتشف العالم من منظور مختلف'
                   : 'Explore the world from a different perspective'}
-
               </span>
 
             </div>
@@ -197,7 +232,6 @@ function CreateAccountPage() {
           </div>
 
         </section>
-
 
         {/* FORM SIDE */}
 
@@ -212,7 +246,6 @@ function CreateAccountPage() {
             </span>
 
           </div>
-
 
           <div className="max-w-md w-full mx-auto">
 
@@ -234,30 +267,15 @@ function CreateAccountPage() {
 
             </div>
 
+            {/* General Error */}
 
-            {/* Success Message */}
-
-            {success && (
-
-              <div className="mb-6 p-4 rounded-xl bg-green-50 border border-green-200 flex items-start gap-3">
-
-                <CheckCircle2
-                  className="text-green-600 shrink-0 mt-1"
-                  size={20}
-                />
-
-                <p className="text-green-700 text-sm leading-6">
-
-                  {isArabic
-                    ? 'تم التحقق من البيانات بنجاح! هذه تجربة واجهة فقط، ولم يتم إنشاء حساب حقيقي.'
-                    : 'Your information has been validated! This is a frontend demo; no real account was created.'}
-
+            {generalError && (
+              <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200">
+                <p className="text-red-700 text-sm leading-6">
+                  {generalError}
                 </p>
-
               </div>
-
             )}
-
 
             {/* Form */}
 
@@ -287,7 +305,6 @@ function CreateAccountPage() {
 
               </FormField>
 
-
               {/* Email */}
 
               <FormField
@@ -308,7 +325,6 @@ function CreateAccountPage() {
 
               </FormField>
 
-
               {/* Phone */}
 
               <FormField
@@ -328,7 +344,6 @@ function CreateAccountPage() {
                 />
 
               </FormField>
-
 
               {/* Password */}
 
@@ -375,7 +390,6 @@ function CreateAccountPage() {
 
               </FormField>
 
-
               {/* Confirm Password */}
 
               <FormField
@@ -421,7 +435,6 @@ function CreateAccountPage() {
 
               </FormField>
 
-
               {/* Terms */}
 
               <div className="pt-2">
@@ -443,33 +456,34 @@ function CreateAccountPage() {
                 </label>
 
                 {errors.terms && (
-
                   <p className="text-red-500 text-xs mt-2">
                     {errors.terms}
                   </p>
-
                 )}
 
               </div>
-
 
               {/* Submit */}
 
               <button
                 type="submit"
-                className="w-full h-14 mt-3 flex items-center justify-center gap-3 rounded-xl bg-[#F5E847] hover:bg-[#e9dc35] text-[#121528] font-black text-base transition-all duration-200 hover:-translate-y-0.5 shadow-lg shadow-[#F5E847]/15"
+                disabled={isSubmitting}
+                className="w-full h-14 mt-3 flex items-center justify-center gap-3 rounded-xl bg-[#F5E847] hover:bg-[#e9dc35] text-[#121528] font-black text-base transition-all duration-200 hover:-translate-y-0.5 shadow-lg shadow-[#F5E847]/15 disabled:opacity-60 disabled:cursor-not-allowed"
               >
 
-                {t('auth.signup.submit')}
+                {isSubmitting
+                  ? (isArabic ? 'جاري إنشاء الحساب...' : 'Creating account...')
+                  : t('auth.signup.submit')}
 
-                {isArabic
-                  ? <ArrowLeft size={20} />
-                  : <ArrowRight size={20} />}
+                {!isSubmitting &&
+                  (isArabic
+                    ? <ArrowLeft size={20} />
+                    : <ArrowRight size={20} />
+                  )}
 
               </button>
 
             </form>
-
 
             {/* Login Link */}
 
@@ -496,10 +510,8 @@ function CreateAccountPage() {
   );
 }
 
-
 function FormField({ label, icon, error, children }) {
   return (
-
     <div>
 
       <label className="block text-sm font-bold text-[#121528] mb-2">
@@ -519,17 +531,13 @@ function FormField({ label, icon, error, children }) {
       {children}
 
       {error && (
-
         <p className="text-red-500 text-xs mt-2">
           {error}
         </p>
-
       )}
 
     </div>
-
   );
 }
-
 
 export default CreateAccountPage;

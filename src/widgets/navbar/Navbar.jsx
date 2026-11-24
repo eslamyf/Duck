@@ -1,10 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import duckLogo from '../../shared/assets/icons/Artboard 14.png';
+
 import { useTranslation } from '../../shared/i18n/index.js';
 import { Button, Badge } from '../../shared/ui/index.js';
 import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
+
+import { getCurrentUser } from '../../entities/user/api/authService.js';
+
 import {
   faHouse,
   faLocationDot,
@@ -27,14 +32,25 @@ import {
 export default function Navbar({ onBookClick }) {
   const { lang, setLanguage, t } = useTranslation();
   const location = useLocation();
+
   const [currency, setCurrency] = useState('EGP');
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(SECTIONS.TOP);
   const [temp, setTemp] = useState('');
 
+  // Current Logged-in User
+  const [currentUser, setCurrentUser] = useState(() => getCurrentUser());
+
+  // Refresh Current User When Navigating Between Pages
+  useEffect(() => {
+    setCurrentUser(getCurrentUser());
+  }, [location.pathname]);
+
   // Fetch weather data for Aswan
   useEffect(() => {
-    fetch('https://api.open-meteo.com/v1/forecast?latitude=24.09&longitude=32.9&current=temperature_2m')
+    fetch(
+      'https://api.open-meteo.com/v1/forecast?latitude=24.09&longitude=32.9&current=temperature_2m'
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data?.current?.temperature_2m !== undefined) {
@@ -135,6 +151,16 @@ export default function Navbar({ onBookClick }) {
   ];
 
   const isRtl = lang === 'ar';
+
+  // Account Information
+  const accountName =
+    currentUser?.fullName ||
+    currentUser?.name ||
+    (isRtl ? 'حسابي' : 'My Account');
+
+  const userInitial = accountName.trim().charAt(0).toUpperCase();
+
+  const accountAvatar = currentUser?.profileImage;
 
   const checkIsActive = (link) => {
     if (location.pathname === ROUTES.ABOUT) {
@@ -267,16 +293,35 @@ export default function Navbar({ onBookClick }) {
             {t('nav.exploreMapAria')}
           </Link>
 
-          {/* Login Button */}
-          <Button
-            as={Link}
-            to="/login"
-            variant="ghost"
-            size="sm"
-            className="text-brand-navy border border-brand-navy/20 hover:border-brand-blue hover:text-brand-blue"
-          >
-            {t('common.login')}
-          </Button>
+          {/* Login / Account Avatar */}
+          {currentUser ? (
+            <Link
+              to="/dashboard"
+              aria-label={isRtl ? 'الذهاب إلى لوحة التحكم' : 'Go to Dashboard'}
+              title={accountName}
+              className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-brand-yellow bg-brand-navy text-lg font-black text-brand-yellow shadow-sm transition hover:scale-105"
+            >
+              {accountAvatar ? (
+                <img
+                  src={accountAvatar}
+                  alt={accountName}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                userInitial
+              )}
+            </Link>
+          ) : (
+            <Button
+              as={Link}
+              to="/login"
+              variant="ghost"
+              size="sm"
+              className="text-brand-navy border border-brand-navy/20 hover:border-brand-blue hover:text-brand-blue"
+            >
+              {t('common.login')}
+            </Button>
+          )}
 
           {/* Book Now Button */}
           <Button
@@ -418,25 +463,47 @@ export default function Navbar({ onBookClick }) {
             />
           </Link>
 
-          {/* Mobile Login Button */}
-          <Link
-            to="/login"
-            onClick={() => setIsMobileOpen(false)}
-            className="flex items-center justify-between w-full min-h-[48px] px-3.5 mt-2 bg-white/8 text-white border border-white/16 rounded-xl text-[15px] font-semibold hover:bg-brand-yellow/12 hover:text-brand-yellow transition-colors"
-          >
-            <span className="inline-flex items-center gap-2.5">
-              <FontAwesomeIcon
-                icon={faArrowRightToBracket}
-                className="w-5 text-center opacity-90"
-              />
-              {t('common.login')}
-            </span>
+          {/* Mobile Login / Account Avatar */}
+          {currentUser ? (
+            <Link
+              to="/dashboard"
+              onClick={() => setIsMobileOpen(false)}
+              className="mt-2 flex min-h-[48px] w-full items-center justify-center rounded-xl border border-white/10 bg-white/5 transition hover:bg-white/10"
+              aria-label={isRtl ? 'الذهاب إلى لوحة التحكم' : 'Go to Dashboard'}
+              title={accountName}
+            >
+              <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 border-brand-yellow bg-brand-navy text-lg font-black text-brand-yellow">
+                {accountAvatar ? (
+                  <img
+                    src={accountAvatar}
+                    alt={accountName}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  userInitial
+                )}
+              </span>
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              onClick={() => setIsMobileOpen(false)}
+              className="flex min-h-[48px] w-full items-center justify-between rounded-xl border border-white/16 bg-white/8 px-3.5 text-[15px] font-semibold text-white transition-colors hover:bg-brand-yellow/12 hover:text-brand-yellow"
+            >
+              <span className="inline-flex items-center gap-2.5">
+                <FontAwesomeIcon
+                  icon={faArrowRightToBracket}
+                  className="w-5 text-center opacity-90"
+                />
+                {t('common.login')}
+              </span>
 
-            <FontAwesomeIcon
-              icon={isRtl ? faArrowLeft : faArrowRight}
-              className="text-xs opacity-60"
-            />
-          </Link>
+              <FontAwesomeIcon
+                icon={isRtl ? faArrowLeft : faArrowRight}
+                className="text-xs opacity-60"
+              />
+            </Link>
+          )}
 
           {/* Mobile Primary CTA */}
           <Button

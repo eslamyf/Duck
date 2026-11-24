@@ -1,11 +1,26 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
+
 import Navbar from '../widgets/navbar/Navbar.jsx';
 import HeroSection from '../widgets/hero/HeroSection.jsx';
 import DestinationsSection from '../widgets/destinations/index.js';
 import TripsSection from '../widgets/trips/index.js';
 import GroupsBanner from '../widgets/groups-banner/index.js';
 import Footer from '../widgets/footer/Footer.jsx';
+
+import CustomerLayout from '../layouts/CustomerLayout.jsx';
+import CustomerDashboardPage from '../pages/customer/CustomerDashboardPage.jsx';
+import MyBookingsPage from '../pages/customer/MyBookingsPage.jsx';
+import ProfilePage from '../pages/customer/ProfilePage.jsx';
+
+import ProtectedRoute from './routes/ProtectedRoute.jsx';
+
 import { ROUTES, sectionLink, SECTIONS } from '../shared/config/routes.js';
 import { useTranslation } from '../shared/i18n/index.js';
 
@@ -17,25 +32,39 @@ const AboutPage = lazy(() => import('../pages/about/index.js'));
 const CreateAccountPage = lazy(() => import('../pages/auth/CreateAccountPage.jsx'));
 const LoginPage = lazy(() => import('../pages/auth/LoginPage.jsx'));
 
-function SectionSpinner({ className = 'text-white/50', borderClass = 'border-brand-yellow/30 border-t-brand-yellow' }) {
+function SectionSpinner({
+  className = 'text-white/50',
+  borderClass = 'border-brand-yellow/30 border-t-brand-yellow',
+}) {
   return (
-    <div className={`w-full flex items-center justify-center ${className}`} aria-busy="true">
+    <div
+      className={`w-full flex items-center justify-center ${className}`}
+      aria-busy="true"
+    >
       <div className={`w-10 h-10 border-4 rounded-full animate-spin ${borderClass}`} />
     </div>
   );
 }
 
 function GroupsFallback() {
-  return <SectionSpinner className="bg-brand-navy min-h-[520px] h-[min(80vh,660px)]" />;
+  return (
+    <SectionSpinner className="bg-brand-navy min-h-[520px] h-[min(80vh,660px)]" />
+  );
 }
 
 function AboutFallback() {
-  return <SectionSpinner className="bg-brand-navy min-h-[520px] h-[min(80vh,660px)]" />;
+  return (
+    <SectionSpinner className="bg-brand-navy min-h-[520px] h-[min(80vh,660px)]" />
+  );
 }
 
 function MapFallback() {
   return (
-    <section id="map" className="relative w-full min-h-[560px] bg-brand-navy flex items-center justify-center text-white/50" aria-label="Loading Map">
+    <section
+      id="map"
+      className="relative w-full min-h-[560px] bg-brand-navy flex items-center justify-center text-white/50"
+      aria-label="Loading Map"
+    >
       <div className="w-10 h-10 border-4 border-brand-yellow/30 border-t-brand-yellow rounded-full animate-spin" />
     </section>
   );
@@ -43,7 +72,11 @@ function MapFallback() {
 
 function ReviewsFallback() {
   return (
-    <section id="reviews" className="relative w-full min-h-[420px] bg-surface-sand flex items-center justify-center text-brand-navy/30" aria-label="Loading Reviews">
+    <section
+      id="reviews"
+      className="relative w-full min-h-[420px] bg-surface-sand flex items-center justify-center text-brand-navy/30"
+      aria-label="Loading Reviews"
+    >
       <div className="w-10 h-10 border-4 border-brand-blue/30 border-t-brand-blue rounded-full animate-spin" />
     </section>
   );
@@ -51,7 +84,11 @@ function ReviewsFallback() {
 
 function FAQFallback() {
   return (
-    <section id="faq" className="relative w-full min-h-[420px] bg-surface-white flex items-center justify-center text-brand-navy/30" aria-label="Loading FAQ">
+    <section
+      id="faq"
+      className="relative w-full min-h-[420px] bg-surface-white flex items-center justify-center text-brand-navy/30"
+      aria-label="Loading FAQ"
+    >
       <div className="w-10 h-10 border-4 border-brand-blue/30 border-t-brand-blue rounded-full animate-spin" />
     </section>
   );
@@ -69,11 +106,14 @@ function ScrollManager() {
   useEffect(() => {
     if (hash) {
       const targetId = hash.replace(/^#/, '');
+
       if (targetId.startsWith('/')) return;
 
       let retries = 0;
+
       const scrollToTarget = () => {
         const el = document.getElementById(targetId);
+
         if (el) {
           el.scrollIntoView({ behavior: 'smooth' });
         } else if (retries < 30) {
@@ -83,6 +123,7 @@ function ScrollManager() {
       };
 
       const timer = setTimeout(scrollToTarget, 50);
+
       return () => clearTimeout(timer);
     }
   }, [pathname, hash]);
@@ -96,14 +137,22 @@ function LegacyHashRedirect() {
   useEffect(() => {
     const handleHash = () => {
       const h = window.location.hash;
+
       if (h === '#/groups' || h === '#//groups' || h.startsWith('#/groups')) {
         navigate(ROUTES.GROUPS, { replace: true });
-      } else if (h === '#/about' || h === '#//about' || h.startsWith('#/about')) {
+      } else if (
+        h === '#/about' ||
+        h === '#//about' ||
+        h.startsWith('#/about')
+      ) {
         navigate(ROUTES.ABOUT, { replace: true });
       }
     };
+
     handleHash();
+
     window.addEventListener('hashchange', handleHash);
+
     return () => window.removeEventListener('hashchange', handleHash);
   }, [navigate]);
 
@@ -119,6 +168,8 @@ function TitleManager() {
       document.title = `${t('common.login')} | ${t('common.brandName')}`;
     } else if (pathname === '/create-account') {
       document.title = `${t('auth.signup.metaTitle')} | ${t('common.brandName')}`;
+    } else if (pathname.startsWith('/dashboard')) {
+      document.title = `Customer Dashboard | ${t('common.brandName')}`;
     } else if (pathname === ROUTES.GROUPS) {
       document.title = `${t('groups.metaTitle')} | ${t('common.brandName')}`;
     } else if (pathname === ROUTES.ABOUT) {
@@ -133,11 +184,14 @@ function TitleManager() {
 
 export default function App() {
   const [selectedDestinationFilter, setSelectedDestinationFilter] = useState('all');
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const { pathname } = useLocation();
 
   const isAuthPage = ['/login', '/create-account'].includes(pathname);
+  const isDashboardPage = pathname.startsWith('/dashboard');
+
+  const hideMainLayout = isAuthPage || isDashboardPage;
 
   // Idle prewarm for below-the-fold dynamic chunks
   useEffect(() => {
@@ -149,18 +203,24 @@ export default function App() {
 
     if ('requestIdleCallback' in window) {
       const id = window.requestIdleCallback(prewarm, { timeout: 2500 });
+
       return () => {
-        if ('cancelIdleCallback' in window) window.cancelIdleCallback(id);
+        if ('cancelIdleCallback' in window) {
+          window.cancelIdleCallback(id);
+        }
       };
     } else {
       const id = setTimeout(prewarm, 2000);
+
       return () => clearTimeout(id);
     }
   }, []);
 
   const handleSelectDestination = (filterKey) => {
     setSelectedDestinationFilter(filterKey);
+
     const tripsEl = document.getElementById('trips');
+
     if (tripsEl) {
       tripsEl.scrollIntoView({ behavior: 'smooth' });
     } else {
@@ -174,36 +234,48 @@ export default function App() {
       <LegacyHashRedirect />
       <TitleManager />
 
-      {!isAuthPage && (
+      {!hideMainLayout && (
         <div className="print:hidden">
           <Navbar />
         </div>
       )}
 
-      <main
+      <div
         id="main"
+        role="main"
         className={`flex-1 ${
-          isAuthPage ? '' : 'pt-[52px] min-[901px]:pt-[100px]'
+          hideMainLayout ? '' : 'pt-[52px] min-[901px]:pt-[100px]'
         } print:pt-0 print:m-0 print:p-0`}
       >
         <Routes>
+          {/* Home Page */}
           <Route
             path={ROUTES.HOME}
             element={
               <>
                 <HeroSection />
-                <DestinationsSection onSelectDestination={handleSelectDestination} />
+
+                <DestinationsSection
+                  onSelectDestination={handleSelectDestination}
+                />
+
                 <TripsSection
                   externalFilter={selectedDestinationFilter}
                   onFilterChange={setSelectedDestinationFilter}
                 />
+
                 <GroupsBanner />
+
                 <Suspense fallback={<MapFallback />}>
-                  <MapSection onSelectDestination={handleSelectDestination} />
+                  <MapSection
+                    onSelectDestination={handleSelectDestination}
+                  />
                 </Suspense>
+
                 <Suspense fallback={<ReviewsFallback />}>
                   <ReviewsSection />
                 </Suspense>
+
                 <Suspense fallback={<FAQFallback />}>
                   <FAQSection />
                 </Suspense>
@@ -211,6 +283,7 @@ export default function App() {
             }
           />
 
+          {/* Groups Page */}
           <Route
             path={ROUTES.GROUPS}
             element={
@@ -220,6 +293,7 @@ export default function App() {
             }
           />
 
+          {/* About Page */}
           <Route
             path={ROUTES.ABOUT}
             element={
@@ -249,11 +323,23 @@ export default function App() {
             }
           />
 
+          {/* Customer Dashboard - Protected Routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<CustomerLayout />}>
+              <Route index element={<CustomerDashboardPage />} />
+
+              <Route path="bookings" element={<MyBookingsPage />} />
+
+              <Route path="profile" element={<ProfilePage />} />
+            </Route>
+          </Route>
+
+          {/* Fallback */}
           <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
         </Routes>
-      </main>
+      </div>
 
-      {!isAuthPage && (
+      {!hideMainLayout && (
         <div className="print:hidden">
           <Footer />
         </div>
