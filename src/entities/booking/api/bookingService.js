@@ -1,5 +1,23 @@
+import { generateQuoteRef } from '../../../shared/config/constants.js';
+
 const BOOKINGS_KEY = 'duck_bookings';
+const QUOTES_KEY = 'duck_b2b_quotes';
 export const BOOKINGS_UPDATED_EVENT = 'duck:bookings-updated';
+
+const INITIAL_SEED_QUOTES = [
+  {
+    ref: 'QUO-2026-201',
+    organization: 'Vodafone Egypt Team',
+    partnerType: 'company',
+    contactName: 'أحمد حسن',
+    phone: '+201012345678',
+    groupSize: 35,
+    date: '2026-12-10',
+    commission: 0,
+    status: 'Contacted',
+    createdAt: '2026-11-24T09:00:00.000Z',
+  },
+];
 
 const BASE_EQUIPMENT = [
   { id: 'kayak', nameAr: 'كاياك النيل', nameEn: 'Nile Kayak', maxUnits: 20, priceEgp: 350 },
@@ -307,4 +325,48 @@ export const getGlobalBookingStats = () => {
     completed: bookings.filter((b) => b.status === 'completed').length,
     revenueEgp,
   };
+};
+
+export const getB2BQuotes = () => {
+  try {
+    const raw = localStorage.getItem(QUOTES_KEY);
+    if (!raw) {
+      localStorage.setItem(QUOTES_KEY, JSON.stringify(INITIAL_SEED_QUOTES));
+      return [...INITIAL_SEED_QUOTES];
+    }
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
+
+export const addB2BQuote = (quote) => {
+  const quotes = getB2BQuotes();
+  const newQuote = {
+    ref: quote.ref || generateQuoteRef(),
+    organization: quote.organization || '',
+    partnerType: quote.partnerType || 'company',
+    contactName: quote.contactName || '',
+    phone: quote.phone || '',
+    groupSize: Math.max(10, Number(quote.groupSize) || 20),
+    date: quote.date || new Date().toISOString().split('T')[0],
+    commission: Number(quote.commission) || 0,
+    status: quote.status || 'New',
+    createdAt: new Date().toISOString(),
+  };
+  const updated = [newQuote, ...quotes];
+  localStorage.setItem(QUOTES_KEY, JSON.stringify(updated));
+  notifyBookingsUpdated();
+  return newQuote;
+};
+
+export const updateB2BQuote = (ref, updates) => {
+  const quotes = getB2BQuotes();
+  const idx = quotes.findIndex((q) => q.ref === ref);
+  if (idx === -1) return null;
+  quotes[idx] = { ...quotes[idx], ...updates };
+  localStorage.setItem(QUOTES_KEY, JSON.stringify(quotes));
+  notifyBookingsUpdated();
+  return quotes[idx];
 };

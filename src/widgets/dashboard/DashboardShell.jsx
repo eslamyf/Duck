@@ -7,6 +7,7 @@ import {
   faRightFromBracket,
   faGlobe,
   faHouse,
+  faUser,
 } from '@fortawesome/free-solid-svg-icons';
 
 import duckLogo from '../../shared/assets/icons/Artboard_8-removebg-preview.png';
@@ -39,7 +40,24 @@ export default function DashboardShell({
   const displayName =
     (isArabic ? currentUser?.fullName : currentUser?.fullNameEn || currentUser?.fullName) ||
     t('common.brandName');
-  const initial = displayName.trim().charAt(0).toUpperCase();
+
+  const [currency, setCurrency] = useState(() => {
+    try {
+      return localStorage.getItem('duck_currency') || 'EGP';
+    } catch {
+      return 'EGP';
+    }
+  });
+
+  const handleCurrencyChange = (cur) => {
+    setCurrency(cur);
+    try {
+      localStorage.setItem('duck_currency', cur);
+      window.dispatchEvent(new CustomEvent('duck:currency-updated', { detail: cur }));
+    } catch {
+      // ignore storage failure
+    }
+  };
 
   const handleLogout = () => {
     logoutUser();
@@ -183,7 +201,29 @@ export default function DashboardShell({
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+              {/* Currency Selector (.pm-tcur from Final_4) */}
+              <div
+                className="hidden sm:inline-flex items-center gap-0.5 rounded-full bg-surface-mist p-1 border border-brand-blue/12"
+                role="group"
+                aria-label="Currency"
+              >
+                {['EGP', 'USD', 'EUR'].map((cur) => (
+                  <button
+                    key={cur}
+                    type="button"
+                    onClick={() => handleCurrencyChange(cur)}
+                    className={`rounded-full px-2.5 py-1 text-[11px] font-bold transition cursor-pointer ${
+                      currency === cur
+                        ? 'bg-brand-navy text-brand-yellow shadow-xs'
+                        : 'text-brand-navy/70 hover:text-brand-navy'
+                    }`}
+                  >
+                    {cur === 'EGP' ? 'EGP' : `${cur} ~`}
+                  </button>
+                ))}
+              </div>
+
               {headerActions}
 
               <button
@@ -195,8 +235,17 @@ export default function DashboardShell({
                 <span>{t('common.languageSwitch')}</span>
               </button>
 
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-navy text-sm font-black text-brand-yellow">
-                {initial}
+              <Link
+                to={ROUTES.HOME}
+                className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-brand-blue/20 bg-surface-white px-3 py-1.5 text-xs font-bold text-brand-navy transition hover:bg-surface-mist"
+              >
+                <FontAwesomeIcon icon={faHouse} className="text-brand-blue" />
+                <span>{isArabic ? 'الموقع' : 'Site'}</span>
+              </Link>
+
+              <div className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-brand-navy px-3 py-1.5 text-xs font-bold text-brand-yellow">
+                <FontAwesomeIcon icon={faUser} className="text-[11px]" />
+                <span className="max-w-[120px] truncate">{displayName.split(' ')[0]}</span>
               </div>
             </div>
           </header>

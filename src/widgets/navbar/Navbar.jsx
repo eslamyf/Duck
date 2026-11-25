@@ -28,6 +28,7 @@ import {
   faCalendarCheck,
   faArrowLeft,
   faArrowRight,
+  faGaugeHigh,
 } from '@fortawesome/free-solid-svg-icons';
 
 export default function Navbar({ onBookClick }) {
@@ -152,11 +153,9 @@ export default function Navbar({ onBookClick }) {
   const accountName =
     currentUser?.fullName ||
     currentUser?.name ||
-    (isRtl ? 'حسابي' : 'My Account');
-
-  const userInitial = accountName.trim().charAt(0).toUpperCase();
-
-  const accountAvatar = currentUser?.profileImage;
+    (isRtl ? 'لوحة التحكم' : 'Dashboard');
+  const dashboardLabel = isRtl ? 'لوحة التحكم' : 'Dashboard';
+  const dashboardPath = currentUser ? getPortalPathForRole(currentUser.role) : ROUTES.LOGIN;
 
   const checkIsActive = (link) => {
     if (location.pathname === ROUTES.ABOUT) {
@@ -289,23 +288,16 @@ export default function Navbar({ onBookClick }) {
             {t('nav.exploreMapAria')}
           </Link>
 
-          {/* Login / Account Avatar */}
+          {/* Login / Dashboard Button */}
           {currentUser ? (
             <Link
-              to={getPortalPathForRole(currentUser.role)}
+              to={dashboardPath}
               aria-label={isRtl ? 'الذهاب إلى لوحة التحكم' : 'Go to Dashboard'}
               title={accountName}
-              className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-brand-yellow bg-brand-navy text-lg font-black text-brand-yellow shadow-sm transition hover:scale-105"
+              className="inline-flex min-h-[38px] shrink-0 items-center gap-2 rounded-full border border-brand-navy/15 bg-brand-navy px-4 py-1.5 text-xs font-bold text-brand-yellow shadow-sm transition hover:bg-brand-blue hover:text-white"
             >
-              {accountAvatar ? (
-                <img
-                  src={accountAvatar}
-                  alt={accountName}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                userInitial
-              )}
+              <FontAwesomeIcon icon={faGaugeHigh} />
+              <span>{dashboardLabel}</span>
             </Link>
           ) : (
             <Button
@@ -459,26 +451,27 @@ export default function Navbar({ onBookClick }) {
             />
           </Link>
 
-          {/* Mobile Login / Account Avatar */}
+          {/* Mobile Login / Dashboard Link */}
           {currentUser ? (
             <Link
-              to="/dashboard"
+              to={dashboardPath}
               onClick={() => setIsMobileOpen(false)}
-              className="mt-2 flex min-h-[48px] w-full items-center justify-center rounded-xl border border-white/10 bg-white/5 transition hover:bg-white/10"
+              className="mt-2 flex min-h-[48px] w-full items-center justify-between rounded-xl border border-brand-yellow/40 bg-brand-yellow/15 px-3.5 text-[15px] font-bold text-brand-yellow transition hover:bg-brand-yellow hover:text-brand-navy"
               aria-label={isRtl ? 'الذهاب إلى لوحة التحكم' : 'Go to Dashboard'}
               title={accountName}
             >
-              <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 border-brand-yellow bg-brand-navy text-lg font-black text-brand-yellow">
-                {accountAvatar ? (
-                  <img
-                    src={accountAvatar}
-                    alt={accountName}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  userInitial
-                )}
+              <span className="inline-flex items-center gap-2.5">
+                <FontAwesomeIcon
+                  icon={faGaugeHigh}
+                  className="w-5 text-center"
+                />
+                <span>{dashboardLabel}</span>
               </span>
+
+              <FontAwesomeIcon
+                icon={isRtl ? faArrowLeft : faArrowRight}
+                className="text-xs opacity-75"
+              />
             </Link>
           ) : (
             <Link

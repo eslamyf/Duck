@@ -10,7 +10,7 @@ import QRCodeSVG from '../booking/QRCodeSVG.jsx';
 import PrintableInvoice from '../booking/PrintableInvoice.jsx';
 import StatusBadge from './StatusBadge.jsx';
 import { useTranslation } from '../../shared/i18n/index.js';
-import { CONTACT } from '../../shared/config/constants.js';
+import { buildWhatsAppUrl } from '../../shared/config/constants.js';
 import { TRIPS } from '../trips/tripsData.js';
 
 export default function BookingDetailsModal({ booking, onClose }) {
@@ -26,12 +26,11 @@ export default function BookingDetailsModal({ booking, onClose }) {
   const amountToPay = Number(booking.amountToPay) || totalAmount;
   const remaining = Math.max(0, totalAmount - amountToPay);
 
-  const whatsappText = encodeURIComponent(
+  const whatsappUrl = buildWhatsAppUrl(
     isArabic
       ? `مرحباً DUCK، أرسل لكم إيصال الحجز رقم ${ref} للرحلة: ${booking.tripTitle || booking.tripKey}`
       : `Hello DUCK, sharing booking receipt ${ref} for: ${booking.tripTitle || booking.tripKey}`
   );
-  const whatsappUrl = `${CONTACT.WHATSAPP}?text=${whatsappText}`;
 
   return (
     <>

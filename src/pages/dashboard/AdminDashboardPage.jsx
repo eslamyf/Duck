@@ -11,6 +11,7 @@ import {
   faClock,
   faCircleCheck,
   faEye,
+  faBuilding,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -30,6 +31,7 @@ import { DEFAULT_ROLE_PERMISSIONS } from '../../entities/user/model/roles.js';
 import {
   updateBookingStatus,
   getGlobalBookingStats,
+  updateB2BQuote,
 } from '../../entities/booking/api/bookingService.js';
 
 const ALL_STATUSES = [
@@ -49,7 +51,7 @@ export default function AdminDashboardPage() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedBooking, setSelectedBooking] = useState(null);
 
-  const { bookings, inventory } = useBookingsSync();
+  const { bookings, inventory, quotes } = useBookingsSync();
 
   const stats = useMemo(() => {
     void bookings;
@@ -77,6 +79,7 @@ export default function AdminDashboardPage() {
     { key: 'trips', label: isArabic ? 'الأنشطة والأسعار' : 'Activities & Pricing', icon: faWater },
     { key: 'destinations', label: isArabic ? 'الوجهات' : 'Destinations', icon: faMapLocationDot },
     { key: 'providers', label: isArabic ? 'الشركاء والمخزون' : 'Partners & Fleet', icon: faHandshake },
+    { key: 'b2b', label: isArabic ? 'طلبات عروض B2B' : 'B2B Quotes', icon: faBuilding },
     { key: 'users', label: isArabic ? 'المستخدمون والصلاحيات' : 'Users & RBAC', icon: faUsersGear },
   ];
 
@@ -371,6 +374,73 @@ export default function AdminDashboardPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {activeTab === 'b2b' && (
+        <DataTable
+          rowKey={(row) => row.ref}
+          rows={quotes}
+          columns={[
+            {
+              key: 'ref',
+              label: isArabic ? 'المرجع' : 'Ref',
+              render: (row) => (
+                <span className="font-mono text-xs font-bold text-brand-blue" dir="ltr">
+                  {row.ref}
+                </span>
+              ),
+            },
+            {
+              key: 'organization',
+              label: isArabic ? 'الجهة / الشركة' : 'Organization',
+              render: (row) => (
+                <div>
+                  <p className="font-bold text-brand-navy">{row.organization}</p>
+                  <p className="text-[11px] text-brand-navy/60" dir="ltr">
+                    {row.contactName} • {row.phone}
+                  </p>
+                </div>
+              ),
+            },
+            {
+              key: 'groupSize',
+              label: isArabic ? 'العدد' : 'Size',
+              render: (row) => <span className="font-bold">{row.groupSize}</span>,
+            },
+            {
+              key: 'commission',
+              label: isArabic ? 'العمولة %' : 'Comm %',
+              render: (row) => (
+                <input
+                  type="number"
+                  min={0}
+                  max={40}
+                  value={row.commission || 0}
+                  onChange={(e) => updateB2BQuote(row.ref, { commission: Number(e.target.value) })}
+                  className="w-16 rounded-lg border border-brand-blue/25 bg-surface-mist px-2 py-1 text-xs font-bold text-brand-navy"
+                />
+              ),
+            },
+            {
+              key: 'status',
+              label: isArabic ? 'الحالة' : 'Status',
+              render: (row) => (
+                <select
+                  value={row.status || 'New'}
+                  onChange={(e) => updateB2BQuote(row.ref, { status: e.target.value })}
+                  className="rounded-lg border border-brand-blue/25 bg-surface-mist px-2 py-1 text-xs font-bold text-brand-navy cursor-pointer"
+                >
+                  {['New', 'Contacted', 'Quoted', 'Confirmed'].map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+              ),
+            },
+          ]}
+          emptyTitle={isArabic ? 'لا توجد طلبات B2B' : 'No B2B quotes'}
+        />
       )}
 
       {activeTab === 'users' && (

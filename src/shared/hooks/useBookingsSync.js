@@ -3,16 +3,19 @@ import {
   BOOKINGS_UPDATED_EVENT,
   getAllBookings,
   getEquipmentInventory,
+  getB2BQuotes,
 } from '../../entities/booking/api/bookingService.js';
 
 export function useBookingsSync() {
   const [bookings, setBookings] = useState(() => getAllBookings());
   const [inventory, setInventory] = useState(() => getEquipmentInventory());
+  const [quotes, setQuotes] = useState(() => getB2BQuotes());
 
   useEffect(() => {
     const sync = () => {
       setBookings(getAllBookings());
       setInventory(getEquipmentInventory());
+      setQuotes(getB2BQuotes());
     };
 
     window.addEventListener(BOOKINGS_UPDATED_EVENT, sync);
@@ -24,6 +27,6 @@ export function useBookingsSync() {
     };
   }, []);
 
-  return { bookings, inventory };
+  return { bookings, inventory, quotes };
 }
 
