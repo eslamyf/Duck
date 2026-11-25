@@ -173,23 +173,29 @@ export default function AdminDashboardPage() {
       ),
     },
     {
-      key: 'loc',
+      key: 'destKey',
       label: isArabic ? 'الوجهة' : 'Destination',
-      render: (row) => <span>{t(`destinations.items.${row.loc}.title`, row.loc)}</span>,
+      render: (row) => (
+        <span>{t(`destinations.items.${row.destKey}.name`, row.destKey)}</span>
+      ),
     },
     {
       key: 'priceEg',
       label: isArabic ? 'سعر المصريين' : 'Egyptian Price',
       render: (row) => (
         <span className="font-bold text-brand-navy">
-          {row.priceEg} {isArabic ? 'ج.م' : 'EGP'}
+          {row.priceEg || row.price} {isArabic ? 'ج.م' : 'EGP'}
         </span>
       ),
     },
     {
       key: 'price',
       label: isArabic ? 'سعر الأجانب' : 'Foreigner Price',
-      render: (row) => <span className="font-bold text-brand-blue">${row.price}</span>,
+      render: (row) => (
+        <span className="font-bold text-brand-blue">
+          {row.price} {isArabic ? 'ج.م' : 'EGP'}
+        </span>
+      ),
     },
   ];
 
@@ -339,10 +345,10 @@ export default function AdminDashboardPage() {
                 {dest.num} • {dest.key}
               </p>
               <h3 className="mt-1 font-heading text-lg font-extrabold text-brand-navy">
-                {t(`destinations.items.${dest.key}.title`, dest.key)}
+                {t(`destinations.items.${dest.key}.name`, dest.key)}
               </h3>
               <p className="mt-2 text-xs text-brand-navy/65">
-                {TRIPS.filter((tr) => tr.loc === dest.key).length || dest.tripCount}{' '}
+                {TRIPS.filter((tr) => tr.destKey === dest.key).length || dest.tripCount}{' '}
                 {isArabic ? 'رحلات نشطة' : 'active trips'}
               </p>
             </div>

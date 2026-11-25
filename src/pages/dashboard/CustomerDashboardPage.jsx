@@ -421,8 +421,8 @@ export default function CustomerDashboardPage() {
                         {t(`trips.items.${trip.key}.title`, trip.slug)}
                       </b>
                       <small className="block truncate text-xs text-brand-navy/65">
-                        {t(`destinations.items.${trip.loc}.title`, trip.loc)} · {actLabel(trip.act)} ·{' '}
-                        {trip.priceEg} {isArabic ? 'ج.م مصري' : 'EGP'}
+                        {t(`destinations.items.${trip.destKey}.name`, trip.destKey)} · {actLabel(trip.act)} ·{' '}
+                        {trip.priceEg || trip.price} {isArabic ? 'ج.م' : 'EGP'}
                       </small>
                     </div>
                     <Link
@@ -526,7 +526,7 @@ export default function CustomerDashboardPage() {
                     </div>
                     <div className="p-4 space-y-1.5">
                       <p className="text-[11px] font-bold text-brand-blue">
-                        {t(`destinations.items.${trip.loc}.title`, trip.loc)} ·{' '}
+                        {t(`destinations.items.${trip.destKey}.name`, trip.destKey)} ·{' '}
                         {actLabel(trip.act)}
                       </p>
                       <h3 className="font-heading text-base font-extrabold text-brand-navy leading-snug">
@@ -541,10 +541,18 @@ export default function CustomerDashboardPage() {
                   <div className="flex items-center justify-between gap-3 border-t border-brand-navy/8 px-4 py-3 bg-surface-mist/40">
                     <div>
                       <b className="block text-sm font-extrabold text-brand-navy">
-                        {trip.priceEg} {isArabic ? 'ج.م' : 'EGP'}{' '}
-                        <small className="font-semibold text-brand-navy/60">
-                          / ${trip.price} {isArabic ? 'أجنبي' : 'Foreign'}
-                        </small>
+                        {trip.priceEg ? (
+                          <>
+                            {trip.priceEg} {isArabic ? 'ج.م مصري' : 'EGP EG'}{' '}
+                            <small className="font-semibold text-brand-navy/60">
+                              / {trip.price} {isArabic ? 'ج.م أجنبي' : 'EGP Foreign'}
+                            </small>
+                          </>
+                        ) : (
+                          <>
+                            {trip.price} {isArabic ? 'ج.م' : 'EGP'}
+                          </>
+                        )}
                       </b>
                       {remainingText && (
                         <small

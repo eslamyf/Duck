@@ -14,6 +14,7 @@ import StatusBadge from './StatusBadge.jsx';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { buildWhatsAppUrl } from '../../shared/config/constants.js';
 import { TRIPS } from '../trips/tripsData.js';
+import { MAP_PINS } from '../map/mapData.js';
 
 /**
  * Reusable Digital Ticket Card with inline QR Code aligned with Final_4.html (.tkcard).
@@ -26,11 +27,13 @@ export default function TicketCard({ booking, onOpenDetails, onCancel }) {
 
   const ref = booking.reference || booking.id;
   const matchedTrip = TRIPS.find((item) => item.key === booking.tripKey);
-  const locKey = matchedTrip?.loc || 'aswan';
-  const meetingPoint = t(
-    `map.points.${locKey}.meetPoint`,
-    t(`destinations.items.${locKey}.title`, locKey)
-  );
+  const destKey = matchedTrip?.destKey || 'aswan';
+  const mapPin = MAP_PINS.find((pin) => pin.destKey === destKey) || MAP_PINS[0];
+  const meetingPoint = mapPin
+    ? isArabic
+      ? mapPin.meetingPointAr
+      : mapPin.meetingPointEn
+    : t(`destinations.items.${destKey}.name`, destKey);
   const totalAmount = Number(booking.totalAmount) || 0;
   const adults = Number(booking.adults) || Number(booking.guests) || 1;
   const childrenCount =
