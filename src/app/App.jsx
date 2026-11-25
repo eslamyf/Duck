@@ -57,6 +57,15 @@ const CustomerDashboardPage = lazy(
 const AdminDashboardPage = lazy(
   () => import('../pages/dashboard/AdminDashboardPage.jsx')
 );
+const PartnerDashboardPage = lazy(
+  () => import('../pages/dashboard/PartnerDashboardPage.jsx')
+);
+const OperationsDashboardPage = lazy(
+  () => import('../pages/dashboard/OperationsDashboardPage.jsx')
+);
+const AgentDashboardPage = lazy(
+  () => import('../pages/dashboard/AgentDashboardPage.jsx')
+);
 
 // Loading Components
 function SectionSpinner({
@@ -514,6 +523,42 @@ export default function App() {
                 <ProtectedRoute allowedRoles={[DASHBOARD_ROLES.ADMIN]}>
                   <Suspense fallback={<AboutFallback />}>
                     <AdminDashboardPage />
+                  </Suspense>
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Partner Portal */}
+            <Route
+              path={ROUTES.PARTNER}
+              element={
+                <ProtectedRoute allowedRoles={[DASHBOARD_ROLES.PARTNER]}>
+                  <Suspense fallback={<AboutFallback />}>
+                    <PartnerDashboardPage />
+                  </Suspense>
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Operations Portal */}
+            <Route
+              path={ROUTES.OPERATIONS}
+              element={
+                <ProtectedRoute allowedRoles={[DASHBOARD_ROLES.OPERATIONS]}>
+                  <Suspense fallback={<AboutFallback />}>
+                    <OperationsDashboardPage />
+                  </Suspense>
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Tour Guide / Agent Portal */}
+            <Route
+              path={ROUTES.TOUR_GUIDE}
+              element={
+                <ProtectedRoute allowedRoles={[DASHBOARD_ROLES.TOUR_GUIDE]}>
+                  <Suspense fallback={<AboutFallback />}>
+                    <AgentDashboardPage />
                   </Suspense>
                 </ProtectedRoute>
               }
