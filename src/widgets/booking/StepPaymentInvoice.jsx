@@ -343,10 +343,10 @@ export default function StepPaymentInvoice({
 
           <Button
             type="button"
-            variant="outline"
+            variant="navy"
             size="md"
             onClick={handlePrint}
-            className="w-full sm:w-auto font-bold gap-2 px-6 border-2 border-brand-navy text-brand-navy hover:bg-brand-navy hover:text-white cursor-pointer"
+            className="w-full sm:w-auto font-bold gap-2 px-6 cursor-pointer"
           >
             <FontAwesomeIcon icon={faPrint} />
             <span>{t('booking.paymentInvoice.printBtn')}</span>

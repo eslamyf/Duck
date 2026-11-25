@@ -16,15 +16,8 @@ import GroupsBanner from '../widgets/groups-banner/GroupsBanner.jsx';
 
 import { TRIPS } from '../widgets/trips/tripsData.js';
 
-import CustomerLayout from '../layouts/CustomerLayout.jsx';
-import CustomerDashboardPage from '../pages/customer/CustomerDashboardPage.jsx';
-import MyBookingsPage from '../pages/customer/MyBookingsPage.jsx';
-import ProfilePage from '../pages/customer/ProfilePage.jsx';
-import ProtectedRoute from './routes/ProtectedRoute.jsx';
-
 import { useTranslation } from '../shared/i18n/index.js';
 import { ROUTES, SECTIONS, sectionLink } from '../shared/config/routes.js';
-import { ROLES } from '../entities/user/model/roles.js';
 
 
 import {
@@ -54,49 +47,24 @@ const CreateAccountPage = lazy(
   () => import('../pages/auth/CreateAccountPage.jsx')
 );
 
-// Admin Portal
-const AdminLayout = lazy(() =>
-  import('../layouts/AdminLayout.jsx')
-);
+// Dashboard Portals
+import ProtectedRoute from './routes/ProtectedRoute.jsx';
+import { ROLES } from '../shared/config/rbac.js';
 
-const AdminDashboardPage = lazy(() =>
-  import('../pages/admin/AdminDashboardPage.jsx')
+const CustomerDashboardPage = lazy(
+  () => import('../pages/dashboard/CustomerDashboardPage.jsx')
 );
-
-const BookingsPage = lazy(() =>
-  import('../pages/admin/BookingsPage.jsx')
+const AdminDashboardPage = lazy(
+  () => import('../pages/dashboard/AdminDashboardPage.jsx')
 );
-
-const CustomersPage = lazy(() =>
-  import('../pages/admin/CustomersPage.jsx')
+const PartnerDashboardPage = lazy(
+  () => import('../pages/dashboard/PartnerDashboardPage.jsx')
 );
-
-const ActivitiesPage = lazy(() =>
-  import('../pages/admin/ActivitiesPage.jsx')
+const OperationsDashboardPage = lazy(
+  () => import('../pages/dashboard/OperationsDashboardPage.jsx')
 );
-
-const AvailabilityPage = lazy(() =>
-  import('../pages/admin/AvailabilityPage.jsx')
-);
-
-const ProvidersPage = lazy(() =>
-  import('../pages/admin/ProvidersPage.jsx')
-);
-
-const PricingPage = lazy(() =>
-  import('../pages/admin/PricingPage.jsx')
-);
-
-const ContentPage = lazy(() =>
-  import('../pages/admin/ContentPage.jsx')
-);
-
-const ReportsPage = lazy(() =>
-  import('../pages/admin/ReportsPage.jsx')
-);
-
-const UsersPage = lazy(() =>
-  import('../pages/admin/UsersPage.jsx')
+const AgentDashboardPage = lazy(
+  () => import('../pages/dashboard/AgentDashboardPage.jsx')
 );
 
 // Loading Components
@@ -299,6 +267,12 @@ function TitleManager() {
       document.title = `Customer Dashboard | ${t('common.brandName')}`;
     } else if (pathname.startsWith(ROUTES.ADMIN)) {
       document.title = `Admin Portal | ${t('common.brandName')}`;
+    } else if (pathname.startsWith(ROUTES.PARTNER)) {
+      document.title = `Partner Portal | ${t('common.brandName')}`;
+    } else if (pathname.startsWith(ROUTES.OPERATIONS)) {
+      document.title = `Operations Portal | ${t('common.brandName')}`;
+    } else if (pathname.startsWith(ROUTES.TOUR_GUIDE)) {
+      document.title = `Tour Guide Portal | ${t('common.brandName')}`;
     } else if (pathname === ROUTES.GROUPS) {
       document.title = `${t('groups.metaTitle')} | ${t('common.brandName')}`;
     } else if (pathname === ROUTES.ABOUT) {
@@ -536,144 +510,64 @@ export default function App() {
               element={<Navigate to={ROUTES.LOGIN} replace />}
             />
 
-            {/* Customer Dashboard - Protected Routes */}
-            <Route element={<ProtectedRoute />}>
-              <Route path="/dashboard" element={<CustomerLayout />}>
-                <Route index element={<CustomerDashboardPage />} />
-                <Route path="bookings" element={<MyBookingsPage />} />
-                <Route path="profile" element={<ProfilePage />} />
-              </Route>
-            </Route>
+            {/* Customer Dashboard */}
+            <Route
+              path={ROUTES.CUSTOMER_DASHBOARD}
+              element={
+                <ProtectedRoute allowedRoles={[ROLES.CUSTOMER]}>
+                  <Suspense fallback={<AboutFallback />}>
+                    <CustomerDashboardPage />
+                  </Suspense>
+                </ProtectedRoute>
+              }
+            />
 
             {/* Admin Portal */}
             <Route
               path={ROUTES.ADMIN}
               element={
                 <ProtectedRoute allowedRoles={[ROLES.ADMIN]}>
-                  <AdminLayout />
-                </ProtectedRoute>
-              }
-            >
-              {/* Admin Dashboard */}
-              <Route
-                index
-                element={
-                  <Suspense fallback={<AuthFallback />}>
+                  <Suspense fallback={<AboutFallback />}>
                     <AdminDashboardPage />
                   </Suspense>
-                }
-              />
-
-              {/* Bookings */}
-              <Route
-                path="bookings"
-                element={
-                  <Suspense fallback={<AuthFallback />}>
-                    <BookingsPage />
-                  </Suspense>
-                }
-              />
-
-              {/* Customers */}
-              <Route
-                path="customers"
-                element={
-                  <Suspense fallback={<AuthFallback />}>
-                    <CustomersPage />
-                  </Suspense>
-                }
-              />
-
-              {/* Activities */}
-              <Route
-                path="activities"
-                element={
-                  <Suspense fallback={<AuthFallback />}>
-                    <ActivitiesPage />
-                  </Suspense>
-                }
-              />
-
-              {/* Availability */}
-              <Route
-                path="availability"
-                element={
-                  <Suspense fallback={<AuthFallback />}>
-                    <AvailabilityPage />
-                  </Suspense>
-                }
-              />
-
-              {/* Providers */}
-              <Route
-                path="providers"
-                element={
-                  <Suspense fallback={<AuthFallback />}>
-                    <ProvidersPage />
-                  </Suspense>
-                }
-              />
-
-              {/* Pricing */}
-              <Route
-                path="pricing"
-                element={
-                  <Suspense fallback={<AuthFallback />}>
-                    <PricingPage />
-                  </Suspense>
-                }
-              />
-
-              {/* Content */}
-              <Route
-                path="content"
-                element={
-                  <Suspense fallback={<AuthFallback />}>
-                    <ContentPage />
-                  </Suspense>
-                }
-              />
-
-              {/* Users & Permissions */}
-              <Route
-                path="users"
-                element={
-                  <Suspense fallback={<AuthFallback />}>
-                    <UsersPage />
-                  </Suspense>
-                }
-              />
-
-              {/* Reports */}
-              <Route
-                path="reports"
-                element={
-                  <Suspense fallback={<AuthFallback />}>
-                    <ReportsPage />
-                  </Suspense>
-                }
-              />
-            </Route>
-
-            {/* Other Staff Portals - To Be Implemented */}
-            <Route
-              path="/portal/ops/*"
-              element={<Navigate to={ROUTES.LOGIN} replace />}
+                </ProtectedRoute>
+              }
             />
 
+            {/* Partner Portal */}
             <Route
-              path="/portal/guide/*"
-              element={<Navigate to={ROUTES.LOGIN} replace />}
+              path={ROUTES.PARTNER}
+              element={
+                <ProtectedRoute allowedRoles={[ROLES.PARTNER]}>
+                  <Suspense fallback={<AboutFallback />}>
+                    <PartnerDashboardPage />
+                  </Suspense>
+                </ProtectedRoute>
+              }
             />
 
+            {/* Operations Portal */}
             <Route
-              path="/portal/content/*"
-              element={<Navigate to={ROUTES.LOGIN} replace />}
+              path={ROUTES.OPERATIONS}
+              element={
+                <ProtectedRoute allowedRoles={[ROLES.OPERATIONS]}>
+                  <Suspense fallback={<AboutFallback />}>
+                    <OperationsDashboardPage />
+                  </Suspense>
+                </ProtectedRoute>
+              }
             />
 
+            {/* Tour Guide / Agent Portal */}
             <Route
-              path="/portal/b2b/*"
-              element={<Navigate to={ROUTES.LOGIN} replace />}
+              path={ROUTES.TOUR_GUIDE}
+              element={
+                <ProtectedRoute allowedRoles={[ROLES.TOUR_GUIDE]}>
+                  <Suspense fallback={<AboutFallback />}>
+                    <AgentDashboardPage />
+                  </Suspense>
+                </ProtectedRoute>
+              }
             />
 
             {/* 404 / Unknown Routes */}

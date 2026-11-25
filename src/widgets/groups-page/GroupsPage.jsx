@@ -1,4 +1,5 @@
 import { useRef, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShip } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
@@ -10,7 +11,13 @@ import GroupSuccess from './GroupSuccess.jsx';
 
 export default function GroupsPage() {
   const { t, lang } = useTranslation();
+  const [searchParams] = useSearchParams();
   const cardRef = useRef(null);
+
+  const rawSize = Number(searchParams.get('size'));
+  const rawType = Number(searchParams.get('type'));
+  const initialSize = Number.isFinite(rawSize) && rawSize >= 20 ? rawSize : 20;
+  const initialType = Number.isInteger(rawType) && rawType >= 0 ? rawType : 0;
 
   const {
     state,
@@ -25,7 +32,7 @@ export default function GroupsPage() {
     setSize,
     validateStep1,
     submitRequest,
-  } = useGroupStudio({ t, lang });
+  } = useGroupStudio({ t, lang, initialSize, initialType });
 
   const scrollToCard = useCallback(() => {
     if (cardRef.current) {

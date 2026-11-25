@@ -1,4 +1,5 @@
 import { ROLES } from '../model/roles.js';
+import { authenticateDemoAccount } from '../../../shared/config/demoAccounts.js';
 
 const USERS_KEY = 'duck_users';
 const CURRENT_USER_KEY = 'duck_current_user';
@@ -227,6 +228,21 @@ export async function loginUser({
 
     const normalizedEmail = normalizeEmail(email);
 
+    const demoUser = authenticateDemoAccount(normalizedEmail, password);
+    if (demoUser) {
+        if (role && demoUser.role !== role) {
+            throw new Error('This account does not match the selected role.');
+        }
+
+        logoutUser();
+        const storage = rememberMe ? localStorage : sessionStorage;
+        storage.setItem(
+            rememberMe ? CURRENT_USER_KEY : SESSION_USER_KEY,
+            JSON.stringify(demoUser)
+        );
+        return demoUser;
+    }
+
     const users = getStoredUsers();
 
     const user = users.find(
@@ -311,10 +327,6 @@ export function updateCurrentUser(updates) {
         (user) => user.id === currentUser.id
     );
 
-    if (userIndex === -1) {
-        throw new Error('User account was not found.');
-    }
-
     const allowedFields = [
         'fullName',
         'phone',
@@ -329,17 +341,28 @@ export function updateCurrentUser(updates) {
         }
     });
 
-    const updatedUser = {
-        ...users[userIndex],
-        ...safeUpdates,
-        updatedAt: new Date().toISOString(),
-    };
+    let safeUser;
 
-    users[userIndex] = updatedUser;
+    if (userIndex === -1) {
+        if (!String(currentUser.id).startsWith('demo-')) {
+            throw new Error('User account was not found.');
+        }
+        safeUser = sanitizeUser({
+            ...currentUser,
+            ...safeUpdates,
+            updatedAt: new Date().toISOString(),
+        });
+    } else {
+        const updatedUser = {
+            ...users[userIndex],
+            ...safeUpdates,
+            updatedAt: new Date().toISOString(),
+        };
 
-    saveUsers(users);
-
-    const safeUser = sanitizeUser(updatedUser);
+        users[userIndex] = updatedUser;
+        saveUsers(users);
+        safeUser = sanitizeUser(updatedUser);
+    }
 
     const persistentSession = localStorage.getItem(
         CURRENT_USER_KEY
