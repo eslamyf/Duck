@@ -1,11 +1,13 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+
 import Navbar from '../widgets/navbar/Navbar.jsx';
 import Footer from '../widgets/footer/Footer.jsx';
 import HeroSection from '../widgets/hero/HeroSection.jsx';
 import DestinationsSection from '../widgets/destinations/DestinationsSection.jsx';
 import TripsSection from '../widgets/trips/TripsSection.jsx';
 import GroupsBanner from '../widgets/groups-banner/GroupsBanner.jsx';
+
 import { TRIPS } from '../widgets/trips/tripsData.js';
 import { useTranslation } from '../shared/i18n/index.js';
 import { ROUTES, SECTIONS, sectionLink } from '../shared/config/routes.js';
@@ -18,11 +20,25 @@ const FAQSection = lazy(() => import('../widgets/faq/index.js'));
 const GroupsPage = lazy(() => import('../widgets/groups-page/index.js'));
 const AboutPage = lazy(() => import('../pages/about/index.js'));
 const TripDetailsPage = lazy(() => import('../pages/trip-details/index.js'));
-const BookingPage = lazy(() =>
-  import('../pages/booking/index.js').then((m) => ({ default: m.BookingPage }))
+
+const PublicActivitiesPage = lazy(
+  () => import('../pages/activities/ActivitiesPage.jsx')
 );
+
+const ActivityDetailsPage = lazy(
+  () => import('../pages/activities/ActivityDetailsPage.jsx')
+);
+
+const BookingPage = lazy(() =>
+  import('../pages/booking/index.js').then((m) => ({
+    default: m.BookingPage,
+  }))
+);
+
 const LoginPage = lazy(() => import('../pages/auth/LoginPage.jsx'));
-const CreateAccountPage = lazy(() => import('../pages/auth/CreateAccountPage.jsx'));
+const CreateAccountPage = lazy(
+  () => import('../pages/auth/CreateAccountPage.jsx')
+);
 
 function SectionSpinner({
   className = 'text-white/50',
@@ -33,7 +49,9 @@ function SectionSpinner({
       className={`w-full flex items-center justify-center ${className}`}
       aria-busy="true"
     >
-      <div className={`w-10 h-10 border-4 rounded-full animate-spin ${borderClass}`} />
+      <div
+        className={`w-10 h-10 border-4 rounded-full animate-spin ${borderClass}`}
+      />
     </div>
   );
 }
@@ -81,7 +99,10 @@ function TripDetailsFallback() {
 
 function AuthFallback() {
   return (
-    <div className="min-h-screen w-full bg-brand-navy flex items-center justify-center text-white/50" aria-busy="true">
+    <div
+      className="min-h-screen w-full bg-brand-navy flex items-center justify-center text-white/50"
+      aria-busy="true"
+    >
       <div className="w-10 h-10 border-4 border-brand-yellow/30 border-t-brand-yellow rounded-full animate-spin" />
     </div>
   );
@@ -135,6 +156,7 @@ function ScrollManager() {
   useEffect(() => {
     if (hash) {
       const targetId = hash.replace(/^#/, '');
+
       if (targetId.startsWith('/')) return;
 
       let retries = 0;
@@ -168,7 +190,11 @@ function LegacyHashRedirect() {
 
       if (h === '#/groups' || h === '#//groups' || h.startsWith('#/groups')) {
         navigate(ROUTES.GROUPS, { replace: true });
-      } else if (h === '#/about' || h === '#//about' || h.startsWith('#/about')) {
+      } else if (
+        h === '#/about' ||
+        h === '#//about' ||
+        h.startsWith('#/about')
+      ) {
         navigate(ROUTES.ABOUT, { replace: true });
       }
     };
@@ -190,7 +216,10 @@ function TitleManager() {
   useEffect(() => {
     if (pathname === ROUTES.LOGIN || pathname === '/login') {
       document.title = `${t('auth.login.metaTitle')} | ${t('common.brandName')}`;
-    } else if (pathname === ROUTES.SIGNUP || pathname === '/create-account') {
+    } else if (
+      pathname === ROUTES.SIGNUP ||
+      pathname === '/create-account'
+    ) {
       document.title = `${t('auth.signup.metaTitle')} | ${t('common.brandName')}`;
     } else if (pathname === ROUTES.GROUPS) {
       document.title = `${t('groups.metaTitle')} | ${t('common.brandName')}`;
@@ -217,7 +246,9 @@ function TitleManager() {
 }
 
 export default function App() {
-  const [selectedDestinationFilter, setSelectedDestinationFilter] = useState('all');
+  const [selectedDestinationFilter, setSelectedDestinationFilter] =
+    useState('all');
+
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -279,6 +310,7 @@ export default function App() {
       <TitleManager />
 
       {!isAuthPage && <ScrollProgress />}
+
       {!isAuthPage && (
         <div className="print:hidden">
           <PendingBookingPopup />
@@ -319,7 +351,9 @@ export default function App() {
                   <GroupsBanner />
 
                   <Suspense fallback={<MapFallback />}>
-                    <MapSection onSelectDestination={handleSelectDestination} />
+                    <MapSection
+                      onSelectDestination={handleSelectDestination}
+                    />
                   </Suspense>
 
                   <Suspense fallback={<ReviewsFallback />}>
@@ -333,6 +367,27 @@ export default function App() {
               }
             />
 
+            {/* Public Activities Page */}
+            <Route
+              path={ROUTES.ACTIVITIES}
+              element={
+                <Suspense fallback={<AboutFallback />}>
+                  <PublicActivitiesPage />
+                </Suspense>
+              }
+            />
+
+            {/* Activity Details */}
+            <Route
+              path="/activities/:slug"
+              element={
+                <Suspense fallback={<AboutFallback />}>
+                  <ActivityDetailsPage />
+                </Suspense>
+              }
+            />
+
+            {/* Trip Details */}
             <Route
               path={ROUTES.TRIP_DETAILS}
               element={
@@ -370,7 +425,10 @@ export default function App() {
             />
 
             {/* Alias /booking -> /book */}
-            <Route path="/booking" element={<Navigate to={ROUTES.BOOKING} replace />} />
+            <Route
+              path="/booking"
+              element={<Navigate to={ROUTES.BOOKING} replace />}
+            />
 
             {/* Public Auth Routes */}
             <Route
@@ -396,12 +454,16 @@ export default function App() {
               path={ROUTES.CREATE_ACCOUNT}
               element={<Navigate to={ROUTES.SIGNUP} replace />}
             />
+
             <Route
               path={ROUTES.AUTH}
               element={<Navigate to={ROUTES.LOGIN} replace />}
             />
 
-            <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
+            <Route
+              path="*"
+              element={<Navigate to={ROUTES.HOME} replace />}
+            />
           </Routes>
         </ErrorBoundary>
       </main>
