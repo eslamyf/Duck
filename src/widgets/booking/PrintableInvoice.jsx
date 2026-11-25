@@ -82,6 +82,12 @@ export default function PrintableInvoice({
     ? new Date(bookingData.createdAt).toLocaleDateString(isArabic ? 'ar-EG' : 'en-US')
     : new Date().toLocaleDateString(isArabic ? 'ar-EG' : 'en-US');
 
+  const stripColon = (str) => String(str || '').replace(/[:：]\s*$/, '');
+  const cleanMeetingPoint =
+    isArabic && String(meetingPoint).startsWith('نقطة اللقاء')
+      ? meetingPoint
+      : `${isArabic ? 'نقطة اللقاء:' : 'Meeting Point:'} ${meetingPoint}`;
+
   return (
     <div
       id="printable-invoice"
@@ -131,17 +137,21 @@ export default function PrintableInvoice({
       <div className="grid grid-cols-2 gap-4 rounded-xl border border-brand-navy/25 bg-surface-mist p-4 mb-5">
         <div className="space-y-1.5 text-xs">
           <p className="font-extrabold text-brand-blue border-b border-brand-navy/10 pb-1">
-            {t('booking.invoice.customerInfo')}
+            {stripColon(t('booking.invoice.customerInfo'))}
           </p>
           <p className="text-sm font-extrabold text-brand-navy">
             {bookingData.fullName || (isArabic ? 'ضيف DUCK' : 'DUCK Guest')}
           </p>
-          <p className="font-mono text-xs font-bold text-brand-navy" dir="ltr">
-            {bookingData.phone || '-'}
+          <p className="font-mono text-xs font-bold text-brand-navy">
+            <span dir="ltr" className="inline-block">
+              {bookingData.phone || '-'}
+            </span>
           </p>
           {bookingData.email && (
-            <p className="font-mono text-xs font-semibold text-brand-navy" dir="ltr">
-              {bookingData.email}
+            <p className="font-mono text-xs font-semibold text-brand-navy">
+              <span dir="ltr" className="inline-block">
+                {bookingData.email}
+              </span>
             </p>
           )}
           <p className="text-xs font-bold text-brand-navy">
@@ -151,17 +161,19 @@ export default function PrintableInvoice({
 
         <div className="space-y-1.5 text-xs">
           <p className="font-extrabold text-brand-blue border-b border-brand-navy/10 pb-1">
-            {t('booking.invoice.bookingDateTime')}
+            {stripColon(t('booking.invoice.bookingDateTime'))}
           </p>
-          <p className="text-sm font-extrabold text-brand-navy" dir="ltr">
-            {bookingData.date || '-'} · {bookingData.time || '10:00'}
+          <p className="text-sm font-extrabold text-brand-navy">
+            <span dir="ltr" className="inline-block">
+              {bookingData.date || '-'} · {bookingData.time || '10:00'}
+            </span>
           </p>
           <p className="text-xs font-bold text-brand-navy">
             {destName} · {actLabel} ({bookingData.duration || 1}{' '}
             {isArabic ? 'ساعة' : 'hr'})
           </p>
           <p className="text-xs font-semibold text-brand-navy leading-snug">
-            {isArabic ? 'نقطة اللقاء:' : 'Meeting Point:'} {meetingPoint}
+            {cleanMeetingPoint}
           </p>
         </div>
       </div>
@@ -215,14 +227,14 @@ export default function PrintableInvoice({
       </table>
 
       {/* Financial Summary + QR Verification */}
-      <div className="grid grid-cols-[1fr_280px] items-center gap-5 border-t-2 border-brand-navy pt-4 mb-5">
+      <div className="grid grid-cols-[1fr_310px] items-center gap-5 border-t-2 border-brand-navy pt-4 mb-5">
         <div className="flex items-center gap-4">
           <div className="rounded-lg border border-brand-navy/20 bg-white p-1.5 shrink-0">
             <QRCodeSVG value={bookingRef} size={90} />
           </div>
           <div className="text-xs space-y-1 text-brand-navy">
             <p className="font-extrabold text-sm">
-              {t('booking.invoice.scanToVerify')}
+              {stripColon(t('booking.invoice.scanToVerify'))}
             </p>
             <p className="font-semibold leading-relaxed">
               {t('booking.invoice.keepTicketSafe')}
@@ -236,23 +248,23 @@ export default function PrintableInvoice({
         </div>
 
         <div className="rounded-xl border border-brand-navy/25 bg-surface-mist p-3.5 space-y-2 text-xs">
-          <div className="flex justify-between font-bold text-brand-navy">
-            <span>{t('booking.reviewPay.totalAmount')}:</span>
-            <span className="tabular-nums">
+          <div className="flex items-center justify-between gap-2 font-bold text-brand-navy">
+            <span>{stripColon(t('booking.reviewPay.totalAmount'))}:</span>
+            <span className="tabular-nums whitespace-nowrap">
               {formatPrice(totalAmount)} {t('trips.currency')}
             </span>
           </div>
 
-          <div className="flex justify-between text-sm font-extrabold border-t border-brand-navy/20 pt-2 text-brand-navy">
-            <span>{t('booking.invoice.amountPaidOrTransferred')}:</span>
-            <span className="tabular-nums">
+          <div className="flex items-center justify-between gap-2 text-sm font-extrabold border-t border-brand-navy/20 pt-2 text-brand-navy">
+            <span>{stripColon(t('booking.invoice.amountPaidOrTransferred'))}:</span>
+            <span className="tabular-nums whitespace-nowrap">
               {formatPrice(amountToPay)} {t('trips.currency')}
             </span>
           </div>
 
-          <div className="flex justify-between font-bold text-brand-blue border-t border-brand-navy/10 pt-1.5">
-            <span>{t('booking.reviewPay.remainingOnSite')}:</span>
-            <span className="tabular-nums">
+          <div className="flex items-center justify-between gap-2 font-bold text-brand-blue border-t border-brand-navy/10 pt-1.5">
+            <span>{stripColon(t('booking.reviewPay.remainingOnSite'))}:</span>
+            <span className="tabular-nums whitespace-nowrap">
               {formatPrice(remainingBalance)} {t('trips.currency')}
             </span>
           </div>
@@ -262,8 +274,8 @@ export default function PrintableInvoice({
       {/* Payment & Safety Instructions */}
       <div className="rounded-xl border border-brand-navy bg-surface-sand p-3.5 mb-4 text-xs space-y-1.5 text-brand-navy">
         <p className="font-extrabold">
-          {t('booking.paymentInvoice.step1Title')}: InstaPay IPA: duckegy@instapay ·{' '}
-          <span dir="ltr">{CONTACT.PHONE}</span>
+          {stripColon(t('booking.paymentInvoice.step1Title'))}: duckegy@instapay ·{' '}
+          <span dir="ltr" className="inline-block">{CONTACT.PHONE}</span>
         </p>
         <p className="font-semibold">
           {t('booking.paymentInvoice.step2Title')}: {t('booking.paymentInvoice.step2Desc')}
