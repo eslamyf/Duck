@@ -158,7 +158,7 @@ export default function StepTripSelect({
                 {/* Select button */}
                 <Button
                   type="button"
-                  variant={isSelected ? 'primary' : 'outline'}
+                  variant={isSelected ? 'primary' : 'subtle'}
                   size="sm"
                   className={`w-full justify-center font-bold text-xs sm:text-sm shadow-xs ${
                     isSelected

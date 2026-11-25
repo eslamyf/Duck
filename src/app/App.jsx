@@ -74,6 +74,9 @@ const OperationsDashboardPage = lazy(
 const AgentDashboardPage = lazy(
   () => import('../pages/dashboard/AgentDashboardPage.jsx')
 );
+const NotFoundPage = lazy(
+  () => import('../pages/not-found/NotFoundPage.jsx')
+);
 
 // Loading Components
 function SectionSpinner({
@@ -604,7 +607,11 @@ export default function App() {
             {/* 404 / Unknown Routes */}
             <Route
               path="*"
-              element={<Navigate to={ROUTES.HOME} replace />}
+              element={
+                <Suspense fallback={<AboutFallback />}>
+                  <NotFoundPage />
+                </Suspense>
+              }
             />
           </Routes>
         </ErrorBoundary>

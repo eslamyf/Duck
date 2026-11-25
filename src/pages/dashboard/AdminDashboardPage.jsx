@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faGaugeHigh,
@@ -46,7 +47,15 @@ const ALL_STATUSES = [
 export default function AdminDashboardPage() {
   const { lang, t } = useTranslation();
   const isArabic = lang === 'ar';
-  const [activeTab, setActiveTab] = useState('overview');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const VALID_TABS = ['overview', 'bookings', 'trips', 'destinations', 'providers', 'b2b', 'users'];
+  const urlTab = searchParams.get('tab');
+  const [localTab, setLocalTab] = useState('overview');
+  const activeTab = VALID_TABS.includes(urlTab) ? urlTab : localTab;
+  const setActiveTab = (nextTab) => {
+    setLocalTab(nextTab);
+    setSearchParams({ tab: nextTab }, { replace: true });
+  };
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedBooking, setSelectedBooking] = useState(null);

@@ -7,7 +7,7 @@ import duckLogo from '../../shared/assets/icons/Artboard 14.png';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { Button, Badge } from '../../shared/ui/index.js';
 import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
-import { getPortalPathForRole } from '../../shared/config/rbac.js';
+import { getPortalPathForRole, ROLES } from '../../shared/config/rbac.js';
 
 import { getCurrentUser } from '../../entities/user/api/authService.js';
 
@@ -101,6 +101,18 @@ export default function Navbar({ onBookClick }) {
     };
   }, [location.pathname]);
 
+  const tripsTarget = currentUser
+    ? currentUser.role === ROLES.CUSTOMER
+      ? `${ROUTES.CUSTOMER_DASHBOARD}?tab=services`
+      : currentUser.role === ROLES.ADMIN
+        ? `${ROUTES.ADMIN}?tab=trips`
+        : currentUser.role === ROLES.PARTNER
+          ? `${ROUTES.PARTNER}?tab=inventory`
+          : currentUser.role === ROLES.TOUR_GUIDE
+            ? `${ROUTES.TOUR_GUIDE}?tab=create`
+            : `${ROUTES.OPERATIONS}?tab=departures`
+    : sectionLink(SECTIONS.TRIPS);
+
   const navLinks = [
     {
       to: sectionLink(SECTIONS.TOP),
@@ -115,7 +127,7 @@ export default function Navbar({ onBookClick }) {
       sectionId: SECTIONS.DESTINATIONS,
     },
     {
-      to: sectionLink(SECTIONS.TRIPS),
+      to: tripsTarget,
       label: t('nav.trips'),
       icon: faCompass,
       sectionId: SECTIONS.TRIPS,

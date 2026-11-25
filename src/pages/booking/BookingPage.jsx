@@ -1,6 +1,9 @@
 import { useState, useMemo, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
+import { ROUTES } from '../../shared/config/routes.js';
 import { TRIPS } from '../../widgets/trips/tripsData.js';
 import { generateBookingRef } from '../../shared/config/constants.js';
 import { addBooking } from '../../entities/booking/api/bookingService.js';
@@ -15,6 +18,7 @@ import {
 
 export default function BookingPage() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const { t, lang } = useTranslation();
   const isArabic = lang === 'ar';
 
@@ -145,6 +149,32 @@ export default function BookingPage() {
       className="min-h-screen bg-surface-sand text-brand-navy pt-16 sm:pt-20 min-[901px]:pt-24 pb-8 px-4 sm:px-6 relative isolate selection:bg-brand-yellow selection:text-brand-navy font-body print:p-0 print:m-0 print:bg-white"
     >
       <div className="max-w-4xl mx-auto space-y-4">
+        {/* Top Back / Previous Bar */}
+        <div className="print:hidden flex items-center justify-between">
+          <button
+            type="button"
+            onClick={() => {
+              if (currentStep > 1) {
+                goToStep(currentStep - 1);
+              } else if (window.history.length > 1) {
+                navigate(-1);
+              } else {
+                navigate(ROUTES.HOME);
+              }
+            }}
+            className="inline-flex items-center gap-2 rounded-full border border-brand-navy/15 bg-white px-4 py-2 text-xs sm:text-sm font-bold text-brand-navy shadow-xs transition hover:bg-brand-navy hover:text-brand-yellow cursor-pointer"
+          >
+            <FontAwesomeIcon icon={isArabic ? faArrowRight : faArrowLeft} />
+            <span>
+              {currentStep > 1
+                ? t('booking.nav.previous', isArabic ? 'السابق' : 'Previous')
+                : isArabic
+                  ? 'رجوع'
+                  : 'Back'}
+            </span>
+          </button>
+        </div>
+
         {/* Visual Stepper (Only on steps 1, 2, 3, 4) */}
         <div className="print:hidden">
           <BookingStepper

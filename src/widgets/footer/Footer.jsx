@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import duckLogo from '../../shared/assets/icons/Artboard 14.png';
 import { useTranslation } from '../../shared/i18n/index.js';
-import { Button } from '../../shared/ui/index.js';
 import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
 import {
   faFacebookF,
@@ -244,20 +243,17 @@ export default function Footer({ onDestinationClick }) {
         </div>
       </div>
 
-      {/* Floating WhatsApp Quick Action Button */}
-      <Button
-        as="a"
+      {/* Floating WhatsApp Quick Action Icon Button */}
+      <a
         href={buildWhatsAppUrl(t('footer.whatsappPrefill'))}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={t('footer.whatsappAction')}
-        variant="whatsapp"
-        size="md"
-        icon={<FontAwesomeIcon icon={faWhatsapp} className="text-lg" />}
-        className="fixed bottom-5 end-5 z-[90] shadow-[0_8px_24px_rgba(37,211,102,0.35)] min-h-[48px] px-5 py-2.5"
+        title={t('footer.whatsappAction')}
+        className="fixed bottom-5 end-5 z-[90] flex h-12 w-12 sm:h-13 sm:w-13 items-center justify-center rounded-full bg-brand-whatsapp text-white shadow-[0_8px_24px_rgba(37,211,102,0.4)] transition-transform duration-200 hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
       >
-        <span>{t('common.whatsapp')}</span>
-      </Button>
+        <FontAwesomeIcon icon={faWhatsapp} className="text-2xl" aria-hidden="true" />
+      </a>
     </footer>
   );
 }

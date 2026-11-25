@@ -736,10 +736,10 @@ export default function StepGuestDetails({
       <div className="flex items-center justify-between gap-4 pt-2">
         <Button
           type="button"
-          variant="outline"
+          variant="subtle"
           size="md"
           onClick={onBack}
-          className="font-bold gap-2 px-5 py-2"
+          className="font-bold gap-2 px-5 py-2 border border-brand-navy/20"
         >
           <FontAwesomeIcon icon={ArrowBack} />
           <span>{t('booking.nav.previous')}</span>

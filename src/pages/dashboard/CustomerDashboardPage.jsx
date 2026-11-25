@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChartPie,
@@ -83,8 +83,16 @@ export default function CustomerDashboardPage() {
   const { lang, setLanguage, t } = useTranslation();
   const isArabic = lang === 'ar';
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [activeTab, setActiveTab] = useState('overview');
+  const VALID_TABS = ['overview', 'services', 'bookings', 'b2b', 'profile'];
+  const urlTab = searchParams.get('tab');
+  const [localTab, setLocalTab] = useState('overview');
+  const activeTab = VALID_TABS.includes(urlTab) ? urlTab : localTab;
+  const setActiveTab = (nextTab) => {
+    setLocalTab(nextTab);
+    setSearchParams({ tab: nextTab }, { replace: true });
+  };
   const [serviceFilter, setServiceFilter] = useState('all');
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
