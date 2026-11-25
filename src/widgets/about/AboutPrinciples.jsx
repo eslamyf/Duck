@@ -8,6 +8,11 @@ import {
   faArrowUpRightFromSquare,
 } from '@fortawesome/free-solid-svg-icons';
 
+import imgAdventure from '../../shared/assets/images/about/principle-adventure.webp';
+import imgFreedom from '../../shared/assets/images/about/principle-freedom.webp';
+import imgConnection from '../../shared/assets/images/about/principle-connection.webp';
+import imgSafety from '../../shared/assets/images/about/principle-safety.webp';
+
 export default function AboutPrinciples() {
   const { lang, t } = useTranslation();
   const isArabic = lang === 'ar';
@@ -17,32 +22,28 @@ export default function AboutPrinciples() {
       number: '01',
       key: 'adventure',
       icon: faCompass,
-      image:
-        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=85',
+      image: imgAdventure,
       layout: 'large',
     },
     {
       number: '02',
       key: 'freedom',
       icon: faWater,
-      image:
-        'https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=900&q=85',
+      image: imgFreedom,
       layout: 'small',
     },
     {
       number: '03',
       key: 'connection',
       icon: faUsers,
-      image:
-        'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=900&q=85',
+      image: imgConnection,
       layout: 'small',
     },
     {
       number: '04',
       key: 'safety',
       icon: faShieldHalved,
-      image:
-        'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1400&q=85',
+      image: imgSafety,
       layout: 'wide',
     },
   ];
@@ -64,15 +65,15 @@ export default function AboutPrinciples() {
           bg-brand-navy shadow-sm
           ${
             mobile
-              ? 'h-[420px] w-[85vw] max-w-[380px] shrink-0 snap-center'
+              ? 'h-[400px] w-[85vw] max-w-[360px] shrink-0 snap-center'
               : `h-full min-h-0 ${desktopLayout}`
           }
         `}
       >
-        {/* Background Image */}
+        {/* Background Real Duck Image */}
         <img
           src={principle.image}
-          alt=""
+          alt={t(`about.principles.${principle.key}.title`)}
           loading="lazy"
           decoding="async"
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -80,7 +81,7 @@ export default function AboutPrinciples() {
 
         {/* Image Overlay */}
         <div
-          className="absolute inset-0 bg-gradient-to-t from-brand-navy/95 via-brand-navy/35 to-brand-navy/10 transition-all duration-500 group-hover:from-brand-navy/90"
+          className="absolute inset-0 bg-gradient-to-t from-brand-navy/95 via-brand-navy/50 to-brand-navy/20 transition-all duration-500 group-hover:from-brand-navy/90"
           aria-hidden="true"
         />
 
@@ -92,34 +93,31 @@ export default function AboutPrinciples() {
         >
           {/* Top */}
           <div className="flex items-start justify-between">
-            <span className="text-sm font-bold tracking-widest text-white/80">
+            <span className="text-xs font-black tracking-widest text-brand-yellow">
               {principle.number}
             </span>
 
-            <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-white/10 text-brand-yellow backdrop-blur-sm transition-all duration-300 group-hover:rotate-12 group-hover:bg-brand-yellow group-hover:text-brand-navy">
-              <FontAwesomeIcon icon={principle.icon} className="text-lg" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-white/10 text-brand-yellow backdrop-blur-sm transition-all duration-300 group-hover:rotate-12 group-hover:bg-brand-yellow group-hover:text-brand-navy">
+              <FontAwesomeIcon icon={principle.icon} className="text-base" />
             </div>
           </div>
 
           {/* Bottom */}
-          <div className="mt-10">
-            <h3 className="mb-2 font-heading text-2xl font-extrabold uppercase sm:text-3xl">
+          <div className="mt-8">
+            <h3 className="mb-2 font-heading text-xl font-extrabold uppercase sm:text-2xl text-white">
               {t(`about.principles.${principle.key}.title`)}
             </h3>
 
-            <p className="max-w-md text-sm leading-7 text-white/80">
+            <p className="max-w-md text-xs leading-relaxed text-white/80 sm:text-sm">
               {t(`about.principles.${principle.key}.description`)}
             </p>
 
             {principle.key === 'adventure' && (
-              <div className="mt-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brand-yellow">
-                <span>
-                  {t('about.principles.highlight')}
-                </span>
-
+              <div className="mt-3 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brand-yellow">
+                <span>{t('about.principles.highlight')}</span>
                 <FontAwesomeIcon
                   icon={faArrowUpRightFromSquare}
-                  className={`text-xs ${isArabic ? '-rotate-90' : ''}`}
+                  className={`text-[10px] ${isArabic ? '-rotate-90' : ''}`}
                 />
               </div>
             )}
@@ -132,90 +130,47 @@ export default function AboutPrinciples() {
   return (
     <section
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="flex min-h-[calc(100svh-100px)] flex-col justify-center bg-surface-sand py-10 md:py-12 lg:min-h-[calc(100svh-100px)] lg:py-8"
+      className="flex min-h-[calc(100svh-100px)] flex-col justify-center bg-surface-sand py-10 md:py-14"
     >
       <div className="mx-auto w-full max-w-7xl px-6 md:px-10 lg:px-16">
         {/* Section Heading */}
-        <div className="mb-7">
-          {/* Eyebrow */}
-          <span className="mb-4 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-brand-blue">
+        <div className="mb-6">
+          <span className="mb-3 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-brand-blue">
             <span className="h-[2px] w-8 bg-brand-yellow" />
             {t('about.principles.eyebrow')}
           </span>
 
-          {/* Title & Description */}
           <div
             dir="ltr"
-            className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between"
+            className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
           >
-            {/* Title */}
             <h2
               dir={isArabic ? 'rtl' : 'ltr'}
-              className={`
-                w-full max-w-2xl font-heading text-4xl font-extrabold
-                uppercase leading-tight text-brand-navy
-                sm:text-5xl md:w-1/2 md:text-6xl
-                ${isArabic
-                  ? 'text-right md:order-2'
-                  : 'text-left md:order-1'
-                }
-              `}
+              className="font-heading text-3xl font-extrabold uppercase leading-[1.15] text-brand-navy sm:text-4xl md:text-5xl"
             >
-              <span className="block">
-                {t('about.principles.titleLine1')}
-              </span>
-
-              <span className="block text-brand-blue">
+              <span>{t('about.principles.titleLine1')}</span>{' '}
+              <span className="text-brand-blue">
                 {t('about.principles.titleLine2')}
               </span>
             </h2>
 
-            {/* Description */}
             <p
               dir={isArabic ? 'rtl' : 'ltr'}
-              className={`
-                w-full max-w-md pb-2 text-sm leading-7
-                text-brand-navy/60 sm:text-base md:w-1/2
-                ${isArabic
-                  ? 'text-right md:order-1'
-                  : 'text-left md:order-2'
-                }
-              `}
+              className="max-w-md text-xs text-brand-navy/70 sm:text-sm leading-relaxed"
             >
               {t('about.principles.description')}
             </p>
           </div>
         </div>
 
-        {/* Mobile Slider */}
-        <div
-          dir={isArabic ? 'rtl' : 'ltr'}
-          className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 md:hidden [&::-webkit-scrollbar]:hidden"
-          style={{ scrollbarWidth: 'none' }}
-        >
-          {principles.map((principle) =>
-            renderCard(principle, true)
-          )}
-        </div>
-
         {/* Desktop Bento Grid */}
-        <div
-          dir="ltr"
-          className="hidden h-[min(58vh,430px)] grid-cols-12 grid-rows-2 gap-3 md:grid"
-        >
-          {principles.map((principle) =>
-            renderCard(principle)
-          )}
+        <div className="hidden h-[540px] grid-cols-12 grid-rows-2 gap-4 lg:grid">
+          {principles.map((p) => renderCard(p, false))}
         </div>
 
-        {/* Mobile Slider Indicator */}
-        <div className="mt-4 flex items-center justify-center gap-2 md:hidden">
-          {principles.map((principle) => (
-            <span
-              key={principle.key}
-              className="h-1.5 w-6 rounded-full bg-brand-blue/20"
-            />
-          ))}
+        {/* Mobile Horizontal Carousel */}
+        <div className="flex gap-4 overflow-x-auto pb-4 pt-2 snap-x snap-mandatory lg:hidden scrollbar-none">
+          {principles.map((p) => renderCard(p, true))}
         </div>
       </div>
     </section>

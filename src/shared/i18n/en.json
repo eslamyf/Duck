@@ -40,134 +40,146 @@
     },
     "story": {
       "eyebrow": "THE STORY OF DUCK",
-      "titleLine1": "A SMALL DUCK.",
-      "titleLine2": "A BIG DREAM.",
-      "paragraph1": "Every big adventure starts with a simple idea.",
-      "paragraph2": "In 2023, one person's passion for the water sparked a dream in Aswan. A dream to help people experience the Nile differently, discover the beauty of nature, and create unforgettable moments on the water.",
-      "paragraph3": "That dream became DUCK. What started as a personal passion grew into a journey built around adventure, connection, and the freedom to explore.",
-      "closing": "AND THIS IS ONLY THE BEGINNING.",
-      "imageAlt": "Kayaking adventure on the water",
+      "titleLine1": "FROM THE NILE OF ASWAN,",
+      "titleLine2": "THE DUCK ADVENTURE BEGAN.",
+      "paragraph1": "In 2023, DUCK was launched on the Nile in Aswan with a clear mission: transforming water sports into safe, inspiring, and accessible adventures for everyone.",
+      "paragraph2": "From single kayaks to a comprehensive fleet of SUP boards, water bikes, and curated group expeditions, we reconnect adventurers with Egypt's authentic nature under uncompromising safety standards.",
+      "closing": "Egypt's waters like you've never experienced before.",
+      "imageAlt": "Kayaking adventure on the Nile in Aswan",
       "imageTag": "Aswan, Egypt",
-      "mainImageAlt": "Kayaking adventure on the water",
-      "fact1": "The journey began in Aswan",
-      "fact2Value": "ONE DREAM",
-      "fact2": "Born from a passion for water",
+      "mainImageAlt": "Kayaking adventure on the Nile in Aswan",
+      "fact1": "Founded in Aswan",
+      "fact2Value": "+4,000",
+      "fact2": "Happy Adventurers",
       "cta": "Discover Our Story",
       "established": "EST. ASWAN",
-      "imageCaption": "A dream sparked by a deep love for the Nile."
+      "imageCaption": "Passion for the water, excellence in adventure."
     },
     "missionVision": {
-      "eyebrow": "WHAT WE BELIEVE IN",
-      "title": "OUR MISSION & VISION",
+      "eyebrow": "WHAT DRIVES US",
+      "title": "MISSION & VISION",
       "missionTitle": "Our Mission",
-      "missionDescription": "To make water adventures more accessible, meaningful, and unforgettable — connecting people with nature, local culture, and the beauty of Egypt.",
+      "missionDescription": "To make water sports and nature adventures in Egypt accessible, safe, and unforgettable, while preserving natural ecosystems and empowering local communities.",
       "visionTitle": "Our Vision",
-      "visionDescription": "To become a leading name in water experiences, inspiring more people to explore Egypt through its rivers, coastlines, and natural destinations.",
+      "visionDescription": "To become Egypt's premier water adventure platform, inspiring thousands to explore the majestic Nile and coastal waters from a brand new perspective.",
       "footer": "WE BELIEVE IN THE POWER OF ADVENTURE",
       "imageAlt": "Kayaking adventure on the Nile",
-      "badge": "DUCK · WATER EXPERIENCES"
+      "badge": "DUCK · AUTHENTIC WATER EXPERIENCES"
     },
     "principles": {
-      "eyebrow": "THE PRINCIPLES WE BELIEVE IN",
+      "eyebrow": "CORE VALUES",
       "titleLine1": "WHAT WE STAND",
       "titleLine2": "FOR",
-      "description": "Every great adventure begins with values we believe in and principles that guide every step of our journey.",
-      "highlight": "OUR PRINCIPLE",
+      "description": "Principles guiding every stroke of our paddles and every adventure on the water.",
+      "highlight": "DUCK STANDARD",
       "adventure": {
         "title": "ADVENTURE",
-        "description": "We believe life is better when you step beyond the ordinary and embrace new experiences."
+        "description": "Venturing beyond the ordinary to discover Egypt's most breathtaking waterways."
       },
       "freedom": {
         "title": "FREEDOM",
-        "description": "We celebrate the freedom to explore, discover, and experience the water in your own way."
+        "description": "Enjoying the water, calm, and open horizon at your own rhythm."
       },
       "connection": {
         "title": "CONNECTION",
-        "description": "We bring people closer to nature, local communities, and each other through shared experiences."
+        "description": "Bonding adventurers with pristine nature, local heritage, and lasting memories."
       },
       "safety": {
-        "title": "SAFETY",
-        "description": "We believe every great adventure starts with care, responsibility, and a commitment to safety."
+        "title": "CERTIFIED SAFETY",
+        "description": "Certified life vests, expert guides, and strict safety protocols on every trip."
       }
     },
     "journey": {
-      "eyebrow": "OUR STORY IN MOTION",
-      "title": "OUR JOURNEY",
-      "subtitle": "From a simple idea in Aswan to unforgettable experiences on the water.",
+      "eyebrow": "KEY MILESTONES",
+      "title": "OUR WATER JOURNEY",
+      "subtitle": "From a spark of passion in Aswan to a nationwide water adventure platform.",
       "items": {
         "beginning": {
-          "title": "WHERE IT ALL BEGAN",
-          "description": "Founded in 2023 in Aswan, Egypt, DUCK began with a passion for water and a vision to help people experience the Nile differently.",
-          "imageAlt": "The Nile River and Nubian village in Aswan"
+          "year": "2023",
+          "title": "Where It All Began",
+          "description": "DUCK started with single kayaks and a genuine love for exploring Aswan's granite islands.",
+          "imageAlt": "Beginnings of DUCK on the Nile in Aswan"
         },
         "experiences": {
-          "title": "BUILDING EXPERIENCES",
-          "description": "We developed a growing collection of water experiences, including Kayaking, Stand-Up Paddle, Water Bike, and curated Nile Tours.",
-          "imageAlt": "People enjoying water activities"
+          "year": "2024",
+          "title": "Expanding Fleet & Activities",
+          "description": "Added double kayaks, Stand-Up Paddleboards, and modern water bikes to the fleet.",
+          "imageAlt": "DUCK fleet and water activities"
         },
         "customers": {
-          "title": "MORE THAN 4,000 MOMENTS",
-          "description": "More than 4,000 customers have experienced DUCK, creating memorable moments through water adventures and local discovery.",
-          "imageAlt": "People enjoying a water adventure"
+          "year": "2025",
+          "title": "Over 4,000 Adventurers",
+          "description": "Welcomed thousands of local and international explorers with top-rated reviews.",
+          "imageAlt": "DUCK adventurer community on the water"
         },
         "beyond": {
-          "title": "BEYOND ASWAN",
-          "description": "Our next chapter focuses on expanding into new Egyptian destinations, developing experiences, and improving our digital platform.",
-          "imageAlt": "Egyptian natural landscape"
+          "year": "2026+",
+          "title": "Across All Egyptian Waters",
+          "description": "Expanding to Gharb Soheil, Marsa Matrouh, Giza, and Siwa Oasis.",
+          "imageAlt": "DUCK expanding across Egypt"
         }
       },
       "swipeHint": "SWIPE TO EXPLORE"
     },
     "numbers": {
-      "eyebrow": "OUR IMPACT",
+      "eyebrow": "OUR NUMBERS",
       "title": "DUCK IN NUMBERS",
-      "subtitle": "Every number tells a story. Every experience creates a memory.",
+      "subtitle": "Numbers reflecting our passion and the trust of our adventurer community.",
       "founded": {
         "label": "Founded",
-        "description": "Born in Aswan, Egypt"
+        "description": "First journey launched in Aswan"
       },
       "customers": {
-        "label": "Customers Served",
-        "description": "And countless memories created"
+        "label": "Adventurers Served",
+        "description": "Unforgettable moments on the water"
       },
       "destinations": {
-        "label": "Destinations & Markets",
-        "description": "And growing beyond"
+        "label": "Water Destinations",
+        "description": "Aswan, Gharb, Matrouh, Giza & Siwa"
+      },
+      "safety": {
+        "label": "Certified Safety",
+        "description": "100% certified gear and trained guides"
       },
       "items": {
         "founded": {
           "label": "Founded",
-          "description": "Born in Aswan, Egypt"
+          "description": "First journey launched in Aswan"
         },
         "customers": {
-          "label": "Customers Served",
-          "description": "And countless memories created"
+          "label": "Adventurers Served",
+          "description": "Unforgettable moments on the water"
         },
         "destinations": {
-          "label": "Destinations & Markets",
-          "description": "And growing beyond"
+          "label": "Water Destinations",
+          "description": "Aswan, Gharb, Matrouh, Giza & Siwa"
+        },
+        "safety": {
+          "label": "Certified Safety",
+          "description": "100% certified gear and trained guides"
         }
       },
       "footer": "Every number represents a new adventure and a lasting memory."
     },
     "community": {
       "eyebrow": "THE DUCK COMMUNITY",
-      "title": "MORE THAN AN EXPERIENCE. A COMMUNITY",
-      "imageLabel": "CONNECTED BY ADVENTURE",
-      "headline": "MORE THAN AN EXPERIENCE. A COMMUNITY.",
-      "description": "It's about the people you meet, the moments you share, and the memories you create together. At DUCK, every adventure brings people closer to nature and to each other.",
-      "mainImageAlt": "People enjoying outdoor water adventures",
+      "title": "STORIES CONNECTED BY WATER",
+      "imageLabel": "PASSIONATE ADVENTURERS",
+      "headline": "More than an activity, it's a growing family.",
+      "description": "It's about the smiles at the end of every trip and the new friends met between the waves. At DUCK, every adventure creates genuine human connections.",
+      "mainImageAlt": "DUCK adventurers enjoying water activities in Aswan",
       "gallery": {
-        "one": "People enjoying a water adventure",
-        "two": "Outdoor adventure and exploration",
-        "three": "Friends sharing memorable moments"
+        "one": "Navigating Nile granite channels",
+        "two": "Paddle celebration with friends",
+        "three": "Serene SUP paddling moments",
+        "four": "Tranquil kayak relaxation"
       }
     },
     "cta": {
-      "eyebrow": "YOUR NEXT ADVENTURE",
-      "title": "YOUR NEXT ADVENTURE STARTS HERE",
-      "description": "Discover the beauty of the Nile from a different perspective. Your next unforgettable experience is waiting.",
-      "button": "EXPLORE ACTIVITIES"
+      "eyebrow": "START YOUR JOURNEY",
+      "title": "The Nile is Calling. Are You Ready?",
+      "description": "Book your next water adventure in minutes and experience Egypt from a whole new perspective.",
+      "button": "Book Your Trip Now"
     },
     "metaTitle": "About Us"
   },

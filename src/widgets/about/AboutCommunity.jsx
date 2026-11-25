@@ -2,26 +2,31 @@ import { useState } from 'react';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { AnimatePresence, motion } from 'framer-motion';
 
+import imgComm1 from '../../shared/assets/images/about/community-1.webp';
+import imgComm2 from '../../shared/assets/images/about/community-2.webp';
+import imgComm3 from '../../shared/assets/images/about/community-3.webp';
+import imgComm4 from '../../shared/assets/images/about/community-4.webp';
+
 const communityImages = [
   {
-    key: 'main',
-    image:
-      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2000&q=90',
-  },
-  {
     key: 'one',
-    image:
-      'https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=900&q=85',
+    image: imgComm1,
+    titleKey: 'one',
   },
   {
     key: 'two',
-    image:
-      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=85',
+    image: imgComm2,
+    titleKey: 'two',
   },
   {
     key: 'three',
-    image:
-      'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=900&q=85',
+    image: imgComm3,
+    titleKey: 'three',
+  },
+  {
+    key: 'four',
+    image: imgComm4,
+    titleKey: 'four',
   },
 ];
 
@@ -30,120 +35,102 @@ export default function AboutCommunity() {
   const isArabic = lang === 'ar';
 
   const [activeIndex, setActiveIndex] = useState(0);
-
-  const activeImage = communityImages[activeIndex];
-
-  const thumbnails = communityImages
-    .map((item, index) => ({
-      ...item,
-      originalIndex: index,
-    }))
-    .filter((item) => item.originalIndex !== activeIndex);
+  const activeItem = communityImages[activeIndex];
 
   return (
     <section
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="h-[calc(100svh-100px)] min-h-[560px] overflow-hidden bg-surface-sand px-4 py-20 sm:px-6 md:px-10 md:py-20"
+      className="bg-surface-sand py-12 md:py-16 text-brand-navy"
     >
-      <div className="mx-auto flex h-full max-w-7xl flex-col">
-        {/* Main Image */}
-        <div className="group relative min-h-0 flex-1 overflow-hidden rounded-[24px] md:rounded-[30px]">
-          {/* Animated Image */}
+      <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16 flex flex-col gap-6">
+        {/* Header - Compact */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <span className="mb-2 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-brand-blue">
+              <span className="h-[2px] w-8 bg-brand-yellow" />
+              {t('about.community.eyebrow')}
+            </span>
+            <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-extrabold uppercase text-brand-navy">
+              {t('about.community.title')}
+            </h2>
+          </div>
+
+          <p className="max-w-md text-xs sm:text-sm text-brand-navy/70 leading-relaxed">
+            {t('about.community.description')}
+          </p>
+        </div>
+
+        {/* Main Interactive Stage */}
+        <div className="relative h-[360px] sm:h-[440px] md:h-[500px] w-full overflow-hidden rounded-3xl shadow-xl bg-brand-navy">
           <AnimatePresence mode="wait">
             <motion.img
-              key={activeImage.key}
-              src={activeImage.image}
-              alt={
-                activeIndex === 0
-                  ? t('about.community.mainImageAlt')
-                  : t(`about.community.gallery.${activeImage.key}`)
-              }
-              initial={{ opacity: 0, scale: 1.04 }}
+              key={activeItem.key}
+              src={activeItem.image}
+              alt={t(`about.community.gallery.${activeItem.titleKey}`, 'مجتمع DUCK')}
+              initial={{ opacity: 0, scale: 1.05 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 1.02 }}
-              transition={{
-                duration: 0.45,
-                ease: 'easeInOut',
-              }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
               className="absolute inset-0 h-full w-full object-cover"
             />
           </AnimatePresence>
 
           {/* Dark Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/95 via-brand-navy/35 to-brand-navy/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/90 via-brand-navy/30 to-transparent" />
 
-          {/* Main Content */}
+          {/* Bottom Captions */}
           <div
             dir={isArabic ? 'rtl' : 'ltr'}
-            className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-9 md:p-12 lg:p-14"
+            className="absolute inset-x-0 bottom-0 p-6 sm:p-8 text-white flex flex-col sm:flex-row sm:items-end justify-between gap-4"
           >
-            {/* Image Label */}
-            <span className="mb-3 block text-[10px] font-bold uppercase tracking-[0.25em] text-brand-yellow sm:text-xs">
-              {t('about.community.imageLabel')}
+            <div>
+              <span className="inline-block text-[10px] font-bold uppercase tracking-[0.2em] text-brand-yellow mb-1.5">
+                {t('about.community.imageLabel')}
+              </span>
+              <h3 className="font-heading text-xl sm:text-2xl md:text-3xl font-extrabold text-white">
+                {t(`about.community.gallery.${activeItem.titleKey}`, t('about.community.headline'))}
+              </h3>
+            </div>
+
+            {/* Quick Indicator */}
+            <span className="font-mono text-sm font-black text-white/70 bg-black/40 px-3 py-1 rounded-full backdrop-blur-xs self-start sm:self-auto">
+              0{activeIndex + 1} / 0{communityImages.length}
             </span>
-
-            {/* Headline */}
-            <h2 className="mb-3 max-w-3xl font-heading text-2xl font-extrabold leading-tight sm:text-3xl md:text-4xl lg:text-5xl">
-              {t('about.community.headline')}
-            </h2>
-
-            {/* Description */}
-            <p className="max-w-2xl text-xs leading-6 text-white/80 sm:text-sm sm:leading-7 md:text-base">
-              {t('about.community.description')}
-            </p>
           </div>
-
-          {/* Image Number */}
-          <span
-            className={`
-              absolute top-5 text-5xl font-extrabold text-white/30
-              sm:top-7 sm:text-6xl md:top-9 md:text-7xl
-              ${isArabic
-                ? 'left-6 md:left-10'
-                : 'right-6 md:right-10'
-              }
-            `}
-          >
-            {String(activeIndex + 1).padStart(2, '0')}
-          </span>
         </div>
 
-        {/* Interactive Gallery */}
-        <div
-          dir={isArabic ? 'rtl' : 'ltr'}
-          className="mt-3 grid h-[clamp(95px,17vh,145px)] shrink-0 grid-cols-3 gap-3 sm:mt-4 sm:gap-4"
-        >
-          {thumbnails.map((item) => (
-            <motion.button
-              key={item.key}
-              type="button"
-              layout
-              onClick={() => setActiveIndex(item.originalIndex)}
-              aria-label={t(
-                `about.community.gallery.${item.key}`
-              )}
-              className="group relative min-h-0 overflow-hidden rounded-[16px] border-2 border-transparent transition-colors duration-300 hover:border-brand-yellow focus-visible:border-brand-yellow focus-visible:outline-none sm:rounded-[20px]"
-            >
-              {/* Thumbnail Image */}
-              <img
-                src={item.image}
-                alt={t(
-                  `about.community.gallery.${item.key}`
-                )}
-                loading="lazy"
-                decoding="async"
-                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
+        {/* 4 Interactive Thumbnails */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          {communityImages.map((item, index) => {
+            const isSelected = index === activeIndex;
+            return (
+              <button
+                key={item.key}
+                type="button"
+                onClick={() => setActiveIndex(index)}
+                className={`group relative h-24 sm:h-28 overflow-hidden rounded-2xl border-2 transition-all cursor-pointer text-start ${
+                  isSelected
+                    ? 'border-brand-navy shadow-md ring-2 ring-brand-yellow scale-[1.02]'
+                    : 'border-black/10 hover:border-brand-blue/50 opacity-75 hover:opacity-100'
+                }`}
+              >
+                <img
+                  src={item.image}
+                  alt={t(`about.community.gallery.${item.titleKey}`)}
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div className={`absolute inset-0 transition-colors ${
+                  isSelected ? 'bg-transparent' : 'bg-black/25 group-hover:bg-transparent'
+                }`} />
 
-              {/* Thumbnail Overlay */}
-              <div className="absolute inset-0 bg-brand-navy/15 transition-colors duration-300 group-hover:bg-transparent" />
-
-              {/* Thumbnail Number */}
-              <span className="absolute bottom-2 left-3 text-xl font-extrabold text-white/70 sm:bottom-3 sm:left-4 sm:text-2xl">
-                {String(item.originalIndex + 1).padStart(2, '0')}
-              </span>
-            </motion.button>
-          ))}
+                <span className="absolute bottom-2 start-2 font-mono text-[10px] font-bold text-white bg-black/60 px-2 py-0.5 rounded backdrop-blur-xs">
+                  0{index + 1}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
     </section>

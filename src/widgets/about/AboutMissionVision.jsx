@@ -1,24 +1,22 @@
 import { useTranslation } from '../../shared/i18n/index.js';
+import missionImage from '../../shared/assets/images/about/mission-vision.webp';
 
 export default function AboutMissionVision() {
   const { lang, t } = useTranslation();
   const isArabic = lang === 'ar';
 
-  const missionImage =
-    'https://images.unsplash.com/photo-1762943107260-d080e13266b3?auto=format&fit=crop&fm=jpg&q=85&w=1400';
-
   return (
     <section
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="overflow-hidden bg-surface-sand py-16 text-brand-navy md:py-20 lg:py-24"
+      className="overflow-hidden bg-surface-sand py-12 md:py-16 text-brand-navy"
     >
       <div
         dir="ltr"
-        className="mx-auto grid max-w-7xl items-center gap-10 px-6 md:px-10 lg:grid-cols-2 lg:gap-16 lg:px-16"
+        className="mx-auto grid max-w-7xl items-center gap-8 px-6 md:px-10 lg:grid-cols-2 lg:gap-14 lg:px-16"
       >
-        {/* Image */}
+        {/* Real Duck Image */}
         <div
-          className={`relative h-[360px] overflow-hidden rounded-3xl shadow-xl sm:h-[440px] lg:h-[min(68vh,580px)] ${
+          className={`relative h-[340px] overflow-hidden rounded-3xl shadow-xl sm:h-[420px] lg:h-[min(64vh,540px)] ${
             isArabic ? 'lg:order-2' : 'lg:order-1'
           }`}
         >
@@ -30,14 +28,14 @@ export default function AboutMissionVision() {
             decoding="async"
           />
 
-          <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/45 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/55 via-transparent to-transparent" />
 
           <div
-            className={`absolute bottom-6 rounded-full border border-white/30 bg-brand-navy/30 px-5 py-3 text-xs font-bold tracking-[0.2em] text-white backdrop-blur-md ${
-              isArabic ? 'right-6' : 'left-6'
+            className={`absolute bottom-5 rounded-full border border-white/30 bg-brand-navy/60 px-4 py-2 text-xs font-bold tracking-[0.2em] text-white backdrop-blur-md shadow-lg ${
+              isArabic ? 'right-5' : 'left-5'
             }`}
           >
-            {t('about.missionVision.badge', 'DUCK · WATER EXPERIENCES')}
+            {t('about.missionVision.badge', 'DUCK · تجارب مائية حقيقية')}
           </div>
         </div>
 
@@ -51,7 +49,7 @@ export default function AboutMissionVision() {
           }`}
         >
           {/* Section Label */}
-          <div className="mb-6 flex items-center gap-3">
+          <div className="mb-4 flex items-center gap-3">
             <span className="h-[2px] w-8 bg-brand-yellow" />
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-brand-blue">
               {t('about.missionVision.eyebrow')}
@@ -60,8 +58,8 @@ export default function AboutMissionVision() {
 
           {/* Heading */}
           <h2
-            className={`mb-8 font-heading text-4xl font-extrabold uppercase leading-tight text-brand-navy sm:text-5xl md:text-6xl ${
-              isArabic ? 'leading-[1.4]' : ''
+            className={`mb-6 font-heading text-3xl font-extrabold uppercase leading-tight text-brand-navy sm:text-4xl md:text-5xl ${
+              isArabic ? 'leading-[1.3]' : ''
             }`}
           >
             {isArabic ? (
@@ -91,36 +89,36 @@ export default function AboutMissionVision() {
           </h2>
 
           {/* Cards */}
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* Mission Card */}
-            <div className="rounded-2xl border border-brand-navy/10 bg-white p-7 shadow-sm transition-shadow duration-300 hover:shadow-md sm:p-8">
-              <div className="mb-3 flex items-center gap-3">
-                <span className="h-2 w-2 rounded-full bg-brand-yellow" />
-                <h3 className="font-heading text-xl font-bold uppercase text-brand-navy sm:text-2xl">
+            <div className="rounded-2xl border border-black/10 bg-white p-5 shadow-xs transition-shadow duration-300 hover:shadow-md sm:p-6">
+              <div className="mb-2 flex items-center gap-2.5">
+                <span className="h-2.5 w-2.5 rounded-full bg-brand-yellow ring-4 ring-brand-yellow/20" />
+                <h3 className="font-heading text-lg font-bold uppercase text-brand-navy sm:text-xl">
                   {t('about.missionVision.missionTitle')}
                 </h3>
               </div>
-              <p className="text-sm leading-7 text-brand-navy/70 sm:text-base">
+              <p className="text-sm leading-relaxed text-brand-navy/70 sm:text-base">
                 {t('about.missionVision.missionDescription')}
               </p>
             </div>
 
             {/* Vision Card */}
-            <div className="rounded-2xl border border-brand-navy/10 bg-white p-7 shadow-sm transition-shadow duration-300 hover:shadow-md sm:p-8">
-              <div className="mb-3 flex items-center gap-3">
-                <span className="h-2 w-2 rounded-full bg-brand-blue" />
-                <h3 className="font-heading text-xl font-bold uppercase text-brand-navy sm:text-2xl">
+            <div className="rounded-2xl border border-black/10 bg-white p-5 shadow-xs transition-shadow duration-300 hover:shadow-md sm:p-6">
+              <div className="mb-2 flex items-center gap-2.5">
+                <span className="h-2.5 w-2.5 rounded-full bg-brand-blue ring-4 ring-brand-blue/20" />
+                <h3 className="font-heading text-lg font-bold uppercase text-brand-navy sm:text-xl">
                   {t('about.missionVision.visionTitle')}
                 </h3>
               </div>
-              <p className="text-sm leading-7 text-brand-navy/70 sm:text-base">
+              <p className="text-sm leading-relaxed text-brand-navy/70 sm:text-base">
                 {t('about.missionVision.visionDescription')}
               </p>
             </div>
           </div>
 
           {/* Bottom Note */}
-          <div className="mt-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-brand-blue">
+          <div className="mt-6 flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-brand-blue">
             <span className="h-[2px] w-6 bg-brand-yellow" />
             <span>
               {t('about.missionVision.footer')}
