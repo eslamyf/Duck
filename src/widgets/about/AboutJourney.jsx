@@ -13,24 +13,28 @@ export default function AboutJourney() {
       key: 'beginning',
       year: '2023',
       image: imgBeginning,
+      objectPos: 'object-[center_68%]',
       tag: isArabic ? 'الانطلاقة الأولى' : 'The First Spark',
     },
     {
       key: 'experiences',
       year: '2024',
       image: imgFleet,
+      objectPos: 'object-[center_72%]',
       tag: isArabic ? 'تنوع الأسطول' : 'Fleet Expansion',
     },
     {
       key: 'customers',
       year: '2025',
       image: imgCommunity,
+      objectPos: 'object-[center_65%]',
       tag: isArabic ? '+4000 مغامر' : '4,000+ Adventurers',
     },
     {
       key: 'beyond',
       year: '2026+',
       image: imgExpansion,
+      objectPos: 'object-[center_62%]',
       tag: isArabic ? 'كل مياه مصر' : 'Across Egypt',
     },
   ];
@@ -82,7 +86,7 @@ export default function AboutJourney() {
                   <img
                     src={item.image}
                     alt={t(`about.journey.items.${item.key}.title`)}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className={`h-full w-full object-cover ${item.objectPos} transition-transform duration-500 group-hover:scale-105`}
                     loading="eager"
                     decoding="async"
                   />

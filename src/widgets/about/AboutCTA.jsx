@@ -25,7 +25,7 @@ export default function AboutCTA() {
         alt={t('about.cta.title')}
         loading="eager"
         decoding="async"
-        className="absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-cover object-[center_65%]"
       />
 
       {/* Dark Navy Overlay */}

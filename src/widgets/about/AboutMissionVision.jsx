@@ -23,7 +23,7 @@ export default function AboutMissionVision() {
           <img
             src={missionImage}
             alt={t('about.missionVision.imageAlt')}
-            className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+            className="h-full w-full object-cover object-[center_62%] transition-transform duration-700 hover:scale-105"
             loading="eager"
             decoding="async"
           />

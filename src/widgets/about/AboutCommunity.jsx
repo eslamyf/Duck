@@ -11,21 +11,25 @@ const communityImages = [
   {
     key: 'one',
     image: imgComm1,
+    objectPos: 'object-[center_65%]',
     titleKey: 'one',
   },
   {
     key: 'two',
     image: imgComm2,
+    objectPos: 'object-[center_85%]',
     titleKey: 'two',
   },
   {
     key: 'three',
     image: imgComm3,
+    objectPos: 'object-[center_55%]',
     titleKey: 'three',
   },
   {
     key: 'four',
     image: imgComm4,
+    objectPos: 'object-[center_68%]',
     titleKey: 'four',
   },
 ];
@@ -71,7 +75,7 @@ export default function AboutCommunity() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 1.02 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
-              className="absolute inset-0 h-full w-full object-cover"
+              className={`absolute inset-0 h-full w-full object-cover ${activeItem.objectPos}`}
             />
           </AnimatePresence>
 
@@ -117,7 +121,7 @@ export default function AboutCommunity() {
                 <img
                   src={item.image}
                   alt={t(`about.community.gallery.${item.titleKey}`)}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  className={`h-full w-full object-cover ${item.objectPos} transition-transform duration-300 group-hover:scale-105`}
                   loading="eager"
                   decoding="async"
                 />

@@ -23,6 +23,7 @@ export default function AboutPrinciples() {
       key: 'adventure',
       icon: faCompass,
       image: imgAdventure,
+      objectPos: 'object-[center_60%]',
       layout: 'large',
     },
     {
@@ -30,6 +31,7 @@ export default function AboutPrinciples() {
       key: 'freedom',
       icon: faWater,
       image: imgFreedom,
+      objectPos: 'object-[center_55%]',
       layout: 'small',
     },
     {
@@ -37,6 +39,7 @@ export default function AboutPrinciples() {
       key: 'connection',
       icon: faUsers,
       image: imgConnection,
+      objectPos: 'object-[center_82%]',
       layout: 'small',
     },
     {
@@ -44,6 +47,7 @@ export default function AboutPrinciples() {
       key: 'safety',
       icon: faShieldHalved,
       image: imgSafety,
+      objectPos: 'object-[center_55%]',
       layout: 'wide',
     },
   ];
@@ -68,7 +72,7 @@ export default function AboutPrinciples() {
           alt={t(`about.principles.${principle.key}.title`)}
           loading="eager"
           decoding="async"
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+          className={`absolute inset-0 h-full w-full object-cover ${principle.objectPos} transition-transform duration-700 group-hover:scale-110`}
         />
 
         {/* Image Overlay */}

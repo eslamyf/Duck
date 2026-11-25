@@ -94,7 +94,7 @@ export default function AboutStory() {
           <img
             src={storyImage}
             alt={t('about.story.mainImageAlt', t('about.story.imageAlt', 'مغامرة كاياك على المياه'))}
-            className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+            className="h-full w-full object-cover object-[center_60%] transition-transform duration-700 hover:scale-105"
             loading="eager"
             decoding="async"
           />
