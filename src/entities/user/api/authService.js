@@ -1,4 +1,5 @@
 import { ROLES } from '../model/roles.js';
+import { authenticateDemoAccount } from '../../../shared/config/demoAccounts.js';
 
 const USERS_KEY = 'duck_users';
 const CURRENT_USER_KEY = 'duck_current_user';
@@ -226,6 +227,21 @@ export async function loginUser({
     }
 
     const normalizedEmail = normalizeEmail(email);
+
+    const demoUser = authenticateDemoAccount(normalizedEmail, password);
+    if (demoUser) {
+        if (role && demoUser.role !== role) {
+            throw new Error('This account does not match the selected role.');
+        }
+
+        logoutUser();
+        const storage = rememberMe ? localStorage : sessionStorage;
+        storage.setItem(
+            rememberMe ? CURRENT_USER_KEY : SESSION_USER_KEY,
+            JSON.stringify(demoUser)
+        );
+        return demoUser;
+    }
 
     const users = getStoredUsers();
 

@@ -1,11 +1,13 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 import { getCurrentUser } from '../../entities/user/api/authService.js';
-import { STAFF_PORTAL_PATHS } from '../../entities/user/model/roles.js';
+import { can } from '../../entities/user/model/roles.js';
+import { getPortalPathForRole } from '../../shared/config/rbac.js';
 import { ROUTES } from '../../shared/config/routes.js';
 
 function ProtectedRoute({
   allowedRoles = [],
+  requiredPermission,
   children,
 }) {
   const location = useLocation();
@@ -22,11 +24,15 @@ function ProtectedRoute({
     );
   }
 
-  // Redirect authenticated users whose role is not permitted
-  if (allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
-    const redirectPath =
-      STAFF_PORTAL_PATHS[user.role] || ROUTES.HOME || '/';
+  const roleAllowed =
+    allowedRoles.length === 0 || allowedRoles.includes(user.role);
+  const permissionAllowed =
+    !requiredPermission ||
+    can(user.role, requiredPermission, user.permissions);
 
+  // Redirect authenticated users whose role or permission is not permitted
+  if (!roleAllowed || !permissionAllowed) {
+    const redirectPath = getPortalPathForRole(user.role) || ROUTES.HOME || '/';
     return <Navigate to={redirectPath} replace />;
   }
 

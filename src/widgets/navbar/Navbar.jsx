@@ -7,6 +7,7 @@ import duckLogo from '../../shared/assets/icons/Artboard 14.png';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { Button, Badge } from '../../shared/ui/index.js';
 import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
+import { getPortalPathForRole } from '../../shared/config/rbac.js';
 
 import { getCurrentUser } from '../../entities/user/api/authService.js';
 
@@ -291,7 +292,7 @@ export default function Navbar({ onBookClick }) {
           {/* Login / Account Avatar */}
           {currentUser ? (
             <Link
-              to="/dashboard"
+              to={getPortalPathForRole(currentUser.role)}
               aria-label={isRtl ? 'الذهاب إلى لوحة التحكم' : 'Go to Dashboard'}
               title={accountName}
               className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-brand-yellow bg-brand-navy text-lg font-black text-brand-yellow shadow-sm transition hover:scale-105"

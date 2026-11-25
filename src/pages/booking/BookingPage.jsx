@@ -1,8 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { TRIPS } from '../../widgets/trips/tripsData.js';
 import { generateBookingRef } from '../../shared/config/constants.js';
+import { addBooking } from '../../entities/booking/api/bookingService.js';
+import { getCurrentUser } from '../../entities/user/api/authService.js';
 import {
   BookingStepper,
   StepTripSelect,
@@ -42,6 +44,7 @@ export default function BookingPage() {
     if (refParam) return refParam;
     return generateBookingRef();
   });
+  const savedBookingRef = useRef(false);
 
   // Today ISO
   const [todayIso] = useState(() => new Date().toISOString().split('T')[0]);
@@ -91,6 +94,7 @@ export default function BookingPage() {
 
   // Reset booking flow
   const handleResetBooking = () => {
+    savedBookingRef.current = false;
     setUserSelectedTrip(null);
     setBookingRef(generateBookingRef());
     setSearchParams({});
@@ -172,7 +176,43 @@ export default function BookingPage() {
               bookingData={bookingData}
               updateBookingData={updateBookingData}
               selectedTrip={selectedTrip}
-              onNext={() => goToStep(4)}
+              onNext={() => {
+                if (!savedBookingRef.current) {
+                  savedBookingRef.current = true;
+                  const currentUser = getCurrentUser();
+                  const guests =
+                    (Number(bookingData.adults) || 0) +
+                    (Number(bookingData.kids1to6) || 0) +
+                    (Number(bookingData.kids7to12) || 0);
+                  addBooking({
+                    reference: bookingRef,
+                    userId: currentUser?.id || 'guest',
+                    email: currentUser?.email || '',
+                    fullName: bookingData.fullName,
+                    phone: bookingData.phone,
+                    tripKey: selectedTrip?.key || '',
+                    tripTitle: selectedTrip
+                      ? t(`trips.items.${selectedTrip.key}.title`, selectedTrip.slug)
+                      : '',
+                    equipment: bookingData.equipment || selectedTrip?.act || 'kayak',
+                    date: bookingData.date,
+                    time: bookingData.time,
+                    adults: bookingData.adults,
+                    kids1to6: bookingData.kids1to6,
+                    kids7to12: bookingData.kids7to12,
+                    guests: guests || 1,
+                    units: guests || 1,
+                    nationality: bookingData.nationality,
+                    totalAmount: bookingData.totalAmount,
+                    amountToPay: bookingData.amountToPay,
+                    remainingBalance: bookingData.remainingBalance,
+                    status: 'pending',
+                    source: 'web',
+                    channel: 'B2C',
+                  });
+                }
+                goToStep(4);
+              }}
               onBack={() => goToStep(2)}
               t={t}
               lang={lang}

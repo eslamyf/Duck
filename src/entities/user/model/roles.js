@@ -163,7 +163,6 @@ export function can(role, permission, overrides = []) {
 export const STAFF_PORTAL_PATHS = Object.freeze({
   [ROLES.ADMIN]:           '/portal/admin',
   [ROLES.OPERATIONS]:      '/portal/ops',
-  [ROLES.TOUR_GUIDE]:      '/portal/guide',
-  [ROLES.CONTENT_MANAGER]: '/portal/content',
-  [ROLES.PARTNER]:         '/portal/b2b',
+  [ROLES.TOUR_GUIDE]:      '/portal/agent',
+  [ROLES.PARTNER]:         '/portal/partner',
 });

@@ -11,6 +11,7 @@ import { faGoogle, faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 
 import { useTranslation } from '../../../shared/i18n/index.js';
 import { ROUTES } from '../../../shared/config/routes.js';
+import { getPortalPathForRole } from '../../../shared/config/rbac.js';
 import { Input, Button, Checkbox } from '../../../shared/ui/index.js';
 import { isValidEmail } from '../../../shared/utils/validators.js';
 import AuthRoleSelector from './AuthRoleSelector.jsx';
@@ -104,12 +105,7 @@ export default function LoginForm() {
       });
 
       setSuccess(true);
-
-      if (authenticatedUser.role === 'Admin') {
-        navigate(ROUTES.ADMIN, { replace: true });
-      } else {
-        navigate('/dashboard', { replace: true });
-      }
+      navigate(getPortalPathForRole(authenticatedUser.role), { replace: true });
     } catch (error) {
       setErrors((prev) => ({
         ...prev,
