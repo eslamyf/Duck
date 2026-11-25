@@ -1,29 +1,99 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+  useLocation,
+} from 'react-router-dom';
+
 import Navbar from '../widgets/navbar/Navbar.jsx';
 import Footer from '../widgets/footer/Footer.jsx';
 import HeroSection from '../widgets/hero/HeroSection.jsx';
 import DestinationsSection from '../widgets/destinations/DestinationsSection.jsx';
 import TripsSection from '../widgets/trips/TripsSection.jsx';
 import GroupsBanner from '../widgets/groups-banner/GroupsBanner.jsx';
+
 import { TRIPS } from '../widgets/trips/tripsData.js';
 import { useTranslation } from '../shared/i18n/index.js';
 import { ROUTES, SECTIONS, sectionLink } from '../shared/config/routes.js';
-import { ErrorBoundary, ScrollProgress } from '../shared/ui/index.js';
+import ProtectedRoute from './routes/ProtectedRoute.jsx';
+import { ROLES } from '../entities/user/model/roles.js';
+
+
+import {
+  ErrorBoundary,
+  ScrollProgress,
+} from '../shared/ui/index.js';
+
 import { PendingBookingPopup } from '../widgets/booking/index.js';
 
+// Lazy-loaded public sections
 const MapSection = lazy(() => import('../widgets/map/index.js'));
 const ReviewsSection = lazy(() => import('../widgets/reviews/index.js'));
 const FAQSection = lazy(() => import('../widgets/faq/index.js'));
 const GroupsPage = lazy(() => import('../widgets/groups-page/index.js'));
 const AboutPage = lazy(() => import('../pages/about/index.js'));
 const TripDetailsPage = lazy(() => import('../pages/trip-details/index.js'));
-const BookingPage = lazy(() =>
-  import('../pages/booking/index.js').then((m) => ({ default: m.BookingPage }))
-);
-const LoginPage = lazy(() => import('../pages/auth/LoginPage.jsx'));
-const CreateAccountPage = lazy(() => import('../pages/auth/CreateAccountPage.jsx'));
 
+const BookingPage = lazy(() =>
+  import('../pages/booking/index.js').then((m) => ({
+    default: m.BookingPage,
+  }))
+);
+
+// Authentication Pages
+const LoginPage = lazy(() => import('../pages/auth/LoginPage.jsx'));
+const CreateAccountPage = lazy(
+  () => import('../pages/auth/CreateAccountPage.jsx')
+);
+
+// Admin Portal
+const AdminLayout = lazy(() =>
+  import('../layouts/AdminLayout.jsx')
+);
+
+const AdminDashboardPage = lazy(() =>
+  import('../pages/admin/AdminDashboardPage.jsx')
+);
+
+const BookingsPage = lazy(() =>
+  import('../pages/admin/BookingsPage.jsx')
+);
+
+const CustomersPage = lazy(() =>
+  import('../pages/admin/CustomersPage.jsx')
+);
+
+const ActivitiesPage = lazy(() =>
+  import('../pages/admin/ActivitiesPage.jsx')
+);
+
+const AvailabilityPage = lazy(() =>
+  import('../pages/admin/AvailabilityPage.jsx')
+);
+
+const ProvidersPage = lazy(() =>
+  import('../pages/admin/ProvidersPage.jsx')
+);
+
+const PricingPage = lazy(() =>
+  import('../pages/admin/PricingPage.jsx')
+);
+
+const ContentPage = lazy(() =>
+  import('../pages/admin/ContentPage.jsx')
+);
+
+const ReportsPage = lazy(() =>
+  import('../pages/admin/ReportsPage.jsx')
+);
+
+const UsersPage = lazy(() =>
+  import('../pages/admin/UsersPage.jsx')
+);
+
+// Loading Components
 function SectionSpinner({
   className = 'text-white/50',
   borderClass = 'border-brand-yellow/30 border-t-brand-yellow',
@@ -33,7 +103,9 @@ function SectionSpinner({
       className={`w-full flex items-center justify-center ${className}`}
       aria-busy="true"
     >
-      <div className={`w-10 h-10 border-4 rounded-full animate-spin ${borderClass}`} />
+      <div
+        className={`w-10 h-10 border-4 rounded-full animate-spin ${borderClass}`}
+      />
     </div>
   );
 }
@@ -81,7 +153,10 @@ function TripDetailsFallback() {
 
 function AuthFallback() {
   return (
-    <div className="min-h-screen w-full bg-brand-navy flex items-center justify-center text-white/50" aria-busy="true">
+    <div
+      className="min-h-screen w-full bg-brand-navy flex items-center justify-center text-white/50"
+      aria-busy="true"
+    >
       <div className="w-10 h-10 border-4 border-brand-yellow/30 border-t-brand-yellow rounded-full animate-spin" />
     </div>
   );
@@ -123,18 +198,23 @@ function FAQFallback() {
   );
 }
 
+// Scroll Manager
 function ScrollManager() {
   const { pathname, hash } = useLocation();
 
   useEffect(() => {
     if (!hash) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
     }
   }, [pathname, hash]);
 
   useEffect(() => {
     if (hash) {
       const targetId = hash.replace(/^#/, '');
+
       if (targetId.startsWith('/')) return;
 
       let retries = 0;
@@ -143,7 +223,9 @@ function ScrollManager() {
         const el = document.getElementById(targetId);
 
         if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
+          el.scrollIntoView({
+            behavior: 'smooth',
+          });
         } else if (retries < 30) {
           retries++;
           setTimeout(scrollToTarget, 80);
@@ -159,6 +241,7 @@ function ScrollManager() {
   return null;
 }
 
+// Legacy Hash Redirect
 function LegacyHashRedirect() {
   const navigate = useNavigate();
 
@@ -166,9 +249,17 @@ function LegacyHashRedirect() {
     const handleHash = () => {
       const h = window.location.hash;
 
-      if (h === '#/groups' || h === '#//groups' || h.startsWith('#/groups')) {
+      if (
+        h === '#/groups' ||
+        h === '#//groups' ||
+        h.startsWith('#/groups')
+      ) {
         navigate(ROUTES.GROUPS, { replace: true });
-      } else if (h === '#/about' || h === '#//about' || h.startsWith('#/about')) {
+      } else if (
+        h === '#/about' ||
+        h === '#//about' ||
+        h.startsWith('#/about')
+      ) {
         navigate(ROUTES.ABOUT, { replace: true });
       }
     };
@@ -177,12 +268,15 @@ function LegacyHashRedirect() {
 
     window.addEventListener('hashchange', handleHash);
 
-    return () => window.removeEventListener('hashchange', handleHash);
+    return () => {
+      window.removeEventListener('hashchange', handleHash);
+    };
   }, [navigate]);
 
   return null;
 }
 
+// Page Title Manager
 function TitleManager() {
   const { pathname } = useLocation();
   const { t } = useTranslation();
@@ -190,8 +284,13 @@ function TitleManager() {
   useEffect(() => {
     if (pathname === ROUTES.LOGIN || pathname === '/login') {
       document.title = `${t('auth.login.metaTitle')} | ${t('common.brandName')}`;
-    } else if (pathname === ROUTES.SIGNUP || pathname === '/create-account') {
+    } else if (
+      pathname === ROUTES.SIGNUP ||
+      pathname === '/create-account'
+    ) {
       document.title = `${t('auth.signup.metaTitle')} | ${t('common.brandName')}`;
+    } else if (pathname.startsWith(ROUTES.ADMIN)) {
+      document.title = `Admin Portal | ${t('common.brandName')}`;
     } else if (pathname === ROUTES.GROUPS) {
       document.title = `${t('groups.metaTitle')} | ${t('common.brandName')}`;
     } else if (pathname === ROUTES.ABOUT) {
@@ -200,6 +299,7 @@ function TitleManager() {
       document.title = `${t('tripDetails.bookNow')} | ${t('common.brandName')}`;
     } else if (pathname.startsWith('/trips/')) {
       const slug = pathname.split('/')[2];
+
       const trip = TRIPS.find((item) => item.slug === slug);
 
       if (trip) {
@@ -216,11 +316,15 @@ function TitleManager() {
   return null;
 }
 
+// Main App
 export default function App() {
-  const [selectedDestinationFilter, setSelectedDestinationFilter] = useState('all');
+  const [selectedDestinationFilter, setSelectedDestinationFilter] =
+    useState('all');
+
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
+  // Authentication Pages
   const isAuthPage = [
     ROUTES.LOGIN,
     ROUTES.SIGNUP,
@@ -232,6 +336,9 @@ export default function App() {
     '/auth',
   ].includes(pathname);
 
+  // All Staff Portal Pages
+  const isPortalPage = pathname.startsWith('/portal/');
+
   // Idle prewarm for below-the-fold dynamic chunks
   useEffect(() => {
     const prewarm = () => {
@@ -241,7 +348,9 @@ export default function App() {
     };
 
     if ('requestIdleCallback' in window) {
-      const id = window.requestIdleCallback(prewarm, { timeout: 2500 });
+      const id = window.requestIdleCallback(prewarm, {
+        timeout: 2500,
+      });
 
       return () => {
         if ('cancelIdleCallback' in window) {
@@ -250,6 +359,7 @@ export default function App() {
       };
     } else {
       const id = setTimeout(prewarm, 2000);
+
       return () => clearTimeout(id);
     }
   }, []);
@@ -260,7 +370,9 @@ export default function App() {
     const tripsEl = document.getElementById('trips');
 
     if (tripsEl) {
-      tripsEl.scrollIntoView({ behavior: 'smooth' });
+      tripsEl.scrollIntoView({
+        behavior: 'smooth',
+      });
     } else {
       navigate(sectionLink(SECTIONS.TRIPS));
     }
@@ -268,24 +380,25 @@ export default function App() {
 
   return (
     <div
-      className={`font-body selection:bg-brand-yellow selection:text-brand-navy ${
-        isAuthPage
+      className={`font-body selection:bg-brand-yellow selection:text-brand-navy ${isAuthPage
           ? 'h-screen max-h-screen overflow-hidden flex flex-col'
           : 'min-h-screen flex flex-col'
-      }`}
+        }`}
     >
       <ScrollManager />
       <LegacyHashRedirect />
       <TitleManager />
 
-      {!isAuthPage && <ScrollProgress />}
-      {!isAuthPage && (
+      {/* Public Website Components */}
+      {!isAuthPage && !isPortalPage && <ScrollProgress />}
+
+      {!isAuthPage && !isPortalPage && (
         <div className="print:hidden">
           <PendingBookingPopup />
         </div>
       )}
 
-      {!isAuthPage && (
+      {!isAuthPage && !isPortalPage && (
         <div className="print:hidden">
           <Navbar />
         </div>
@@ -293,14 +406,16 @@ export default function App() {
 
       <main
         id="main"
-        className={`flex-1 ${
-          isAuthPage
+        className={`flex-1 ${isAuthPage
             ? 'h-full max-h-screen overflow-hidden p-0 m-0'
-            : 'pt-[52px] min-[901px]:pt-[100px]'
-        } print:pt-0 print:m-0 print:p-0`}
+            : isPortalPage
+              ? 'p-0 m-0 min-h-screen'
+              : 'pt-[52px] min-[901px]:pt-[100px]'
+          } print:pt-0 print:m-0 print:p-0`}
       >
         <ErrorBoundary>
           <Routes>
+            {/* Home Page */}
             <Route
               path={ROUTES.HOME}
               element={
@@ -319,7 +434,9 @@ export default function App() {
                   <GroupsBanner />
 
                   <Suspense fallback={<MapFallback />}>
-                    <MapSection onSelectDestination={handleSelectDestination} />
+                    <MapSection
+                      onSelectDestination={handleSelectDestination}
+                    />
                   </Suspense>
 
                   <Suspense fallback={<ReviewsFallback />}>
@@ -333,6 +450,7 @@ export default function App() {
               }
             />
 
+            {/* Trip Details */}
             <Route
               path={ROUTES.TRIP_DETAILS}
               element={
@@ -342,6 +460,7 @@ export default function App() {
               }
             />
 
+            {/* Groups */}
             <Route
               path={ROUTES.GROUPS}
               element={
@@ -351,6 +470,7 @@ export default function App() {
               }
             />
 
+            {/* About */}
             <Route
               path={ROUTES.ABOUT}
               element={
@@ -360,6 +480,7 @@ export default function App() {
               }
             />
 
+            {/* Booking */}
             <Route
               path={ROUTES.BOOKING}
               element={
@@ -370,9 +491,12 @@ export default function App() {
             />
 
             {/* Alias /booking -> /book */}
-            <Route path="/booking" element={<Navigate to={ROUTES.BOOKING} replace />} />
+            <Route
+              path="/booking"
+              element={<Navigate to={ROUTES.BOOKING} replace />}
+            />
 
-            {/* Public Auth Routes */}
+            {/* Public Authentication Routes */}
             <Route
               path={ROUTES.LOGIN}
               element={
@@ -391,22 +515,159 @@ export default function App() {
               }
             />
 
-            {/* Aliases for backward compatibility */}
+            {/* Authentication Aliases */}
             <Route
               path={ROUTES.CREATE_ACCOUNT}
               element={<Navigate to={ROUTES.SIGNUP} replace />}
             />
+
             <Route
               path={ROUTES.AUTH}
               element={<Navigate to={ROUTES.LOGIN} replace />}
             />
 
-            <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
+            {/* Admin Portal */}
+            <Route
+              path={ROUTES.ADMIN}
+              element={
+                <ProtectedRoute allowedRoles={[ROLES.ADMIN]}>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }
+            >
+              {/* Admin Dashboard */}
+              <Route
+                index
+                element={
+                  <Suspense fallback={<AuthFallback />}>
+                    <AdminDashboardPage />
+                  </Suspense>
+                }
+              />
+
+              {/* Bookings */}
+              <Route
+                path="bookings"
+                element={
+                  <Suspense fallback={<AuthFallback />}>
+                    <BookingsPage />
+                  </Suspense>
+                }
+              />
+
+              {/* Customers */}
+              <Route
+                path="customers"
+                element={
+                  <Suspense fallback={<AuthFallback />}>
+                    <CustomersPage />
+                  </Suspense>
+                }
+              />
+
+              {/* Activities */}
+              <Route
+                path="activities"
+                element={
+                  <Suspense fallback={<AuthFallback />}>
+                    <ActivitiesPage />
+                  </Suspense>
+                }
+              />
+
+              {/* Availability */}
+              <Route
+                path="availability"
+                element={
+                  <Suspense fallback={<AuthFallback />}>
+                    <AvailabilityPage />
+                  </Suspense>
+                }
+              />
+
+              {/* Providers */}
+              <Route
+                path="providers"
+                element={
+                  <Suspense fallback={<AuthFallback />}>
+                    <ProvidersPage />
+                  </Suspense>
+                }
+              />
+
+              {/* Pricing */}
+              <Route
+                path="pricing"
+                element={
+                  <Suspense fallback={<AuthFallback />}>
+                    <PricingPage />
+                  </Suspense>
+                }
+              />
+
+              {/* Content */}
+              <Route
+                path="content"
+                element={
+                  <Suspense fallback={<AuthFallback />}>
+                    <ContentPage />
+                  </Suspense>
+                }
+              />
+
+              {/* Users & Permissions */}
+              <Route
+                path="users"
+                element={
+                  <Suspense fallback={<AuthFallback />}>
+                    <UsersPage />
+                  </Suspense>
+                }
+              />
+
+              {/* Reports */}
+              <Route
+                path="reports"
+                element={
+                  <Suspense fallback={<AuthFallback />}>
+                    <ReportsPage />
+                  </Suspense>
+                }
+              />
+            </Route>
+
+            {/* Other Staff Portals - To Be Implemented */}
+            <Route
+              path="/portal/ops/*"
+              element={<Navigate to={ROUTES.LOGIN} replace />}
+            />
+
+            <Route
+              path="/portal/guide/*"
+              element={<Navigate to={ROUTES.LOGIN} replace />}
+            />
+
+            <Route
+              path="/portal/content/*"
+              element={<Navigate to={ROUTES.LOGIN} replace />}
+            />
+
+            <Route
+              path="/portal/b2b/*"
+              element={<Navigate to={ROUTES.LOGIN} replace />}
+            />
+
+            {/* 404 / Unknown Routes */}
+            <Route
+              path="*"
+              element={<Navigate to={ROUTES.HOME} replace />}
+            />
           </Routes>
         </ErrorBoundary>
       </main>
 
-      {!isAuthPage && (
+      {/* Public Website Footer */}
+      {!isAuthPage && !isPortalPage && (
         <div className="print:hidden">
           <Footer />
         </div>
