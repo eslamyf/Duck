@@ -379,7 +379,11 @@ export default function StepPaymentInvoice({
       {/* PRINTABLE INVOICE COMPONENT (Rendered strictly during window.print()) */}
       <PrintableInvoice
         bookingRef={bookingRef}
-        bookingData={bookingData}
+        bookingData={{
+          ...bookingData,
+          tripTitle,
+          status: receiptSent ? 'confirmed' : 'pending',
+        }}
         selectedTrip={selectedTrip}
         t={t}
         lang={lang}
