@@ -2,26 +2,43 @@ import { useState, useMemo, useCallback } from 'react';
 import { GROUP_TYPES, TIMES_OF_DAY } from '../../widgets/groups-page/sceneData.js';
 import { DESTINATIONS } from '../../widgets/destinations/destinationsData.js';
 import { buildWhatsAppUrl } from '../config/constants.js';
+import { getCurrentUser } from '../../entities/user/api/authService.js';
+import { addB2BQuote } from '../../entities/booking/api/bookingService.js';
 
-export function useGroupStudio({ t }) {
+const TYPE_TO_PARTNER_ID = {
+  friends: 'event',
+  corporate: 'company',
+  schools: 'school',
+  hospitality: 'hotel',
+};
+
+export function useGroupStudio({ t, initialSize = 20, initialType = 0 }) {
   const defaultDate = useMemo(() => {
     const d = new Date();
     d.setDate(d.getDate() + 3);
     return d.toISOString().slice(0, 10);
   }, []);
 
-  const [state, setState] = useState({
-    type: 0,
-    size: 20,
-    act: 'kayak',
-    loc: 0,
-    time: 3, // Sunset by default
-    date: defaultDate,
-    org: '',
-    nm: '',
-    ph: '',
-    notes: '',
-    nt: '',
+  const [state, setState] = useState(() => {
+    const currentUser = getCurrentUser();
+    const safeType =
+      Number.isInteger(initialType) && initialType >= 0 && initialType < GROUP_TYPES.length
+        ? initialType
+        : 0;
+    const safeSize = Math.max(20, Math.min(150, Math.round(Number(initialSize)) || 20));
+    return {
+      type: safeType,
+      size: safeSize,
+      act: 'kayak',
+      loc: 0,
+      time: 3, // Sunset by default
+      date: defaultDate,
+      org: currentUser?.businessName || '',
+      nm: currentUser?.fullName || '',
+      ph: currentUser?.phone || '',
+      notes: '',
+      nt: '',
+    };
   });
 
   const [step, setStep] = useState(0); // 0 = details & stage, 1 = contact info
@@ -126,6 +143,16 @@ export function useGroupStudio({ t }) {
     });
 
     const url = buildWhatsAppUrl(text);
+    addB2BQuote({
+      ref: code,
+      organization: state.org.trim(),
+      partnerType: TYPE_TO_PARTNER_ID[typeObj.id] || 'event',
+      contactName: state.nm.trim(),
+      phone: state.ph.trim(),
+      groupSize: state.size,
+      date: state.date,
+      status: 'New',
+    });
     setWaUrl(url);
     setSubmitted(true);
     return { code, text, waUrl: url };

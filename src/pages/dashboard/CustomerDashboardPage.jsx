@@ -41,42 +41,41 @@ import {
 import {
   getUserBookings,
   updateBookingStatus,
-  addB2BQuote,
 } from '../../entities/booking/api/bookingService.js';
 
 const B2B_PACKAGES = [
   {
     id: 'starter',
-    titleAr: 'باقة المجموعات والرحلات (20 - 35 فرد)',
-    titleEn: 'Starter Group Outing (20 - 35 Guests)',
-    descAr: 'كاياك أو ستاند أب بادل + سترة نجاة + مرشدان معتمدان + تصوير تذكاري.',
-    descEn: 'Kayak or SUP + life jackets + 2 certified guides + souvenir photos.',
-    badgeAr: 'خصم 15%',
-    badgeEn: '15% Off',
-    size: 25,
-    type: 'event',
+    titleAr: 'مجموعات وأصدقاء (20 - 34 فرد)',
+    titleEn: 'Groups & Friends (20 - 34 Guests)',
+    descAr: 'تنظيم كامل ومرشد خاص + تنسيق مخصص لعدد المجموعة بدون أسعار مسبقة.',
+    descEn: 'Full coordination & private guide tailored to your group size.',
+    ctaAr: 'احجز لمجموعتك',
+    ctaEn: 'Book Package',
+    size: 20,
+    typeIdx: 0,
   },
   {
     id: 'corporate',
-    titleAr: 'باقة بناء الفريق للشركات (40 - 80 فرد)',
-    titleEn: 'Corporate Team Building (40 - 80 Guests)',
-    descAr: 'مسابقات تجديف جماعية + نقطة استقبال خاصة + ضيافة نوبية أو مشروبات.',
-    descEn: 'Team paddling challenges + private launch access + refreshments.',
-    badgeAr: 'خصم 22%',
-    badgeEn: '22% Off',
-    size: 50,
-    type: 'company',
+    titleAr: 'جامعات وشركات (35 - 59 فرد)',
+    titleEn: 'Corporates & Teams (35 - 59 Guests)',
+    descAr: 'جدول تناوب منظم وتنسيق شامل للفعاليات + عرض خاص للمجموعة.',
+    descEn: 'Structured rotation schedule & dedicated corporate event setup.',
+    ctaAr: 'احجز لمجموعتك',
+    ctaEn: 'Book Package',
+    size: 35,
+    typeIdx: 1,
   },
   {
     id: 'campus',
-    titleAr: 'باقة المدارس والجامعات (60+ طالب)',
-    titleEn: 'Universities & Schools Package (60+ Students)',
-    descAr: 'أسعار تعليمية مخفضة + تقسيم على أفواج آمنة + إشراف كامل.',
-    descEn: 'Educational discount rates + supervised rotated batches.',
-    badgeAr: 'سعر خاص',
-    badgeEn: 'Campus Deal',
+    titleAr: 'مدارس وفعاليات كبرى (60+ فرد)',
+    titleEn: 'Schools & Large Events (60+ Guests)',
+    descAr: 'تخصيص الأسطول بالكامل ومنسق فعالية وإشراف ميداني شامل.',
+    descEn: 'Dedicated fleet allocation, event coordinator & full field support.',
+    ctaAr: 'احجز لمجموعتك',
+    ctaEn: 'Book Package',
     size: 60,
-    type: 'school',
+    typeIdx: 2,
   },
 ];
 
@@ -97,13 +96,6 @@ export default function CustomerDashboardPage() {
     phone: currentUser?.phone || '',
   }));
   const [profileSaved, setProfileSaved] = useState(false);
-
-  const [b2bForm, setB2bForm] = useState({
-    organization: '',
-    groupSize: 25,
-    partnerType: 'company',
-  });
-  const [quoteNotice, setQuoteNotice] = useState('');
 
   // Subscribe to live bookings, inventory, and B2B quotes
   const { bookings: allBookings, inventory, quotes } = useBookingsSync();
@@ -183,26 +175,6 @@ export default function CustomerDashboardPage() {
     setCurrentUser(updated);
     setProfileSaved(true);
     setTimeout(() => setProfileSaved(false), 3000);
-  };
-
-  const handleQuoteSubmit = (e) => {
-    e.preventDefault();
-    if (!b2bForm.organization.trim()) return;
-    const saved = addB2BQuote({
-      organization: b2bForm.organization.trim(),
-      groupSize: b2bForm.groupSize,
-      partnerType: b2bForm.partnerType,
-      contactName: currentUser?.fullName || '',
-      phone: currentUser?.phone || '',
-      status: 'New',
-    });
-    setB2bForm({ organization: '', groupSize: 25, partnerType: 'company' });
-    setQuoteNotice(
-      isArabic
-        ? `تم إرسال طلب عرض السعر رقم ${saved.ref} بنجاح.`
-        : `Quote request ${saved.ref} submitted successfully.`
-    );
-    setTimeout(() => setQuoteNotice(''), 4000);
   };
 
   const handleLogout = () => {
@@ -680,18 +652,18 @@ export default function CustomerDashboardPage() {
         </div>
       )}
 
-      {/* B2B PACKAGES & CUSTOM QUOTES TAB (Matched to Final_4.html lines 2013-2016) */}
+      {/* B2B PACKAGES & GROUP BOOKING REDIRECT TAB */}
       {activeTab === 'b2b' && (
         <div className="space-y-5">
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1.2fr_1fr] items-start">
-            {/* Ready Tiered Group Packages */}
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1.25fr_1fr] items-start">
+            {/* Group Packages (Zero upfront discounts, links to /groups) */}
             <div className="rounded-[18px] border border-brand-blue/16 bg-surface-white p-5 shadow-card space-y-3.5">
               <h2 className="font-heading text-lg font-extrabold text-brand-navy flex items-center gap-2">
                 <FontAwesomeIcon icon={faBuilding} className="text-brand-blue" />
                 <span>
                   {isArabic
-                    ? 'باقات المجموعات الجاهزة (B2B)'
-                    : 'Ready Tiered Group Packages'}
+                    ? 'حجز المجموعات والفعاليات (B2B)'
+                    : 'Group & Corporate Packages (B2B)'}
                 </span>
               </h2>
 
@@ -709,112 +681,49 @@ export default function CustomerDashboardPage() {
                         {isArabic ? pk.descAr : pk.descEn}
                       </p>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setB2bForm((prev) => ({
-                          ...prev,
-                          groupSize: pk.size,
-                          partnerType: pk.type,
-                        }))
-                      }
-                      className="shrink-0 rounded-full bg-brand-navy px-3.5 py-1.5 text-xs font-bold text-brand-yellow hover:bg-brand-blue hover:text-white transition cursor-pointer"
+                    <Link
+                      to={`${ROUTES.GROUPS}?size=${pk.size}&type=${pk.typeIdx}`}
+                      className="inline-flex min-h-[38px] shrink-0 items-center justify-center rounded-full bg-brand-navy px-4 py-1.5 text-xs font-bold text-brand-yellow shadow-xs transition hover:bg-brand-blue hover:text-white"
                     >
-                      {isArabic ? pk.badgeAr : pk.badgeEn}
-                    </button>
+                      {isArabic ? pk.ctaAr : pk.ctaEn}
+                    </Link>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Request Custom Group Quote Form */}
-            <form
-              onSubmit={handleQuoteSubmit}
-              className="rounded-[18px] border border-brand-blue/16 bg-surface-white p-5 shadow-card space-y-4"
-            >
+            {/* Direct CTA Card to Full Group Data Submission Page (/groups) */}
+            <div className="rounded-[18px] border border-brand-blue/16 bg-surface-white p-6 shadow-card space-y-4">
               <h3 className="font-heading text-lg font-extrabold text-brand-navy">
                 {isArabic
-                  ? 'طلب عرض سعر مخصص للمجموعات'
-                  : 'Request Custom Group Quote'}
+                  ? 'إرسال بيانات الحجز الجماعي'
+                  : 'Submit Group Booking Details'}
               </h3>
+              <p className="text-xs sm:text-sm text-brand-navy/75 leading-relaxed">
+                {isArabic
+                  ? 'لا توجد أسعار أو خصومات ثابتة مسبقًا — فور تسجيل بيانات مجموعتك وعدد الأفراد في صفحة الحجز الجماعي يتواصل معك فريق المجموعات مباشرة لتنسيق الباقة المناسبة، ويظهر طلبك تلقائيًا في جدول المتابعة أدناه.'
+                  : 'No fixed upfront discounts — submit your group count and preferences in our dedicated Group Booking page. Our team coordinates your custom deal and syncs it live below.'}
+              </p>
 
-              <div>
-                <label className="block text-xs font-bold text-brand-navy mb-1.5">
+              <Link
+                to={ROUTES.GROUPS}
+                className="flex min-h-[46px] w-full items-center justify-center gap-2 rounded-full bg-brand-yellow px-5 text-sm font-extrabold text-brand-navy shadow-sm transition hover:bg-brand-yellow-hover"
+              >
+                <span>
                   {isArabic
-                    ? 'اسم الشركة / الجامعة / الجهة *'
-                    : 'Organization / Group Name *'}
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={b2bForm.organization}
-                  onChange={(e) =>
-                    setB2bForm((p) => ({ ...p, organization: e.target.value }))
-                  }
-                  placeholder={
-                    isArabic
-                      ? 'مثال: جامعة أسوان / شركة...'
-                      : 'e.g. Aswan University / Acme Corp'
-                  }
-                  className="w-full rounded-xl border border-brand-blue/20 bg-surface-mist/50 px-3.5 py-2.5 text-sm text-brand-navy outline-none focus:border-brand-blue focus:bg-surface-white"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div>
-                  <label className="block text-xs font-bold text-brand-navy mb-1.5">
-                    {isArabic ? 'العدد المتوقع (10+)' : 'Group Size (10+)'}
-                  </label>
-                  <input
-                    type="number"
-                    min={10}
-                    max={500}
-                    required
-                    value={b2bForm.groupSize}
-                    onChange={(e) =>
-                      setB2bForm((p) => ({ ...p, groupSize: e.target.value }))
-                    }
-                    className="w-full rounded-xl border border-brand-blue/20 bg-surface-mist/50 px-3.5 py-2.5 text-sm text-brand-navy outline-none focus:border-brand-blue focus:bg-surface-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-brand-navy mb-1.5">
-                    {isArabic ? 'نوع الجهة' : 'Partner Type'}
-                  </label>
-                  <select
-                    value={b2bForm.partnerType}
-                    onChange={(e) =>
-                      setB2bForm((p) => ({ ...p, partnerType: e.target.value }))
-                    }
-                    className="w-full rounded-xl border border-brand-blue/20 bg-surface-mist/50 px-3.5 py-2.5 text-sm font-bold text-brand-navy outline-none focus:border-brand-blue"
-                  >
-                    {B2B_PARTNER_TYPES.map((pt) => (
-                      <option key={pt.id} value={pt.id}>
-                        {isArabic ? pt.labelAr : pt.labelEn}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {quoteNotice && (
-                <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-2 text-xs font-bold text-emerald-700">
-                  {quoteNotice}
-                </p>
-              )}
-
-              <Button type="submit" variant="primary" size="md" className="w-full font-bold">
-                {isArabic ? 'إرسال طلب عرض السعر' : 'Submit Quote Request'}
-              </Button>
-            </form>
+                    ? 'الانتقال لصفحة إرسال بيانات الحجز الجماعي'
+                    : 'Go to Group Booking Form'}
+                </span>
+                <FontAwesomeIcon icon={isArabic ? faArrowLeft : faArrowRight} />
+              </Link>
+            </div>
           </div>
 
           <DataTable
             columns={quoteColumns}
             rows={quotes}
             rowKey={(row) => row.ref}
-            emptyTitle={isArabic ? 'لا توجد طلبات عروض أسعار بعد' : 'No B2B quotes yet'}
+            emptyTitle={isArabic ? 'لا توجد طلبات حجز جماعي بعد' : 'No group booking requests yet'}
           />
         </div>
       )}
