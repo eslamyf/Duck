@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { ROUTES } from '../../shared/config/routes.js';
 import {
   ArrowUpLeft,
   ArrowUpRight,
@@ -144,20 +146,20 @@ export default function PublicActivitiesPage() {
     });
   };
 
-  const handleActivityDetails = (activityId) => {
-    const activitySlugs = {
-      kayak: 'kayaking',
-      'water-bike': 'water-bike',
-      sup: 'sup',
-      'nile-trips': 'nile-tours',
-    };
-
-    const slug = activitySlugs[activityId];
-
-    if (slug) {
-      navigate(`/activities/${slug}`);
-    }
+const handleActivityDetails = (activityId) => {
+  const activitySlugs = {
+    kayak: 'kayaking',
+    'water-bike': 'water-bike',
+    sup: 'sup',
+    'nile-trips': 'nile-tours',
   };
+
+  const slug = activitySlugs[activityId];
+
+  if (slug) {
+    navigate(`/${language}/activities/${slug}`);
+  }
+};
 
   return (
     <main
@@ -396,19 +398,18 @@ export default function PublicActivitiesPage() {
               </p>
             </div>
 
-            <button
-              type="button"
-              onClick={scrollToActivities}
-              className="inline-flex shrink-0 items-center justify-center gap-3 rounded-full bg-[#FDFB45] px-7 py-4 font-bold text-[#0C1226] transition hover:-translate-y-1"
-            >
-              {t.ctaButton}
+           <Link
+  to={ROUTES.BOOKING}
+  className="inline-flex shrink-0 items-center justify-center gap-3 rounded-full bg-[#FDFB45] px-7 py-4 font-bold text-[#0C1226] transition hover:-translate-y-1"
+>
+  {t.ctaButton}
 
-              {isArabic ? (
-                <ArrowUpLeft size={20} />
-              ) : (
-                <ArrowUpRight size={20} />
-              )}
-            </button>
+  {isArabic ? (
+    <ArrowUpLeft size={20} />
+  ) : (
+    <ArrowUpRight size={20} />
+  )}
+</Link>
           </div>
         </div>
       </section>

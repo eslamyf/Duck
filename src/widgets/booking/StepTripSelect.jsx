@@ -81,7 +81,7 @@ export default function StepTripSelect({
           const isSelected = selectedTrip?.id === trip.id;
           const tripTitle = t(`trips.items.${trip.key}.title`, trip.slug);
           const durationText = t(`trips.durations.${trip.durKey}`, '1-2 Hours');
-          const destName = t(`destinations.locations.${trip.destKey}.name`, trip.destKey);
+          const destName = t(`destinations.items.${trip.destKey}.name`, trip.destKey);
           const displayPrice = trip.priceEg || trip.price;
 
           return (
