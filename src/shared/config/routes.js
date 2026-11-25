@@ -21,23 +21,12 @@ export const ROUTES = Object.freeze({
   CREATE_ACCOUNT: '/create-account',
   AUTH: '/auth',
 
-  // Admin Portal
+  // 5-Role Dashboards (RBAC Protected)
+  CUSTOMER_DASHBOARD: '/dashboard',
   ADMIN: '/portal/admin',
-  ADMIN_BOOKINGS: '/portal/admin/bookings',
-  ADMIN_CUSTOMERS: '/portal/admin/customers',
-  ADMIN_ACTIVITIES: '/portal/admin/activities',
-  ADMIN_AVAILABILITY: '/portal/admin/availability',
-  ADMIN_PROVIDERS: '/portal/admin/providers',
-  ADMIN_PRICING: '/portal/admin/pricing',
-  ADMIN_CONTENT: '/portal/admin/content',
-  ADMIN_USERS: '/portal/admin/users',
-  ADMIN_REPORTS: '/portal/admin/reports',
-
-  // Other Staff Portals
+  PARTNER: '/portal/partner',
   OPERATIONS: '/portal/ops',
-  TOUR_GUIDE: '/portal/guide',
-  CONTENT_MANAGER: '/portal/content',
-  PARTNER: '/portal/b2b',
+  TOUR_GUIDE: '/portal/agent',
 });
 
 export const SECTIONS = Object.freeze({
