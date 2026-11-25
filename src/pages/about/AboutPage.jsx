@@ -20,7 +20,7 @@ export default function AboutPage() {
   return (
     <div className="text-brand-navy" dir={isArabic ? 'rtl' : 'ltr'}>
       <section
-        className="relative h-[calc(100svh-52px)] w-full overflow-hidden bg-brand-navy text-white lg:h-[calc(100svh-100px)]"
+        className="relative min-h-[calc(100svh-52px)] w-full overflow-hidden bg-brand-navy text-white lg:min-h-[calc(100svh-100px)] flex items-center"
         aria-labelledby="about-title"
       >
         <img
@@ -34,11 +34,11 @@ export default function AboutPage() {
           className="absolute inset-0 bg-brand-navy/65"
           aria-hidden="true"
         />
-        <div className="relative z-10 mx-auto flex h-full min-h-0 w-full max-w-7xl items-center px-6 py-8 md:px-10 md:py-10 lg:px-16 lg:py-6">
-          <div dir="ltr" className="grid w-full items-center gap-12 lg:grid-cols-2">
+        <div className="relative z-10 mx-auto flex h-full min-h-0 w-full max-w-7xl items-center px-6 py-10 md:px-10 md:py-12 lg:px-16 lg:py-8">
+          <div dir="ltr" className="grid w-full items-center gap-10 lg:grid-cols-2 lg:gap-12">
             <div
               role="group"
-              className={`relative hidden h-[520px] lg:block ${isArabic ? 'lg:order-1' : 'lg:order-2'}`}
+              className={`relative h-[300px] sm:h-[380px] md:h-[420px] lg:h-[520px] w-full order-2 ${isArabic ? 'lg:order-1' : 'lg:order-2'}`}
               aria-label={t('about.hero.collageLabel')}
             >
               <div
@@ -48,18 +48,18 @@ export default function AboutPage() {
                   src={mainImage}
                   alt={t('about.hero.mainImageAlt')}
                   className="h-full w-full object-cover"
-                  loading="lazy"
+                  loading="eager"
                   decoding="async"
                 />
               </div>
               <div
-                className={`absolute bottom-0 h-[42%] w-[48%] overflow-hidden rounded-3xl border-4 border-brand-navy shadow-2xl ${isArabic ? 'left-0' : 'right-0'}`}
+                className={`absolute bottom-0 h-[44%] w-[48%] overflow-hidden rounded-3xl border-4 border-brand-navy shadow-2xl ${isArabic ? 'left-0' : 'right-0'}`}
               >
                 <img
                   src={secondaryImage}
                   alt={t('about.hero.secondaryImageAlt')}
                   className="h-full w-full object-cover"
-                  loading="lazy"
+                  loading="eager"
                   decoding="async"
                 />
               </div>
@@ -67,7 +67,7 @@ export default function AboutPage() {
 
             <div
               dir={isArabic ? 'rtl' : 'ltr'}
-              className={`text-white ${isArabic ? 'text-right lg:order-2' : 'text-left lg:order-1'}`}
+              className={`text-white order-1 ${isArabic ? 'text-right lg:order-2' : 'text-left lg:order-1'}`}
             >
               <span className="mb-6 inline-block text-xs font-semibold uppercase text-brand-yellow">
                 {t('about.hero.eyebrow')}

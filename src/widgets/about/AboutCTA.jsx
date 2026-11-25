@@ -23,7 +23,7 @@ export default function AboutCTA() {
         }}
         src={ctaBg}
         alt={t('about.cta.title')}
-        loading="lazy"
+        loading="eager"
         decoding="async"
         className="absolute inset-0 h-full w-full object-cover"
       />

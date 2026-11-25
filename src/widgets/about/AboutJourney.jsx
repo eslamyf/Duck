@@ -83,7 +83,7 @@ export default function AboutJourney() {
                     src={item.image}
                     alt={t(`about.journey.items.${item.key}.title`)}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
+                    loading="eager"
                     decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />

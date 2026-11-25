@@ -48,33 +48,25 @@ export default function AboutPrinciples() {
     },
   ];
 
-  const renderCard = (principle, mobile = false) => {
-    const desktopLayout =
+  const renderCard = (principle) => {
+    const responsiveLayout =
       principle.layout === 'large'
-        ? 'lg:col-span-4 lg:row-span-2'
+        ? 'min-h-[280px] sm:min-h-[300px] lg:min-h-0 lg:col-span-4 lg:row-span-2'
         : principle.layout === 'wide'
-          ? 'lg:col-span-8 lg:row-span-1'
-          : 'lg:col-span-4 lg:row-span-1';
+          ? 'min-h-[260px] sm:col-span-2 lg:min-h-0 lg:col-span-8 lg:row-span-1'
+          : 'min-h-[260px] lg:min-h-0 lg:col-span-4 lg:row-span-1';
 
     return (
       <article
         key={principle.key}
         dir={isArabic ? 'rtl' : 'ltr'}
-        className={`
-          group relative isolate overflow-hidden rounded-[24px]
-          bg-brand-navy shadow-sm
-          ${
-            mobile
-              ? 'h-[400px] w-[85vw] max-w-[360px] shrink-0 snap-center'
-              : `h-full min-h-0 ${desktopLayout}`
-          }
-        `}
+        className={`group relative isolate overflow-hidden rounded-[24px] bg-brand-navy shadow-sm h-full ${responsiveLayout}`}
       >
         {/* Background Real Duck Image */}
         <img
           src={principle.image}
           alt={t(`about.principles.${principle.key}.title`)}
-          loading="lazy"
+          loading="eager"
           decoding="async"
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
@@ -163,14 +155,9 @@ export default function AboutPrinciples() {
           </div>
         </div>
 
-        {/* Desktop Bento Grid */}
-        <div className="hidden h-[540px] grid-cols-12 grid-rows-2 gap-4 lg:grid">
-          {principles.map((p) => renderCard(p, false))}
-        </div>
-
-        {/* Mobile Horizontal Carousel */}
-        <div className="flex gap-4 overflow-x-auto pb-4 pt-2 snap-x snap-mandatory lg:hidden scrollbar-none">
-          {principles.map((p) => renderCard(p, true))}
+        {/* Responsive Bento Grid (All screen sizes, single DOM) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 lg:grid-rows-2 lg:h-[540px] gap-4">
+          {principles.map((p) => renderCard(p))}
         </div>
       </div>
     </section>
