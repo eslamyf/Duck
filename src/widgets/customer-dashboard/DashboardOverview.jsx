@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Compass,
   Waves,
@@ -22,43 +22,28 @@ function DashboardOverview() {
   const { lang } = useTranslation();
   const isArabic = lang === "ar";
 
-  const [stats, setStats] = useState({
-    total: 0,
-    confirmed: 0,
-    upcoming: 0,
-  });
-
-  const [bookings, setBookings] = useState([]);
-
-  useEffect(() => {
-    // Get the currently logged-in user
+  const [{ stats, bookings }] = useState(() => {
     const currentUser = getCurrentUser();
 
     if (!currentUser?.id) {
-      setStats({
-        total: 0,
-        confirmed: 0,
-        upcoming: 0,
-      });
-
-      setBookings([]);
-      return;
+      return {
+        stats: { total: 0, confirmed: 0, upcoming: 0 },
+        bookings: [],
+      };
     }
 
-    // Get bookings belonging to this user only
     const userBookings = getUserBookings(currentUser.id);
-
-    // Get booking statistics
     const bookingStats = getBookingStats(currentUser.id);
 
-    setBookings(userBookings);
-
-    setStats({
-      total: bookingStats.total,
-      confirmed: bookingStats.confirmed,
-      upcoming: bookingStats.upcoming,
-    });
-  }, []);
+    return {
+      bookings: userBookings,
+      stats: {
+        total: bookingStats.total,
+        confirmed: bookingStats.confirmed,
+        upcoming: bookingStats.upcoming,
+      },
+    };
+  });
 
   // Convert statistics object into the format expected by BookingSummaryCards
   const statsList = [

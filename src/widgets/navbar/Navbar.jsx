@@ -38,13 +38,8 @@ export default function Navbar({ onBookClick }) {
   const [activeSection, setActiveSection] = useState(SECTIONS.TOP);
   const [temp, setTemp] = useState('');
 
-  // Current Logged-in User
-  const [currentUser, setCurrentUser] = useState(() => getCurrentUser());
-
-  // Refresh Current User When Navigating Between Pages
-  useEffect(() => {
-    setCurrentUser(getCurrentUser());
-  }, [location.pathname]);
+  // Current Logged-in User (refreshed on navigation)
+  const currentUser = getCurrentUser();
 
   // Fetch weather data for Aswan
   useEffect(() => {

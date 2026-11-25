@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import {
   CalendarDays,
@@ -18,23 +18,15 @@ function MyBookingsPage() {
   const { lang } = useTranslation();
   const isArabic = lang === "ar";
 
-  const [bookings, setBookings] = useState([]);
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
   // Load current user's bookings
-  useEffect(() => {
+  const [bookings] = useState(() => {
     const currentUser = getCurrentUser();
-
-    if (!currentUser?.id) {
-      setBookings([]);
-      return;
-    }
-
-    const userBookings = getUserBookings(currentUser.id);
-
-    setBookings(userBookings);
-  }, []);
+    if (!currentUser?.id) return [];
+    return getUserBookings(currentUser.id);
+  });
 
   // Booking filters
   const filters = [

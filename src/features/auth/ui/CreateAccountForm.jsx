@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faUserPlus,
@@ -17,11 +17,14 @@ import {
   isValidPassword,
   isNonEmpty,
 } from '../../../shared/utils/validators.js';
+import { registerUser, loginUser } from '../../../entities/user/api/authService.js';
+import { ROLES } from '../../../entities/user/model/roles.js';
 import AuthRoleSelector from './AuthRoleSelector.jsx';
 import AuthHeader from './AuthHeader.jsx';
 
 export default function CreateAccountForm() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const [role, setRole] = useState('Customer');
   const [showPassword, setShowPassword] = useState(false);
@@ -106,17 +109,40 @@ export default function CreateAccountForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate() || isSubmitting) return;
 
     setIsSubmitting(true);
 
-    // Mock secure signup handshake (safe demo, zero password storage)
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const targetRole = role === 'Partner' ? ROLES.PARTNER : ROLES.CUSTOMER;
+      await registerUser({
+        fullName: formData.fullName,
+        businessName: formData.businessName,
+        email: formData.email,
+        phone: formData.phone,
+        password: formData.password,
+        role: targetRole,
+      });
+
+      await loginUser({
+        email: formData.email,
+        password: formData.password,
+        rememberMe: true,
+      });
+
       setSuccess(true);
-    }, 800);
+      navigate(targetRole === ROLES.PARTNER ? ROUTES.HOME : '/dashboard', { replace: true });
+    } catch (error) {
+      setErrors((prev) => ({
+        ...prev,
+        email: error?.message || t('auth.errors.invalidEmail'),
+      }));
+      setSuccess(false);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
