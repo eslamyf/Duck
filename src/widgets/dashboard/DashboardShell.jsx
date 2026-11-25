@@ -78,11 +78,13 @@ export default function DashboardShell({
               onClick={() => setSidebarOpen(false)}
               className="flex items-center gap-2.5"
             >
-              <img
-                src={duckLogo}
-                alt={t('common.brandName')}
-                className="h-9 w-auto object-contain"
-              />
+              <span className="inline-flex items-center rounded-xl bg-surface-white px-2.5 py-1 shadow-xs">
+                <img
+                  src={duckLogo}
+                  alt={t('common.brandName')}
+                  className="h-7 w-auto object-contain"
+                />
+              </span>
               <span className="rounded-full bg-brand-yellow/15 px-2.5 py-0.5 text-[11px] font-bold text-brand-yellow">
                 {currentUser?.role || 'Portal'}
               </span>
