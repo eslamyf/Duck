@@ -47,6 +47,17 @@ const CreateAccountPage = lazy(
   () => import('../pages/auth/CreateAccountPage.jsx')
 );
 
+// Dashboard Portals
+import ProtectedRoute from './routes/ProtectedRoute.jsx';
+import { DASHBOARD_ROLES } from '../shared/config/rbac.js';
+
+const CustomerDashboardPage = lazy(
+  () => import('../pages/dashboard/CustomerDashboardPage.jsx')
+);
+const AdminDashboardPage = lazy(
+  () => import('../pages/dashboard/AdminDashboardPage.jsx')
+);
+
 // Loading Components
 function SectionSpinner({
   className = 'text-white/50',
@@ -482,6 +493,30 @@ export default function App() {
             <Route
               path={ROUTES.AUTH}
               element={<Navigate to={ROUTES.LOGIN} replace />}
+            />
+
+            {/* Customer Dashboard */}
+            <Route
+              path={ROUTES.CUSTOMER_DASHBOARD}
+              element={
+                <ProtectedRoute allowedRoles={[DASHBOARD_ROLES.CUSTOMER]}>
+                  <Suspense fallback={<AboutFallback />}>
+                    <CustomerDashboardPage />
+                  </Suspense>
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Admin Portal */}
+            <Route
+              path={ROUTES.ADMIN}
+              element={
+                <ProtectedRoute allowedRoles={[DASHBOARD_ROLES.ADMIN]}>
+                  <Suspense fallback={<AboutFallback />}>
+                    <AdminDashboardPage />
+                  </Suspense>
+                </ProtectedRoute>
+              }
             />
 
             {/* 404 / Unknown Routes */}
