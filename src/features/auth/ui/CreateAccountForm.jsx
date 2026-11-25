@@ -10,6 +10,7 @@ import {
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useTranslation } from '../../../shared/i18n/index.js';
 import { ROUTES } from '../../../shared/config/routes.js';
+import { getPortalPathForRole } from '../../../shared/config/rbac.js';
 import { Input, Button, Checkbox } from '../../../shared/ui/index.js';
 import {
   isValidEmail,
@@ -133,7 +134,7 @@ export default function CreateAccountForm() {
       });
 
       setSuccess(true);
-      navigate(targetRole === ROLES.PARTNER ? ROUTES.HOME : '/dashboard', { replace: true });
+      navigate(getPortalPathForRole(targetRole), { replace: true });
     } catch (error) {
       setErrors((prev) => ({
         ...prev,

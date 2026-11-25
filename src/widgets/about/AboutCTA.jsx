@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
-import { SECTIONS, sectionLink } from '../../shared/config/routes.js';
+import { ROUTES } from '../../shared/config/routes.js';
 import ctaBg from '../../shared/assets/images/about/cta-bg.webp';
 
 export default function AboutCTA() {
@@ -69,7 +69,7 @@ export default function AboutCTA() {
 
         {/* Button */}
         <Link
-          to={sectionLink(SECTIONS.TRIPS)}
+          to={ROUTES.BOOKING}
           className="group mt-8 inline-flex items-center gap-3 rounded-full bg-brand-yellow px-8 py-3.5 text-xs font-black uppercase text-brand-navy transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-lg sm:text-sm"
         >
           {t('about.cta.button')}

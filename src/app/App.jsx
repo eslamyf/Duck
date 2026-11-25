@@ -35,6 +35,14 @@ const GroupsPage = lazy(() => import('../widgets/groups-page/index.js'));
 const AboutPage = lazy(() => import('../pages/about/index.js'));
 const TripDetailsPage = lazy(() => import('../pages/trip-details/index.js'));
 
+const PublicActivitiesPage = lazy(
+  () => import('../pages/activities/ActivitiesPage.jsx')
+);
+
+const ActivityDetailsPage = lazy(
+  () => import('../pages/activities/ActivityDetailsPage.jsx')
+);
+
 const BookingPage = lazy(() =>
   import('../pages/booking/index.js').then((m) => ({
     default: m.BookingPage,
@@ -253,7 +261,7 @@ function LegacyHashRedirect() {
 // Page Title Manager
 function TitleManager() {
   const { pathname } = useLocation();
-  const { t } = useTranslation();
+  const { lang, t } = useTranslation();
 
   useEffect(() => {
     if (pathname === ROUTES.LOGIN || pathname === '/login') {
@@ -273,6 +281,8 @@ function TitleManager() {
       document.title = `Operations Portal | ${t('common.brandName')}`;
     } else if (pathname.startsWith(ROUTES.TOUR_GUIDE)) {
       document.title = `Tour Guide Portal | ${t('common.brandName')}`;
+    } else if (pathname === ROUTES.ACTIVITIES || pathname.startsWith('/activities/')) {
+      document.title = `${lang === 'ar' ? 'الأنشطة' : 'Activities'} | ${t('common.brandName')}`;
     } else if (pathname === ROUTES.GROUPS) {
       document.title = `${t('groups.metaTitle')} | ${t('common.brandName')}`;
     } else if (pathname === ROUTES.ABOUT) {
@@ -293,7 +303,7 @@ function TitleManager() {
     } else {
       document.title = `${t('common.brandName')} - ${t('nav.home')}`;
     }
-  }, [pathname, t]);
+  }, [pathname, t, lang]);
 
   return null;
 }
@@ -372,6 +382,7 @@ export default function App() {
       <TitleManager />
 
       {!hideMainLayout && <ScrollProgress />}
+
       {!hideMainLayout && (
         <div className="print:hidden">
           <PendingBookingPopup />
@@ -431,6 +442,26 @@ export default function App() {
                     <FAQSection />
                   </Suspense>
                 </>
+              }
+            />
+
+            {/* Public Activities Page */}
+            <Route
+              path={ROUTES.ACTIVITIES}
+              element={
+                <Suspense fallback={<AboutFallback />}>
+                  <PublicActivitiesPage />
+                </Suspense>
+              }
+            />
+
+            {/* Activity Details */}
+            <Route
+              path="/activities/:slug"
+              element={
+                <Suspense fallback={<AboutFallback />}>
+                  <ActivityDetailsPage />
+                </Suspense>
               }
             />
 

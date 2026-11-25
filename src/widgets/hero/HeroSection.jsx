@@ -5,7 +5,7 @@ import heroVideoMobile from '../../shared/assets/Videos/hero-mobile.mp4';
 import heroPosterDesktop from '../../shared/assets/images/hero-poster-desktop.webp';
 import heroPosterMobile from '../../shared/assets/images/hero-poster-mobile.webp';
 import { useTranslation } from '../../shared/i18n/index.js';
-import { SECTIONS, sectionLink } from '../../shared/config/routes.js';
+import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
 
 export default function HeroSection() {
   const { lang, t } = useTranslation();
@@ -156,7 +156,7 @@ export default function HeroSection() {
               {t('hero.ctaTrips')}
             </Link>
             <Link
-              to={sectionLink(SECTIONS.TRIPS)}
+              to={ROUTES.BOOKING}
               className="inline-flex items-center justify-center min-h-[50px] min-[901px]:min-h-[52px] px-7 rounded-full bg-transparent text-white border border-white/45 font-semibold text-base hover:bg-white/15 transition-all active:bg-white/20"
             >
               {t('hero.ctaBook')}

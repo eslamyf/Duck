@@ -15,10 +15,15 @@ import { Badge, Button } from '../../shared/ui/index.js';
 export default function StepTripSelect({
   selectedTrip,
   onSelectTrip,
+  initialActivity = 'all',
   t,
   lang,
 }) {
-  const [filterAct, setFilterAct] = useState('all');
+  const [filterAct, setFilterAct] = useState(
+    ['kayak', 'sup', 'waterbike'].includes(initialActivity)
+      ? initialActivity
+      : 'all'
+  );
   const isArabic = lang === 'ar';
   const ArrowIcon = isArabic ? faArrowLeft : faArrowRight;
 
@@ -81,7 +86,7 @@ export default function StepTripSelect({
           const isSelected = selectedTrip?.id === trip.id;
           const tripTitle = t(`trips.items.${trip.key}.title`, trip.slug);
           const durationText = t(`trips.durations.${trip.durKey}`, '1-2 Hours');
-          const destName = t(`destinations.locations.${trip.destKey}.name`, trip.destKey);
+          const destName = t(`destinations.items.${trip.destKey}.name`, trip.destKey);
           const displayPrice = trip.priceEg || trip.price;
 
           return (

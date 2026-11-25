@@ -6,6 +6,7 @@
 export const ROUTES = Object.freeze({
   // Public Website
   HOME: '/',
+  ACTIVITIES: '/activities',
   GROUPS: '/groups',
   ABOUT: '/about',
   BOOKING: '/book',

@@ -19,14 +19,26 @@ export default function BookingPage() {
   const isArabic = lang === 'ar';
 
   const tripSlug = searchParams.get('trip');
+  const rawActivityParam = (searchParams.get('activity') || '').toLowerCase();
+  const initialActivity =
+    rawActivityParam === 'water-bike'
+      ? 'waterbike'
+      : ['kayak', 'sup', 'waterbike'].includes(rawActivityParam)
+        ? rawActivityParam
+        : 'all';
   const refParam = searchParams.get('ref');
   const stepParam = parseInt(searchParams.get('step') || '0', 10);
 
-  // 1. Initial Trip match
+  // 1. Initial Trip match (by ?trip slug or single-trip ?activity like water-bike / sup)
   const initialTrip = useMemo(() => {
-    if (!tripSlug) return null;
-    return TRIPS.find((item) => item.slug === tripSlug) || null;
-  }, [tripSlug]);
+    if (tripSlug) {
+      return TRIPS.find((item) => item.slug === tripSlug) || null;
+    }
+    if (initialActivity === 'waterbike' || initialActivity === 'sup') {
+      return TRIPS.find((item) => item.act === initialActivity) || null;
+    }
+    return null;
+  }, [tripSlug, initialActivity]);
 
   const [userSelectedTrip, setUserSelectedTrip] = useState(null);
   const selectedTrip = userSelectedTrip || initialTrip;
@@ -56,7 +68,9 @@ export default function BookingPage() {
     date: new Date().toISOString().split('T')[0],
     time: '10:00',
     duration: 1,
-    equipment: initialTrip?.act || 'kayak',
+    equipment:
+      initialTrip?.act ||
+      (initialActivity !== 'all' ? initialActivity : 'kayak'),
     adults: 1,
     kids1to6: 0,
     kids7to12: 0,
@@ -148,6 +162,7 @@ export default function BookingPage() {
             <StepTripSelect
               selectedTrip={selectedTrip}
               onSelectTrip={handleSelectTrip}
+              initialActivity={initialActivity}
               t={t}
               lang={lang}
             />

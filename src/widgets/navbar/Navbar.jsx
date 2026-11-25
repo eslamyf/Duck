@@ -19,7 +19,6 @@ import {
   faStar,
   faCircleQuestion,
   faUsers,
-  faMap,
   faLanguage,
   faSun,
   faBars,
@@ -55,7 +54,7 @@ export default function Navbar({ onBookClick }) {
           setTemp(String(val));
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   // Update active section based on scroll (only when on home page)
@@ -122,6 +121,12 @@ export default function Navbar({ onBookClick }) {
       sectionId: SECTIONS.TRIPS,
     },
     {
+      to: ROUTES.ACTIVITIES,
+      label: lang === 'ar' ? 'الأنشطة' : 'Activities',
+      icon: faCalendarCheck,
+      isActivities: true,
+    },
+    {
       to: ROUTES.GROUPS,
       label: t('nav.groups'),
       icon: faUsersLine,
@@ -158,27 +163,38 @@ export default function Navbar({ onBookClick }) {
   const dashboardPath = currentUser ? getPortalPathForRole(currentUser.role) : ROUTES.LOGIN;
 
   const checkIsActive = (link) => {
+    // Activities page and its details
+    if (link.isActivities) {
+      return (
+        location.pathname === ROUTES.ACTIVITIES ||
+        location.pathname.startsWith(`${ROUTES.ACTIVITIES}/`)
+      );
+    }
+
+    // About page
     if (location.pathname === ROUTES.ABOUT) {
       return Boolean(link.isAbout);
     }
 
+    // Groups page
     if (location.pathname === ROUTES.GROUPS) {
       return Boolean(link.isGroups);
     }
 
-    if (link.isAbout || link.isGroups) return false;
+    // Don't keep Home section links active on other pages
+    if (location.pathname !== ROUTES.HOME) {
+      return false;
+    }
 
+    // Active section on Home page only
     return activeSection === link.sectionId;
   };
 
   return (
     <header className="fixed top-0 inset-x-0 z-[9999] bg-white border-b border-[rgba(20,125,159,0.16)] shadow-[0_8px_24px_rgba(12,18,38,0.06)] font-body">
-
       {/* Top Bar (Hidden on Mobile < 900px) */}
       <div className="hidden min-[901px]:flex items-center justify-between h-10 px-[4vw] bg-brand-navy text-white text-[13px]">
-
         <div className="flex items-center gap-2">
-
           {/* Language Toggle */}
           <Button
             type="button"
@@ -224,7 +240,8 @@ export default function Navbar({ onBookClick }) {
 
           {temp && (
             <span>
-              {temp}{t('common.tempSuffix')}
+              {temp}
+              {t('common.tempSuffix')}
             </span>
           )}
 
@@ -240,7 +257,6 @@ export default function Navbar({ onBookClick }) {
         aria-label="Main Navigation"
         className="flex items-center justify-between h-[52px] min-[901px]:h-[60px] px-[4vw] max-w-[1400px] mx-auto"
       >
-
         {/* Brand Logo */}
         <Link
           to={ROUTES.HOME}
@@ -265,11 +281,10 @@ export default function Navbar({ onBookClick }) {
               <Link
                 key={link.to}
                 to={link.to}
-                className={`relative px-3 py-2 text-[14.5px] font-semibold transition-colors duration-200 ${
-                  isActive
+                className={`relative px-3 py-2 text-[14.5px] font-semibold transition-colors duration-200 ${isActive
                     ? 'text-brand-blue font-bold after:content-[""] after:absolute after:bottom-0 after:inset-x-3 after:h-0.5 after:bg-brand-yellow'
                     : 'text-brand-navy/78 hover:text-brand-blue'
-                }`}
+                  }`}
               >
                 {link.label}
               </Link>
@@ -279,15 +294,6 @@ export default function Navbar({ onBookClick }) {
 
         {/* Desktop Action Buttons */}
         <div className="hidden min-[901px]:flex items-center gap-3">
-
-          {/* Map Link */}
-          <Link
-            to={sectionLink(SECTIONS.MAP)}
-            className="text-xs font-semibold text-brand-navy/75 hover:text-brand-blue transition-colors px-2 py-1"
-          >
-            {t('nav.exploreMapAria')}
-          </Link>
-
           {/* Login / Dashboard Button */}
           {currentUser ? (
             <Link
@@ -350,10 +356,8 @@ export default function Navbar({ onBookClick }) {
           id="mobile-nav"
           className="min-[901px]:hidden fixed inset-x-0 top-[52px] bottom-0 z-[10000] bg-brand-navy text-white px-[6vw] py-4 pb-[calc(88px+env(safe-area-inset-bottom))] flex flex-col gap-1 overflow-y-auto shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200"
         >
-
           {/* Mobile Top Controls */}
           <div className="flex items-center justify-between gap-2 p-2 bg-white/8 border border-white/14 rounded-[14px] mb-2">
-
             <Button
               type="button"
               variant="chip"
@@ -402,7 +406,8 @@ export default function Navbar({ onBookClick }) {
 
               {temp && (
                 <span>
-                  {temp}{t('common.tempSuffix')}
+                  {temp}
+                  {t('common.tempSuffix')}
                 </span>
               )}
             </Badge>
@@ -431,25 +436,7 @@ export default function Navbar({ onBookClick }) {
             </Link>
           ))}
 
-          {/* Map Link */}
-          <Link
-            to={sectionLink(SECTIONS.MAP)}
-            onClick={() => setIsMobileOpen(false)}
-            className="flex items-center justify-between min-h-[50px] px-3 text-[16px] font-semibold border-b border-white/10 rounded-xl hover:bg-brand-yellow/12 hover:text-brand-yellow transition-colors"
-          >
-            <span className="inline-flex items-center gap-2.5">
-              <FontAwesomeIcon
-                icon={faMap}
-                className="w-5 text-center opacity-90"
-              />
-              {t('nav.exploreMapAria')}
-            </span>
 
-            <FontAwesomeIcon
-              icon={isRtl ? faArrowLeft : faArrowRight}
-              className="text-xs opacity-60"
-            />
-          </Link>
 
           {/* Mobile Login / Dashboard Link */}
           {currentUser ? (
