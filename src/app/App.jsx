@@ -7,6 +7,13 @@ import DestinationsSection from '../widgets/destinations/DestinationsSection.jsx
 import TripsSection from '../widgets/trips/TripsSection.jsx';
 import GroupsBanner from '../widgets/groups-banner/GroupsBanner.jsx';
 import { TRIPS } from '../widgets/trips/tripsData.js';
+
+import CustomerLayout from '../layouts/CustomerLayout.jsx';
+import CustomerDashboardPage from '../pages/customer/CustomerDashboardPage.jsx';
+import MyBookingsPage from '../pages/customer/MyBookingsPage.jsx';
+import ProfilePage from '../pages/customer/ProfilePage.jsx';
+import ProtectedRoute from './routes/ProtectedRoute.jsx';
+
 import { useTranslation } from '../shared/i18n/index.js';
 import { ROUTES, SECTIONS, sectionLink } from '../shared/config/routes.js';
 import { ErrorBoundary, ScrollProgress } from '../shared/ui/index.js';
@@ -135,6 +142,7 @@ function ScrollManager() {
   useEffect(() => {
     if (hash) {
       const targetId = hash.replace(/^#/, '');
+
       if (targetId.startsWith('/')) return;
 
       let retries = 0;
@@ -168,7 +176,11 @@ function LegacyHashRedirect() {
 
       if (h === '#/groups' || h === '#//groups' || h.startsWith('#/groups')) {
         navigate(ROUTES.GROUPS, { replace: true });
-      } else if (h === '#/about' || h === '#//about' || h.startsWith('#/about')) {
+      } else if (
+        h === '#/about' ||
+        h === '#//about' ||
+        h.startsWith('#/about')
+      ) {
         navigate(ROUTES.ABOUT, { replace: true });
       }
     };
@@ -192,6 +204,8 @@ function TitleManager() {
       document.title = `${t('auth.login.metaTitle')} | ${t('common.brandName')}`;
     } else if (pathname === ROUTES.SIGNUP || pathname === '/create-account') {
       document.title = `${t('auth.signup.metaTitle')} | ${t('common.brandName')}`;
+    } else if (pathname.startsWith('/dashboard')) {
+      document.title = `Customer Dashboard | ${t('common.brandName')}`;
     } else if (pathname === ROUTES.GROUPS) {
       document.title = `${t('groups.metaTitle')} | ${t('common.brandName')}`;
     } else if (pathname === ROUTES.ABOUT) {
@@ -231,6 +245,8 @@ export default function App() {
     '/create-account',
     '/auth',
   ].includes(pathname);
+  const isDashboardPage = pathname.startsWith('/dashboard');
+  const hideMainLayout = isAuthPage || isDashboardPage;
 
   // Idle prewarm for below-the-fold dynamic chunks
   useEffect(() => {
@@ -250,6 +266,7 @@ export default function App() {
       };
     } else {
       const id = setTimeout(prewarm, 2000);
+
       return () => clearTimeout(id);
     }
   }, []);
@@ -278,14 +295,14 @@ export default function App() {
       <LegacyHashRedirect />
       <TitleManager />
 
-      {!isAuthPage && <ScrollProgress />}
-      {!isAuthPage && (
+      {!hideMainLayout && <ScrollProgress />}
+      {!hideMainLayout && (
         <div className="print:hidden">
           <PendingBookingPopup />
         </div>
       )}
 
-      {!isAuthPage && (
+      {!hideMainLayout && (
         <div className="print:hidden">
           <Navbar />
         </div>
@@ -293,10 +310,13 @@ export default function App() {
 
       <main
         id="main"
+        role="main"
         className={`flex-1 ${
           isAuthPage
             ? 'h-full max-h-screen overflow-hidden p-0 m-0'
-            : 'pt-[52px] min-[901px]:pt-[100px]'
+            : hideMainLayout
+              ? 'p-0 m-0'
+              : 'pt-[52px] min-[901px]:pt-[100px]'
         } print:pt-0 print:m-0 print:p-0`}
       >
         <ErrorBoundary>
@@ -401,12 +421,21 @@ export default function App() {
               element={<Navigate to={ROUTES.LOGIN} replace />}
             />
 
+            {/* Customer Dashboard - Protected Routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/dashboard" element={<CustomerLayout />}>
+                <Route index element={<CustomerDashboardPage />} />
+                <Route path="bookings" element={<MyBookingsPage />} />
+                <Route path="profile" element={<ProfilePage />} />
+              </Route>
+            </Route>
+
             <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
           </Routes>
         </ErrorBoundary>
       </main>
 
-      {!isAuthPage && (
+      {!hideMainLayout && (
         <div className="print:hidden">
           <Footer />
         </div>
