@@ -26,3 +26,4 @@ export function useBookingsSync() {
 
   return { bookings, inventory };
 }
+

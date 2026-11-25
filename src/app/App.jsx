@@ -49,7 +49,7 @@ const CreateAccountPage = lazy(
 
 // Dashboard Portals
 import ProtectedRoute from './routes/ProtectedRoute.jsx';
-import { DASHBOARD_ROLES } from '../shared/config/rbac.js';
+import { ROLES } from '../shared/config/rbac.js';
 
 const CustomerDashboardPage = lazy(
   () => import('../pages/dashboard/CustomerDashboardPage.jsx')
@@ -267,6 +267,12 @@ function TitleManager() {
       document.title = `Customer Dashboard | ${t('common.brandName')}`;
     } else if (pathname.startsWith(ROUTES.ADMIN)) {
       document.title = `Admin Portal | ${t('common.brandName')}`;
+    } else if (pathname.startsWith(ROUTES.PARTNER)) {
+      document.title = `Partner Portal | ${t('common.brandName')}`;
+    } else if (pathname.startsWith(ROUTES.OPERATIONS)) {
+      document.title = `Operations Portal | ${t('common.brandName')}`;
+    } else if (pathname.startsWith(ROUTES.TOUR_GUIDE)) {
+      document.title = `Tour Guide Portal | ${t('common.brandName')}`;
     } else if (pathname === ROUTES.GROUPS) {
       document.title = `${t('groups.metaTitle')} | ${t('common.brandName')}`;
     } else if (pathname === ROUTES.ABOUT) {
@@ -508,7 +514,7 @@ export default function App() {
             <Route
               path={ROUTES.CUSTOMER_DASHBOARD}
               element={
-                <ProtectedRoute allowedRoles={[DASHBOARD_ROLES.CUSTOMER]}>
+                <ProtectedRoute allowedRoles={[ROLES.CUSTOMER]}>
                   <Suspense fallback={<AboutFallback />}>
                     <CustomerDashboardPage />
                   </Suspense>
@@ -520,7 +526,7 @@ export default function App() {
             <Route
               path={ROUTES.ADMIN}
               element={
-                <ProtectedRoute allowedRoles={[DASHBOARD_ROLES.ADMIN]}>
+                <ProtectedRoute allowedRoles={[ROLES.ADMIN]}>
                   <Suspense fallback={<AboutFallback />}>
                     <AdminDashboardPage />
                   </Suspense>
@@ -532,7 +538,7 @@ export default function App() {
             <Route
               path={ROUTES.PARTNER}
               element={
-                <ProtectedRoute allowedRoles={[DASHBOARD_ROLES.PARTNER]}>
+                <ProtectedRoute allowedRoles={[ROLES.PARTNER]}>
                   <Suspense fallback={<AboutFallback />}>
                     <PartnerDashboardPage />
                   </Suspense>
@@ -544,7 +550,7 @@ export default function App() {
             <Route
               path={ROUTES.OPERATIONS}
               element={
-                <ProtectedRoute allowedRoles={[DASHBOARD_ROLES.OPERATIONS]}>
+                <ProtectedRoute allowedRoles={[ROLES.OPERATIONS]}>
                   <Suspense fallback={<AboutFallback />}>
                     <OperationsDashboardPage />
                   </Suspense>
@@ -556,7 +562,7 @@ export default function App() {
             <Route
               path={ROUTES.TOUR_GUIDE}
               element={
-                <ProtectedRoute allowedRoles={[DASHBOARD_ROLES.TOUR_GUIDE]}>
+                <ProtectedRoute allowedRoles={[ROLES.TOUR_GUIDE]}>
                   <Suspense fallback={<AboutFallback />}>
                     <AgentDashboardPage />
                   </Suspense>
