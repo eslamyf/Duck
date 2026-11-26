@@ -24,13 +24,13 @@ export default function ReviewsSection() {
     setMobileActiveIdx((prev) => (prev - 1 + total) % total);
   }, [total]);
 
-  // Mobile Autoplay: Rotates every 3 seconds per user request
+  // Mobile Autoplay: Rotates every 4 seconds per user request
   useEffect(() => {
     if (total <= 1 || isPaused) return;
 
     const timer = setInterval(() => {
       setMobileActiveIdx((prev) => (prev + 1) % total);
-    }, 3000);
+    }, 4000);
 
     return () => clearInterval(timer);
   }, [isPaused, total]);
@@ -133,6 +133,12 @@ export default function ReviewsSection() {
       onFocus={() => setIsPaused(true)}
       onBlur={() => setIsPaused(false)}
     >
+      <style>{`
+        @keyframes rvTimer {
+          0% { width: 0%; }
+          100% { width: 100%; }
+        }
+      `}</style>
       <div className="max-w-[1360px] mx-auto">
         {/* Section Header: Badge + Marketing H2 + Subtitle */}
         <SectionHeader
@@ -213,14 +219,12 @@ export default function ReviewsSection() {
             >
               {columns[0].items.map((item, itemIdx) => {
                 const isAriaHidden = itemIdx >= columns[0].halfCount;
-                const isDark = itemIdx % 3 === 1;
 
                 return (
                   <ReviewCard
                     key={`c0-${item.review.id}-${itemIdx}`}
                     review={item.review}
                     variant="wall"
-                    isDark={isDark}
                     gradientIndex={item.globalIndex}
                     ariaHidden={isAriaHidden}
                   />
@@ -235,14 +239,12 @@ export default function ReviewsSection() {
             >
               {columns[1].items.map((item, itemIdx) => {
                 const isAriaHidden = itemIdx >= columns[1].halfCount;
-                const isDark = itemIdx % 3 === 0;
 
                 return (
                   <ReviewCard
                     key={`c1-${item.review.id}-${itemIdx}`}
                     review={item.review}
                     variant="wall"
-                    isDark={isDark}
                     gradientIndex={item.globalIndex}
                     ariaHidden={isAriaHidden}
                   />
@@ -257,14 +259,12 @@ export default function ReviewsSection() {
             >
               {columns[2].items.map((item, itemIdx) => {
                 const isAriaHidden = itemIdx >= columns[2].halfCount;
-                const isDark = itemIdx % 3 === 2;
 
                 return (
                   <ReviewCard
                     key={`c2-${item.review.id}-${itemIdx}`}
                     review={item.review}
                     variant="wall"
-                    isDark={isDark}
                     gradientIndex={item.globalIndex}
                     ariaHidden={isAriaHidden}
                   />
@@ -275,14 +275,14 @@ export default function ReviewsSection() {
         </div>
 
         {/* ─────────────────────────────────────────────────────────────
-            MOBILE VIEW (< 901px): Single Card Carousel with 3s Autoplay & Manual Controls
+            MOBILE VIEW (< 901px): Single Card Carousel with 4s Autoplay & Manual Controls
             ───────────────────────────────────────────────────────────── */}
         <div
           className="flex min-[901px]:hidden flex-col items-center gap-4 w-full"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          {/* Top Quick Rating Badge */}
+          {/* Top Quick Rating Badge & Navigation */}
           <div className="flex items-center justify-between w-full max-w-[680px] px-1 text-xs">
             <div className="flex items-center gap-1.5 font-extrabold text-brand-navy">
               <span className="text-lg leading-none font-black">{averageRating}</span>
@@ -291,6 +291,9 @@ export default function ReviewsSection() {
                   <FontAwesomeIcon key={i} icon={faStar} />
                 ))}
               </div>
+              <span className="text-[11px] text-brand-navy/60 font-medium ms-1">
+                ({total} {t('reviews.reviewsWord', 'آراء')})
+              </span>
             </div>
 
             {/* Carousel Navigation Buttons & Counter */}
@@ -304,7 +307,7 @@ export default function ReviewsSection() {
                 <FontAwesomeIcon icon={PrevIcon} className="text-xs" />
               </button>
 
-              <span className="font-mono text-xs font-bold text-brand-navy px-2 py-0.5 rounded-full bg-brand-navy/5">
+              <span className="font-mono text-xs font-bold text-brand-navy px-2.5 py-0.5 rounded-full bg-white border border-brand-navy/10 shadow-xs">
                 {mobileActiveIdx + 1} / {total}
               </span>
 
@@ -319,13 +322,15 @@ export default function ReviewsSection() {
             </div>
           </div>
 
-          {/* Single Active Review Card (With Real Customer Photo) */}
+          {/* Single Active Review Card with Live 4s Progress Bar */}
           <div className="w-full relative animate-in fade-in zoom-in-95 duration-300">
             <ReviewCard
               key={currentMobileReview.id}
               review={currentMobileReview}
               variant="featured"
               gradientIndex={mobileActiveIdx}
+              showProgress={true}
+              isPaused={isPaused}
             />
           </div>
 
