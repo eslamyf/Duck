@@ -138,9 +138,9 @@ export default function StepReviewPay({
     <div className="w-full max-w-4xl mx-auto space-y-4 font-body">
       {/* Step Header - Compact */}
       <div className="text-center space-y-1">
-        <h2 className="text-xl sm:text-2xl font-heading font-extrabold text-brand-navy">
+        <h1 className="text-xl sm:text-2xl font-heading font-extrabold text-brand-navy">
           {t('booking.reviewPay.title')}
-        </h2>
+        </h1>
         <p className="text-xs sm:text-sm text-brand-navy/70">
           {t('booking.reviewPay.subtitle')}
         </p>
@@ -151,9 +151,9 @@ export default function StepReviewPay({
         <div className="flex items-center justify-between pb-2 border-b border-black/5">
           <div className="flex items-center gap-2">
             <FontAwesomeIcon icon={faShieldHalved} className="text-brand-blue text-sm" />
-            <h3 className="font-heading font-extrabold text-sm sm:text-base text-brand-navy">
+            <h2 className="font-heading font-extrabold text-sm sm:text-base text-brand-navy">
               {t('booking.reviewPay.summaryTitle')}
-            </h3>
+            </h2>
           </div>
           <span className="text-xs font-bold text-brand-blue bg-brand-blue/10 px-2.5 py-0.5 rounded-full">
             {t('booking.reviewPay.officialRate')}

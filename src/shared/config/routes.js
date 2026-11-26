@@ -7,6 +7,8 @@ export const ROUTES = Object.freeze({
   // Public Website
   HOME: '/',
   ACTIVITIES: '/activities',
+  ACTIVITY_DETAILS: '/activities/:slug',
+  activityDetails: (slug) => `/activities/${slug}`,
   GROUPS: '/groups',
   ABOUT: '/about',
   BOOKING: '/book',

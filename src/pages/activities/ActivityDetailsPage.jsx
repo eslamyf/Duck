@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate, useParams, Navigate } from 'react-router-dom';
+import { Link, useParams, Navigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowLeft,
@@ -10,6 +10,7 @@ import {
   faCircleCheck,
   faWater,
   faCalendarCheck,
+  faLocationDot,
 } from '@fortawesome/free-solid-svg-icons';
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 
@@ -17,6 +18,7 @@ import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES } from '../../shared/config/routes.js';
 import { buildWhatsAppUrl } from '../../shared/config/constants.js';
 import { TRIPS } from '../../widgets/trips/tripsData.js';
+import { useCMS } from '../../shared/hooks/index.js';
 import NotFoundPage from '../not-found/NotFoundPage.jsx';
 
 import kayakImg from '../../shared/assets/images/trips/kayak-free-960w.webp';
@@ -29,21 +31,25 @@ import gharbImg from '../../shared/assets/images/trips/gharb-explorer-960w.webp'
 const ACTIVITY_MEDIA = {
   kayaking: {
     id: 'kayak',
+    actFilter: 'kayak',
     image: kayakImg,
     gallery: [kayakGalleryImg, nileToursImg],
   },
   'water-bike': {
     id: 'water-bike',
+    actFilter: 'waterbike',
     image: waterbikeImg,
     gallery: [kayakGalleryImg, gharbImg],
   },
   sup: {
     id: 'sup',
+    actFilter: 'sup',
     image: supImg,
     gallery: [kayakGalleryImg, nileToursImg],
   },
   'nile-tours': {
     id: 'nile-trips',
+    actFilter: 'nile',
     image: nileToursImg,
     gallery: [gharbImg, kayakGalleryImg],
   },
@@ -51,8 +57,9 @@ const ACTIVITY_MEDIA = {
 
 export default function ActivityDetailsPage() {
   const { slug } = useParams();
-  const navigate = useNavigate();
   const { lang, t } = useTranslation();
+  const { trips: dynamicTrips } = useCMS();
+  const tripsList = dynamicTrips?.length ? dynamicTrips : TRIPS;
 
   const isArabic = lang === 'ar';
   const ArrowIcon = isArabic ? faArrowLeft : faArrowRight;
@@ -70,7 +77,7 @@ export default function ActivityDetailsPage() {
     : [];
 
   if (!activity) {
-    const matchingTrip = TRIPS.find((t) => t.slug === slug);
+    const matchingTrip = tripsList.find((item) => item.slug === slug);
     if (matchingTrip) {
       return <Navigate to={ROUTES.tripDetails(slug)} replace />;
     }
@@ -81,6 +88,12 @@ export default function ActivityDetailsPage() {
   const itemDesc = t(`activitiesPage.items.${activity.id}.description`);
   const itemDuration = t(`activitiesPage.items.${activity.id}.duration`);
   const itemCapacity = t(`activitiesPage.items.${activity.id}.capacity`);
+
+  const matchingTrips = tripsList.filter((trip) =>
+    activity.actFilter === 'nile'
+      ? trip.loc === 0 || trip.loc === 1 || trip.loc === 3
+      : trip.act === activity.actFilter
+  );
 
   const relatedActivities = Object.entries(ACTIVITY_MEDIA)
     .filter(([activitySlug]) => activitySlug !== slug)
@@ -103,14 +116,13 @@ export default function ActivityDetailsPage() {
         <div className="pointer-events-none absolute inset-0 bg-brand-navy/75" />
 
         <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-16">
-          <button
-            type="button"
-            onClick={() => navigate(ROUTES.ACTIVITIES)}
-            className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-brand-yellow transition hover:opacity-80 cursor-pointer"
+          <Link
+            to={ROUTES.ACTIVITIES}
+            className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-brand-yellow transition hover:opacity-80"
           >
             <FontAwesomeIcon icon={BackArrowIcon} />
             <span>{t('activitiesPage.details.back')}</span>
-          </button>
+          </Link>
 
           <div className="max-w-3xl">
             <span className="mb-3 block font-mono text-xs font-bold uppercase tracking-[0.2em] text-brand-yellow">
@@ -182,6 +194,60 @@ export default function ActivityDetailsPage() {
                 </p>
               </div>
             </div>
+
+            {matchingTrips.length > 0 && (
+              <div className="space-y-4 rounded-3xl border border-brand-blue/15 bg-surface-white p-6 shadow-card sm:p-8">
+                <div className="flex items-center justify-between gap-3">
+                  <h2 className="font-heading text-xl font-extrabold text-brand-navy sm:text-2xl">
+                    {isArabic ? 'الرحلات المتاحة لهذه التجربة' : 'Available Trips for This Experience'}
+                  </h2>
+                  <span className="rounded-full bg-brand-blue/10 px-3 py-1 text-xs font-bold text-brand-blue">
+                    {matchingTrips.length}
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {matchingTrips.map((trip) => {
+                    const tripTitle = t(`trips.items.${trip.key}.title`, trip.slug);
+                    const destName = t(`destinations.items.${trip.destKey}.name`, trip.destKey);
+                    const priceVal = Number(trip.priceEg || trip.price).toLocaleString(isArabic ? 'ar-EG' : 'en-US');
+
+                    return (
+                      <div
+                        key={trip.id}
+                        className="flex flex-col justify-between gap-3 rounded-2xl border border-brand-blue/15 bg-surface-mist/60 p-4"
+                      >
+                        <div className="space-y-1">
+                          <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-brand-blue">
+                            <FontAwesomeIcon icon={faLocationDot} />
+                            <span>{destName}</span>
+                          </span>
+                          <h3 className="font-heading text-base font-extrabold text-brand-navy">
+                            {tripTitle}
+                          </h3>
+                          <p className="text-xs font-bold text-brand-navy/75">
+                            {priceVal} {t('trips.currency')}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2 pt-1">
+                          <Link
+                            to={ROUTES.booking(trip.slug)}
+                            className="flex-1 inline-flex items-center justify-center rounded-xl bg-brand-yellow px-3 py-2 text-xs font-extrabold text-brand-navy hover:bg-brand-yellow-hover transition"
+                          >
+                            {t('activitiesPage.cardBookButton')}
+                          </Link>
+                          <Link
+                            to={ROUTES.tripDetails(trip.slug)}
+                            className="inline-flex items-center justify-center rounded-xl border border-brand-navy/20 bg-white px-3 py-2 text-xs font-bold text-brand-navy hover:bg-brand-navy hover:text-brand-yellow transition"
+                          >
+                            {t('activitiesPage.cardDetailsButton')}
+                          </Link>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
           <aside className="space-y-6 lg:sticky lg:top-28 lg:col-span-5">
@@ -288,16 +354,16 @@ export default function ActivityDetailsPage() {
               const relDesc = t(`activitiesPage.items.${related.id}.description`);
 
               return (
-                <button
+                <Link
                   key={related.id}
-                  type="button"
-                  onClick={() => navigate(`/activities/${relatedSlug}`)}
-                  className="group overflow-hidden rounded-3xl border border-brand-blue/15 bg-surface-white text-start shadow-card transition hover:-translate-y-1 hover:shadow-soft cursor-pointer"
+                  to={ROUTES.activityDetails(relatedSlug)}
+                  className="group block overflow-hidden rounded-3xl border border-brand-blue/15 bg-surface-white text-start shadow-card transition hover:-translate-y-1 hover:shadow-soft"
                 >
                   <div className="h-44 overflow-hidden bg-brand-navy">
                     <img
                       src={related.image}
                       alt={relTitle}
+                      loading="lazy"
                       className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                     />
                   </div>
@@ -313,7 +379,7 @@ export default function ActivityDetailsPage() {
                       <FontAwesomeIcon icon={ArrowIcon} />
                     </span>
                   </div>
-                </button>
+                </Link>
               );
             })}
           </div>

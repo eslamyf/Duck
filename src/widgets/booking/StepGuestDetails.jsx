@@ -189,9 +189,9 @@ export default function StepGuestDetails({
     <form onSubmit={handleSubmit} className="w-full max-w-4xl mx-auto space-y-4 font-body">
       {/* Step Header - Compact */}
       <div className="text-center space-y-1">
-        <h2 className="text-xl sm:text-2xl font-heading font-extrabold text-brand-navy">
+        <h1 className="text-xl sm:text-2xl font-heading font-extrabold text-brand-navy">
           {t('booking.guestDetails.title')}
-        </h2>
+        </h1>
         <p className="text-xs sm:text-sm text-brand-navy/70">
           {t('booking.guestDetails.subtitle')}
         </p>

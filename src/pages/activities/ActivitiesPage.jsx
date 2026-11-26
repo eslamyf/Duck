@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowLeft,
@@ -30,7 +30,6 @@ const ACTIVITIES_LIST = [
 ];
 
 export default function PublicActivitiesPage() {
-  const navigate = useNavigate();
   const { lang, t } = useTranslation();
 
   const isArabic = lang === 'ar';
@@ -173,14 +172,13 @@ export default function PublicActivitiesPage() {
                       <span>{t('activitiesPage.cardBookButton')}</span>
                     </Link>
 
-                    <button
-                      type="button"
-                      onClick={() => navigate(`/activities/${activity.slug}`)}
-                      className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand-navy px-4 py-3 text-xs sm:text-sm font-bold text-white transition hover:bg-brand-blue cursor-pointer"
+                    <Link
+                      to={ROUTES.activityDetails(activity.slug)}
+                      className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand-navy px-4 py-3 text-xs sm:text-sm font-bold text-white transition hover:bg-brand-blue"
                     >
                       <span>{t('activitiesPage.cardDetailsButton')}</span>
                       <FontAwesomeIcon icon={ArrowIcon} className="text-xs" />
-                    </button>
+                    </Link>
                   </div>
                 </article>
               );

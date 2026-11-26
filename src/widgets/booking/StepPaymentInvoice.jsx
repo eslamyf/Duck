@@ -121,9 +121,9 @@ export default function StepPaymentInvoice({
             <span>{t('booking.paymentInvoice.ticketCreatedBadge')}</span>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-brand-navy">
+          <h1 className="text-2xl sm:text-3xl font-heading font-extrabold text-brand-navy">
             {t('booking.paymentInvoice.title')}
-          </h2>
+          </h1>
           <p className="text-sm sm:text-base text-brand-navy/70 max-w-lg mx-auto">
             {t('booking.paymentInvoice.subtitle')}
           </p>

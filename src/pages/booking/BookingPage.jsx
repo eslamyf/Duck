@@ -44,8 +44,12 @@ function findRestoredBooking(refParam) {
 export default function BookingPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const refParam = searchParams.get('ref');
+  const tripParam = searchParams.get('trip') || '';
+  const activityParam = searchParams.get('activity') || '';
   const stepParam = parseInt(searchParams.get('step') || '0', 10);
-  const instanceKey = refParam ? `ref-${refParam}-${stepParam}` : 'new-booking';
+  const instanceKey = refParam
+    ? `ref-${refParam}-${stepParam}`
+    : `booking-${tripParam || 'none'}-${activityParam || 'all'}-${stepParam}`;
 
   return (
     <BookingFlowContent
@@ -98,6 +102,8 @@ function BookingFlowContent({ searchParams, setSearchParams }) {
     return null;
   }, [tripSlug, initialActivity, restoredRecord, tripsList, t]);
 
+  const isInvalidTripParam = Boolean(tripSlug && !initialTrip);
+
   const [userSelectedTrip, setUserSelectedTrip] = useState(null);
   const selectedTrip = userSelectedTrip || initialTrip;
 
@@ -113,6 +119,8 @@ function BookingFlowContent({ searchParams, setSearchParams }) {
     if (initialTrip) return 2;
     return 1;
   });
+
+  const effectiveStep = !selectedTrip && !restoredRecord ? 1 : currentStep;
 
   // 3. Unique Booking Ref (generated when reaching step 4 or restored from URL)
   const [bookingRef, setBookingRef] = useState(() => {
@@ -217,8 +225,8 @@ function BookingFlowContent({ searchParams, setSearchParams }) {
           <button
             type="button"
             onClick={() => {
-              if (currentStep > 1) {
-                goToStep(currentStep - 1);
+              if (effectiveStep > 1) {
+                goToStep(effectiveStep - 1);
               } else if (window.history.length > 1) {
                 navigate(-1);
               } else {
@@ -229,7 +237,7 @@ function BookingFlowContent({ searchParams, setSearchParams }) {
           >
             <FontAwesomeIcon icon={isArabic ? faArrowRight : faArrowLeft} />
             <span>
-              {currentStep > 1
+              {effectiveStep > 1
                 ? t('booking.nav.previous', isArabic ? 'السابق' : 'Previous')
                 : isArabic
                   ? 'رجوع'
@@ -241,21 +249,24 @@ function BookingFlowContent({ searchParams, setSearchParams }) {
         {/* Visual Stepper (Only on steps 1, 2, 3, 4) */}
         <div className="print:hidden">
           <BookingStepper
-            currentStep={currentStep}
+            currentStep={effectiveStep}
             onStepClick={(step) => {
-              if (step < currentStep) goToStep(step);
+              if (step < effectiveStep) goToStep(step);
             }}
             t={t}
           />
         </div>
 
         {/* STEP 1: Select Trip */}
-        {currentStep === 1 && (
+        {effectiveStep === 1 && (
           <div className="animate-in fade-in duration-300">
             <StepTripSelect
+              trips={tripsList}
               selectedTrip={selectedTrip}
               onSelectTrip={handleSelectTrip}
               initialActivity={initialActivity}
+              invalidTripSlug={isInvalidTripParam ? tripSlug : ''}
+              onClearTripFilter={() => setSearchParams({})}
               t={t}
               lang={lang}
             />
@@ -263,7 +274,7 @@ function BookingFlowContent({ searchParams, setSearchParams }) {
         )}
 
         {/* STEP 2: Guest & Booking Details */}
-        {currentStep === 2 && (
+        {effectiveStep === 2 && (
           <div className="animate-in fade-in duration-300">
             <StepGuestDetails
               bookingData={bookingData}
@@ -292,7 +303,7 @@ function BookingFlowContent({ searchParams, setSearchParams }) {
         )}
 
         {/* STEP 3: Review & Payment Options */}
-        {currentStep === 3 && (
+        {effectiveStep === 3 && (
           <div className="animate-in fade-in duration-300">
             <StepReviewPay
               bookingData={bookingData}
@@ -360,7 +371,7 @@ function BookingFlowContent({ searchParams, setSearchParams }) {
         )}
 
         {/* STEP 4: Payment & Invoice */}
-        {currentStep === 4 && (
+        {effectiveStep === 4 && (
           <div className="animate-in fade-in duration-300">
             <StepPaymentInvoice
               bookingRef={bookingRef}

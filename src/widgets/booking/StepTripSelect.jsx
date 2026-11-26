@@ -8,14 +8,18 @@ import {
   faArrowRight,
   faSailboat,
   faShip,
+  faCircleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
 import { TRIPS } from '../trips/tripsData.js';
 import { Badge, Button } from '../../shared/ui/index.js';
 
 export default function StepTripSelect({
+  trips = TRIPS,
   selectedTrip,
   onSelectTrip,
   initialActivity = 'all',
+  invalidTripSlug = '',
+  onClearTripFilter,
   t,
   lang,
 }) {
@@ -34,7 +38,8 @@ export default function StepTripSelect({
     { id: 'waterbike', label: t('booking.tripSelect.waterbike'), icon: faShip },
   ];
 
-  const filteredTrips = TRIPS.filter((item) => {
+  const sourceTrips = trips?.length ? trips : TRIPS;
+  const filteredTrips = sourceTrips.filter((item) => {
     if (filterAct === 'all') return true;
     return item.act === filterAct;
   });
@@ -44,11 +49,37 @@ export default function StepTripSelect({
 
   return (
     <div className="w-full max-w-5xl mx-auto space-y-6">
+      {/* Invalid Trip URL Notice */}
+      {invalidTripSlug && (
+        <div
+          role="alert"
+          className="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3.5 text-brand-navy shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+        >
+          <div className="flex items-start gap-2.5 text-xs sm:text-sm font-semibold">
+            <FontAwesomeIcon icon={faCircleExclamation} className="text-amber-600 text-base shrink-0 mt-0.5" />
+            <span>
+              {isArabic
+                ? 'الرحلة المطلوبة غير متاحة أو تم تحديث رابطها. اختر أي تجربة متاحة من القائمة التالية:'
+                : 'The requested trip could not be found or its link changed. Please select any available experience below:'}
+            </span>
+          </div>
+          {onClearTripFilter && (
+            <button
+              type="button"
+              onClick={onClearTripFilter}
+              className="shrink-0 self-start sm:self-center rounded-xl bg-brand-navy px-3.5 py-2 text-xs font-bold text-brand-yellow hover:bg-brand-blue transition cursor-pointer"
+            >
+              {isArabic ? 'عرض كل الرحلات' : 'Show All Trips'}
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Header Info */}
       <div className="text-center space-y-2">
-        <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-brand-navy">
+        <h1 className="text-2xl sm:text-3xl font-heading font-extrabold text-brand-navy">
           {t('booking.tripSelect.title')}
-        </h2>
+        </h1>
         <p className="text-sm sm:text-base text-brand-navy/70 max-w-xl mx-auto font-medium">
           {t('booking.tripSelect.subtitle')}
         </p>
@@ -140,9 +171,9 @@ export default function StepTripSelect({
               {/* Body */}
               <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
                 <div className="space-y-1.5">
-                  <h3 className="font-heading font-black text-base sm:text-lg text-brand-navy line-clamp-1 group-hover:text-brand-blue transition-colors">
+                  <h2 className="font-heading font-black text-base sm:text-lg text-brand-navy line-clamp-1 group-hover:text-brand-blue transition-colors">
                     {tripTitle}
-                  </h3>
+                  </h2>
                   <div className="flex items-center gap-3 text-xs text-brand-navy/70 font-semibold">
                     <span className="flex items-center gap-1">
                       <FontAwesomeIcon icon={faClock} className="text-brand-blue" />
