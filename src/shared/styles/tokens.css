@@ -79,6 +79,16 @@
   /* WhatsApp Brand Green */
   --color-yellow-hover: #FFE95A;
   /* Primary CTA hover state */
+  --color-star: #F5B800;
+  /* Golden Star Rating */
+
+  /* ── Review Avatar Gradient Palette ──────────────────────── */
+  --grad-avatar-1: linear-gradient(135deg, #147D9F, #0C1226);
+  --grad-avatar-2: linear-gradient(135deg, #1A9BC4, #147D9F);
+  --grad-avatar-3: linear-gradient(135deg, #2C3A6B, #147D9F);
+  --grad-avatar-4: linear-gradient(135deg, #0F5F78, #2C3A6B);
+  --grad-avatar-5: linear-gradient(135deg, #147D9F, #3A2F6B);
+  --grad-avatar-6: linear-gradient(135deg, #1B6F8A, #0C1226);
 
   /* ── Marine Shadow System ────────────────────────────────── */
   --shadow-soft: 0 12px 32px rgba(12, 18, 38, 0.08);

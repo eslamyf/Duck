@@ -1,50 +1,62 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useMemo, useRef, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
-import { Button } from '../../shared/ui/index.js';
+import { SectionHeader, Badge, Button } from '../../shared/ui/index.js';
 import { ReviewCard, reviewsData, GOOGLE_REVIEWS_URL } from '../../entities/review/index.js';
 
 export default function ReviewsSection() {
-  const { t, lang } = useTranslation();
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const timerRef = useRef(null);
+  const { t } = useTranslation();
+  const [mobileActiveIdx, setMobileActiveIdx] = useState(0);
+  const mobileCarouselRef = useRef(null);
 
-  const isRtl = lang === 'ar';
   const total = reviewsData.length;
 
-  const nextReview = useCallback(() => {
-    setActiveIndex((prev) => (prev + 1) % total);
+  // Average Rating calculated dynamically from unified source of truth
+  const averageRating = useMemo(() => {
+    if (total === 0) return '5.0';
+    const sum = reviewsData.reduce((acc, r) => acc + (r.r || 5), 0);
+    return (sum / total).toFixed(1);
   }, [total]);
 
-  const prevReview = useCallback(() => {
-    setActiveIndex((prev) => (prev - 1 + total) % total);
+  // Handle Mobile swipe carousel scroll index
+  const handleMobileScroll = useCallback(() => {
+    const el = mobileCarouselRef.current;
+    if (!el || !el.firstElementChild) return;
+    const cardWidth = el.firstElementChild.offsetWidth + 14;
+    const scrollPos = Math.abs(el.scrollLeft);
+    const idx = Math.min(
+      total - 1,
+      Math.max(0, Math.round(scrollPos / cardWidth))
+    );
+    setMobileActiveIdx(idx);
   }, [total]);
 
-  // Mobile / Autoplay timer (5 seconds)
-  useEffect(() => {
-    if (total <= 1 || isPaused) return;
+  // Shard reviews into 3 columns for desktop infinite moving wall
+  const columns = useMemo(() => {
+    const numCols = 3;
+    const cols = Array.from({ length: numCols }, () => []);
 
-    // Respect prefers-reduced-motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
+    reviewsData.forEach((rev, idx) => {
+      cols[idx % numCols].push({ review: rev, globalIndex: idx });
+    });
 
-    timerRef.current = setTimeout(() => {
-      nextReview();
-    }, 5000);
+    // Ensure each column has sufficient height before duplicating (at least 3 cards per half)
+    return cols.map((col, colIdx) => {
+      let half = [...col];
+      while (half.length < 3) {
+        half = [...half, ...col];
+      }
+      return {
+        colIdx,
+        items: [...half, ...half],
+        halfCount: half.length,
+      };
+    });
+  }, []);
 
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, [activeIndex, isPaused, nextReview, total]);
-
-  // Average Rating
-  const averageRating = total > 0
-    ? (reviewsData.reduce((acc, r) => acc + r.r, 0) / total).toFixed(1)
-    : '5.0';
-
+  // Empty state fallback
   if (total === 0) {
     return (
       <section
@@ -66,7 +78,7 @@ export default function ReviewsSection() {
             as="a"
             href={GOOGLE_REVIEWS_URL}
             target="_blank"
-            rel="noopener"
+            rel="noopener noreferrer"
             variant="subtle"
             size="md"
           >
@@ -77,207 +89,197 @@ export default function ReviewsSection() {
     );
   }
 
-  const currentReview = reviewsData[activeIndex];
-
-  // Icons for Prev/Next depending on text direction
-  const PrevIcon = isRtl ? faChevronRight : faChevronLeft;
-  const NextIcon = isRtl ? faChevronLeft : faChevronRight;
-
   return (
     <section
       id="reviews"
-      className="bg-white text-brand-navy py-12 min-[901px]:py-20 px-[5vw] min-[901px]:px-[6vw] font-body relative overflow-hidden border-t border-[rgba(20,125,159,0.12)] scroll-mt-[calc(var(--header-height-mobile)+16px)] min-[901px]:scroll-mt-[calc(var(--header-height-desktop)+20px)]"
-      aria-label={t('reviews.sectionTitle', 'ماذا يقول ضيوفنا')}
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onFocus={() => setIsPaused(true)}
-      onBlur={() => setIsPaused(false)}
+      className="bg-gradient-to-b from-white to-surface-mist text-brand-navy py-12 min-[901px]:py-20 px-[5vw] min-[901px]:px-[6vw] font-body relative overflow-hidden border-t border-[rgba(20,125,159,0.12)] scroll-mt-[calc(var(--header-height-mobile)+16px)] min-[901px]:scroll-mt-[calc(var(--header-height-desktop)+20px)]"
+      aria-label={t('reviews.sectionTitle')}
     >
       <div className="max-w-[1360px] mx-auto">
-        {/* Header: Title & Subtitle + Google Rating Summary Badge */}
-        <div className="flex flex-col min-[901px]:flex-row justify-between items-start min-[901px]:items-end gap-6 mb-7 min-[901px]:mb-9">
-          <div>
+        {/* Section Header: Badge + Marketing H2 + Subtitle */}
+        <SectionHeader
+          tag={
             <span
-              className="mb-2 inline-block text-xs font-extrabold uppercase tracking-[0.2em] text-brand-blue"
+              className="text-xs font-extrabold uppercase tracking-[0.2em] text-brand-blue"
               lang="en"
               dir="ltr"
             >
               {t('reviews.realBadge')}
             </span>
-            <h2 className="text-2xl min-[901px]:text-4xl font-bold leading-tight tracking-tight text-brand-navy mb-2">
-              {t('reviews.sectionTitle')}
-            </h2>
-            <p className="text-sm min-[901px]:text-base leading-relaxed text-brand-navy/72 max-w-[62ch]">
-              {t('reviews.sectionSubtitle')}
-            </p>
-          </div>
+          }
+          title={t('reviews.sectionTitle')}
+          subtitle={t('reviews.sectionSubtitle')}
+          className="mb-8 min-[901px]:mb-10"
+        />
 
-          {/* Google Summary Badge (.gsum) */}
-          <div className="flex items-center gap-3.5 bg-surface-mist border border-[rgba(20,125,159,0.16)] px-4 min-[901px]:px-5 py-2.5 rounded-[20px] shadow-sm w-full min-[901px]:w-auto justify-between min-[901px]:justify-start">
-            <span
-              className="w-11 h-11 rounded-full grid place-items-center text-xl text-[#4285f4] bg-white border border-[rgba(20,125,159,0.16)] flex-none shadow-sm"
-              aria-hidden="true"
-            >
-              <FontAwesomeIcon icon={faGoogle} />
-            </span>
-            <div className="flex flex-col justify-center">
-              <div className="flex items-center gap-2">
-                <b className="text-2xl min-[901px]:text-3xl font-extrabold text-brand-navy leading-none">
-                  {averageRating}
-                </b>
-                <span className="flex items-center gap-0.5 text-[#f59e0b] text-sm" aria-hidden="true">
-                  {[...Array(5)].map((_, i) => (
-                    <FontAwesomeIcon key={i} icon={faStar} />
-                  ))}
-                </span>
-              </div>
-              <small className="text-xs text-brand-navy/75 font-medium mt-0.5">
-                {t('reviews.basedOnGoogle', { count: total }, `بناءً على ${total} تقييم على Google`)}
-              </small>
+        {/* ─────────────────────────────────────────────────────────────
+            DESKTOP VIEW (>= 900px): Rating Summary Card + 3-Column Infinite Wall
+            ───────────────────────────────────────────────────────────── */}
+        <div className="hidden min-[901px]:grid grid-cols-[250px_1fr] min-[1281px]:grid-cols-[290px_1fr] gap-6 items-stretch">
+          {/* Rating Summary Card (Side Aside) */}
+          <aside
+            aria-label={t('reviews.ratingSummary', 'ملخص التقييمات')}
+            className="flex flex-col justify-center items-center text-center gap-3.5 p-6 min-[901px]:p-8 rounded-[28px] bg-white border border-[rgba(20,125,159,0.16)] shadow-[0_12px_32px_rgba(12,18,38,0.08)] h-full"
+          >
+            <div className="flex items-start justify-center font-bold text-6xl min-[901px]:text-7xl min-[1281px]:text-8xl leading-none text-brand-navy tabular-nums select-none">
+              <span>{averageRating}</span>
+              <sup className="text-xl min-[901px]:text-2xl text-brand-blue font-bold ms-1 top-2 relative">
+                /5
+              </sup>
             </div>
-          </div>
-        </div>
 
-        {/* Mobile Story Bars & Top Nav (.rf-top) - Only on Mobile */}
-        <div className="block min-[901px]:hidden mb-3">
-          {/* Instagram-style segmented progress bar (.rst) */}
+            <div
+              className="flex items-center gap-1.5 text-[var(--color-star)] text-xl min-[901px]:text-2xl"
+              role="img"
+              aria-label={t('reviews.outOfFive', { rating: averageRating }, `${averageRating} من 5`)}
+            >
+              {[...Array(5)].map((_, i) => (
+                <FontAwesomeIcon key={i} icon={faStar} />
+              ))}
+            </div>
+
+            <small className="text-xs min-[901px]:text-sm text-brand-navy/70 font-medium">
+              {t('reviews.fromCountReviews', { count: total }, `من ${total} آراء عملاء`)}
+            </small>
+
+            <Badge
+              variant="subtle"
+              size="md"
+              className="mt-1 font-bold text-xs min-[901px]:text-[13px] px-3.5 py-1.5 rounded-full border border-[rgba(20,125,159,0.16)] bg-surface-mist text-brand-blue"
+            >
+              {t('reviews.trustBadge', 'رحلات مائية بإشراف محترفين')}
+            </Badge>
+
+            <div className="pt-2 w-full">
+              <Button
+                as="a"
+                href={GOOGLE_REVIEWS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="primary"
+                size="sm"
+                fullWidth
+                className="mt-2 text-xs min-[901px]:text-sm font-bold shadow-sm"
+              >
+                {t('reviews.writeReview', 'شوف تجارب ضيوفنا')}
+              </Button>
+            </div>
+          </aside>
+
+          {/* 3-Column Infinite Vertical Review Wall */}
           <div
-            className="grid gap-1.5 w-full mb-2"
-            style={{ gridTemplateColumns: `repeat(${total}, minmax(0, 1fr))` }}
-            role="tablist"
-            aria-label={t('reviews.storyNavigation', 'التنقل بين آراء الضيوف')}
+            className="rv-wall relative grid grid-cols-2 min-[1281px]:grid-cols-3 gap-[18px] h-[580px] overflow-hidden rounded-[28px] [mask-image:linear-gradient(to_bottom,transparent_0,#000_12%,#000_88%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0,#000_12%,#000_88%,transparent_100%)] select-none"
+            role="list"
+            aria-label={t('reviews.guestReviewsWall', 'آراء العملاء')}
           >
-            {reviewsData.map((_, j) => {
-              const isPast = j < activeIndex;
-              const isCurrent = j === activeIndex;
-
-              return (
-                <button
-                  key={j}
-                  type="button"
-                  onClick={() => setActiveIndex(j)}
-                  className="h-4 flex items-center p-0 border-0 bg-transparent cursor-pointer outline-none"
-                  aria-label={t('reviews.reviewIndex', { current: j + 1, total }, `رأي ${j + 1} من ${total}`)}
-                  aria-selected={isCurrent}
-                >
-                  <span className="w-full h-1 rounded-full bg-brand-navy/15 overflow-hidden block">
-                    <i
-                      className={`block h-full rounded-full transition-all duration-300 ${
-                        isPast
-                          ? 'w-full bg-brand-navy'
-                          : isCurrent
-                          ? 'w-full bg-brand-blue animate-rv-story'
-                          : 'w-0 bg-transparent'
-                      }`}
-                      style={{
-                        animationDuration: isCurrent ? '5s' : undefined,
-                      }}
-                    />
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Mobile Prev / Next Controls */}
-          <div className="flex items-center justify-between gap-3">
-            <button
-              type="button"
-              onClick={prevReview}
-              className="w-9 h-9 rounded-full border border-[rgba(20,125,159,0.2)] bg-white text-brand-navy grid place-items-center shadow-sm cursor-pointer hover:bg-brand-navy hover:text-brand-yellow active:scale-95 transition-all"
-              aria-label={t('reviews.prevReview', 'الرأي السابق')}
+            {/* Column 0: Standard Downward Roll */}
+            <div
+              className="col flex flex-col gap-[18px] will-change-transform animate-rv-roll self-start"
+              style={{ '--roll-duration': '46s' }}
             >
-              <FontAwesomeIcon icon={PrevIcon} className="w-3.5 h-3.5" />
-            </button>
-
-            <span className="text-xs font-bold text-brand-navy bg-[rgba(6,123,161,0.08)] px-3 py-1 rounded-full" aria-hidden="true">
-              {activeIndex + 1} / {total}
-            </span>
-
-            <button
-              type="button"
-              onClick={nextReview}
-              className="w-9 h-9 rounded-full border border-[rgba(20,125,159,0.2)] bg-white text-brand-navy grid place-items-center shadow-sm cursor-pointer hover:bg-brand-navy hover:text-brand-yellow active:scale-95 transition-all"
-              aria-label={t('reviews.nextReview', 'الرأي التالي')}
-            >
-              <FontAwesomeIcon icon={NextIcon} className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </div>
-
-        {/* Featured Review Active Card */}
-        <div className="relative w-full" aria-live="polite">
-          <ReviewCard review={currentReview} variant="featured" />
-        </div>
-
-        {/* Desktop Carousel Navigation (.rcn) */}
-        {total > 1 && (
-          <div className="hidden min-[901px]:flex items-center justify-center gap-4 mt-6">
-            <button
-              type="button"
-              onClick={prevReview}
-              className="w-10 h-10 rounded-full border border-[rgba(20,125,159,0.25)] bg-white text-brand-navy grid place-items-center shadow-sm cursor-pointer hover:bg-brand-navy hover:text-brand-yellow hover:border-brand-navy active:scale-95 transition-all outline-none focus-visible:ring-2 focus-visible:ring-brand-blue"
-              aria-label={t('reviews.prevReview', 'الرأي السابق')}
-            >
-              <FontAwesomeIcon icon={PrevIcon} className="w-4 h-4" />
-            </button>
-
-            <span className="text-sm font-bold text-brand-navy bg-[rgba(6,123,161,0.08)] px-4 py-1.5 rounded-full select-none" aria-hidden="true">
-              {activeIndex + 1} / {total}
-            </span>
-
-            <button
-              type="button"
-              onClick={nextReview}
-              className="w-10 h-10 rounded-full border border-[rgba(20,125,159,0.25)] bg-white text-brand-navy grid place-items-center shadow-sm cursor-pointer hover:bg-brand-navy hover:text-brand-yellow hover:border-brand-navy active:scale-95 transition-all outline-none focus-visible:ring-2 focus-visible:ring-brand-blue"
-              aria-label={t('reviews.nextReview', 'الرأي التالي')}
-            >
-              <FontAwesomeIcon icon={NextIcon} className="w-4 h-4" />
-            </button>
-          </div>
-        )}
-
-        {/* Infinite Marquee Ticker Track (Desktop Only: .rm -> .rmt) */}
-        {total > 1 && (
-          <div
-            className="hidden min-[901px]:block overflow-hidden -mx-[6vw] mt-8 py-3.5 relative [mask-image:linear-gradient(90deg,transparent,#000_6%,#000_94%,transparent)] [-webkit-mask-image:linear-gradient(90deg,transparent,#000_6%,#000_94%,transparent)]"
-            dir="ltr"
-            role="group"
-            aria-label={t('reviews.tickerAria', 'شريط آراء الضيوف المتحرك')}
-          >
-            <div className="flex gap-4 w-max px-4 will-change-transform animate-rv-scroll hover:[animation-play-state:paused]">
-              {[...reviewsData, ...reviewsData].map((rev, idx) => {
-                const originalIndex = idx % total;
-                const isSelected = originalIndex === activeIndex;
+              {columns[0].items.map((item, itemIdx) => {
+                const isAriaHidden = itemIdx >= columns[0].halfCount;
+                const isDark = itemIdx % 3 === 1;
 
                 return (
-                  <div key={`${rev.id}-${idx}`} dir={isRtl ? 'rtl' : 'ltr'}>
-                    <ReviewCard
-                      review={rev}
-                      variant="marquee"
-                      isActive={isSelected}
-                      onClick={() => setActiveIndex(originalIndex)}
-                    />
-                  </div>
+                  <ReviewCard
+                    key={`c0-${item.review.id}-${itemIdx}`}
+                    review={item.review}
+                    variant="wall"
+                    isDark={isDark}
+                    gradientIndex={item.globalIndex}
+                    ariaHidden={isAriaHidden}
+                  />
+                );
+              })}
+            </div>
+
+            {/* Column 1: Reversed Upward Roll */}
+            <div
+              className="col flex flex-col gap-[18px] will-change-transform animate-rv-roll-reverse self-start"
+              style={{ '--roll-duration': '53s' }}
+            >
+              {columns[1].items.map((item, itemIdx) => {
+                const isAriaHidden = itemIdx >= columns[1].halfCount;
+                const isDark = itemIdx % 3 === 0;
+
+                return (
+                  <ReviewCard
+                    key={`c1-${item.review.id}-${itemIdx}`}
+                    review={item.review}
+                    variant="wall"
+                    isDark={isDark}
+                    gradientIndex={item.globalIndex}
+                    ariaHidden={isAriaHidden}
+                  />
+                );
+              })}
+            </div>
+
+            {/* Column 2: Standard Downward Roll (Visible on > 1280px) */}
+            <div
+              className="col hidden min-[1281px]:flex flex-col gap-[18px] will-change-transform animate-rv-roll self-start"
+              style={{ '--roll-duration': '60s' }}
+            >
+              {columns[2].items.map((item, itemIdx) => {
+                const isAriaHidden = itemIdx >= columns[2].halfCount;
+                const isDark = itemIdx % 3 === 2;
+
+                return (
+                  <ReviewCard
+                    key={`c2-${item.review.id}-${itemIdx}`}
+                    review={item.review}
+                    variant="wall"
+                    isDark={isDark}
+                    gradientIndex={item.globalIndex}
+                    ariaHidden={isAriaHidden}
+                  />
                 );
               })}
             </div>
           </div>
-        )}
+        </div>
 
-        {/* CTA: Write a Review on Google */}
-        <div className="flex justify-center mt-8 min-[901px]:mt-10">
+        {/* ─────────────────────────────────────────────────────────────
+            MOBILE VIEW (< 900px): Clean Horizontal Snap Carousel
+            ───────────────────────────────────────────────────────────── */}
+        <div
+          ref={mobileCarouselRef}
+          onScroll={handleMobileScroll}
+          className="flex min-[901px]:hidden gap-3.5 overflow-x-auto snap-x snap-mandatory -mx-[5vw] px-[5vw] pb-4 no-scrollbar"
+          role="list"
+          aria-label={t('reviews.guestReviewsWall', 'آراء العملاء')}
+        >
+          {reviewsData.map((rev, idx) => (
+            <ReviewCard
+              key={`m-${rev.id}`}
+              review={rev}
+              variant="mobile"
+              gradientIndex={idx}
+            />
+          ))}
+        </div>
+
+        {/* Mobile Slide Counter */}
+        <p
+          className="block min-[901px]:hidden text-center font-bold text-xs text-brand-navy/70 mt-1"
+          aria-live="polite"
+        >
+          {mobileActiveIdx + 1} / {total} &nbsp;·&nbsp; {t('reviews.swipeHint', 'اسحب لقراءة باقي الآراء')}
+        </p>
+
+        {/* Mobile CTA Button */}
+        <div className="flex min-[901px]:hidden justify-center mt-6">
           <Button
             as="a"
             href={GOOGLE_REVIEWS_URL}
             target="_blank"
-            rel="noopener"
-            variant="subtle"
+            rel="noopener noreferrer"
+            variant="primary"
             size="md"
-            icon={<FontAwesomeIcon icon={faGoogle} className="text-[#4285f4] text-lg" />}
-            className="shadow-sm font-bold border border-[rgba(20,125,159,0.25)]"
+            className="shadow-sm font-bold"
           >
-            {t('reviews.writeReview', 'اكتب تقييمك على Google')}
+            {t('reviews.writeReview', 'شوف تجارب ضيوفنا')}
           </Button>
         </div>
       </div>

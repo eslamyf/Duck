@@ -648,7 +648,13 @@
     "realBadge": "Real Experiences. Real Memories.",
     "heroTitle": "تجاربهم بتحكي أحلى مننا.",
     "heroSubtitle": "كل تجربة ليها ذكرى، وكل ذكرى ليها حكاية. اكتشف آراء الناس اللي عاشوا تجاربهم مع DUCK.",
-    "shareReview": "شاركنا تجربتك"
+    "shareReview": "شاركنا تجربتك",
+    "trustBadge": "رحلات مائية بإشراف محترفين",
+    "fromCountReviews": "من {{count}} آراء عملاء",
+    "ratingSummary": "ملخص التقييمات",
+    "guestReviewsWall": "آراء العملاء",
+    "swipeHint": "اسحب لقراءة باقي الآراء",
+    "outOfFive": "{{rating}} من 5"
   },
   "faq": {
     "title": "عندك سؤال؟ إحنا هنا نساعدك.",

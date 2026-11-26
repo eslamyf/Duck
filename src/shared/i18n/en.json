@@ -648,7 +648,13 @@
     "realBadge": "Real Experiences. Real Memories.",
     "heroTitle": "Their Experiences Say It Better.",
     "heroSubtitle": "Every outing holds a memory, and every memory tells a story. Read from guests who lived their adventures with DUCK.",
-    "shareReview": "Share Your Experience"
+    "shareReview": "Share Your Experience",
+    "trustBadge": "Professional Guided Water Tours",
+    "fromCountReviews": "From {{count}} guest reviews",
+    "ratingSummary": "Rating Summary",
+    "guestReviewsWall": "Customer Reviews",
+    "swipeHint": "Swipe to read more",
+    "outOfFive": "{{rating}} out of 5"
   },
   "faq": {
     "title": "Got a Question? We’re Here to Help.",

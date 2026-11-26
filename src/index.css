@@ -113,39 +113,35 @@ body {
 }
 
 /* ================= REVIEWS ANIMATIONS ================= */
-@keyframes rvScroll {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-
-  100% {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
-@keyframes rvStory {
-  from {
-    width: 0%;
-  }
-
+/* ================= REVIEWS INFINITE VERTICAL WALL ================= */
+@keyframes rvWallRoll {
   to {
-    width: 100%;
+    transform: translate3d(0, calc(-50% - 9px), 0);
   }
 }
 
-.animate-rv-scroll {
+.animate-rv-roll {
   will-change: transform;
-  animation: rvScroll 42s linear infinite;
+  animation: rvWallRoll var(--roll-duration, 48s) linear infinite;
 }
 
-.animate-rv-story {
-  animation: rvStory 5s linear forwards;
+.animate-rv-roll-reverse {
+  will-change: transform;
+  animation: rvWallRoll var(--roll-duration, 55s) linear infinite reverse;
+}
+
+.rv-wall:hover .animate-rv-roll,
+.rv-wall:hover .animate-rv-roll-reverse,
+.rv-wall:focus-within .animate-rv-roll,
+.rv-wall:focus-within .animate-rv-roll-reverse {
+  animation-play-state: paused;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-rv-scroll,
-  .animate-rv-story {
+  .animate-rv-roll,
+  .animate-rv-roll-reverse {
     animation: none !important;
+    transform: none !important;
   }
 }
 
