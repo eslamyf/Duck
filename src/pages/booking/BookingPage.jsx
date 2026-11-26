@@ -6,8 +6,9 @@ import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES } from '../../shared/config/routes.js';
 import { TRIPS } from '../../widgets/trips/tripsData.js';
 import { generateBookingRef } from '../../shared/config/constants.js';
-import { addBooking } from '../../entities/booking/api/bookingService.js';
+import { addBooking, getAllBookings } from '../../entities/booking/api/bookingService.js';
 import { getCurrentUser } from '../../entities/user/api/authService.js';
+import { getPendingBookingRaw } from '../../entities/notification/index.js';
 import {
   BookingStepper,
   StepTripSelect,
@@ -16,8 +17,39 @@ import {
   StepPaymentInvoice,
 } from '../../widgets/booking/index.js';
 
+function findRestoredBooking(refParam) {
+  if (!refParam) return null;
+  const record = getAllBookings().find((b) => b.reference === refParam) || null;
+  const rawPending = getPendingBookingRaw();
+  const pendingMatch = rawPending?.ref === refParam ? rawPending : null;
+  if (!record && !pendingMatch) return null;
+
+  return {
+    ...(pendingMatch || {}),
+    ...(record || {}),
+    totalAmount: record?.totalAmount ?? pendingMatch?.total ?? pendingMatch?.amount ?? 0,
+    amountToPay: record?.amountToPay ?? pendingMatch?.amount ?? pendingMatch?.total ?? 0,
+    remainingBalance: record?.remainingBalance ?? 0,
+    restoredFromRef: true,
+  };
+}
+
 export default function BookingPage() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const refParam = searchParams.get('ref');
+  const stepParam = parseInt(searchParams.get('step') || '0', 10);
+  const instanceKey = refParam ? `ref-${refParam}-${stepParam}` : 'new-booking';
+
+  return (
+    <BookingFlowContent
+      key={instanceKey}
+      searchParams={searchParams}
+      setSearchParams={setSearchParams}
+    />
+  );
+}
+
+function BookingFlowContent({ searchParams, setSearchParams }) {
   const navigate = useNavigate();
   const { t, lang } = useTranslation();
   const isArabic = lang === 'ar';
@@ -32,17 +64,29 @@ export default function BookingPage() {
         : 'all';
   const refParam = searchParams.get('ref');
   const stepParam = parseInt(searchParams.get('step') || '0', 10);
+  const restoredRecord = useMemo(() => findRestoredBooking(refParam), [refParam]);
 
-  // 1. Initial Trip match (by ?trip slug or single-trip ?activity like water-bike / sup)
+  // 1. Initial Trip match (by ?trip slug, restored booking ref, or single-trip ?activity)
   const initialTrip = useMemo(() => {
     if (tripSlug) {
       return TRIPS.find((item) => item.slug === tripSlug) || null;
+    }
+    if (restoredRecord?.tripKey) {
+      const byKey = TRIPS.find((item) => item.key === restoredRecord.tripKey);
+      if (byKey) return byKey;
+    }
+    if (restoredRecord?.tripTitle) {
+      const byTitle = TRIPS.find((item) =>
+        restoredRecord.tripTitle.includes(item.slug) ||
+        t(`trips.items.${item.key}.title`, item.slug) === restoredRecord.tripTitle
+      );
+      if (byTitle) return byTitle;
     }
     if (initialActivity === 'waterbike' || initialActivity === 'sup') {
       return TRIPS.find((item) => item.act === initialActivity) || null;
     }
     return null;
-  }, [tripSlug, initialActivity]);
+  }, [tripSlug, initialActivity, restoredRecord, t]);
 
   const [userSelectedTrip, setUserSelectedTrip] = useState(null);
   const selectedTrip = userSelectedTrip || initialTrip;
@@ -60,38 +104,42 @@ export default function BookingPage() {
     if (refParam) return refParam;
     return generateBookingRef();
   });
-  const savedBookingRef = useRef(false);
+  const savedBookingRef = useRef(Boolean(restoredRecord));
 
   // Today ISO
   const [todayIso] = useState(() => new Date().toISOString().split('T')[0]);
 
   // 4. Central Booking Form State
-  const [bookingData, setBookingData] = useState({
-    fullName: '',
-    phone: '',
-    date: new Date().toISOString().split('T')[0],
-    time: '10:00',
-    duration: 1,
+  const [bookingData, setBookingData] = useState(() => ({
+    fullName: restoredRecord?.fullName || '',
+    phone: restoredRecord?.phone || '',
+    email: restoredRecord?.email || '',
+    date: restoredRecord?.date || todayIso,
+    time: restoredRecord?.time || '10:00',
+    duration: restoredRecord?.duration || 1,
     equipment:
+      restoredRecord?.equipment ||
       initialTrip?.act ||
       (initialActivity !== 'all' ? initialActivity : 'kayak'),
-    adults: 1,
-    kids1to6: 0,
-    kids7to12: 0,
-    nationality: 'all_egyptian',
-    egyptianCount: 1,
-    foreignCount: 0,
+    adults: restoredRecord?.adults ?? 1,
+    kids1to6: restoredRecord?.kids1to6 ?? 0,
+    kids7to12: restoredRecord?.kids7to12 ?? 0,
+    nationality: restoredRecord?.nationality || 'all_egyptian',
+    egyptianCount: restoredRecord?.egyptianCount ?? 1,
+    foreignCount: restoredRecord?.foreignCount ?? 0,
     triedBefore: null,
     howHeard: null,
     appliedPromo: null,
-    paymentType: 'full',
+    paymentType: restoredRecord?.paymentType || 'full',
     customPayAmount: null,
-    subtotal: 0,
-    discount: 0,
-    totalAmount: 0,
-    amountToPay: 0,
-    remainingBalance: 0,
-  });
+    subtotal: restoredRecord?.subtotal ?? restoredRecord?.totalAmount ?? 0,
+    discount: restoredRecord?.discount ?? 0,
+    totalAmount: restoredRecord?.totalAmount ?? 0,
+    amountToPay: restoredRecord?.amountToPay ?? 0,
+    remainingBalance: restoredRecord?.remainingBalance ?? 0,
+    receiptSent: Boolean(restoredRecord?.receiptSent),
+    restoredFromRef: Boolean(restoredRecord?.restoredFromRef),
+  }));
 
   // Scroll to top on step transition
   const goToStep = (stepNumber) => {

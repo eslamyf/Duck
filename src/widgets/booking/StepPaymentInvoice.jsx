@@ -14,6 +14,10 @@ import {
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import { Button, Badge } from '../../shared/ui/index.js';
 import { CONTACT, buildWhatsAppUrl } from '../../shared/config/constants.js';
+import {
+  savePendingBooking,
+  markPendingReceiptSent,
+} from '../../entities/notification/index.js';
 import QRCodeSVG from './QRCodeSVG.jsx';
 import PrintableInvoice from './PrintableInvoice.jsx';
 
@@ -30,7 +34,7 @@ export default function StepPaymentInvoice({
   const isArabic = lang === 'ar';
   const [copiedRef, setCopiedRef] = useState(false);
   const [copiedIpa, setCopiedIpa] = useState(false);
-  const [receiptSent, setReceiptSent] = useState(false);
+  const [receiptSent, setReceiptSent] = useState(() => Boolean(bookingData.receiptSent));
 
   const formatPrice = (p) =>
     Number(p).toLocaleString(isArabic ? 'ar-EG' : 'en-US');
@@ -41,27 +45,22 @@ export default function StepPaymentInvoice({
 
   const amountToPay = bookingData.amountToPay || bookingData.totalAmount || 0;
 
-  // Persist pending booking to localStorage on mount so reminder popup knows
+  // Persist pending booking to localStorage on mount so reminder pill & bell stay synced
   useEffect(() => {
-    if (!bookingRef) return;
-    try {
-      const ticket = {
-        ref: bookingRef,
-        tripTitle,
-        amount: amountToPay,
-        total: bookingData.totalAmount,
-        date: bookingData.date,
-        time: bookingData.time,
-        phone: bookingData.phone,
-        fullName: bookingData.fullName,
-        status: 'pending_confirmation',
-        receiptSent: false,
-        createdAt: new Date().toISOString(),
-      };
-      localStorage.setItem('duck_pending_booking', JSON.stringify(ticket));
-    } catch {
-      // Fallback silently if storage blocked
-    }
+    if (!bookingRef || !amountToPay || bookingData.restoredFromRef) return;
+    savePendingBooking({
+      ref: bookingRef,
+      tripTitle,
+      amount: amountToPay,
+      total: bookingData.totalAmount,
+      date: bookingData.date,
+      time: bookingData.time,
+      phone: bookingData.phone,
+      fullName: bookingData.fullName,
+      status: 'pending_confirmation',
+      receiptSent: false,
+      createdAt: new Date().toISOString(),
+    });
   }, [bookingRef, tripTitle, amountToPay, bookingData]);
 
   // Copy helpers
@@ -104,17 +103,7 @@ export default function StepPaymentInvoice({
 
   const handleWhatsAppClick = () => {
     setReceiptSent(true);
-    try {
-      const stored = localStorage.getItem('duck_pending_booking');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        parsed.receiptSent = true;
-        parsed.status = 'receipt_sent';
-        localStorage.setItem('duck_pending_booking', JSON.stringify(parsed));
-      }
-    } catch {
-      // ignore
-    }
+    markPendingReceiptSent();
   };
 
   const handlePrint = () => {

@@ -1027,6 +1027,7 @@
     },
     "pendingPopup": {
       "title": "Reminder: Unconfirmed Booking",
+      "compactLabel": "Pending Ticket",
       "message": "You have a pending booking ({{ref}}) for {{trip}} awaiting transfer receipt confirmation.",
       "confirmWhatsAppBtn": "Confirm on WhatsApp Now",
       "returnToInvoiceBtn": "Return to Payment & Invoice",

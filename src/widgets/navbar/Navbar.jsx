@@ -10,6 +10,8 @@ import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
 import { getPortalPathForRole, ROLES } from '../../shared/config/rbac.js';
 
 import { getCurrentUser } from '../../entities/user/api/authService.js';
+import { AUTH_UPDATED_EVENT } from '../../entities/notification/index.js';
+import { NotificationBell } from '../notifications/index.js';
 
 import {
   faHouse,
@@ -38,9 +40,23 @@ export default function Navbar({ onBookClick }) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(SECTIONS.TOP);
   const [temp, setTemp] = useState('');
+  const [authTick, setAuthTick] = useState(0);
 
-  // Current Logged-in User (refreshed on navigation)
-  const currentUser = getCurrentUser();
+  useEffect(() => {
+    const syncAuth = () => setAuthTick((n) => n + 1);
+    window.addEventListener(AUTH_UPDATED_EVENT, syncAuth);
+    window.addEventListener('storage', syncAuth);
+    return () => {
+      window.removeEventListener(AUTH_UPDATED_EVENT, syncAuth);
+      window.removeEventListener('storage', syncAuth);
+    };
+  }, []);
+
+  // Current Logged-in User (refreshed on auth event or navigation)
+  const currentUser = (() => {
+    void authTick;
+    return getCurrentUser();
+  })();
 
   // Fetch weather data for Aswan
   useEffect(() => {
@@ -305,7 +321,10 @@ export default function Navbar({ onBookClick }) {
         </div>
 
         {/* Desktop Action Buttons */}
-        <div className="hidden min-[901px]:flex items-center gap-3">
+        <div className="hidden min-[901px]:flex items-center gap-2.5 xl:gap-3">
+          {/* Notifications Bell */}
+          <NotificationBell />
+
           {/* Login / Dashboard Button */}
           {currentUser ? (
             <Link
@@ -347,8 +366,10 @@ export default function Navbar({ onBookClick }) {
           </Button>
         </div>
 
-        {/* Mobile Hamburger Button */}
+        {/* Mobile Notification Bell & Hamburger Button */}
         <div className="flex items-center gap-2 min-[901px]:hidden">
+          <NotificationBell compact />
+
           <button
             type="button"
             onClick={() => setIsMobileOpen(!isMobileOpen)}

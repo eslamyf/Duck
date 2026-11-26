@@ -1,5 +1,6 @@
 import { ROLES } from '../model/roles.js';
 import { authenticateDemoAccount } from '../../../shared/config/demoAccounts.js';
+import { notifyAuthUpdated } from '../../notification/index.js';
 
 const USERS_KEY = 'duck_users';
 const CURRENT_USER_KEY = 'duck_current_user';
@@ -240,6 +241,7 @@ export async function loginUser({
             rememberMe ? CURRENT_USER_KEY : SESSION_USER_KEY,
             JSON.stringify(demoUser)
         );
+        notifyAuthUpdated();
         return demoUser;
     }
 
@@ -277,6 +279,8 @@ export async function loginUser({
         JSON.stringify(safeUser)
     );
 
+    notifyAuthUpdated();
+
     return safeUser;
 }
 
@@ -309,6 +313,7 @@ export function getCurrentUser() {
 export function logoutUser() {
     localStorage.removeItem(CURRENT_USER_KEY);
     sessionStorage.removeItem(SESSION_USER_KEY);
+    notifyAuthUpdated();
 }
 
 /**
@@ -385,6 +390,8 @@ export function updateCurrentUser(updates) {
             JSON.stringify(safeUser)
         );
     }
+
+    notifyAuthUpdated();
 
     return safeUser;
 }

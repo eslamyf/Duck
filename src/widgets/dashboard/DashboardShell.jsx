@@ -17,6 +17,7 @@ import {
   getCurrentUser,
   logoutUser,
 } from '../../entities/user/api/authService.js';
+import { NotificationBell } from '../notifications/index.js';
 
 /**
  * Unified Dashboard Shell aligned with Final_4.html (.pm / .pm-side / .pm-top / .pm-main).
@@ -225,6 +226,8 @@ export default function DashboardShell({
               </div>
 
               {headerActions}
+
+              <NotificationBell compact />
 
               <button
                 type="button"
