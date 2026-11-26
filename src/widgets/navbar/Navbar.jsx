@@ -31,7 +31,6 @@ import {
   faArrowLeft,
   faArrowRight,
   faGaugeHigh,
-  faUser,
 } from '@fortawesome/free-solid-svg-icons';
 
 export default function Navbar({ onBookClick }) {
@@ -202,6 +201,13 @@ export default function Navbar({ onBookClick }) {
   const isRtl = lang === 'ar';
 
   // Account Information
+  const userInitial = (
+    currentUser?.fullName ||
+    currentUser?.name ||
+    currentUser?.email ||
+    ''
+  ).trim().charAt(0).toUpperCase();
+
   const accountName =
     currentUser?.fullName ||
     currentUser?.name ||
@@ -258,20 +264,37 @@ export default function Navbar({ onBookClick }) {
           />
         </Link>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
           <NotificationBell compact tone="light" />
 
-          <Link
-            to={dashboardPath}
-            aria-label={currentUser ? t('nav.dashboard') : t('common.login')}
-            title={accountName}
-            className={`relative inline-flex h-9 w-9 items-center justify-center rounded-full border transition-all ${currentUser
-              ? 'border-brand-navy bg-brand-navy text-brand-yellow shadow-xs'
-              : 'border-brand-blue/20 bg-surface-mist text-brand-navy hover:border-brand-blue hover:bg-brand-navy hover:text-brand-yellow'
-              }`}
-          >
-            <FontAwesomeIcon icon={faUser} className="text-sm" aria-hidden="true" />
-          </Link>
+          {currentUser ? (
+            <Link
+              to={dashboardPath}
+              aria-label={t('nav.dashboard')}
+              title={accountName}
+              className="relative inline-flex h-9 w-9 items-center justify-center rounded-full border-2 border-brand-yellow/90 bg-brand-navy text-brand-yellow shadow-xs transition-transform hover:scale-105 active:scale-95 overflow-hidden font-heading font-black text-sm select-none"
+            >
+              {currentUser.avatarUrl ? (
+                <img
+                  src={currentUser.avatarUrl}
+                  alt={accountName}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <span>{userInitial || (currentUser.role === 'admin' ? 'A' : 'D')}</span>
+              )}
+              <span className="absolute bottom-0 end-0 h-2 w-2 rounded-full bg-emerald-500 ring-1.5 ring-white" />
+            </Link>
+          ) : (
+            <Link
+              to={ROUTES.LOGIN}
+              aria-label={t('common.login')}
+              className="inline-flex h-8 items-center gap-1.5 rounded-full border border-brand-navy/20 bg-surface-mist px-2.5 text-xs font-bold text-brand-navy transition hover:bg-brand-navy hover:text-brand-yellow"
+            >
+              <FontAwesomeIcon icon={faArrowRightToBracket} className="text-brand-blue text-xs" />
+              <span>{t('common.login')}</span>
+            </Link>
+          )}
         </div>
       </header>
 

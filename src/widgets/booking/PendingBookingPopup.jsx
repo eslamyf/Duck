@@ -107,13 +107,13 @@ export default function PendingBookingPopup() {
     <div
       ref={containerRef}
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="fixed bottom-[154px] md:bottom-5 start-4 md:start-5 z-[90] max-w-[calc(100vw-32px)] md:max-w-[420px] font-body transition-all duration-300"
+      className="fixed bottom-[74px] md:bottom-5 start-3 md:start-5 z-[90] max-w-[calc(100vw-24px)] md:max-w-[420px] font-body transition-all duration-300"
       role="status"
       aria-label={t('booking.pendingPopup.title')}
     >
       {/* 1. Expandable Quick Summary Card (التفاصيل المختصرة للحجز غير المؤكد) */}
       {isExpanded && (
-        <div className="mb-2.5 w-full rounded-2xl border-2 border-brand-yellow/80 bg-white p-4 text-brand-navy shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-bottom-2 duration-200">
+        <div className="mb-2 w-full max-h-[75vh] overflow-y-auto rounded-2xl border-2 border-brand-yellow/80 bg-white p-4 text-brand-navy shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-bottom-2 duration-200">
           {/* Card Top: Unconfirmed Status Header */}
           <div className="flex items-center justify-between pb-3 border-b border-brand-navy/10">
             <div className="flex items-center gap-2">
@@ -227,38 +227,38 @@ export default function PendingBookingPopup() {
         </div>
       )}
 
-      {/* 2. Compact Bottom Floating Pill (الشريط الدائري المعتمد) */}
-      <div className="inline-flex items-center gap-2 rounded-full border-2 border-brand-yellow bg-surface-white/95 px-2.5 py-1.5 text-brand-navy shadow-soft backdrop-blur-md">
+      {/* 2. Compact Bottom Floating Pill (شريط مصغر وراقي بدون زحمة) */}
+      <div className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border-2 border-brand-yellow bg-surface-white/95 px-2.5 py-1 text-brand-navy shadow-soft backdrop-blur-md">
         {/* Clickable ticket summary toggles the quick details card */}
         <button
           type="button"
           onClick={() => setIsExpanded((prev) => !prev)}
           title={isExpanded ? t('booking.pendingPopup.hideDetails') : t('booking.pendingPopup.showDetails')}
-          className="group flex min-w-0 items-center gap-2 text-start cursor-pointer focus-visible:outline-none"
+          className="group flex min-w-0 items-center gap-1.5 sm:gap-2 text-start cursor-pointer focus-visible:outline-none"
         >
-          <span className="relative flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-yellow text-xs text-brand-navy shadow-xs transition-transform group-hover:scale-105">
+          <span className="relative flex h-6 w-6 sm:h-7 sm:w-7 shrink-0 items-center justify-center rounded-full bg-brand-yellow text-xs text-brand-navy shadow-xs transition-transform group-hover:scale-105">
             <FontAwesomeIcon icon={faTicket} />
             <span className="absolute -top-0.5 -end-0.5 h-2 w-2 rounded-full bg-amber-500 ring-2 ring-white animate-pulse" />
           </span>
 
-          <span className="min-w-0 flex flex-col items-start">
-            <span className="flex items-center gap-1.5 font-mono text-[11px] font-extrabold leading-tight text-brand-navy">
+          <span className="min-w-0 flex flex-col items-start leading-tight">
+            <span className="flex items-center gap-1.5 font-mono text-[11px] font-extrabold text-brand-navy whitespace-nowrap">
               <bdi dir="ltr">{pendingBooking.ref}</bdi>
-              <span className="rounded-full bg-amber-100 px-1.5 py-0.2 text-[9px] font-bold text-amber-800">
+              <span className="whitespace-nowrap shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-[9.5px] font-extrabold text-amber-800 border border-amber-200/50">
                 {t('booking.pendingPopup.statusPending')}
               </span>
             </span>
-            <span className="block max-w-[130px] sm:max-w-[180px] truncate text-[10.5px] font-bold leading-tight text-brand-blue">
+            <span className="hidden sm:block max-w-[160px] truncate text-[10px] font-bold text-brand-blue">
               {pendingBooking.tripTitle || t('booking.pendingPopup.compactLabel')}
             </span>
           </span>
 
-          <span className="ms-1 flex h-5 w-5 items-center justify-center rounded-full bg-surface-mist text-[10px] text-brand-navy/60 group-hover:bg-brand-navy group-hover:text-white transition-colors">
+          <span className="ms-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-surface-mist text-[9px] text-brand-navy/60 group-hover:bg-brand-navy group-hover:text-white transition-colors">
             <FontAwesomeIcon icon={isExpanded ? faChevronDown : faChevronUp} />
           </span>
         </button>
 
-        {/* WhatsApp & Dismiss Quick Actions */}
+        {/* WhatsApp & Dismiss Quick Actions (WhatsApp shown on desktop, omitted on mobile to prevent duplicate button) */}
         <div className="flex shrink-0 items-center gap-1 border-s border-brand-navy/10 ps-1.5">
           <a
             href={waUrl}
@@ -267,7 +267,7 @@ export default function PendingBookingPopup() {
             onClick={markPendingReceiptSent}
             title={t('booking.pendingPopup.confirmWhatsAppBtn')}
             aria-label={t('booking.pendingPopup.confirmWhatsAppBtn')}
-            className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-whatsapp text-xs text-white shadow-xs transition-transform hover:scale-105"
+            className="hidden sm:flex h-6 w-6 items-center justify-center rounded-full bg-brand-whatsapp text-[11px] text-white shadow-xs transition-transform hover:scale-105"
           >
             <FontAwesomeIcon icon={faWhatsapp} />
           </a>
