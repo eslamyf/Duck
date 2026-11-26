@@ -83,6 +83,9 @@ const OperationsDashboardPage = lazy(
 const AgentDashboardPage = lazy(
   () => import('../pages/dashboard/AgentDashboardPage.jsx')
 );
+const ContentDashboardPage = lazy(
+  () => import('../pages/dashboard/ContentDashboardPage.jsx')
+);
 const NotFoundPage = lazy(
   () => import('../pages/not-found/NotFoundPage.jsx')
 );
@@ -297,12 +300,14 @@ function TitleManager() {
       document.title = `Customer Dashboard | ${t('common.brandName')}`;
     } else if (pathname.startsWith(ROUTES.ADMIN)) {
       document.title = `Admin Portal | ${t('common.brandName')}`;
-    } else if (pathname.startsWith(ROUTES.PARTNER)) {
+    } else if (pathname.startsWith(ROUTES.PARTNER) || pathname.startsWith('/portal/b2b')) {
       document.title = `Partner Portal | ${t('common.brandName')}`;
     } else if (pathname.startsWith(ROUTES.OPERATIONS)) {
       document.title = `Operations Portal | ${t('common.brandName')}`;
-    } else if (pathname.startsWith(ROUTES.TOUR_GUIDE)) {
+    } else if (pathname.startsWith(ROUTES.TOUR_GUIDE) || pathname.startsWith('/portal/guide')) {
       document.title = `Tour Guide Portal | ${t('common.brandName')}`;
+    } else if (pathname.startsWith('/portal/content')) {
+      document.title = `Content & Media Portal | ${t('common.brandName')}`;
     } else if (pathname === ROUTES.ACTIVITIES || pathname.startsWith('/activities/')) {
       document.title = `${t('activitiesPage.metaTitle')} | ${t('common.brandName')}`;
     } else if (pathname === ROUTES.PRIVACY) {
@@ -709,6 +714,40 @@ export default function App() {
               path={ROUTES.TOUR_GUIDE}
               element={
                 <ProtectedRoute allowedRoles={[ROLES.TOUR_GUIDE]}>
+                  <Suspense fallback={<AboutFallback />}>
+                    <AgentDashboardPage />
+                  </Suspense>
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Content Manager Portal */}
+            <Route
+              path="/portal/content"
+              element={
+                <ProtectedRoute allowedRoles={[ROLES.CONTENT_MANAGER, ROLES.ADMIN]}>
+                  <Suspense fallback={<AboutFallback />}>
+                    <ContentDashboardPage />
+                  </Suspense>
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Portal Aliases (/portal/b2b -> Partner, /portal/guide -> Tour Guide) */}
+            <Route
+              path="/portal/b2b"
+              element={
+                <ProtectedRoute allowedRoles={[ROLES.PARTNER, ROLES.ADMIN]}>
+                  <Suspense fallback={<AboutFallback />}>
+                    <PartnerDashboardPage />
+                  </Suspense>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/portal/guide"
+              element={
+                <ProtectedRoute allowedRoles={[ROLES.TOUR_GUIDE, ROLES.ADMIN]}>
                   <Suspense fallback={<AboutFallback />}>
                     <AgentDashboardPage />
                   </Suspense>

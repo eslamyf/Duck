@@ -25,12 +25,15 @@ export const ROUTES = Object.freeze({
   CREATE_ACCOUNT: '/create-account',
   AUTH: '/auth',
 
-  // 5-Role Dashboards (RBAC Protected)
+  // 6-Role Dashboards (RBAC Protected)
   CUSTOMER_DASHBOARD: '/dashboard',
   ADMIN: '/portal/admin',
   PARTNER: '/portal/partner',
+  PARTNER_B2B: '/portal/b2b',
   OPERATIONS: '/portal/ops',
   TOUR_GUIDE: '/portal/agent',
+  TOUR_GUIDE_PORTAL: '/portal/guide',
+  CONTENT_MANAGER: '/portal/content',
 });
 
 export const SECTIONS = Object.freeze({

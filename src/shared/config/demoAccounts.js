@@ -2,7 +2,7 @@ import { ROLES } from '../../entities/user/model/roles.js';
 import { ROUTES } from './routes.js';
 
 /**
- * Central 5-Role RBAC Demo Accounts Registry (In-Memory Auth Mock).
+ * Central 6-Role RBAC Demo Accounts Registry (In-Memory Auth Mock).
  * Passwords are NEVER stored in localStorage, sessionStorage, or logged.
  */
 export const DEMO_ACCOUNTS = Object.freeze([
@@ -35,21 +35,21 @@ export const DEMO_ACCOUNTS = Object.freeze([
   {
     id: 'demo-partner-01',
     role: ROLES.PARTNER,
-    labelAr: 'مقدم خدمة',
-    labelEn: 'Partner',
+    labelAr: 'مقدم خدمة / شريك',
+    labelEn: 'Partner / Provider',
     fullName: 'كريم النوبي',
     fullNameEn: 'Karim El-Noby',
     email: 'partner@duck.demo',
     password: ['Partner', '@2026'].join(''),
     phone: '+201122334455',
     businessName: 'Aswan Nile Kayaks',
-    portalPath: ROUTES.PARTNER,
+    portalPath: ROUTES.PARTNER_B2B || ROUTES.PARTNER,
   },
   {
     id: 'demo-ops-01',
     role: ROLES.OPERATIONS,
-    labelAr: 'فريق العمليات',
-    labelEn: 'Operations',
+    labelAr: 'فريق العمليات الميدانية',
+    labelEn: 'Operations Team',
     fullName: 'عمر طارق',
     fullNameEn: 'Omar Tarek',
     email: 'ops@duck.demo',
@@ -59,17 +59,31 @@ export const DEMO_ACCOUNTS = Object.freeze([
     portalPath: ROUTES.OPERATIONS,
   },
   {
-    id: 'demo-agent-01',
+    id: 'demo-guide-01',
     role: ROLES.TOUR_GUIDE,
-    labelAr: 'مرشد / وكيل',
+    labelAr: 'مرشد سياحي / وكيل',
     labelEn: 'Tour Guide / Agent',
     fullName: 'سارة محمود',
     fullNameEn: 'Sara Mahmoud',
-    email: 'agent@duck.demo',
-    password: ['Agent', '@2026'].join(''),
+    email: 'guide@duck.demo',
+    aliases: ['agent@duck.demo'],
+    password: ['Guide', '@2026'].join(''),
     phone: '+201098765432',
     businessName: 'Nile Discovery Tours',
-    portalPath: ROUTES.TOUR_GUIDE,
+    portalPath: ROUTES.TOUR_GUIDE_PORTAL || ROUTES.TOUR_GUIDE,
+  },
+  {
+    id: 'demo-content-01',
+    role: ROLES.CONTENT_MANAGER,
+    labelAr: 'مدير المحتوى',
+    labelEn: 'Content Manager',
+    fullName: 'منى إبراهيم',
+    fullNameEn: 'Mona Ibrahim',
+    email: 'content@duck.demo',
+    password: ['Content', '@2026'].join(''),
+    phone: '+201011223344',
+    businessName: 'DUCK Media & Content',
+    portalPath: ROUTES.CONTENT_MANAGER,
   },
 ]);
 
@@ -81,10 +95,26 @@ export function toSafeDemoUser(account) {
 }
 
 export function authenticateDemoAccount(email, password) {
-  const normalized = String(email || '').trim().toLowerCase();
-  const match = DEMO_ACCOUNTS.find(
-    (acc) => acc.email.toLowerCase() === normalized && acc.password === password
-  );
+  const normalizedEmail = String(email || '').trim().toLowerCase();
+  const rawPassword = String(password || '').trim();
+  const lowerPassword = rawPassword.toLowerCase();
+
+  const match = DEMO_ACCOUNTS.find((acc) => {
+    const accEmail = acc.email.toLowerCase();
+    const isEmailMatch =
+      accEmail === normalizedEmail ||
+      (Array.isArray(acc.aliases) && acc.aliases.includes(normalizedEmail));
+
+    if (!isEmailMatch) return false;
+
+    // Support both exact password and case-insensitive match for testing ease
+    return (
+      acc.password === rawPassword ||
+      acc.password.toLowerCase() === lowerPassword ||
+      (acc.email === 'guide@duck.demo' && rawPassword === 'Agent@2026')
+    );
+  });
+
   return match ? toSafeDemoUser(match) : null;
 }
 

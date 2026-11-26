@@ -13,9 +13,12 @@ import {
 import duckLogo from '../../shared/assets/icons/Artboard_8-removebg-preview.png';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES } from '../../shared/config/routes.js';
+import { DEMO_ACCOUNTS } from '../../shared/config/demoAccounts.js';
+import { getPortalPathForRole } from '../../shared/config/rbac.js';
 import {
   getCurrentUser,
   logoutUser,
+  loginUser,
 } from '../../entities/user/api/authService.js';
 import { NotificationBell } from '../notifications/index.js';
 
@@ -109,6 +112,40 @@ export default function DashboardShell({
             <small className="mt-0.5 block truncate text-xs text-white/75">
               {currentUser?.email || portalTitle}
             </small>
+
+            {/* In-Dashboard Demo Role Switcher */}
+            <div className="mt-2.5 pt-2 border-t border-white/10">
+              <label
+                htmlFor="sidebarRoleSwitcher"
+                className="block text-[10px] font-bold uppercase tracking-wider text-white/50 mb-1"
+              >
+                {isArabic ? 'مبدّل الأدوار التجريبي:' : 'Switch Demo Role:'}
+              </label>
+              <select
+                id="sidebarRoleSwitcher"
+                value={currentUser?.role || ''}
+                onChange={async (e) => {
+                  const targetRole = e.target.value;
+                  const acc = DEMO_ACCOUNTS.find((a) => a.role === targetRole);
+                  if (acc) {
+                    await loginUser({
+                      email: acc.email,
+                      password: acc.password,
+                      rememberMe: true,
+                    });
+                    setSidebarOpen(false);
+                    navigate(getPortalPathForRole(acc.role), { replace: true });
+                  }
+                }}
+                className="w-full rounded-lg border border-white/20 bg-brand-navy text-xs font-bold text-brand-yellow px-2 py-1.5 outline-none cursor-pointer focus:border-brand-yellow"
+              >
+                {DEMO_ACCOUNTS.map((a) => (
+                  <option key={a.id} value={a.role} className="bg-brand-navy text-white">
+                    {isArabic ? a.labelAr : a.labelEn} ({a.role})
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {/* .pm-nav */}

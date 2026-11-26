@@ -8,6 +8,7 @@ import {
   faCircleCheck,
   faFlagCheckered,
   faEye,
+  faPlus,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -19,9 +20,11 @@ import {
 } from '../../widgets/dashboard/index.js';
 import { useBookingsSync } from '../../shared/hooks/index.js';
 import { useTranslation } from '../../shared/i18n/index.js';
+import { TRIPS } from '../../widgets/trips/tripsData.js';
 import {
   updateBookingStatus,
   getGlobalBookingStats,
+  addBooking,
 } from '../../entities/booking/api/bookingService.js';
 
 const OPS_STATUS_OPTIONS = [
@@ -37,7 +40,7 @@ export default function OperationsDashboardPage() {
   const { lang } = useTranslation();
   const isArabic = lang === 'ar';
   const [searchParams, setSearchParams] = useSearchParams();
-  const VALID_TABS = ['overview', 'departures'];
+  const VALID_TABS = ['overview', 'departures', 'dispatch'];
   const urlTab = searchParams.get('tab');
   const [localTab, setLocalTab] = useState('overview');
   const activeTab = VALID_TABS.includes(urlTab) ? urlTab : localTab;
@@ -48,8 +51,62 @@ export default function OperationsDashboardPage() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedBooking, setSelectedBooking] = useState(null);
+  const [dispatchSuccess, setDispatchSuccess] = useState('');
+
+  const [dispatchForm, setDispatchForm] = useState({
+    fullName: '',
+    phone: '',
+    tripKey: TRIPS[0]?.key || 'botanicalGarden',
+    time: '10:00',
+    guests: 2,
+    notes: '',
+  });
 
   const { bookings } = useBookingsSync();
+
+  const handleCreateDispatch = (e) => {
+    e.preventDefault();
+    if (!dispatchForm.fullName.trim()) return;
+
+    const trip = TRIPS.find((t) => t.key === dispatchForm.tripKey) || TRIPS[0];
+    const totalAmount = (trip?.priceEg || 350) * Number(dispatchForm.guests || 1);
+
+    addBooking({
+      fullName: dispatchForm.fullName.trim(),
+      phone: dispatchForm.phone.trim(),
+      email: 'ops@duck.demo',
+      tripKey: trip.key,
+      tripTitle: trip.titleAr || trip.key,
+      destKey: trip.destKey,
+      equipment: trip.act,
+      date: new Date().toISOString().split('T')[0],
+      time: dispatchForm.time,
+      guests: Number(dispatchForm.guests) || 1,
+      totalAmount,
+      currency: 'EGP',
+      status: 'confirmed',
+      channel: 'Field Operations',
+      source: 'Ops Portal',
+    });
+
+    setDispatchSuccess(
+      isArabic
+        ? 'تم تسجيل وتأكيد انطلاق الرحلة الميدانية بنجاح!'
+        : 'Field departure dispatched and confirmed successfully!'
+    );
+    setDispatchForm({
+      fullName: '',
+      phone: '',
+      tripKey: TRIPS[0]?.key || 'botanicalGarden',
+      time: '10:00',
+      guests: 2,
+      notes: '',
+    });
+    setTimeout(() => {
+      setDispatchSuccess('');
+      setActiveTab('departures');
+    }, 1500);
+  };
 
   const stats = useMemo(() => {
     void bookings;
@@ -74,6 +131,7 @@ export default function OperationsDashboardPage() {
   const navItems = [
     { key: 'overview', label: isArabic ? 'نظرة عامة' : 'Overview', icon: faGaugeHigh },
     { key: 'departures', label: isArabic ? 'جدول التشغيل الميداني' : 'Field Departures', icon: faClipboardCheck },
+    { key: 'dispatch', label: isArabic ? 'تسجيل انطلاق فوري' : 'Instant Field Dispatch', icon: faPlus },
   ];
 
   const opsColumns = [
@@ -203,6 +261,121 @@ export default function OperationsDashboardPage() {
           activeFilter={statusFilter}
           onFilterChange={setStatusFilter}
         />
+      )}
+
+      {activeTab === 'dispatch' && (
+        <div className="space-y-4 max-w-2xl">
+          <div className="rounded-[20px] border border-brand-blue/16 bg-surface-white p-6 shadow-card space-y-4">
+            <h2 className="font-heading text-lg font-extrabold text-brand-navy">
+              {isArabic ? 'تسجيل وتأكيد انطلاق رحلة ميدانية' : 'Dispatch & Confirm Field Departure'}
+            </h2>
+            <p className="text-xs text-brand-navy/60">
+              {isArabic
+                ? 'تسجيل فوري للمجموعات والزائرين عند نقطة الإنزال وتحديث حالة المقاعد فورياً'
+                : 'Walk-in or direct field guest registration with live slot synchronization'}
+            </p>
+
+            {dispatchSuccess && (
+              <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-3 text-xs font-bold text-emerald-800 flex items-center gap-2">
+                <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-600" />
+                <span>{dispatchSuccess}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleCreateDispatch} className="space-y-3 pt-2">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div>
+                  <label className="block text-xs font-bold text-brand-navy mb-1">
+                    {isArabic ? 'اسم الضيف / العميل' : 'Guest Name'}
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={dispatchForm.fullName}
+                    onChange={(e) =>
+                      setDispatchForm((p) => ({ ...p, fullName: e.target.value }))
+                    }
+                    placeholder={isArabic ? 'مثال: محمد علي' : 'e.g. John Doe'}
+                    className="w-full rounded-xl border border-brand-blue/20 bg-surface-mist px-3.5 py-2 text-xs font-bold text-brand-navy outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-brand-navy mb-1">
+                    {isArabic ? 'رقم الهاتف' : 'Phone Number'}
+                  </label>
+                  <input
+                    type="tel"
+                    value={dispatchForm.phone}
+                    onChange={(e) =>
+                      setDispatchForm((p) => ({ ...p, phone: e.target.value }))
+                    }
+                    placeholder="+201..."
+                    dir="ltr"
+                    className="w-full rounded-xl border border-brand-blue/20 bg-surface-mist px-3.5 py-2 text-xs font-bold text-brand-navy outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                <div>
+                  <label className="block text-xs font-bold text-brand-navy mb-1">
+                    {isArabic ? 'التجربة الميدانية' : 'Experience'}
+                  </label>
+                  <select
+                    value={dispatchForm.tripKey}
+                    onChange={(e) =>
+                      setDispatchForm((p) => ({ ...p, tripKey: e.target.value }))
+                    }
+                    className="w-full rounded-xl border border-brand-blue/20 bg-surface-mist px-3 py-2 text-xs font-bold text-brand-navy outline-none cursor-pointer"
+                  >
+                    {TRIPS.map((tr) => (
+                      <option key={tr.key} value={tr.key}>
+                        {tr.titleAr || tr.key}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-brand-navy mb-1">
+                    {isArabic ? 'وقت الانطلاق' : 'Time'}
+                  </label>
+                  <input
+                    type="time"
+                    value={dispatchForm.time}
+                    onChange={(e) =>
+                      setDispatchForm((p) => ({ ...p, time: e.target.value }))
+                    }
+                    className="w-full rounded-xl border border-brand-blue/20 bg-surface-mist px-3 py-2 text-xs font-bold text-brand-navy outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-brand-navy mb-1">
+                    {isArabic ? 'عدد الأفراد' : 'Guests Count'}
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={20}
+                    value={dispatchForm.guests}
+                    onChange={(e) =>
+                      setDispatchForm((p) => ({ ...p, guests: e.target.value }))
+                    }
+                    className="w-full rounded-xl border border-brand-blue/20 bg-surface-mist px-3 py-2 text-xs font-bold text-brand-navy outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-2 flex justify-end">
+                <button
+                  type="submit"
+                  className="rounded-xl bg-brand-navy px-5 py-2.5 text-xs font-black text-brand-yellow hover:bg-brand-blue hover:text-white transition shadow-sm cursor-pointer"
+                >
+                  {isArabic ? 'تأكيد الانطلاق الفوري' : 'Confirm Instant Dispatch'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
 
       <BookingDetailsModal

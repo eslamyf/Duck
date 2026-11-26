@@ -7,6 +7,7 @@ export const DASHBOARD_ROLES = Object.freeze([
   ROLES.PARTNER,
   ROLES.OPERATIONS,
   ROLES.TOUR_GUIDE,
+  ROLES.CONTENT_MANAGER,
 ]);
 
 export const ROLE_PORTAL_MAP = Object.freeze({
@@ -15,6 +16,7 @@ export const ROLE_PORTAL_MAP = Object.freeze({
   [ROLES.PARTNER]: ROUTES.PARTNER,
   [ROLES.OPERATIONS]: ROUTES.OPERATIONS,
   [ROLES.TOUR_GUIDE]: ROUTES.TOUR_GUIDE,
+  [ROLES.CONTENT_MANAGER]: ROUTES.CONTENT_MANAGER,
 });
 
 export function getPortalPathForRole(role) {

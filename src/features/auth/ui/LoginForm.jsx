@@ -12,6 +12,7 @@ import { faGoogle, faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import { useTranslation } from '../../../shared/i18n/index.js';
 import { ROUTES } from '../../../shared/config/routes.js';
 import { getPortalPathForRole } from '../../../shared/config/rbac.js';
+import { DEMO_ACCOUNTS } from '../../../shared/config/demoAccounts.js';
 import { Input, Button, Checkbox } from '../../../shared/ui/index.js';
 import { isValidEmail } from '../../../shared/utils/validators.js';
 import AuthRoleSelector from './AuthRoleSelector.jsx';
@@ -35,6 +36,33 @@ export default function LoginForm() {
   });
 
   const [errors, setErrors] = useState({});
+
+  const handleQuickDemoLogin = async (acc) => {
+    setFormData({
+      email: acc.email,
+      password: acc.password,
+    });
+    setErrors({});
+    setIsSubmitting(true);
+
+    try {
+      const authenticatedUser = await loginUser({
+        email: acc.email,
+        password: acc.password,
+        rememberMe: true,
+      });
+
+      setSuccess(true);
+      navigate(getPortalPathForRole(authenticatedUser.role), { replace: true });
+    } catch (error) {
+      setErrors({
+        submit: error?.message || 'Login failed',
+      });
+      setSuccess(false);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleRoleChange = (newRole) => {
     setRole(newRole);
@@ -328,6 +356,36 @@ export default function LoginForm() {
             {t('auth.common.continueWithGoogle')}
           </span>
         </button>
+
+        {/* Quick 1-Click Demo Logins for All 6 Roles */}
+        <div className="mt-3.5 p-3 rounded-2xl bg-surface-mist border border-brand-blue/20">
+          <div className="flex items-center justify-between gap-2 mb-2">
+            <span className="text-[11px] font-black tracking-wide text-brand-navy flex items-center gap-1.5">
+              <span className="inline-block w-2 h-2 rounded-full bg-brand-yellow animate-pulse"></span>
+              <span>{t('common.languageSwitch') === 'English' ? 'الدخول السريع التجريبي (6 أدوار)' : '1-Click Demo Login (6 Roles)'}</span>
+            </span>
+            <span className="text-[10px] text-brand-navy/50 font-bold">In-Memory Mock</span>
+          </div>
+
+          <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
+            {DEMO_ACCOUNTS.map((acc) => (
+              <button
+                key={acc.id}
+                type="button"
+                onClick={() => handleQuickDemoLogin(acc)}
+                className="flex flex-col items-center justify-center p-1.5 rounded-xl border border-brand-navy/12 bg-surface-white hover:bg-brand-navy hover:text-brand-yellow text-brand-navy transition shadow-xs cursor-pointer group text-center"
+                title={`${acc.email} (${acc.password})`}
+              >
+                <span className="text-[11px] font-black leading-tight group-hover:text-brand-yellow truncate w-full">
+                  {acc.role}
+                </span>
+                <span className="text-[9px] text-brand-navy/50 group-hover:text-white/70 truncate w-full font-mono mt-0.5">
+                  {acc.email.split('@')[0]}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
 
         <div className="mt-3.5 p-3 rounded-xl bg-surface-sand border border-brand-navy/10 text-center">
           <p className="text-xs font-bold text-brand-navy/80 mb-1.5">
