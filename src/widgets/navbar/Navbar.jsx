@@ -310,10 +310,10 @@ export default function Navbar({ onBookClick }) {
                 <Link
                   key={link.to}
                   to={link.to}
-                  className={`relative whitespace-nowrap px-1 min-[1360px]:px-1.5 min-[1420px]:px-2 py-2 text-xs min-[1420px]:text-[13px] font-semibold transition-colors duration-200 ${
+                  className={`relative whitespace-nowrap px-1 min-[1360px]:px-1.5 min-[1420px]:px-2 py-2 text-xs min-[1420px]:text-[13px] font-bold transition-colors duration-200 ${
                     isActive
-                      ? 'text-brand-blue font-bold after:content-[""] after:absolute after:bottom-0 after:inset-x-1 after:h-0.5 after:bg-brand-yellow'
-                      : 'text-brand-navy/78 hover:text-brand-blue'
+                      ? 'text-brand-blue font-extrabold after:content-[""] after:absolute after:bottom-0 after:inset-x-1 after:h-[2.5px] after:rounded-full after:bg-brand-blue'
+                      : 'text-brand-navy hover:text-brand-blue'
                   }`}
                 >
                   {link.label}

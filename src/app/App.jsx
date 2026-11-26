@@ -40,9 +40,9 @@ import { PendingBookingPopup } from '../widgets/booking/index.js';
 const MapSection = lazy(() => import('../widgets/map/index.js'));
 const ReviewsSection = lazy(() => import('../widgets/reviews/index.js'));
 const FAQSection = lazy(() => import('../widgets/faq/index.js'));
-const GroupsPage = lazy(() => import('../widgets/groups-page/index.js'));
-const AboutPage = lazy(() => import('../pages/about/index.js'));
-const TripDetailsPage = lazy(() => import('../pages/trip-details/index.js'));
+const GroupsPage = lazy(() => import('../widgets/groups-page/GroupsPage.jsx'));
+const AboutPage = lazy(() => import('../pages/about/AboutPage.jsx'));
+const TripDetailsPage = lazy(() => import('../pages/trip-details/TripDetailsPage.jsx'));
 
 const PublicActivitiesPage = lazy(
   () => import('../pages/activities/ActivitiesPage.jsx')
@@ -613,22 +613,6 @@ export default function App() {
             <Route
               path="/experiences"
               element={<Navigate to={ROUTES.ACTIVITIES} replace />}
-            />
-            <Route
-              path="/about/"
-              element={<Navigate to={ROUTES.ABOUT} replace />}
-            />
-            <Route
-              path="/groups/"
-              element={<Navigate to={ROUTES.GROUPS} replace />}
-            />
-            <Route
-              path="/activities/"
-              element={<Navigate to={ROUTES.ACTIVITIES} replace />}
-            />
-            <Route
-              path="/book/"
-              element={<Navigate to={ROUTES.BOOKING} replace />}
             />
 
             {/* Public Authentication Routes */}
