@@ -38,7 +38,6 @@ export default function Navbar({ onBookClick }) {
   const { lang, setLanguage, t } = useTranslation();
   const location = useLocation();
 
-  const [currency, setCurrency] = useState('EGP');
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(SECTIONS.TOP);
   const [temp, setTemp] = useState('');
@@ -273,29 +272,6 @@ export default function Navbar({ onBookClick }) {
           >
             {t('common.languageSwitch')}
           </Button>
-
-          {/* Currency Group */}
-          <div
-            className="inline-flex items-center gap-1"
-            role="group"
-            aria-label="Currency"
-          >
-            {['EGP', 'USD', 'EUR'].map((cur) => (
-              <Button
-                key={cur}
-                type="button"
-                variant={currency === cur ? 'chipActive' : 'chip'}
-                size="xs"
-                onClick={() => setCurrency(cur)}
-              >
-                {cur === 'EGP'
-                  ? t('common.currencyEGP')
-                  : cur === 'USD'
-                    ? t('common.currencyUSD')
-                    : t('common.currencyEUR')}
-              </Button>
-            ))}
-          </div>
         </div>
 
         {/* Weather Indicator */}
@@ -441,25 +417,6 @@ export default function Navbar({ onBookClick }) {
             >
               {t('common.languageSwitch')}
             </Button>
-
-            <div className="inline-flex items-center gap-1">
-              {['EGP', 'USD', 'EUR'].map((cur) => (
-                <Button
-                  key={cur}
-                  type="button"
-                  variant={currency === cur ? 'chipActive' : 'chip'}
-                  size="xs"
-                  onClick={() => setCurrency(cur)}
-                  className="px-2"
-                >
-                  {cur === 'EGP'
-                    ? t('common.currencyEGP')
-                    : cur === 'USD'
-                      ? t('common.currencyUSD')
-                      : t('common.currencyEUR')}
-                </Button>
-              ))}
-            </div>
 
             <Badge
               as="span"

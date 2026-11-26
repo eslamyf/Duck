@@ -42,24 +42,6 @@ export default function DashboardShell({
     (isArabic ? currentUser?.fullName : currentUser?.fullNameEn || currentUser?.fullName) ||
     t('common.brandName');
 
-  const [currency, setCurrency] = useState(() => {
-    try {
-      return localStorage.getItem('duck_currency') || 'EGP';
-    } catch {
-      return 'EGP';
-    }
-  });
-
-  const handleCurrencyChange = (cur) => {
-    setCurrency(cur);
-    try {
-      localStorage.setItem('duck_currency', cur);
-      window.dispatchEvent(new CustomEvent('duck:currency-updated', { detail: cur }));
-    } catch {
-      // ignore storage failure
-    }
-  };
-
   const handleLogout = () => {
     logoutUser();
     setSidebarOpen(false);
@@ -203,28 +185,6 @@ export default function DashboardShell({
             </div>
 
             <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
-              {/* Currency Selector (.pm-tcur from Final_4) */}
-              <div
-                className="hidden sm:inline-flex items-center gap-0.5 rounded-full bg-surface-mist p-1 border border-brand-blue/12"
-                role="group"
-                aria-label="Currency"
-              >
-                {['EGP', 'USD', 'EUR'].map((cur) => (
-                  <button
-                    key={cur}
-                    type="button"
-                    onClick={() => handleCurrencyChange(cur)}
-                    className={`rounded-full px-2.5 py-1 text-[11px] font-bold transition cursor-pointer ${
-                      currency === cur
-                        ? 'bg-brand-navy text-brand-yellow shadow-xs'
-                        : 'text-brand-navy/70 hover:text-brand-navy'
-                    }`}
-                  >
-                    {cur === 'EGP' ? 'EGP' : `${cur} ~`}
-                  </button>
-                ))}
-              </div>
-
               {headerActions}
 
               <NotificationBell compact />
