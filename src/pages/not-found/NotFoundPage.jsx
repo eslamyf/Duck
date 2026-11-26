@@ -16,6 +16,25 @@ export default function NotFoundPage() {
   const isArabic = lang === 'ar';
   const navigate = useNavigate();
 
+  const handleGoHome = (e) => {
+    e?.preventDefault?.();
+    if (window.location.hash) {
+      window.history.replaceState(null, '', ROUTES.HOME);
+    }
+    navigate(ROUTES.HOME, { replace: true });
+  };
+
+  const handleGoBack = () => {
+    if (window.location.hash) {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate(ROUTES.HOME, { replace: true });
+    }
+  };
+
   return (
     <main
       dir={isArabic ? 'rtl' : 'ltr'}
@@ -43,7 +62,7 @@ export default function NotFoundPage() {
         <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
           <button
             type="button"
-            onClick={() => (window.history.length > 1 ? navigate(-1) : navigate(ROUTES.HOME))}
+            onClick={handleGoBack}
             className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-brand-navy/20 bg-surface-mist px-5 py-2.5 text-sm font-bold text-brand-navy transition hover:bg-brand-navy hover:text-brand-yellow cursor-pointer"
           >
             <FontAwesomeIcon icon={isArabic ? faArrowRight : faArrowLeft} />
@@ -52,6 +71,7 @@ export default function NotFoundPage() {
 
           <Link
             to={ROUTES.HOME}
+            onClick={handleGoHome}
             className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-brand-navy px-5 py-2.5 text-sm font-bold text-white transition hover:bg-brand-blue"
           >
             <FontAwesomeIcon icon={faHouse} />

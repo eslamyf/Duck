@@ -16,6 +16,7 @@ import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES } from '../../shared/config/routes.js';
 import { buildWhatsAppUrl } from '../../shared/config/constants.js';
+import NotFoundPage from '../not-found/NotFoundPage.jsx';
 
 import kayakImg from '../../shared/assets/images/trips/kayak-free-960w.webp';
 import kayakGalleryImg from '../../shared/assets/images/trips/botanical-garden-960w.webp';
@@ -68,24 +69,7 @@ export default function ActivityDetailsPage() {
     : [];
 
   if (!activity) {
-    return (
-      <main
-        dir={isArabic ? 'rtl' : 'ltr'}
-        className="flex min-h-[60vh] flex-col items-center justify-center bg-surface-mist px-5 text-center font-body"
-      >
-        <h1 className="font-heading text-3xl font-extrabold text-brand-navy">
-          {t('activitiesPage.details.notFound')}
-        </h1>
-
-        <button
-          type="button"
-          onClick={() => navigate(ROUTES.ACTIVITIES)}
-          className="mt-6 rounded-full bg-brand-yellow px-6 py-3 font-bold text-brand-navy cursor-pointer"
-        >
-          {t('activitiesPage.details.back')}
-        </button>
-      </main>
-    );
+    return <NotFoundPage />;
   }
 
   const itemTitle = t(`activitiesPage.items.${activity.id}.title`);

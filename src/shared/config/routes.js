@@ -46,6 +46,39 @@ export const SECTIONS = Object.freeze({
   BOOK: 'trips',
 });
 
+export const VALID_SECTIONS = Object.freeze(
+  new Set([
+    '',
+    SECTIONS.TOP,
+    SECTIONS.LOCATIONS,
+    'destinations',
+    SECTIONS.TRIPS,
+    SECTIONS.GROUPS_BANNER,
+    'groups',
+    SECTIONS.MAP,
+    SECTIONS.REVIEWS,
+    SECTIONS.FAQ,
+    SECTIONS.ABOUT,
+    'why-duck',
+    'brand-intro',
+    'final-cta',
+  ])
+);
+
+/**
+ * Validates whether a section anchor exists on the Home page.
+ */
+export function isValidSection(sectionId) {
+  if (!sectionId) return true;
+  const cleanId = sectionId
+    .replace(/^#/, '')
+    .split('?')[0]
+    .split('&')[0]
+    .trim()
+    .toLowerCase();
+  return VALID_SECTIONS.has(cleanId);
+}
+
 /**
  * Returns canonical path with section hash.
  */

@@ -19,8 +19,8 @@ import {
   TripBookingCard,
   TripMobileBottomBar,
   TripToast,
-  TripNotFound,
 } from '../../widgets/trip-details/index.js';
+import NotFoundPage from '../not-found/NotFoundPage.jsx';
 
 export default function TripDetailsPage() {
   const { slug } = useParams();
@@ -88,7 +88,7 @@ export default function TripDetailsPage() {
   }, []);
 
   if (!trip) {
-    return <TripNotFound />;
+    return <NotFoundPage />;
   }
 
   const tripTitle = t(`trips.items.${trip.key}.title`);

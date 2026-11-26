@@ -21,7 +21,12 @@ import { FinalCtaSection } from '../widgets/final-cta/index.js';
 import { TRIPS } from '../widgets/trips/tripsData.js';
 
 import { useTranslation } from '../shared/i18n/index.js';
-import { ROUTES, SECTIONS, sectionLink } from '../shared/config/routes.js';
+import {
+  ROUTES,
+  SECTIONS,
+  sectionLink,
+  isValidSection,
+} from '../shared/config/routes.js';
 
 
 import {
@@ -205,20 +210,27 @@ function ScrollManager() {
 
   useEffect(() => {
     if (hash) {
-      const targetId = hash.replace(/^#/, '');
+      const targetId = hash.replace(/^#/, '').split('?')[0].split('&')[0].trim();
 
       if (targetId.startsWith('/')) return;
+
+      // On home page, only attempt scroll if it is a recognized valid section
+      if (pathname === ROUTES.HOME && !isValidSection(targetId)) {
+        return;
+      }
 
       let retries = 0;
 
       const scrollToTarget = () => {
-        const el = document.getElementById(targetId);
+        const el =
+          document.getElementById(targetId) ||
+          document.getElementById(targetId.toLowerCase());
 
         if (el) {
           el.scrollIntoView({
             behavior: 'smooth',
           });
-        } else if (retries < 30) {
+        } else if (retries < 15) {
           retries++;
           setTimeout(scrollToTarget, 80);
         }
@@ -241,19 +253,10 @@ function LegacyHashRedirect() {
     const handleHash = () => {
       const h = window.location.hash;
 
-      if (
-        h === '#/groups' ||
-        h === '#//groups' ||
-        h.startsWith('#/groups')
-      ) {
-        navigate(ROUTES.GROUPS, { replace: true });
-      } else if (
-        h === '#/about' ||
-        h === '#//about' ||
-        h.startsWith('#/about')
-      ) {
-        navigate(ROUTES.ABOUT, { replace: true });
-      }
+      if (!h || !h.startsWith('#/')) return;
+
+      const cleanPath = h.replace(/^#\/?/, '/');
+      navigate(cleanPath, { replace: true });
     };
 
     handleHash();
@@ -270,11 +273,20 @@ function LegacyHashRedirect() {
 
 // Page Title Manager
 function TitleManager() {
-  const { pathname } = useLocation();
-  const { t } = useTranslation();
+  const { pathname, hash } = useLocation();
+  const { t, lang } = useTranslation();
+  const isArabic = lang === 'ar';
 
   useEffect(() => {
-    if (pathname === ROUTES.LOGIN || pathname === '/login') {
+    const isInvalidHomeHash =
+      pathname === ROUTES.HOME &&
+      hash &&
+      !hash.startsWith('#/') &&
+      !isValidSection(hash);
+
+    if (isInvalidHomeHash) {
+      document.title = `${isArabic ? 'الصفحة غير موجودة (404)' : 'Page Not Found (404)'} | ${t('common.brandName')}`;
+    } else if (pathname === ROUTES.LOGIN || pathname === '/login') {
       document.title = `${t('auth.login.metaTitle')} | ${t('common.brandName')}`;
     } else if (
       pathname === ROUTES.SIGNUP ||
@@ -319,9 +331,68 @@ function TitleManager() {
     } else {
       document.title = `${t('common.brandName')} - ${t('nav.home')}`;
     }
-  }, [pathname, t]);
+  }, [pathname, hash, t, isArabic]);
 
   return null;
+}
+
+// Home Page View with Invalid Hash Validation
+function HomePageView({
+  onSelectDestination,
+  selectedDestinationFilter,
+  setSelectedDestinationFilter,
+}) {
+  const { hash } = useLocation();
+
+  // If hash is present on Home, check if it's invalid (e.g. /#topdksf)
+  if (hash) {
+    const rawTarget = hash.replace(/^#/, '').split('?')[0].split('&')[0].trim();
+    // Hashes starting with '/' are handled by LegacyHashRedirect
+    if (!rawTarget.startsWith('/') && !isValidSection(rawTarget)) {
+      return (
+        <Suspense fallback={<AboutFallback />}>
+          <NotFoundPage />
+        </Suspense>
+      );
+    }
+  }
+
+  return (
+    <>
+      <HeroSection />
+
+      <BrandIntroSection />
+
+      <DestinationsSection
+        onSelectDestination={onSelectDestination}
+      />
+
+      <TripsSection
+        externalFilter={selectedDestinationFilter}
+        onFilterChange={setSelectedDestinationFilter}
+      />
+
+      <WhyDuckSection />
+
+      <GroupsBanner />
+
+      <Suspense fallback={<MapFallback />}>
+        <MapSection
+          onSelectDestination={onSelectDestination}
+        />
+      </Suspense>
+
+      <Suspense fallback={<ReviewsFallback />}>
+        <ReviewsSection />
+      </Suspense>
+
+      <Suspense fallback={<FAQFallback />}>
+        <FAQSection />
+      </Suspense>
+
+      <FinalCtaSection />
+    </>
+  );
 }
 
 // Main App
@@ -431,40 +502,11 @@ export default function App() {
             <Route
               path={ROUTES.HOME}
               element={
-                <>
-                  <HeroSection />
-
-                  <BrandIntroSection />
-
-                  <DestinationsSection
-                    onSelectDestination={handleSelectDestination}
-                  />
-
-                  <TripsSection
-                    externalFilter={selectedDestinationFilter}
-                    onFilterChange={setSelectedDestinationFilter}
-                  />
-
-                  <WhyDuckSection />
-
-                  <GroupsBanner />
-
-                  <Suspense fallback={<MapFallback />}>
-                    <MapSection
-                      onSelectDestination={handleSelectDestination}
-                    />
-                  </Suspense>
-
-                  <Suspense fallback={<ReviewsFallback />}>
-                    <ReviewsSection />
-                  </Suspense>
-
-                  <Suspense fallback={<FAQFallback />}>
-                    <FAQSection />
-                  </Suspense>
-
-                  <FinalCtaSection />
-                </>
+                <HomePageView
+                  onSelectDestination={handleSelectDestination}
+                  selectedDestinationFilter={selectedDestinationFilter}
+                  setSelectedDestinationFilter={setSelectedDestinationFilter}
+                />
               }
             />
 
@@ -531,6 +573,56 @@ export default function App() {
             {/* Alias /booking -> /book */}
             <Route
               path="/booking"
+              element={<Navigate to={ROUTES.BOOKING} replace />}
+            />
+
+            {/* Common Aliases, Slashes & Deep-Link Redirects */}
+            <Route
+              path="/destinations"
+              element={<Navigate to="/#locations" replace />}
+            />
+            <Route
+              path="/locations"
+              element={<Navigate to="/#locations" replace />}
+            />
+            <Route
+              path="/trips"
+              element={<Navigate to="/#trips" replace />}
+            />
+            <Route
+              path="/reviews"
+              element={<Navigate to="/#reviews" replace />}
+            />
+            <Route
+              path="/faq"
+              element={<Navigate to="/#faq" replace />}
+            />
+            <Route
+              path="/map"
+              element={<Navigate to="/#map" replace />}
+            />
+            <Route
+              path="/contact"
+              element={<Navigate to="/#final-cta" replace />}
+            />
+            <Route
+              path="/experiences"
+              element={<Navigate to={ROUTES.ACTIVITIES} replace />}
+            />
+            <Route
+              path="/about/"
+              element={<Navigate to={ROUTES.ABOUT} replace />}
+            />
+            <Route
+              path="/groups/"
+              element={<Navigate to={ROUTES.GROUPS} replace />}
+            />
+            <Route
+              path="/activities/"
+              element={<Navigate to={ROUTES.ACTIVITIES} replace />}
+            />
+            <Route
+              path="/book/"
               element={<Navigate to={ROUTES.BOOKING} replace />}
             />
 
