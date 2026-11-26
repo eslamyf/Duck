@@ -3,6 +3,11 @@
   "name": "Duck Entertainment | تجارب مائية على النيل",
   "icons": [
     {
+      "src": "/favicon-32x32.png",
+      "type": "image/png",
+      "sizes": "32x32"
+    },
+    {
       "src": "/icon-192.png",
       "type": "image/png",
       "sizes": "192x192"
