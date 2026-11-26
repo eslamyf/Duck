@@ -137,9 +137,31 @@ body {
   animation-play-state: paused;
 }
 
+/* ================= HERO RIVER WAVE FLOW ================= */
+@keyframes duckRiverFlow {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-river-flow {
+  will-change: transform;
+  animation: duckRiverFlow 3.2s linear infinite;
+}
+
+.animate-river-flow-slow {
+  will-change: transform;
+  animation: duckRiverFlow 4.8s linear infinite reverse;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-rv-roll,
-  .animate-rv-roll-reverse {
+  .animate-rv-roll-reverse,
+  .animate-river-flow,
+  .animate-river-flow-slow {
     animation: none !important;
     transform: none !important;
   }

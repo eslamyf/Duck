@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarCheck, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES } from '../../shared/config/routes.js';
-import { Button } from '../../shared/ui/index.js';
+import { Button, DuckManifesto } from '../../shared/ui/index.js';
 import ctaBg from '../../shared/assets/images/about/cta-bg.webp';
 
 export default function FinalCtaSection() {
@@ -33,13 +33,11 @@ export default function FinalCtaSection() {
         />
 
         <div className="relative z-10 max-w-[820px] mx-auto flex flex-col items-center text-center gap-4">
-          <span
-            className="inline-block rounded-full bg-brand-yellow/15 px-4 py-1 text-xs font-extrabold tracking-[0.2em] text-brand-yellow uppercase"
-            lang="en"
-            dir="ltr"
-          >
-            {t('finalCta.eyebrow')}
-          </span>
+          <DuckManifesto
+            text={t('finalCta.eyebrow')}
+            theme="dark"
+            align="center"
+          />
 
           <h2 className="text-[clamp(26px,3.8vw,44px)] font-extrabold leading-tight text-white m-0">
             {t('finalCta.title')}

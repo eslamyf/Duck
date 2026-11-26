@@ -11,3 +11,4 @@ export { default as WaveDivider } from './WaveDivider.jsx';
 export { default as ErrorBoundary } from './ErrorBoundary/index.js';
 export { default as ScrollProgress } from './ScrollProgress/index.js';
 export { default as ImageFocusCropper } from './ImageFocusCropper.jsx';
+export { default as DuckManifesto } from './DuckManifesto.jsx';

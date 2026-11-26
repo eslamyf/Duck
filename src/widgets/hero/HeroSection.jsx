@@ -8,6 +8,7 @@ import heroPosterDesktop from '../../shared/assets/images/hero-poster-desktop.we
 import heroPosterMobile from '../../shared/assets/images/hero-poster-mobile.webp';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
+import { DuckManifesto } from '../../shared/ui/index.js';
 
 export default function HeroSection() {
   const { lang, t } = useTranslation();
@@ -176,14 +177,13 @@ export default function HeroSection() {
 
           {/* Foreground Content Aligned to Start Edge */}
           <div className="relative z-10 w-full max-w-[700px] px-5 pt-24 pb-10 sm:px-9 sm:py-14 min-[901px]:px-14 min-[901px]:py-16">
-            {/* Brand Badge with Glowing Yellow Dot */}
-            <div className="inline-flex items-center gap-2.5 w-fit px-4 py-1.5 rounded-full bg-brand-navy/80 border border-brand-yellow/40 backdrop-blur-md text-brand-yellow text-xs font-extrabold tracking-[0.18em] mb-4 uppercase shadow-card">
-              <span
-                className="h-2 w-2 rounded-full bg-brand-yellow animate-pulse"
-                aria-hidden="true"
-              />
-              <span lang="en" dir="ltr">{t('hero.tag')}</span>
-            </div>
+            {/* Editorial River-Wave & Decal Manifesto */}
+            <DuckManifesto
+              text={t('hero.tag')}
+              theme="dark"
+              align="start"
+              className="mb-4 sm:mb-5"
+            />
 
             {/* Bold Headline with Yellow Highlight */}
             <h1 className="font-heading text-[clamp(28px,4.6vw,58px)] font-extrabold leading-[1.2] tracking-tight mb-4 text-white drop-shadow-sm">

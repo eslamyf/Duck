@@ -3,11 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowLeft,
   faArrowRight,
-  faCompass,
 } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES } from '../../shared/config/routes.js';
-import { Badge, Button } from '../../shared/ui/index.js';
+import { Button, DuckManifesto } from '../../shared/ui/index.js';
 import introImage from '../../shared/assets/images/image1.jpeg';
 
 export default function BrandIntroSection() {
@@ -25,14 +24,12 @@ export default function BrandIntroSection() {
       <div className="max-w-[1360px] mx-auto grid grid-cols-1 min-[901px]:grid-cols-[1.15fr_1fr] gap-8 min-[901px]:gap-14 items-center">
         {/* Story Copy */}
         <div className="flex flex-col items-start">
-          <Badge
-            variant="tagLight"
-            size="sm"
-            icon={<FontAwesomeIcon icon={faCompass} className="text-brand-blue" />}
+          <DuckManifesto
+            text={t('brandIntro.badge')}
+            theme="light"
+            align="start"
             className="mb-4"
-          >
-            <span lang="en" dir="ltr">{t('brandIntro.badge')}</span>
-          </Badge>
+          />
 
           <h2
             id="brand-intro-heading"
