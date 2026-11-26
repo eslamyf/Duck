@@ -229,6 +229,15 @@ export function getFunnelMetrics() {
 
   return {
     counts,
+    pageViews: counts[ANALYTICS_EVENTS.PAGE_VIEW] || 0,
+    viewActivities: counts[ANALYTICS_EVENTS.VIEW_ACTIVITY] || 0,
+    searches: counts[ANALYTICS_EVENTS.SEARCH] || 0,
+    initiatedBookings: counts[ANALYTICS_EVENTS.INITIATE_BOOKING] || 0,
+    addedDetails: counts[ANALYTICS_EVENTS.ADD_BOOKING_DETAILS] || 0,
+    initiatedCheckouts: counts[ANALYTICS_EVENTS.INITIATE_CHECKOUT] || 0,
+    purchases: counts[ANALYTICS_EVENTS.PURCHASE] || 0,
+    leads: counts[ANALYTICS_EVENTS.LEAD_SUBMISSION] || 0,
+    revenueEgp: totalSalesEgp,
     totalSalesEgp,
     conversionRate,
     totalEvents: events.length,

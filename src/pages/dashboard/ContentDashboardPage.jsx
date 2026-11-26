@@ -546,6 +546,13 @@ export default function ContentDashboardPage() {
                       </button>
                     )}
                   </div>
+                  <input
+                    type="url"
+                    placeholder={isArabic ? 'أو ضع رابط صورة مباشر (URL)...' : 'Or paste direct image URL...'}
+                    value={editForm.customImage?.startsWith('data:') ? '' : (editForm.customImage || '')}
+                    onChange={(e) => setEditForm((p) => ({ ...p, customImage: e.target.value }))}
+                    className="w-full rounded-xl border border-brand-navy/20 bg-surface-white px-3 py-1.5 text-xs font-mono text-brand-navy outline-none"
+                  />
                   <p className="text-[11px] text-brand-navy/60">
                     {isArabic
                       ? 'يمكنك رفع صورة بصيغة JPG أو PNG أو WebP بوضوح عالٍ لاستبدال صورة غلاف الرحلة فوراً على الموقع.'

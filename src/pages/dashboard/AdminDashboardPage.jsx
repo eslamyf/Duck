@@ -19,6 +19,7 @@ import {
   faTrash,
   faPenToSquare,
   faXmark,
+  faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -100,6 +101,7 @@ export default function AdminDashboardPage() {
     price: 650,
     durKey: '2h',
     max: 10,
+    imageUrl: '',
   });
 
   const [newDestForm, setNewDestForm] = useState({
@@ -112,12 +114,35 @@ export default function AdminDashboardPage() {
     tripCount: 1,
     lat: 24.0889,
     lng: 32.8998,
+    imageUrl: '',
+  });
+
+  const [editTripForm, setEditTripForm] = useState({
+    priceEg: '',
+    price: '',
+    titleAr: '',
+    titleEn: '',
+    imageUrl: '',
   });
 
   // Dynamic Hooks
   const { bookings, inventory, quotes } = useBookingsSync();
   const { destinations: dynamicDestinations, trips: dynamicTrips, equipmentCapacity } = useCMS();
   const { metrics, events, clearLog } = useAnalyticsFunnel();
+
+  const safeMetrics = useMemo(() => ({
+    pageViews: 0,
+    viewActivities: 0,
+    searches: 0,
+    initiatedBookings: 0,
+    addedDetails: 0,
+    initiatedCheckouts: 0,
+    purchases: 0,
+    leads: 0,
+    revenueEgp: 0,
+    conversionRate: '0.0',
+    ...(metrics || {}),
+  }), [metrics]);
 
   const stats = useMemo(() => {
     void bookings;
@@ -166,11 +191,27 @@ export default function AdminDashboardPage() {
     setTimeout(() => setResetMessage(''), 4000);
   };
 
+  const handleFileUpload = (file, callback) => {
+    if (!file) return;
+    if (file.size > 8 * 1024 * 1024) {
+      alert(isArabic ? 'حجم الصورة كبير جداً، الحد الأقصى 8 ميجابايت' : 'Image is too large, max 8MB');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      callback(e.target.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleCreateTrip = (e) => {
     e.preventDefault();
     if (!newTripForm.titleAr || !newTripForm.titleEn) return;
     const key = `trip_${Date.now()}`;
     const slug = newTripForm.titleEn.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const finalImg =
+      newTripForm.imageUrl ||
+      'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1000&auto=format&fit=crop&q=80';
     addDynamicTrip({
       key,
       slug,
@@ -183,8 +224,8 @@ export default function AdminDashboardPage() {
       durKey: newTripForm.durKey,
       max: Number(newTripForm.max) || 10,
       images: {
-        thumb: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=500&auto=format&fit=crop&q=80',
-        medium: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1000&auto=format&fit=crop&q=80',
+        thumb: finalImg,
+        medium: finalImg,
       },
     });
     setShowAddTripModal(false);
@@ -197,14 +238,24 @@ export default function AdminDashboardPage() {
       price: 650,
       durKey: '2h',
       max: 10,
+      imageUrl: '',
     });
   };
 
-  const handleSaveTripPricing = (tripId, priceEg, price) => {
-    updateDynamicTrip(tripId, {
+  const handleSaveTripPricing = (tripId, priceEg, price, imageUrl, titleAr, titleEn) => {
+    const updates = {
       priceEg: Number(priceEg),
       price: Number(price),
-    });
+    };
+    if (titleAr) updates.titleAr = titleAr;
+    if (titleEn) updates.titleEn = titleEn;
+    if (imageUrl) {
+      updates.images = {
+        thumb: imageUrl,
+        medium: imageUrl,
+      };
+    }
+    updateDynamicTrip(tripId, updates);
     setEditingTrip(null);
   };
 
@@ -212,6 +263,9 @@ export default function AdminDashboardPage() {
     e.preventDefault();
     if (!newDestForm.nameAr || !newDestForm.nameEn) return;
     const key = newDestForm.key.trim() || newDestForm.nameEn.toLowerCase().replace(/[^a-z0-9]+/g, '');
+    const finalImg =
+      newDestForm.imageUrl ||
+      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80';
     addDynamicDestination({
       key,
       num: newDestForm.num,
@@ -224,7 +278,7 @@ export default function AdminDashboardPage() {
       lng: Number(newDestForm.lng) || 32.8998,
       filterKey: key,
       images: {
-        cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80',
+        cover: finalImg,
       },
     });
     setShowAddDestModal(false);
@@ -238,6 +292,7 @@ export default function AdminDashboardPage() {
       tripCount: 1,
       lat: 24.0889,
       lng: 32.8998,
+      imageUrl: '',
     });
   };
 
@@ -325,13 +380,25 @@ export default function AdminDashboardPage() {
       key: 'title',
       label: isArabic ? 'النشاط / الرحلة' : 'Activity / Trip',
       render: (row) => (
-        <div>
-          <span className="font-bold text-brand-navy block">
-            {row.titleAr || t(`trips.items.${row.key}.title`, row.slug)}
-          </span>
-          <span className="text-[11px] text-brand-navy/60 font-medium">
-            {row.act} • {row.durKey || '2h'}
-          </span>
+        <div className="flex items-center gap-2.5">
+          <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 border border-black/10 bg-slate-100">
+            <img
+              src={row.images?.thumb || row.images?.medium || 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=200&auto=format&fit=crop&q=80'}
+              alt={row.titleAr || row.slug}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.currentTarget.src = 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=200&auto=format&fit=crop&q=80';
+              }}
+            />
+          </div>
+          <div>
+            <span className="font-bold text-brand-navy block">
+              {row.titleAr || t(`trips.items.${row.key}.title`, row.slug)}
+            </span>
+            <span className="text-[11px] text-brand-navy/60 font-medium">
+              {row.act} • {row.durKey || '2h'}
+            </span>
+          </div>
         </div>
       ),
     },
@@ -369,9 +436,18 @@ export default function AdminDashboardPage() {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => setEditingTrip(row)}
+            onClick={() => {
+              setEditingTrip(row);
+              setEditTripForm({
+                priceEg: row.priceEg || row.price || '',
+                price: row.price || '',
+                titleAr: row.titleAr || '',
+                titleEn: row.titleEn || '',
+                imageUrl: row.images?.medium || row.images?.thumb || '',
+              });
+            }}
             className="p-1.5 rounded-lg bg-surface-mist text-brand-navy hover:bg-brand-navy hover:text-brand-yellow transition text-xs cursor-pointer"
-            title={isArabic ? 'تعديل السعر' : 'Edit Price'}
+            title={isArabic ? 'تعديل السعر والصورة' : 'Edit Price & Photo'}
           >
             <FontAwesomeIcon icon={faPenToSquare} />
           </button>
@@ -586,9 +662,21 @@ export default function AdminDashboardPage() {
             {dynamicDestinations.map((dest) => (
               <div
                 key={dest.id}
-                className="rounded-[18px] border border-brand-blue/16 bg-surface-white p-5 shadow-card flex flex-col justify-between space-y-3"
+                className="rounded-[18px] border border-brand-blue/16 bg-surface-white p-4 shadow-card flex flex-col justify-between space-y-3"
               >
                 <div>
+                  {dest.images?.cover && (
+                    <div className="w-full h-32 rounded-xl overflow-hidden mb-3 bg-surface-mist border border-black/5">
+                      <img
+                        src={dest.images.cover}
+                        alt={dest.nameAr || dest.key}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80';
+                        }}
+                      />
+                    </div>
+                  )}
                   <div className="flex items-center justify-between">
                     <p className="text-xs font-bold text-brand-blue uppercase">
                       {dest.num} • {dest.key}
@@ -730,25 +818,25 @@ export default function AdminDashboardPage() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <StatCard
               title={isArabic ? 'مشاهدات الصفحات' : 'Page Views'}
-              value={metrics.pageViews}
+              value={safeMetrics.pageViews}
               icon={faEye}
               tone="navy"
             />
             <StatCard
               title={isArabic ? 'بدء الحجز' : 'Initiated Bookings'}
-              value={metrics.initiatedBookings}
+              value={safeMetrics.initiatedBookings}
               icon={faCalendarCheck}
               tone="blue"
             />
             <StatCard
               title={isArabic ? 'معدل التحويل النهائي' : 'Conversion Rate'}
-              value={`${metrics.conversionRate}%`}
+              value={`${safeMetrics.conversionRate}%`}
               icon={faChartLine}
               tone="success"
             />
             <StatCard
               title={isArabic ? 'إيرادات التحويلات' : 'Tracked Revenue'}
-              value={`${metrics.revenueEgp.toLocaleString(isArabic ? 'ar-EG' : 'en-US')} ${isArabic ? 'ج.م' : 'EGP'}`}
+              value={`${Number(safeMetrics.revenueEgp || 0).toLocaleString(isArabic ? 'ar-EG' : 'en-US')} ${isArabic ? 'ج.م' : 'EGP'}`}
               icon={faCoins}
               tone="yellow"
             />
@@ -761,16 +849,16 @@ export default function AdminDashboardPage() {
             </h3>
             <div className="space-y-3">
               {[
-                { label: isArabic ? '1. زيارة الصفحة (page_view)' : '1. Page Views', val: metrics.pageViews, color: 'bg-brand-navy' },
-                { label: isArabic ? '2. استعراض نشاط (view_activity)' : '2. View Activities', val: metrics.viewActivities, color: 'bg-brand-blue' },
-                { label: isArabic ? '3. بحث وفلترة (search)' : '3. Searches', val: metrics.searches, color: 'bg-brand-blue' },
-                { label: isArabic ? '4. بدء الحجز (initiate_booking)' : '4. Initiated Bookings', val: metrics.initiatedBookings, color: 'bg-indigo-600' },
-                { label: isArabic ? '5. إدخال بيانات الضيوف (add_booking_details)' : '5. Guest Details', val: metrics.addedDetails, color: 'bg-amber-600' },
-                { label: isArabic ? '6. بدء الدفع (initiate_checkout)' : '6. Initiated Checkout', val: metrics.initiatedCheckouts, color: 'bg-orange-600' },
-                { label: isArabic ? '7. تأكيد الحجز والشراء (purchase)' : '7. Purchases', val: metrics.purchases, color: 'bg-emerald-600' },
-                { label: isArabic ? '8. طلبات عروض الشركات (lead_submission)' : '8. B2B Leads', val: metrics.leads, color: 'bg-cyan-600' },
+                { label: isArabic ? '1. زيارة الصفحة (page_view)' : '1. Page Views', val: safeMetrics.pageViews, color: 'bg-brand-navy' },
+                { label: isArabic ? '2. استعراض نشاط (view_activity)' : '2. View Activities', val: safeMetrics.viewActivities, color: 'bg-brand-blue' },
+                { label: isArabic ? '3. بحث وفلترة (search)' : '3. Searches', val: safeMetrics.searches, color: 'bg-brand-blue' },
+                { label: isArabic ? '4. بدء الحجز (initiate_booking)' : '4. Initiated Bookings', val: safeMetrics.initiatedBookings, color: 'bg-indigo-600' },
+                { label: isArabic ? '5. إدخال بيانات الضيوف (add_booking_details)' : '5. Guest Details', val: safeMetrics.addedDetails, color: 'bg-amber-600' },
+                { label: isArabic ? '6. بدء الدفع (initiate_checkout)' : '6. Initiated Checkout', val: safeMetrics.initiatedCheckouts, color: 'bg-orange-600' },
+                { label: isArabic ? '7. تأكيد الحجز والشراء (purchase)' : '7. Purchases', val: safeMetrics.purchases, color: 'bg-emerald-600' },
+                { label: isArabic ? '8. طلبات عروض الشركات (lead_submission)' : '8. B2B Leads', val: safeMetrics.leads, color: 'bg-cyan-600' },
               ].map((stage, idx) => {
-                const maxVal = Math.max(1, metrics.pageViews, metrics.purchases);
+                const maxVal = Math.max(1, safeMetrics.pageViews, safeMetrics.purchases);
                 const pct = Math.min(100, Math.round((stage.val / maxVal) * 100));
                 return (
                   <div key={idx} className="space-y-1">
@@ -998,6 +1086,54 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
 
+              {/* Image Upload for Trip */}
+              <div>
+                <label className="block font-bold text-brand-navy mb-1">
+                  {isArabic ? 'صورة الغلاف / النشاط' : 'Cover / Trip Photo'}
+                </label>
+                {newTripForm.imageUrl ? (
+                  <div className="relative w-full h-32 rounded-xl overflow-hidden border border-black/10 group mb-2">
+                    <img src={newTripForm.imageUrl} alt="Preview" className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => setNewTripForm((p) => ({ ...p, imageUrl: '' }))}
+                      className="absolute top-2 end-2 h-7 w-7 rounded-full bg-red-600 text-white flex items-center justify-center text-xs hover:bg-red-700 shadow cursor-pointer"
+                      title={isArabic ? 'حذف الصورة' : 'Remove image'}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-brand-blue/30 bg-surface-mist/50 p-4 text-center hover:border-brand-blue transition mb-2">
+                    <label className="flex flex-col items-center gap-1.5 cursor-pointer w-full">
+                      <div className="h-9 w-9 rounded-full bg-brand-blue/10 text-brand-blue flex items-center justify-center text-sm">
+                        <FontAwesomeIcon icon={faUpload} />
+                      </div>
+                      <span className="text-xs font-bold text-brand-navy">
+                        {isArabic ? 'اضغط لرفع صورة من جهازك' : 'Click to upload image from device'}
+                      </span>
+                      <span className="text-[10px] text-brand-navy/60">PNG, JPG, WebP (Max 8MB)</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handleFileUpload(file, (url) => setNewTripForm((p) => ({ ...p, imageUrl: url })));
+                        }}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                )}
+                <input
+                  type="url"
+                  placeholder={isArabic ? 'أو ضع رابط صورة مباشر (URL)...' : 'Or paste direct image URL...'}
+                  value={newTripForm.imageUrl?.startsWith('data:') ? '' : (newTripForm.imageUrl || '')}
+                  onChange={(e) => setNewTripForm((p) => ({ ...p, imageUrl: e.target.value }))}
+                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy text-[11px] font-mono"
+                />
+              </div>
+
               <div className="flex justify-end gap-2 pt-2 border-t border-black/10">
                 <button
                   type="button"
@@ -1095,6 +1231,54 @@ export default function AdminDashboardPage() {
                 />
               </div>
 
+              {/* Image Upload for Destination */}
+              <div>
+                <label className="block font-bold text-brand-navy mb-1">
+                  {isArabic ? 'صورة غلاف الوجهة' : 'Destination Cover Photo'}
+                </label>
+                {newDestForm.imageUrl ? (
+                  <div className="relative w-full h-32 rounded-xl overflow-hidden border border-black/10 group mb-2">
+                    <img src={newDestForm.imageUrl} alt="Preview" className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => setNewDestForm((p) => ({ ...p, imageUrl: '' }))}
+                      className="absolute top-2 end-2 h-7 w-7 rounded-full bg-red-600 text-white flex items-center justify-center text-xs hover:bg-red-700 shadow cursor-pointer"
+                      title={isArabic ? 'حذف الصورة' : 'Remove image'}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-brand-blue/30 bg-surface-mist/50 p-4 text-center hover:border-brand-blue transition mb-2">
+                    <label className="flex flex-col items-center gap-1.5 cursor-pointer w-full">
+                      <div className="h-9 w-9 rounded-full bg-brand-blue/10 text-brand-blue flex items-center justify-center text-sm">
+                        <FontAwesomeIcon icon={faUpload} />
+                      </div>
+                      <span className="text-xs font-bold text-brand-navy">
+                        {isArabic ? 'اضغط لرفع صورة من جهازك' : 'Click to upload image from device'}
+                      </span>
+                      <span className="text-[10px] text-brand-navy/60">PNG, JPG, WebP (Max 8MB)</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handleFileUpload(file, (url) => setNewDestForm((p) => ({ ...p, imageUrl: url })));
+                        }}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                )}
+                <input
+                  type="url"
+                  placeholder={isArabic ? 'أو ضع رابط صورة مباشر (URL)...' : 'Or paste direct image URL...'}
+                  value={newDestForm.imageUrl?.startsWith('data:') ? '' : (newDestForm.imageUrl || '')}
+                  onChange={(e) => setNewDestForm((p) => ({ ...p, imageUrl: e.target.value }))}
+                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy text-[11px] font-mono"
+                />
+              </div>
+
               <div className="flex justify-end gap-2 pt-2 border-t border-black/10">
                 <button
                   type="button"
@@ -1115,13 +1299,13 @@ export default function AdminDashboardPage() {
         </div>
       )}
 
-      {/* MODAL: EDIT TRIP PRICING */}
+      {/* MODAL: EDIT TRIP PRICING & PHOTO */}
       {editingTrip && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl space-y-4">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-black/10">
               <h3 className="font-heading font-extrabold text-base text-brand-navy">
-                {isArabic ? 'تعديل أسعار الرحلة' : 'Edit Trip Pricing'}
+                {isArabic ? 'تعديل أسعار وصورة الرحلة' : 'Edit Trip Pricing & Photo'}
               </h3>
               <button
                 type="button"
@@ -1133,31 +1317,81 @@ export default function AdminDashboardPage() {
             </div>
 
             <div className="space-y-3 font-body text-xs">
-              <p className="font-bold text-brand-navy">
+              <p className="font-bold text-brand-navy text-sm">
                 {editingTrip.titleAr || editingTrip.slug}
               </p>
 
-              <div>
-                <label className="block font-bold text-brand-navy mb-1">
-                  {isArabic ? 'سعر المصريين (ج.م)' : 'Egyptian Price (EGP)'}
-                </label>
-                <input
-                  type="number"
-                  defaultValue={editingTrip.priceEg || editingTrip.price}
-                  id="edit-price-eg"
-                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy font-bold"
-                />
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block font-bold text-brand-navy mb-1">
+                    {isArabic ? 'سعر المصريين (ج.م)' : 'Egyptian Price (EGP)'}
+                  </label>
+                  <input
+                    type="number"
+                    value={editTripForm.priceEg}
+                    onChange={(e) => setEditTripForm((p) => ({ ...p, priceEg: e.target.value }))}
+                    className="w-full rounded-xl border border-black/15 p-2 text-brand-navy font-bold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-brand-navy mb-1">
+                    {isArabic ? 'سعر الأجانب (ج.م)' : 'Foreigner Price (EGP)'}
+                  </label>
+                  <input
+                    type="number"
+                    value={editTripForm.price}
+                    onChange={(e) => setEditTripForm((p) => ({ ...p, price: e.target.value }))}
+                    className="w-full rounded-xl border border-black/15 p-2 text-brand-navy font-bold"
+                  />
+                </div>
               </div>
 
+              {/* Edit Trip Image */}
               <div>
                 <label className="block font-bold text-brand-navy mb-1">
-                  {isArabic ? 'سعر الأجانب (ج.م)' : 'Foreigner Price (EGP)'}
+                  {isArabic ? 'تعديل صورة النشاط' : 'Update Trip Photo'}
                 </label>
+                {editTripForm.imageUrl ? (
+                  <div className="relative w-full h-32 rounded-xl overflow-hidden border border-black/10 group mb-2">
+                    <img src={editTripForm.imageUrl} alt="Preview" className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => setEditTripForm((p) => ({ ...p, imageUrl: '' }))}
+                      className="absolute top-2 end-2 h-7 w-7 rounded-full bg-red-600 text-white flex items-center justify-center text-xs hover:bg-red-700 shadow cursor-pointer"
+                      title={isArabic ? 'حذف الصورة' : 'Remove image'}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-brand-blue/30 bg-surface-mist/50 p-4 text-center hover:border-brand-blue transition mb-2">
+                    <label className="flex flex-col items-center gap-1.5 cursor-pointer w-full">
+                      <div className="h-9 w-9 rounded-full bg-brand-blue/10 text-brand-blue flex items-center justify-center text-sm">
+                        <FontAwesomeIcon icon={faUpload} />
+                      </div>
+                      <span className="text-xs font-bold text-brand-navy">
+                        {isArabic ? 'اضغط لرفع صورة جديدة' : 'Click to upload new image'}
+                      </span>
+                      <span className="text-[10px] text-brand-navy/60">PNG, JPG, WebP</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handleFileUpload(file, (url) => setEditTripForm((p) => ({ ...p, imageUrl: url })));
+                        }}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                )}
                 <input
-                  type="number"
-                  defaultValue={editingTrip.price}
-                  id="edit-price-fo"
-                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy font-bold"
+                  type="url"
+                  placeholder={isArabic ? 'أو ضع رابط صورة مباشر (URL)...' : 'Or paste direct image URL...'}
+                  value={editTripForm.imageUrl?.startsWith('data:') ? '' : (editTripForm.imageUrl || '')}
+                  onChange={(e) => setEditTripForm((p) => ({ ...p, imageUrl: e.target.value }))}
+                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy text-[11px] font-mono"
                 />
               </div>
 
@@ -1172,13 +1406,18 @@ export default function AdminDashboardPage() {
                 <button
                   type="button"
                   onClick={() => {
-                    const peg = document.getElementById('edit-price-eg')?.value;
-                    const pfo = document.getElementById('edit-price-fo')?.value;
-                    handleSaveTripPricing(editingTrip.id, peg, pfo);
+                    handleSaveTripPricing(
+                      editingTrip.id,
+                      editTripForm.priceEg,
+                      editTripForm.price,
+                      editTripForm.imageUrl,
+                      editTripForm.titleAr,
+                      editTripForm.titleEn
+                    );
                   }}
                   className="rounded-xl px-4 py-2 bg-brand-navy text-brand-yellow font-bold hover:bg-brand-blue hover:text-white transition cursor-pointer"
                 >
-                  {isArabic ? 'تحديث الأسعار' : 'Update Prices'}
+                  {isArabic ? 'تحديث الرحلة والصورة' : 'Update Trip & Photo'}
                 </button>
               </div>
             </div>
