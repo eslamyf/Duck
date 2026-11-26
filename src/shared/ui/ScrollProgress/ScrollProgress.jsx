@@ -54,7 +54,7 @@ export default function ScrollProgress() {
     <>
       {/* Top Reading Progress Bar (Fixed directly beneath navbar) */}
       <div
-        className="fixed top-[60px] md:top-[52px] min-[901px]:top-[100px] inset-x-0 z-[9998] h-[3px] pointer-events-none bg-black/5 overflow-hidden"
+        className="fixed top-[var(--header-offset)] inset-x-0 z-[9998] h-[3px] pointer-events-none bg-black/5 overflow-hidden"
         aria-hidden="true"
       >
         <div

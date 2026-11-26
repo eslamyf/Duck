@@ -38,10 +38,9 @@ export default function StaticInfoPage({ policyKey = 'privacy' }) {
             align="start"
             tag={
               <Badge
-                variant="tag"
+                variant="tagLight"
                 size="sm"
                 icon={<FontAwesomeIcon icon={faShieldHalved} className="text-brand-blue" />}
-                className="font-bold uppercase tracking-wider"
               >
                 <span lang="en" dir="ltr">{t(`legal.${policyKey}.eyebrow`)}</span>
               </Badge>

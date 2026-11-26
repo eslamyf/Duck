@@ -8,7 +8,7 @@ import {
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES } from '../../shared/config/routes.js';
 import { Badge, Button } from '../../shared/ui/index.js';
-import introImage from '../../shared/assets/images/about/story-aswan.webp';
+import introImage from '../../shared/assets/images/image1.jpeg';
 
 export default function BrandIntroSection() {
   const { t, lang } = useTranslation();
@@ -26,10 +26,10 @@ export default function BrandIntroSection() {
         {/* Story Copy */}
         <div className="flex flex-col items-start">
           <Badge
-            variant="tag"
+            variant="tagLight"
             size="sm"
             icon={<FontAwesomeIcon icon={faCompass} className="text-brand-blue" />}
-            className="mb-4 bg-surface-mist text-brand-navy border-brand-blue/20 font-bold tracking-wider uppercase"
+            className="mb-4"
           >
             <span lang="en" dir="ltr">{t('brandIntro.badge')}</span>
           </Badge>
@@ -65,7 +65,7 @@ export default function BrandIntroSection() {
             alt={t('brandIntro.imageAlt')}
             loading="lazy"
             decoding="async"
-            className="w-full h-full object-cover object-[center_58%] transition-transform duration-700 hover:scale-105"
+            className="w-full h-full object-cover object-[center_45%] transition-transform duration-700 hover:scale-105"
           />
           <div
             className="absolute inset-0 bg-gradient-to-t from-brand-navy/55 via-transparent to-transparent pointer-events-none"

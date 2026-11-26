@@ -75,7 +75,7 @@ html {
 @media (min-width: 901px) {
   :root {
     --header-offset: var(--header-height-desktop);
-    --scroll-padding: 112px;
+    --scroll-padding: 80px;
   }
 }
 
