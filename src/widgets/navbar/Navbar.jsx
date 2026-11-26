@@ -31,6 +31,7 @@ import {
   faArrowLeft,
   faArrowRight,
   faGaugeHigh,
+  faUser,
 } from '@fortawesome/free-solid-svg-icons';
 
 export default function Navbar({ onBookClick }) {
@@ -220,7 +221,46 @@ export default function Navbar({ onBookClick }) {
   };
 
   return (
-    <header className="fixed top-0 inset-x-0 z-[9999] bg-white border-b border-[rgba(20,125,159,0.16)] shadow-[0_8px_24px_rgba(12,18,38,0.06)] font-body">
+    <>
+      {/* App-Style Mobile Top Header (< 768px only: Logo + Bell + Account, No Search) */}
+      <header
+        dir={isRtl ? 'rtl' : 'ltr'}
+        className="md:hidden fixed top-0 inset-x-0 z-[9999] bg-brand-navy text-white h-[60px] px-4 flex items-center justify-between border-b border-white/10 shadow-header font-body print:hidden"
+      >
+        <Link
+          to={ROUTES.HOME}
+          className="inline-flex items-center focus:outline-none"
+          aria-label={t('common.brandName')}
+        >
+          <img
+            src={duckLogo}
+            alt={t('common.brandName')}
+            width="124"
+            height="32"
+            className="h-[32px] w-auto object-contain brightness-0 invert"
+          />
+        </Link>
+
+        <div className="flex items-center gap-2.5">
+          <NotificationBell compact tone="dark" />
+
+          <Link
+            to={dashboardPath}
+            aria-label={currentUser ? t('nav.dashboard') : t('common.login')}
+            title={accountName}
+            className={`relative inline-flex h-9 w-9 items-center justify-center rounded-full border transition-all ${
+              currentUser
+                ? 'border-brand-yellow bg-brand-yellow text-brand-navy shadow-xs'
+                : 'border-white/20 bg-white/10 text-white hover:border-brand-yellow hover:bg-brand-yellow hover:text-brand-navy'
+            }`}
+          >
+            <FontAwesomeIcon icon={faUser} className="text-sm" aria-hidden="true" />
+          </Link>
+        </div>
+      </header>
+
+      {/* Tablet (>= 768px) & Full Desktop (>= 901px) Header — Preserved Intact */}
+      <header className="hidden md:block fixed top-0 inset-x-0 z-[9999] bg-white border-b border-[rgba(20,125,159,0.16)] shadow-[0_8px_24px_rgba(12,18,38,0.06)] font-body">
       {/* Top Bar (Hidden on Mobile < 900px) */}
       <div className="hidden min-[901px]:flex items-center justify-between h-10 px-[4vw] bg-brand-navy text-white text-[13px]">
         <div className="flex items-center gap-2">
@@ -538,5 +578,6 @@ export default function Navbar({ onBookClick }) {
         </div>
       )}
     </header>
+    </>
   );
 }

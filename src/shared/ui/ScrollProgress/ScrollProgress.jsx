@@ -54,7 +54,7 @@ export default function ScrollProgress() {
     <>
       {/* Top Reading Progress Bar (Fixed directly beneath navbar) */}
       <div
-        className="fixed top-[52px] min-[901px]:top-[100px] inset-x-0 z-[9998] h-[3px] pointer-events-none bg-black/5 overflow-hidden"
+        className="fixed top-[60px] md:top-[52px] min-[901px]:top-[100px] inset-x-0 z-[9998] h-[3px] pointer-events-none bg-black/5 overflow-hidden"
         aria-hidden="true"
       >
         <div
@@ -65,7 +65,7 @@ export default function ScrollProgress() {
 
       {/* Floating Back-To-Top Button with Circular Progress Ring */}
       <div
-        className={`fixed bottom-5 start-5 z-[85] transition-all duration-300 ${
+        className={`fixed bottom-24 md:bottom-5 start-4 md:start-5 z-[85] transition-all duration-300 ${
           isVisible
             ? 'opacity-100 translate-y-0 pointer-events-auto'
             : 'opacity-0 translate-y-4 pointer-events-none'

@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 
 import Navbar from '../widgets/navbar/Navbar.jsx';
+import { MobileBottomNav } from '../widgets/header/index.js';
 import Footer from '../widgets/footer/Footer.jsx';
 import HeroSection from '../widgets/hero/HeroSection.jsx';
 import { BrandIntroSection } from '../widgets/brand-intro/index.js';
@@ -407,6 +408,7 @@ export default function App() {
       {!hideMainLayout && (
         <div className="print:hidden">
           <Navbar />
+          <MobileBottomNav />
         </div>
       )}
 
@@ -420,7 +422,7 @@ export default function App() {
               ? 'p-0 m-0 min-h-screen'
               : isDashboardPage
                 ? 'p-0 m-0'
-                : 'pt-[52px] min-[901px]:pt-[100px]'
+                : 'pt-[60px] md:pt-[52px] min-[901px]:pt-[100px]'
         } print:pt-0 print:m-0 print:p-0`}
       >
         <ErrorBoundary>

@@ -124,10 +124,10 @@ export default function HeroSection() {
       {/* Hero Visual Container */}
       <div
         id="top"
-        className="relative overflow-hidden bg-brand-navy text-white min-h-[calc(100svh-52px)] min-[901px]:min-h-[calc(100svh-100px)] flex flex-col justify-end min-[901px]:grid min-[901px]:grid-cols-[1fr_1.15fr]"
+        className="relative overflow-hidden bg-brand-navy text-white min-h-[calc(100svh-60px)] md:min-h-[calc(100svh-52px)] min-[901px]:min-h-[calc(100svh-100px)] flex flex-col justify-end min-[901px]:grid min-[901px]:grid-cols-[1fr_1.15fr]"
       >
         {/* Content Column */}
-        <div className="relative z-10 flex flex-col justify-center px-[5vw] min-[901px]:px-[6vw] min-[901px]:pe-[2vw] pt-14 pb-24 min-[901px]:py-20">
+        <div className="relative z-10 flex flex-col justify-center px-[5vw] min-[901px]:px-[6vw] min-[901px]:pe-[2vw] pt-14 pb-36 md:pb-12 min-[901px]:py-20">
           {/* Tag Pill */}
           <div className="inline-flex items-center gap-2 w-fit px-3.5 py-1.5 rounded-full bg-brand-yellow/15 text-brand-yellow text-xs font-bold tracking-[0.18em] mb-4 uppercase">
             <span lang="en" dir="ltr">{t('hero.tag')}</span>

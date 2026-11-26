@@ -36,7 +36,7 @@ const KIND_STYLES = {
   },
 };
 
-export default function NotificationBell({ compact = false }) {
+export default function NotificationBell({ compact = false, tone = 'light' }) {
   const { lang } = useTranslation();
   const isArabic = lang === 'ar';
   const location = useLocation();
@@ -94,6 +94,21 @@ export default function NotificationBell({ compact = false }) {
   };
 
   const hasPriorityUnread = notifications.some((n) => n.isPriority && !n.isRead);
+  const isDarkTone = tone === 'dark';
+
+  const buttonToneClass = isDarkTone
+    ? isOpen
+      ? 'border-brand-yellow bg-brand-yellow text-brand-navy shadow-sm'
+      : 'border-white/20 bg-white/10 text-white hover:border-brand-yellow hover:bg-brand-yellow hover:text-brand-navy'
+    : isOpen
+      ? 'border-brand-navy bg-brand-navy text-brand-yellow shadow-sm'
+      : 'border-brand-blue/20 bg-surface-mist text-brand-navy hover:border-brand-blue hover:bg-brand-navy hover:text-brand-yellow';
+
+  const badgeToneClass = isDarkTone
+    ? 'border-brand-navy bg-brand-yellow text-brand-navy'
+    : hasPriorityUnread
+      ? 'border-white bg-brand-yellow text-brand-navy'
+      : 'border-white bg-brand-error text-white';
 
   return (
     <div ref={containerRef} className="relative inline-flex items-center">
@@ -106,21 +121,13 @@ export default function NotificationBell({ compact = false }) {
         title={isArabic ? 'التنبيهات' : 'Notifications'}
         className={`relative inline-flex items-center justify-center rounded-full border transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue ${
           compact ? 'h-9 w-9 text-sm' : 'h-9 w-9 xl:h-10 xl:w-10 text-sm'
-        } ${
-          isOpen
-            ? 'border-brand-navy bg-brand-navy text-brand-yellow shadow-sm'
-            : 'border-brand-blue/20 bg-surface-mist text-brand-navy hover:border-brand-blue hover:bg-brand-navy hover:text-brand-yellow'
-        }`}
+        } ${buttonToneClass}`}
       >
         <FontAwesomeIcon icon={faBell} />
 
         {unreadCount > 0 && (
           <span
-            className={`absolute -top-1 -end-1 flex min-w-[18px] h-[18px] items-center justify-center rounded-full border-2 border-white px-1 text-[10px] font-extrabold leading-none ${
-              hasPriorityUnread
-                ? 'bg-brand-yellow text-brand-navy'
-                : 'bg-brand-error text-white'
-            }`}
+            className={`absolute -top-1 -end-1 flex min-w-[18px] h-[18px] items-center justify-center rounded-full border-2 px-1 text-[10px] font-extrabold leading-none ${badgeToneClass}`}
           >
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
@@ -132,7 +139,7 @@ export default function NotificationBell({ compact = false }) {
           dir={isArabic ? 'rtl' : 'ltr'}
           role="menu"
           aria-label={isArabic ? 'قائمة التنبيهات' : 'Notifications menu'}
-          className="fixed inset-x-3 top-[60px] z-[10001] overflow-hidden rounded-2xl border border-brand-blue/20 bg-surface-white text-brand-navy shadow-ocean animate-in fade-in slide-in-from-top-2 duration-150 sm:absolute sm:inset-x-auto sm:top-full sm:end-0 sm:mt-2.5 sm:w-[360px]"
+          className="fixed inset-x-3 top-[64px] z-[10001] overflow-hidden rounded-2xl border border-brand-blue/20 bg-surface-white text-brand-navy shadow-ocean animate-in fade-in slide-in-from-top-2 duration-150 sm:absolute sm:inset-x-auto sm:top-full sm:end-0 sm:mt-2.5 sm:w-[360px]"
         >
           {/* Dropdown Header */}
           <div className="flex items-center justify-between gap-2 border-b border-brand-blue/15 bg-brand-navy px-4 py-3 text-white">

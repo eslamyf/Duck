@@ -241,7 +241,7 @@ export default function Footer({ onDestinationClick }) {
       </div>
 
       {/* Sub-Footer */}
-      <div className="border-t border-white/8 px-[5vw] min-[901px]:px-[6vw] py-5">
+      <div className="border-t border-white/8 px-16 md:px-[6vw] pt-5 pb-[calc(108px+env(safe-area-inset-bottom))] md:pb-5">
         <div className="max-w-[1360px] mx-auto flex flex-col min-[901px]:flex-row items-center justify-between gap-3 text-xs text-white/60">
           <p className="m-0 text-center min-[901px]:text-start">
             {t('footer.copyright')}{' '}
@@ -274,7 +274,7 @@ export default function Footer({ onDestinationClick }) {
         rel="noopener noreferrer"
         aria-label={t('footer.whatsappAction')}
         title={t('footer.whatsappAction')}
-        className="fixed bottom-5 end-5 z-[90] flex h-12 w-12 sm:h-13 sm:w-13 items-center justify-center rounded-full bg-brand-whatsapp text-white shadow-[0_8px_24px_rgba(37,211,102,0.4)] transition-transform duration-200 hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
+        className="fixed bottom-24 md:bottom-5 end-4 md:end-5 z-[90] flex h-12 w-12 sm:h-13 sm:w-13 items-center justify-center rounded-full bg-brand-whatsapp text-white shadow-[0_8px_24px_rgba(37,211,102,0.4)] transition-transform duration-200 hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
       >
         <FontAwesomeIcon icon={faWhatsapp} className="text-2xl" aria-hidden="true" />
       </a>
