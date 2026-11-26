@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSailboat } from '@fortawesome/free-solid-svg-icons';
+import { faSailboat, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { SectionHeader, Accordion, Button } from '../../shared/ui/index.js';
@@ -61,12 +61,13 @@ export default function FAQSection() {
           <div className="w-full min-w-0">
             {/* Category Selector Buttons (5 Categories) */}
             <div
-              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 mb-6 min-[901px]:mb-8"
+              className="grid grid-cols-2 min-[901px]:grid-cols-5 gap-2.5 mb-6 min-[901px]:mb-8"
               role="group"
               aria-label={t('faq.categoriesLabel', 'أقسام الأسئلة')}
             >
-              {FAQ_CATEGORIES.map((cat) => {
+              {FAQ_CATEGORIES.map((cat, idx) => {
                 const isActive = cat.id === activeCategory;
+                const isLast = idx === FAQ_CATEGORIES.length - 1;
 
                 return (
                   <button
@@ -74,21 +75,42 @@ export default function FAQSection() {
                     type="button"
                     aria-pressed={isActive}
                     onClick={() => handleCategoryChange(cat.id)}
-                    className={`flex flex-col items-center justify-center gap-1.5 min-h-[82px] min-[901px]:min-h-[96px] p-2.5 min-[901px]:p-3.5 rounded-2xl border transition-all duration-200 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-brand-blue select-none ${
+                    className={`relative flex items-center justify-center p-2.5 min-[901px]:p-3.5 rounded-2xl border transition-all duration-200 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-brand-blue select-none ${
+                      isLast
+                        ? 'col-span-2 min-[901px]:col-span-1 min-h-[64px] min-[901px]:min-h-[96px] flex-row min-[901px]:flex-col gap-2.5 min-[901px]:gap-1.5'
+                        : 'flex-col gap-1.5 min-h-[82px] min-[901px]:min-h-[96px]'
+                    } ${
                       isActive
-                        ? 'bg-brand-navy text-white border-brand-navy shadow-card -translate-y-0.5'
+                        ? 'bg-brand-navy text-white border-brand-navy shadow-card -translate-y-0.5 ring-2 ring-brand-navy/30'
                         : 'bg-white text-brand-navy border-[rgba(20,125,159,0.18)] hover:bg-white/80 hover:border-brand-blue hover:-translate-y-0.5'
                     }`}
                   >
+                    {/* Active Checkmark Corner Indicator */}
+                    {isActive && (
+                      <span
+                        className="absolute top-2 end-2 flex h-4.5 w-4.5 min-[901px]:h-5 min-[901px]:w-5 items-center justify-center rounded-full bg-brand-yellow text-brand-navy shadow-xs ring-2 ring-brand-navy"
+                        aria-hidden="true"
+                        title={t('common.selected', 'تم الاختيار')}
+                      >
+                        <FontAwesomeIcon icon={faCheck} className="text-[10px] min-[901px]:text-xs font-black" />
+                      </span>
+                    )}
+
                     <FontAwesomeIcon
                       icon={cat.icon}
-                      className={`text-xl min-[901px]:text-2xl mb-0.5 transition-colors ${
+                      className={`text-xl min-[901px]:text-2xl mb-0.5 transition-colors shrink-0 ${
                         isActive ? 'text-brand-yellow' : 'text-brand-blue'
                       }`}
                       aria-hidden="true"
                     />
-                    <span className="font-bold text-xs min-[901px]:text-[14px] text-center leading-snug">
-                      {t(`faq.categories.${cat.key}`)}
+
+                    <span className="font-bold text-xs min-[901px]:text-[14px] text-center leading-snug inline-flex items-center gap-1.5">
+                      <span>{t(`faq.categories.${cat.key}`)}</span>
+                      {isActive && (
+                        <span className="inline-flex items-center justify-center rounded-full bg-brand-yellow/20 px-1.5 py-0.5 text-[10px] text-brand-yellow font-black border border-brand-yellow/40">
+                          <FontAwesomeIcon icon={faCheck} className="text-[9px]" />
+                        </span>
+                      )}
                     </span>
                   </button>
                 );

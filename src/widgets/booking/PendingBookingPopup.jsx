@@ -244,7 +244,7 @@ export default function PendingBookingPopup() {
           <span className="min-w-0 flex flex-col items-start leading-tight">
             <span className="flex items-center gap-1.5 font-mono text-[11px] font-extrabold text-brand-navy whitespace-nowrap">
               <bdi dir="ltr">{pendingBooking.ref}</bdi>
-              <span className="whitespace-nowrap shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-[9.5px] font-extrabold text-amber-800 border border-amber-200/50">
+              <span className="whitespace-nowrap shrink-0 [word-break:keep-all] rounded-full bg-amber-100 px-2 py-0.5 text-[9.5px] font-extrabold text-amber-800 border border-amber-200/50">
                 {t('booking.pendingPopup.statusPending')}
               </span>
             </span>
