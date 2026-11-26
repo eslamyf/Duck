@@ -1093,11 +1093,21 @@
     "pendingPopup": {
       "title": "Reminder: Unconfirmed Booking",
       "compactLabel": "Pending Ticket",
-      "message": "You have a pending booking ({{ref}}) for {{trip}} awaiting transfer receipt confirmation.",
+      "statusPending": "Pending Confirmation",
+      "statusUnconfirmed": "Not Confirmed Yet",
+      "unconfirmedNotice": "Your booking is temporary and not fully confirmed yet — please send payment receipt via WhatsApp to secure your seats.",
+      "bookingRef": "Booking Ref",
+      "trip": "Trip",
+      "dateAndTime": "Date & Time",
+      "amountDue": "Amount Due",
+      "viewInvoice": "View Full Invoice",
       "confirmWhatsAppBtn": "Confirm on WhatsApp Now",
       "returnToInvoiceBtn": "Return to Payment & Invoice",
       "remindLaterBtn": "Remind Me Later",
-      "dismiss": "Dismiss"
+      "dismiss": "Dismiss",
+      "showDetails": "Details",
+      "hideDetails": "Hide Details",
+      "copied": "Reference Copied"
     },
     "nav": {
       "previous": "Previous",

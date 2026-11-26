@@ -1093,11 +1093,21 @@
     "pendingPopup": {
       "title": "تذكير: حجز مبدئي بانتظار التأكيد",
       "compactLabel": "تذكرة بانتظار التأكيد",
-      "message": "لديك حجز مبدئي رقم {{ref}} لرحلة {{trip}} بانتظار إرسال إيصال الدفع لتأكيده.",
+      "statusPending": "بانتظار التأكيد",
+      "statusUnconfirmed": "غير مؤكد بعد",
+      "unconfirmedNotice": "حجزك مبدئي ولم يُؤكد نهائياً بعد — يرجى إرسال إيصال التحويل عبر واتساب لتثبيت مقاعدك.",
+      "bookingRef": "رقم الحجز",
+      "trip": "الرحلة",
+      "dateAndTime": "الموعد",
+      "amountDue": "المبلغ المطلوب سداده",
+      "viewInvoice": "عرض الفاتورة الكاملة",
       "confirmWhatsAppBtn": "أكمل التأكيد على واتساب الآن",
       "returnToInvoiceBtn": "العودة لصفحة الدفع والفاتورة",
       "remindLaterBtn": "تذكيري لاحقاً",
-      "dismiss": "إغلاق"
+      "dismiss": "إغلاق",
+      "showDetails": "التفاصيل",
+      "hideDetails": "إخفاء التفاصيل",
+      "copied": "تم نسخ رقم الحجز"
     },
     "nav": {
       "previous": "السابق",
