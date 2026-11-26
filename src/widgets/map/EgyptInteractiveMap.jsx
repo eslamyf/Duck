@@ -220,7 +220,7 @@ export default function EgyptInteractiveMap({
 
       {/* Manual Zoom Controls (+ / -) */}
       <div
-        className="absolute bottom-4 inset-inline-end-4 z-[400] flex flex-col gap-1.5 shadow-md rounded-xl overflow-hidden border border-black/10"
+        className="absolute bottom-4 right-4 z-[400] flex flex-col gap-1.5 shadow-md rounded-xl overflow-hidden border border-black/10"
         role="group"
         aria-label={t('map.mapAriaLabel', 'التحكم في تكبير وتصغير الخريطة')}
       >
@@ -255,7 +255,7 @@ export default function EgyptInteractiveMap({
       </button>
 
       {/* Google Logo Badge */}
-      <div className="absolute bottom-3 inset-inline-start-3 z-[400] pointer-events-none" dir="ltr">
+      <div className="absolute bottom-3 left-3 z-[400] pointer-events-none select-none" dir="ltr">
         <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-white/85 backdrop-blur-sm text-[12px] font-black tracking-tight shadow-sm border border-black/5 select-none">
           <span className="text-[#4285F4]">G</span>
           <span className="text-[#EA4335]">o</span>
