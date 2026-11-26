@@ -135,8 +135,14 @@ export default function ReviewsSection() {
     >
       <style>{`
         @keyframes rvTimer {
-          0% { width: 0%; }
-          100% { width: 100%; }
+          0% { transform: scaleX(0); }
+          100% { transform: scaleX(1); }
+        }
+        .rv-timer-bar {
+          transform-origin: right;
+        }
+        [dir="ltr"] .rv-timer-bar {
+          transform-origin: left;
         }
       `}</style>
       <div className="max-w-[1360px] mx-auto">
@@ -334,22 +340,29 @@ export default function ReviewsSection() {
             />
           </div>
 
-          {/* Indicator Dots for Easy 1-Click Jumping */}
-          <div className="flex items-center justify-center gap-1.5 pt-1" role="tablist">
+          {/* Indicator Dots for Easy 1-Click Jumping (Accessible Touch Target & WCAG Group Semantics) */}
+          <div
+            className="flex items-center justify-center gap-1.5 pt-1"
+            role="group"
+            aria-label={t('reviews.paginationLabel', 'التنقل بين آراء الضيوف')}
+          >
             {reviewsData.map((_, dotIdx) => (
               <button
                 key={dotIdx}
                 type="button"
-                role="tab"
-                aria-selected={dotIdx === mobileActiveIdx}
-                aria-label={`Review ${dotIdx + 1}`}
+                aria-current={dotIdx === mobileActiveIdx ? 'true' : undefined}
+                aria-label={t('reviews.reviewNum', { current: dotIdx + 1, total: reviewsData.length }, `رأي ${dotIdx + 1} من ${reviewsData.length}`)}
                 onClick={() => setMobileActiveIdx(dotIdx)}
-                className={`transition-all duration-300 rounded-full cursor-pointer ${
-                  dotIdx === mobileActiveIdx
-                    ? 'w-6 h-2 bg-brand-navy'
-                    : 'w-2 h-2 bg-brand-navy/20 hover:bg-brand-navy/40'
-                }`}
-              />
+                className="grid place-items-center min-w-7 h-7 p-1 cursor-pointer"
+              >
+                <span
+                  className={`block h-2 rounded-full transition-all duration-300 ${
+                    dotIdx === mobileActiveIdx
+                      ? 'w-6 bg-brand-navy'
+                      : 'w-2 bg-brand-navy/25 hover:bg-brand-navy/45'
+                  }`}
+                />
+              </button>
             ))}
           </div>
 

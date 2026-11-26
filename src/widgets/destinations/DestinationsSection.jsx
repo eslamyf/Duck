@@ -10,7 +10,7 @@ import { SECTIONS, sectionLink } from '../../shared/config/routes.js';
 
 export default function DestinationsSection({ onSelectDestination }) {
   const { t, lang } = useTranslation();
-  const { destinations: dynamicDestinations } = useCMS();
+  const { destinations: dynamicDestinations, trips: dynamicTrips } = useCMS();
   const destinationsList = dynamicDestinations?.length ? dynamicDestinations : DESTINATIONS;
 
   const [activeId, setActiveId] = useState(0);
@@ -173,7 +173,6 @@ export default function DestinationsSection({ onSelectDestination }) {
           ref={carouselRef}
           onPointerLeave={handlePointerLeave}
           className="dx flex flex-row overflow-x-auto min-[901px]:overflow-visible scroll-smooth snap-x snap-mandatory min-[901px]:snap-none gap-3.5 min-[901px]:gap-3 h-[460px] min-[901px]:h-[540px] -mx-[5vw] min-[901px]:mx-0 px-[5vw] min-[901px]:px-0 scrollbar-none"
-          role="tablist"
           aria-label={t('destinations.tabAriaLabel')}
         >
           {destinationsList.map((item, index) => {
@@ -188,6 +187,19 @@ export default function DestinationsSection({ onSelectDestination }) {
               ? (isRtl ? item.nameAr : item.nameEn)
               : t(`destinations.items.${item.key}.alt`);
 
+            // Dynamically synchronize trip count with real inventory store (U1, U2, U6)
+            const actualTripCount = dynamicTrips?.length
+              ? dynamicTrips.filter(
+                  (t) =>
+                    t.destKey === item.key ||
+                    t.destKey === item.filterKey ||
+                    t.loc === item.id ||
+                    t.loc === item.filterKey
+                ).length
+              : (item.tripCount || 0);
+
+            const isSoon = actualTripCount === 0;
+
             return (
               <article
                 key={item.id}
@@ -201,8 +213,6 @@ export default function DestinationsSection({ onSelectDestination }) {
                     ? 'min-[901px]:flex-[5.5] border-2 border-brand-yellow shadow-[0_12px_36px_rgba(253,251,69,0.12)]'
                     : 'min-[901px]:flex-1 border border-white/18 hover:border-white/40'
                 } w-[84%] max-w-[340px] min-[901px]:max-w-none min-[901px]:w-auto`}
-                role="tabpanel"
-                aria-expanded={isActive}
               >
                 {/* Background Image Container */}
                 <div className="absolute inset-0 overflow-hidden bg-brand-navy" aria-hidden="true">
@@ -253,9 +263,9 @@ export default function DestinationsSection({ onSelectDestination }) {
                 <button
                   type="button"
                   id={`tb${item.id}`}
-                  role="tab"
-                  aria-selected={isActive}
+                  aria-expanded={isActive}
                   aria-controls={`dcc${item.id}`}
+                  aria-label={destName}
                   onClick={(e) => {
                     e.stopPropagation();
                     selectTab(item.id, true);
@@ -271,7 +281,7 @@ export default function DestinationsSection({ onSelectDestination }) {
                     </span>
                   </div>
                   <div className="h-6 flex items-center justify-center">
-                    {item.soon ? (
+                    {isSoon ? (
                       <Badge variant="tag" size="xs" className="px-1.5 py-0.5 text-[10px] font-bold">
                         {t('destinations.badgeSoon')}
                       </Badge>
@@ -296,7 +306,7 @@ export default function DestinationsSection({ onSelectDestination }) {
                     className="text-2xl min-[901px]:text-3xl min-[1150px]:text-4xl font-extrabold text-white flex items-center gap-2.5 flex-wrap focus:outline-none drop-shadow-md"
                   >
                     <span>{destName}</span>
-                    {item.soon && (
+                    {isSoon && (
                       <Badge variant="accent" size="xs" className="font-bold tracking-wider uppercase">
                         {t('destinations.badgeSoon')}
                       </Badge>
@@ -308,7 +318,7 @@ export default function DestinationsSection({ onSelectDestination }) {
                   </p>
 
                   <div className="pt-1.5">
-                    {item.tripCount > 0 ? (
+                    {actualTripCount > 0 ? (
                       <Button
                         as={Link}
                         to={sectionLink(SECTIONS.TRIPS)}
@@ -317,15 +327,25 @@ export default function DestinationsSection({ onSelectDestination }) {
                         onClick={(e) => {
                           e.stopPropagation();
                           if (onSelectDestination) {
-                            onSelectDestination(item.filterKey);
+                            onSelectDestination(item.filterKey ?? item.id);
                           }
                         }}
-                        className="w-full min-[901px]:w-fit shadow-md font-bold text-xs min-[901px]:text-sm inline-flex items-center justify-center gap-1"
+                        className="w-full min-[901px]:w-fit shadow-md font-bold text-xs min-[901px]:text-sm inline-flex items-center justify-center gap-1.5"
                       >
                         <span>
-                          {item.tripCount === 1
-                            ? t('destinations.btnViewTripSingle', { name: destName, count: item.tripCount })
-                            : t('destinations.btnViewTrips', { name: destName, count: item.tripCount })}
+                          {isRtl ? (
+                            actualTripCount === 1
+                              ? `استكشف رحلة ${destName} (رحلة واحدة)`
+                              : actualTripCount === 2
+                              ? `استكشف رحلات ${destName} (رحلتان)`
+                              : actualTripCount >= 3 && actualTripCount <= 10
+                              ? `استكشف رحلات ${destName} (${actualTripCount} رحلات)`
+                              : `استكشف رحلات ${destName} (${actualTripCount} رحلة)`
+                          ) : (
+                            actualTripCount === 1
+                              ? `Explore ${destName} (${actualTripCount} trip)`
+                              : `Explore ${destName} (${actualTripCount} trips)`
+                          )}
                         </span>
                         <span className="inline-block rtl:rotate-180 transition-transform select-none" aria-hidden="true">
                           →
@@ -349,7 +369,7 @@ export default function DestinationsSection({ onSelectDestination }) {
 
         {/* Mobile Navigation Dots */}
         <div
-          className="flex min-[901px]:hidden justify-center items-center gap-2 mt-5"
+          className="flex min-[901px]:hidden justify-center items-center gap-1.5 mt-5"
           role="group"
           aria-label={t('destinations.tabAriaLabel')}
         >
@@ -359,10 +379,14 @@ export default function DestinationsSection({ onSelectDestination }) {
               type="button"
               onClick={() => scrollToMobileCard(idx)}
               aria-label={item.nameAr && item.nameEn ? (isRtl ? item.nameAr : item.nameEn) : t(`destinations.items.${item.key}.name`)}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                mobileActiveIdx === idx ? 'w-6 bg-brand-yellow' : 'w-2 bg-white/30 hover:bg-white/50'
-              }`}
-            />
+              className="grid place-items-center min-w-7 h-7 p-1 cursor-pointer"
+            >
+              <span
+                className={`block h-2 rounded-full transition-all duration-300 ${
+                  mobileActiveIdx === idx ? 'w-6 bg-brand-yellow' : 'w-2 bg-white/30 hover:bg-white/50'
+                }`}
+              />
+            </button>
           ))}
         </div>
       </div>

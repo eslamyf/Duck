@@ -306,3 +306,9 @@ body {
 .duck-pin.dim {
   opacity: 0.65;
 }
+
+/* Below-the-fold Performance Optimization (P2 in Audit Report) */
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 650px;
+}

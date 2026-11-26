@@ -120,12 +120,12 @@ export default function ReviewCard({
       className={`group relative flex flex-col sm:grid sm:grid-cols-[190px_1fr] gap-4 p-5 sm:p-6 rounded-[24px] bg-white border border-[rgba(20,125,159,0.18)] shadow-[0_14px_36px_rgba(12,18,38,0.08)] max-w-[680px] w-full mx-auto overflow-hidden transition-all duration-300 hover:shadow-xl no-underline cursor-pointer block text-brand-navy ${className}`.trim()}
       aria-label={`${reviewerName} - ${reviewerActivity}`}
     >
-      {/* Animated 7-second Progress Bar (indicates auto-switch) */}
+      {/* Animated 7-second Progress Bar (GPU Composite Transform) */}
       {showProgress && (
         <div className="absolute top-0 inset-x-0 h-1.5 bg-brand-navy/10 overflow-hidden z-20">
           <div
             key={gradientIndex}
-            className="h-full bg-gradient-to-r from-brand-blue via-brand-yellow to-brand-navy rounded-full"
+            className="h-full w-full bg-gradient-to-r from-brand-blue via-brand-yellow to-brand-navy rounded-full rv-timer-bar will-change-transform"
             style={{
               animation: 'rvTimer 7000ms linear forwards',
               animationPlayState: isPaused ? 'paused' : 'running',

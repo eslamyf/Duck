@@ -69,20 +69,19 @@ export default function HeroSection() {
       }
     };
 
-    if ('requestIdleCallback' in window) {
-      const idleId = window.requestIdleCallback(startVideoLoad, { timeout: 1500 });
-      return () => {
-        mediaQuery.removeEventListener('change', handleMotionChange);
-        if ('cancelIdleCallback' in window) {
-          window.cancelIdleCallback(idleId);
-        }
-      };
+    const triggerVideo = () => {
+      setTimeout(startVideoLoad, 1500);
+    };
+
+    if (document.readyState === 'complete') {
+      triggerVideo();
+    } else {
+      window.addEventListener('load', triggerVideo, { once: true });
     }
 
-    const timerId = setTimeout(startVideoLoad, 1000);
     return () => {
       mediaQuery.removeEventListener('change', handleMotionChange);
-      clearTimeout(timerId);
+      window.removeEventListener('load', triggerVideo);
     };
   }, []);
 
@@ -153,7 +152,7 @@ export default function HeroSection() {
                 muted
                 loop
                 playsInline
-                preload="auto"
+                preload="none"
                 poster={isDesktop ? heroPosterDesktop : heroPosterMobile}
                 onPlaying={() => setIsVideoPlaying(true)}
                 onError={() => setVideoError(true)}

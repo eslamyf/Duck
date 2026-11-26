@@ -105,9 +105,9 @@ export default function Footer({ onDestinationClick }) {
 
         {/* Quick Links */}
         <div>
-          <h4 className="text-[17px] font-bold text-brand-navy mb-3 min-[901px]:mb-4 relative pb-2.5 after:content-[''] after:absolute after:bottom-0 after:start-0 after:w-8 after:h-[3px] after:rounded-full after:bg-brand-blue">
+          <h3 className="text-[17px] font-bold text-brand-navy mb-3 min-[901px]:mb-4 relative pb-2.5 after:content-[''] after:absolute after:bottom-0 after:start-0 after:w-8 after:h-[3px] after:rounded-full after:bg-brand-blue">
             {t('footer.quickLinksTitle')}
-          </h4>
+          </h3>
           <ul className="grid gap-2.5 list-none p-0 m-0">
             <li>
               <Link to={sectionLink(SECTIONS.TOP)} className="text-brand-navy/80 text-sm font-medium inline-flex items-center gap-2 hover:text-brand-blue hover:-translate-x-1 rtl:hover:-translate-x-1 ltr:hover:translate-x-1 transition-all duration-200">
@@ -167,9 +167,9 @@ export default function Footer({ onDestinationClick }) {
 
         {/* Destinations in Egypt */}
         <div>
-          <h4 className="text-[17px] font-bold text-brand-navy mb-3 min-[901px]:mb-4 relative pb-2.5 after:content-[''] after:absolute after:bottom-0 after:start-0 after:w-8 after:h-[3px] after:rounded-full after:bg-brand-blue">
+          <h3 className="text-[17px] font-bold text-brand-navy mb-3 min-[901px]:mb-4 relative pb-2.5 after:content-[''] after:absolute after:bottom-0 after:start-0 after:w-8 after:h-[3px] after:rounded-full after:bg-brand-blue">
             {t('footer.destinationsTitle')}
-          </h4>
+          </h3>
           <ul className="grid gap-2.5 list-none p-0 m-0">
             {destinationItems.map((loc) => (
               <li key={loc.id}>
@@ -188,9 +188,9 @@ export default function Footer({ onDestinationClick }) {
 
         {/* Contact & Safety */}
         <div className="flex flex-col gap-3.5">
-          <h4 className="text-[17px] font-bold text-brand-navy mb-1 relative pb-2.5 after:content-[''] after:absolute after:bottom-0 after:start-0 after:w-8 after:h-[3px] after:rounded-full after:bg-brand-blue">
+          <h3 className="text-[17px] font-bold text-brand-navy mb-1 relative pb-2.5 after:content-[''] after:absolute after:bottom-0 after:start-0 after:w-8 after:h-[3px] after:rounded-full after:bg-brand-blue">
             {t('footer.contactTitle')}
-          </h4>
+          </h3>
           <p className="text-brand-navy/70 text-xs font-semibold m-0">
             {t('footer.supportHours')}
           </p>
@@ -274,7 +274,7 @@ export default function Footer({ onDestinationClick }) {
         rel="noopener noreferrer"
         aria-label={t('footer.whatsappAction')}
         title={t('footer.whatsappAction')}
-        className="fixed bottom-24 md:bottom-5 end-4 md:end-5 z-[90] flex h-12 w-12 sm:h-13 sm:w-13 items-center justify-center rounded-full bg-brand-whatsapp text-white shadow-[0_8px_24px_rgba(37,211,102,0.4)] transition-transform duration-200 hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
+        className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+5.75rem)] min-[901px]:bottom-6 end-4 min-[901px]:end-6 z-[90] flex h-12 w-12 sm:h-13 sm:w-13 items-center justify-center rounded-full bg-brand-whatsapp text-white shadow-[0_8px_24px_rgba(37,211,102,0.45)] transition-all duration-200 hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
       >
         <FontAwesomeIcon icon={faWhatsapp} className="text-2xl" aria-hidden="true" />
       </a>

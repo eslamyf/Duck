@@ -1,10 +1,22 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect, lazy, Suspense } from 'react';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { SectionHeader } from '../../shared/ui/index.js';
 import { MAP_PINS, DESTINATIONS } from './mapData.js';
 import { useCMS } from '../../shared/hooks/index.js';
-import EgyptInteractiveMap from './EgyptInteractiveMap.jsx';
 import DestinationMapCard from './DestinationMapCard.jsx';
+
+// Lazy-load EgyptInteractiveMap so Leaflet (148KB), leaflet.css, and map tiles
+// are strictly deferred until the user scrolls near the Map Section!
+const EgyptInteractiveMap = lazy(() => import('./EgyptInteractiveMap.jsx'));
+
+function MapSkeleton() {
+  return (
+    <div className="w-full h-full min-h-[460px] min-[901px]:min-h-[540px] flex flex-col items-center justify-center bg-[#f2efe9] text-brand-navy/60 animate-pulse p-6">
+      <div className="w-12 h-12 rounded-full border-3 border-brand-blue/30 border-t-brand-blue animate-spin mb-3" />
+      <span className="font-bold text-xs tracking-wider">جاري تحميل خريطة الوجهات...</span>
+    </div>
+  );
+}
 
 export default function MapSection({ onSelectDestination }) {
   const { t, lang } = useTranslation();
@@ -12,6 +24,24 @@ export default function MapSection({ onSelectDestination }) {
   const isEn = lang === 'en';
   const { destinations: dynamicDestinations } = useCMS();
   const destinationsList = dynamicDestinations?.length ? dynamicDestinations : DESTINATIONS;
+
+  const mapFrameRef = useRef(null);
+  const [isMapNear, setIsMapNear] = useState(false);
+
+  useEffect(() => {
+    if (!mapFrameRef.current) return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsMapNear(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '350px' }
+    );
+    observer.observe(mapFrameRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section
@@ -87,14 +117,23 @@ export default function MapSection({ onSelectDestination }) {
 
         {/* 2-Column Responsive Grid: Map Frame & Destination Preview Card */}
         <div className="grid grid-cols-1 min-[901px]:grid-cols-[1.1fr_1fr] gap-6 items-stretch">
-          {/* Map Frame (.egframe) */}
-          <div className="rounded-[26px] overflow-hidden border border-brand-yellow/35 shadow-card bg-[#f2efe9] relative p-0 min-h-[460px] min-[901px]:min-h-[540px] flex items-center justify-center">
-            <EgyptInteractiveMap
-              pins={MAP_PINS}
-              destinations={destinationsList}
-              activeIdx={activeIdx}
-              onSelectPin={setActiveIdx}
-            />
+          {/* Map Frame (.egframe) with On-Demand Near Viewport Mounting */}
+          <div
+            ref={mapFrameRef}
+            className="rounded-[26px] overflow-hidden border border-brand-yellow/35 shadow-card bg-[#f2efe9] relative p-0 min-h-[460px] min-[901px]:min-h-[540px] flex items-center justify-center"
+          >
+            {isMapNear ? (
+              <Suspense fallback={<MapSkeleton />}>
+                <EgyptInteractiveMap
+                  pins={MAP_PINS}
+                  destinations={destinationsList}
+                  activeIdx={activeIdx}
+                  onSelectPin={setActiveIdx}
+                />
+              </Suspense>
+            ) : (
+              <MapSkeleton />
+            )}
           </div>
 
           {/* Destination Preview Card */}
@@ -110,5 +149,3 @@ export default function MapSection({ onSelectDestination }) {
     </section>
   );
 }
-
-

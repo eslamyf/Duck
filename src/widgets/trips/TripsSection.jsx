@@ -26,6 +26,7 @@ const EXPERIENCE_TYPES = [
 
 export default function TripsSection({ externalFilter, onFilterChange }) {
   const { t, lang } = useTranslation();
+  const isArabic = lang === 'ar';
   const { trips: dynamicTrips, destinations: dynamicDestinations } = useCMS();
   const tripsList = dynamicTrips?.length ? dynamicTrips : TRIPS;
 
@@ -639,7 +640,7 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
             <>
               {visibleTrips.length > 1 && (
                 <div
-                  className="flex justify-center items-center gap-1.5 mt-3"
+                  className="flex justify-center items-center gap-1 mt-3"
                   role="group"
                   aria-label={t('trips.listAriaLabel')}
                 >
@@ -649,21 +650,27 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                       type="button"
                       onClick={() => scrollToMobileTrip(idx)}
                       aria-label={t(`trips.items.${item.key}.title`)}
-                      className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                        safeMobileIdx === idx
-                          ? 'w-6 bg-brand-navy'
-                          : 'w-2 bg-brand-blue/30 hover:bg-brand-blue/60'
-                      }`}
-                    />
+                      aria-current={safeMobileIdx === idx ? 'true' : undefined}
+                      className="grid place-items-center min-w-7 h-7 p-1 cursor-pointer"
+                    >
+                      <span
+                        className={`block h-2 rounded-full transition-all duration-300 ${
+                          safeMobileIdx === idx
+                            ? 'w-6 bg-brand-navy'
+                            : 'w-2 bg-brand-blue/30 hover:bg-brand-blue/60'
+                        }`}
+                      />
+                    </button>
                   ))}
                 </div>
               )}
 
               <p className="text-center font-bold text-xs text-brand-navy/70 mt-2.5" aria-live="polite">
-                {t('trips.mobileSwipeNotice', {
-                  current: safeMobileIdx + 1,
-                  total: visibleTrips.length,
-                })}
+                <bdi dir="ltr" className="inline-block font-mono font-bold">
+                  {safeMobileIdx + 1} / {visibleTrips.length}
+                </bdi>
+                {'  ·  '}
+                <span>{isArabic ? 'اسحب لاستكشاف باقي الرحلات' : 'Swipe to explore remaining trips'}</span>
               </p>
             </>
           )}

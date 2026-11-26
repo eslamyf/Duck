@@ -249,7 +249,6 @@ export default function EgyptInteractiveMap({
         type="button"
         onClick={toggleMapType}
         className="absolute top-3 inset-inline-end-3 z-[400] h-9 px-3 rounded-lg bg-white/95 hover:bg-white active:scale-95 text-brand-navy border border-black/10 backdrop-blur-md flex items-center gap-2 font-bold text-xs transition-all cursor-pointer shadow-sm select-none outline-none"
-        aria-label={mapType === 'roadmap' ? 'عرض القمر الصناعي' : 'عرض الخريطة'}
       >
         <FontAwesomeIcon icon={faLayerGroup} className="text-brand-blue text-xs" />
         <span>{mapType === 'roadmap' ? (isEn ? 'Satellite' : 'قمر صناعي') : (isEn ? 'Map' : 'خريطة')}</span>

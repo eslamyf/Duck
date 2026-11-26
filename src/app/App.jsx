@@ -382,25 +382,37 @@ function HomePageView({
         onFilterChange={setSelectedDestinationFilter}
       />
 
-      <WhyDuckSection />
+      <div className="content-visibility-auto">
+        <WhyDuckSection />
+      </div>
 
-      <GroupsBanner />
+      <div className="content-visibility-auto">
+        <GroupsBanner />
+      </div>
 
-      <Suspense fallback={<MapFallback />}>
-        <MapSection
-          onSelectDestination={onSelectDestination}
-        />
-      </Suspense>
+      <div className="content-visibility-auto">
+        <Suspense fallback={<MapFallback />}>
+          <MapSection
+            onSelectDestination={onSelectDestination}
+          />
+        </Suspense>
+      </div>
 
-      <Suspense fallback={<ReviewsFallback />}>
-        <ReviewsSection />
-      </Suspense>
+      <div className="content-visibility-auto">
+        <Suspense fallback={<ReviewsFallback />}>
+          <ReviewsSection />
+        </Suspense>
+      </div>
 
-      <Suspense fallback={<FAQFallback />}>
-        <FAQSection />
-      </Suspense>
+      <div className="content-visibility-auto">
+        <Suspense fallback={<FAQFallback />}>
+          <FAQSection />
+        </Suspense>
+      </div>
 
-      <FinalCtaSection />
+      <div className="content-visibility-auto">
+        <FinalCtaSection />
+      </div>
     </>
   );
 }
