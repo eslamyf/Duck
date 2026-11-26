@@ -232,15 +232,26 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
             {/* Background Image with smooth transition */}
             <div className="absolute inset-0 z-0 bg-brand-navy">
               <picture>
-                <source srcSet={selectedTrip.images.srcSet} sizes="(min-width: 901px) 60vw, 100vw" />
+                {selectedTrip.images?.srcSet && (
+                  <source srcSet={selectedTrip.images.srcSet} sizes="(min-width: 901px) 60vw, 100vw" />
+                )}
                 <img
                   key={selectedTrip.id}
-                  src={selectedTrip.images.large}
-                  alt={t(`trips.items.${selectedTrip.key}.alt`)}
+                  src={
+                    selectedTrip.images?.large ||
+                    selectedTrip.images?.medium ||
+                    selectedTrip.images?.thumb ||
+                    selectedTrip.imageUrl ||
+                    'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1000&auto=format&fit=crop&q=80'
+                  }
+                  alt={selectedTrip.titleAr || t(`trips.items.${selectedTrip.key}.alt`)}
                   loading="lazy"
                   decoding="async"
                   width={960}
                   height={580}
+                  style={{
+                    objectPosition: selectedTrip.imagePosition || selectedTrip.objectPosition || 'center center',
+                  }}
                   className="w-full h-full object-cover transition-opacity duration-500"
                 />
               </picture>
@@ -400,12 +411,20 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                     {/* Thumbnail */}
                     <div className="w-16 h-16 rounded-[14px] overflow-hidden bg-brand-navy/20 shrink-0">
                       <img
-                        src={trip.images.thumb}
-                        alt={t(`trips.items.${trip.key}.title`)}
+                        src={
+                          trip.images?.thumb ||
+                          trip.images?.medium ||
+                          trip.imageUrl ||
+                          'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1000&auto=format&fit=crop&q=80'
+                        }
+                        alt={trip.titleAr || t(`trips.items.${trip.key}.title`)}
                         loading="lazy"
                         decoding="async"
                         width={64}
                         height={64}
+                        style={{
+                          objectPosition: trip.imagePosition || trip.objectPosition || 'center center',
+                        }}
                         className="w-full h-full object-cover"
                       />
                     </div>
@@ -517,14 +536,24 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                   {/* Background Image & Gradient */}
                   <div className="absolute inset-0 z-0">
                     <picture>
-                      <source srcSet={trip.images.srcSet} sizes="86vw" />
+                      {trip.images?.srcSet && (
+                        <source srcSet={trip.images.srcSet} sizes="86vw" />
+                      )}
                       <img
-                        src={trip.images.medium}
-                        alt={t(`trips.items.${trip.key}.title`)}
+                        src={
+                          trip.images?.medium ||
+                          trip.images?.thumb ||
+                          trip.imageUrl ||
+                          'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1000&auto=format&fit=crop&q=80'
+                        }
+                        alt={trip.titleAr || t(`trips.items.${trip.key}.title`)}
                         loading="lazy"
                         decoding="async"
                         width={640}
                         height={450}
+                        style={{
+                          objectPosition: trip.imagePosition || trip.objectPosition || 'center center',
+                        }}
                         className="w-full h-full object-cover"
                       />
                     </picture>

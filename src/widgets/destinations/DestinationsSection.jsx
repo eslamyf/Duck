@@ -206,26 +206,45 @@ export default function DestinationsSection({ onSelectDestination }) {
               >
                 {/* Background Image Container */}
                 <div className="absolute inset-0 overflow-hidden bg-brand-navy" aria-hidden="true">
-                  <img
-                    src={isActive ? item.images.defaultSrc : item.images.stripSrc}
-                    srcSet={isActive ? item.images.srcSet : undefined}
-                    sizes={
-                      isActive
-                        ? '(max-width: 900px) 84vw, (min-width: 901px) 800px'
-                        : '(max-width: 900px) 84vw, 360px'
-                    }
-                    alt={destAlt}
-                    width={item.width}
-                    height={item.height}
-                    loading="lazy"
-                    decoding="async"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                    }}
-                    className={`w-full h-full object-cover transition-transform duration-1200 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                      isActive ? 'scale-106' : 'scale-100'
-                    }`}
-                  />
+                  {(() => {
+                    const fallbackImg =
+                      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80';
+                    const resolvedSrc =
+                      (isActive
+                        ? (item.images?.defaultSrc || item.images?.cover || item.images?.stripSrc)
+                        : (item.images?.stripSrc || item.images?.defaultSrc || item.images?.cover)) ||
+                      item.imageUrl ||
+                      fallbackImg;
+
+                    return (
+                      <img
+                        src={resolvedSrc}
+                        srcSet={isActive ? item.images?.srcSet : undefined}
+                        sizes={
+                          isActive
+                            ? '(max-width: 900px) 84vw, (min-width: 901px) 800px'
+                            : '(max-width: 900px) 84vw, 360px'
+                        }
+                        alt={destAlt}
+                        width={item.width || 1080}
+                        height={item.height || 1440}
+                        loading="lazy"
+                        decoding="async"
+                        style={{
+                          objectPosition: item.imagePosition || item.objectPosition || 'center center',
+                        }}
+                        onError={(e) => {
+                          if (e.currentTarget.src !== fallbackImg) {
+                            e.currentTarget.src = fallbackImg;
+                            e.currentTarget.style.display = 'block';
+                          }
+                        }}
+                        className={`w-full h-full object-cover transition-transform duration-1200 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                          isActive ? 'scale-106' : 'scale-100'
+                        }`}
+                      />
+                    );
+                  })()}
                   {/* Subtle Top & Bottom Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#121528] via-[#121528]/60 to-[rgba(6,123,161,0.18)] pointer-events-none" />
                 </div>

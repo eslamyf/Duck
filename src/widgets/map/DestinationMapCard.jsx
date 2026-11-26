@@ -53,10 +53,19 @@ export default function DestinationMapCard({
                 {/* Thumbnail Image */}
                 <div className="relative w-16 h-14 min-[901px]:w-18 min-[901px]:h-15 rounded-xl overflow-hidden flex-none bg-brand-navy border border-white/15">
                   <img
-                    src={dest.images?.stripSrc || dest.images?.defaultSrc}
+                    src={
+                      dest.images?.stripSrc ||
+                      dest.images?.defaultSrc ||
+                      dest.images?.cover ||
+                      dest.imageUrl ||
+                      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80'
+                    }
                     alt={title}
                     loading="lazy"
                     decoding="async"
+                    style={{
+                      objectPosition: dest.imagePosition || dest.objectPosition || 'center center',
+                    }}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <span
@@ -116,12 +125,21 @@ export default function DestinationMapCard({
         {/* Hero Image */}
         <div className="relative rounded-2xl overflow-hidden aspect-video bg-brand-navy border border-white/15 shadow-sm mb-4">
           <img
-            src={activeDest.images?.defaultSrc}
+            src={
+              activeDest.images?.defaultSrc ||
+              activeDest.images?.cover ||
+              activeDest.images?.stripSrc ||
+              activeDest.imageUrl ||
+              'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80'
+            }
             srcSet={activeDest.images?.srcSet}
             sizes="(max-width: 900px) 90vw, 500px"
             alt={title}
             loading="lazy"
             decoding="async"
+            style={{
+              objectPosition: activeDest.imagePosition || activeDest.objectPosition || 'center center',
+            }}
             className="w-full h-full object-cover"
           />
           {/* Status Badge */}

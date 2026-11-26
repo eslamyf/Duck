@@ -42,7 +42,49 @@ export function getDynamicDestinations() {
       return [...INITIAL_DESTINATIONS];
     }
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) && parsed.length > 0 ? parsed : [...INITIAL_DESTINATIONS];
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      let changed = false;
+      const repaired = parsed.map((d) => {
+        const img =
+          d.imageUrl ||
+          d.images?.cover ||
+          d.images?.defaultSrc ||
+          d.images?.stripSrc ||
+          d.image;
+        const pos = d.imagePosition || d.objectPosition || '50% 50%';
+
+        if (
+          img &&
+          (!d.images?.defaultSrc || !d.images?.stripSrc || !d.images?.cover || !d.imagePosition)
+        ) {
+          changed = true;
+          return {
+            ...d,
+            imageUrl: img,
+            imagePosition: pos,
+            objectPosition: pos,
+            images: {
+              cover: img,
+              defaultSrc: img,
+              stripSrc: img,
+              srcSet: d.images?.srcSet || '',
+              ...(d.images || {}),
+            },
+          };
+        }
+        return d;
+      });
+
+      if (changed) {
+        try {
+          localStorage.setItem(CMS_DESTINATIONS_KEY, JSON.stringify(repaired));
+        } catch {
+          // ignore quota
+        }
+      }
+      return repaired;
+    }
+    return [...INITIAL_DESTINATIONS];
   } catch {
     return [...INITIAL_DESTINATIONS];
   }
@@ -67,12 +109,21 @@ export function addDynamicDestination(destData) {
     .trim()
     .replace(/\s+/g, '-');
 
+  const imageUrl =
+    destData.imageUrl ||
+    destData.images?.cover ||
+    destData.images?.defaultSrc ||
+    destData.images?.stripSrc ||
+    INITIAL_DESTINATIONS[0].images.defaultSrc;
+
+  const imagePosition = destData.imagePosition || destData.objectPosition || '50% 50%';
+
   const newDest = {
     id: newId,
     key: slugKey,
-    num: String(list.length + 1).padStart(2, '0'),
+    num: destData.num || String(list.length + 1).padStart(2, '0'),
     soon: Boolean(destData.soon),
-    tripCount: Number(destData.tripCount) || 0,
+    tripCount: Number(destData.tripCount) || 1,
     filterKey: slugKey,
     nameAr: destData.nameAr || '',
     nameEn: destData.nameEn || '',
@@ -82,13 +133,26 @@ export function addDynamicDestination(destData) {
     locationEn: destData.locationEn || '',
     lat: Number(destData.lat) || 24.0889,
     lng: Number(destData.lng) || 32.8998,
-    images: destData.images || {
-      stripSrc: destData.imageUrl || INITIAL_DESTINATIONS[0].images.stripSrc,
-      defaultSrc: destData.imageUrl || INITIAL_DESTINATIONS[0].images.defaultSrc,
-      srcSet: '',
+    imageUrl,
+    imagePosition,
+    objectPosition: imagePosition,
+    images: {
+      cover: imageUrl,
+      defaultSrc: imageUrl,
+      stripSrc: imageUrl,
+      srcSet: destData.images?.srcSet || '',
+      ...(destData.images || {}),
     },
     ...destData,
   };
+
+  // Ensure image fields are consistently filled
+  newDest.imageUrl = imageUrl;
+  newDest.imagePosition = imagePosition;
+  newDest.objectPosition = imagePosition;
+  newDest.images.cover = imageUrl;
+  newDest.images.defaultSrc = imageUrl;
+  newDest.images.stripSrc = imageUrl;
 
   const updated = [...list, newDest];
   saveDynamicDestinations(updated);
@@ -102,10 +166,36 @@ export function updateDynamicDestination(idOrKey, updates) {
   );
   if (idx === -1) return null;
 
+  const prev = list[idx];
+  const imageUrl =
+    updates.imageUrl ||
+    updates.images?.cover ||
+    updates.images?.defaultSrc ||
+    prev.imageUrl ||
+    prev.images?.defaultSrc ||
+    prev.images?.cover;
+
+  const imagePosition =
+    updates.imagePosition ||
+    updates.objectPosition ||
+    prev.imagePosition ||
+    prev.objectPosition ||
+    '50% 50%';
+
   list[idx] = {
-    ...list[idx],
+    ...prev,
     ...updates,
-    id: list[idx].id,
+    id: prev.id,
+    imageUrl,
+    imagePosition,
+    objectPosition: imagePosition,
+    images: {
+      ...prev.images,
+      ...(updates.images || {}),
+      cover: imageUrl,
+      defaultSrc: imageUrl,
+      stripSrc: imageUrl,
+    },
   };
 
   saveDynamicDestinations(list);

@@ -42,12 +42,14 @@ import {
 import {
   resetAllDemoData,
   addDynamicDestination,
+  updateDynamicDestination,
   deleteDynamicDestination,
   addDynamicTrip,
   deleteDynamicTrip,
   updateDynamicTrip,
   updateEquipmentCapacity,
 } from '../../shared/api/cmsService.js';
+import { ImageFocusCropper } from '../../shared/ui/index.js';
 
 const ALL_STATUSES = [
   { value: 'pending', ar: 'قيد المراجعة', en: 'Pending' },
@@ -91,6 +93,7 @@ export default function AdminDashboardPage() {
   const [showAddTripModal, setShowAddTripModal] = useState(false);
   const [showAddDestModal, setShowAddDestModal] = useState(false);
   const [editingTrip, setEditingTrip] = useState(null);
+  const [editingDest, setEditingDest] = useState(null);
 
   const [newTripForm, setNewTripForm] = useState({
     titleAr: '',
@@ -102,6 +105,7 @@ export default function AdminDashboardPage() {
     durKey: '2h',
     max: 10,
     imageUrl: '',
+    imagePosition: '50% 50%',
   });
 
   const [newDestForm, setNewDestForm] = useState({
@@ -115,6 +119,19 @@ export default function AdminDashboardPage() {
     lat: 24.0889,
     lng: 32.8998,
     imageUrl: '',
+    imagePosition: '50% 20%',
+  });
+
+  const [editDestForm, setEditDestForm] = useState({
+    id: '',
+    key: '',
+    num: '',
+    nameAr: '',
+    nameEn: '',
+    descAr: '',
+    descEn: '',
+    imageUrl: '',
+    imagePosition: '50% 50%',
   });
 
   const [editTripForm, setEditTripForm] = useState({
@@ -123,6 +140,7 @@ export default function AdminDashboardPage() {
     titleAr: '',
     titleEn: '',
     imageUrl: '',
+    imagePosition: '50% 50%',
   });
 
   // Dynamic Hooks
@@ -193,13 +211,42 @@ export default function AdminDashboardPage() {
 
   const handleFileUpload = (file, callback) => {
     if (!file) return;
-    if (file.size > 8 * 1024 * 1024) {
-      alert(isArabic ? 'حجم الصورة كبير جداً، الحد الأقصى 8 ميجابايت' : 'Image is too large, max 8MB');
+    if (file.size > 15 * 1024 * 1024) {
+      alert(isArabic ? 'حجم الصورة كبير جداً، الحد الأقصى 15 ميجابايت' : 'Image is too large, max 15MB');
       return;
     }
     const reader = new FileReader();
     reader.onload = (e) => {
-      callback(e.target.result);
+      const img = new Image();
+      img.onload = () => {
+        // Optimize & resize image on canvas (max 1280px) to prevent localStorage quota issues
+        const maxDim = 1280;
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        let dataUrl = canvas.toDataURL('image/webp', 0.85);
+        if (!dataUrl || dataUrl.length < 50 || !dataUrl.startsWith('data:image/webp')) {
+          dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        }
+        callback(dataUrl);
+      };
+      img.onerror = () => {
+        callback(e.target.result);
+      };
+      img.src = e.target.result;
     };
     reader.readAsDataURL(file);
   };
@@ -223,6 +270,8 @@ export default function AdminDashboardPage() {
       price: Number(newTripForm.price) || 650,
       durKey: newTripForm.durKey,
       max: Number(newTripForm.max) || 10,
+      imagePosition: newTripForm.imagePosition || '50% 50%',
+      objectPosition: newTripForm.imagePosition || '50% 50%',
       images: {
         thumb: finalImg,
         medium: finalImg,
@@ -239,10 +288,11 @@ export default function AdminDashboardPage() {
       durKey: '2h',
       max: 10,
       imageUrl: '',
+      imagePosition: '50% 50%',
     });
   };
 
-  const handleSaveTripPricing = (tripId, priceEg, price, imageUrl, titleAr, titleEn) => {
+  const handleSaveTripPricing = (tripId, priceEg, price, imageUrl, titleAr, titleEn, imagePosition) => {
     const updates = {
       priceEg: Number(priceEg),
       price: Number(price),
@@ -254,6 +304,11 @@ export default function AdminDashboardPage() {
         thumb: imageUrl,
         medium: imageUrl,
       };
+      updates.imageUrl = imageUrl;
+    }
+    if (imagePosition) {
+      updates.imagePosition = imagePosition;
+      updates.objectPosition = imagePosition;
     }
     updateDynamicTrip(tripId, updates);
     setEditingTrip(null);
@@ -266,6 +321,8 @@ export default function AdminDashboardPage() {
     const finalImg =
       newDestForm.imageUrl ||
       'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80';
+    const finalPos = newDestForm.imagePosition || '50% 20%';
+
     addDynamicDestination({
       key,
       num: newDestForm.num,
@@ -277,8 +334,14 @@ export default function AdminDashboardPage() {
       lat: Number(newDestForm.lat) || 24.0889,
       lng: Number(newDestForm.lng) || 32.8998,
       filterKey: key,
+      imageUrl: finalImg,
+      imagePosition: finalPos,
+      objectPosition: finalPos,
       images: {
         cover: finalImg,
+        defaultSrc: finalImg,
+        stripSrc: finalImg,
+        srcSet: '',
       },
     });
     setShowAddDestModal(false);
@@ -293,7 +356,55 @@ export default function AdminDashboardPage() {
       lat: 24.0889,
       lng: 32.8998,
       imageUrl: '',
+      imagePosition: '50% 20%',
     });
+  };
+
+  const handleOpenEditDest = (dest) => {
+    const img = dest.imageUrl || dest.images?.cover || dest.images?.defaultSrc || dest.images?.stripSrc || '';
+    const pos = dest.imagePosition || dest.objectPosition || '50% 50%';
+    setEditingDest(dest);
+    setEditDestForm({
+      id: dest.id,
+      key: dest.key || '',
+      num: dest.num || '',
+      nameAr: dest.nameAr || '',
+      nameEn: dest.nameEn || '',
+      descAr: dest.descAr || '',
+      descEn: dest.descEn || '',
+      imageUrl: img,
+      imagePosition: pos,
+    });
+  };
+
+  const handleSaveDestEdit = (e) => {
+    e.preventDefault();
+    if (!editingDest) return;
+    const finalImg =
+      editDestForm.imageUrl ||
+      editingDest.imageUrl ||
+      editingDest.images?.cover ||
+      editingDest.images?.defaultSrc ||
+      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80';
+    const finalPos = editDestForm.imagePosition || '50% 50%';
+
+    updateDynamicDestination(editingDest.id, {
+      num: editDestForm.num,
+      nameAr: editDestForm.nameAr,
+      nameEn: editDestForm.nameEn,
+      descAr: editDestForm.descAr,
+      descEn: editDestForm.descEn,
+      imageUrl: finalImg,
+      imagePosition: finalPos,
+      objectPosition: finalPos,
+      images: {
+        cover: finalImg,
+        defaultSrc: finalImg,
+        stripSrc: finalImg,
+        srcSet: '',
+      },
+    });
+    setEditingDest(null);
   };
 
   const bookingColumns = [
@@ -444,6 +555,7 @@ export default function AdminDashboardPage() {
                 titleAr: row.titleAr || '',
                 titleEn: row.titleEn || '',
                 imageUrl: row.images?.medium || row.images?.thumb || '',
+                imagePosition: row.imagePosition || row.objectPosition || '50% 50%',
               });
             }}
             className="p-1.5 rounded-lg bg-surface-mist text-brand-navy hover:bg-brand-navy hover:text-brand-yellow transition text-xs cursor-pointer"
@@ -665,30 +777,55 @@ export default function AdminDashboardPage() {
                 className="rounded-[18px] border border-brand-blue/16 bg-surface-white p-4 shadow-card flex flex-col justify-between space-y-3"
               >
                 <div>
-                  {dest.images?.cover && (
-                    <div className="w-full h-32 rounded-xl overflow-hidden mb-3 bg-surface-mist border border-black/5">
-                      <img
-                        src={dest.images.cover}
-                        alt={dest.nameAr || dest.key}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.currentTarget.src = 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80';
-                        }}
-                      />
-                    </div>
-                  )}
+                  {(() => {
+                    const coverImg =
+                      dest.imageUrl ||
+                      dest.images?.cover ||
+                      dest.images?.defaultSrc ||
+                      dest.images?.stripSrc;
+                    if (!coverImg) return null;
+                    return (
+                      <div className="w-full h-36 rounded-xl overflow-hidden mb-3 bg-surface-mist border border-black/5 relative group">
+                        <img
+                          src={coverImg}
+                          alt={dest.nameAr || dest.key}
+                          style={{
+                            objectPosition: dest.imagePosition || dest.objectPosition || 'center center',
+                          }}
+                          className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-300"
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80';
+                          }}
+                        />
+                        <span className="absolute bottom-1.5 start-1.5 rounded-md bg-black/60 backdrop-blur-xs px-1.5 py-0.5 text-[9px] font-mono text-white/90">
+                          {dest.imagePosition || '50% 50%'}
+                        </span>
+                      </div>
+                    );
+                  })()}
                   <div className="flex items-center justify-between">
                     <p className="text-xs font-bold text-brand-blue uppercase">
                       {dest.num} • {dest.key}
                     </p>
-                    <button
-                      type="button"
-                      onClick={() => setDeleteModal({ type: 'dest', id: dest.id, title: dest.nameAr || dest.key })}
-                      className="p-1 rounded text-red-500 hover:bg-red-50 transition cursor-pointer text-xs"
-                      title={isArabic ? 'حذف الوجهة' : 'Delete destination'}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => handleOpenEditDest(dest)}
+                        className="p-1.5 rounded-lg text-brand-blue hover:bg-brand-blue/10 transition cursor-pointer text-xs"
+                        title={isArabic ? 'تعديل الوجهة وتحديد موضع الصورة' : 'Edit destination & crop'}
+                      >
+                        <FontAwesomeIcon icon={faPenToSquare} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setDeleteModal({ type: 'dest', id: dest.id, title: dest.nameAr || dest.key })}
+                        className="p-1.5 rounded-lg text-red-500 hover:bg-red-50 transition cursor-pointer text-xs"
+                        title={isArabic ? 'حذف الوجهة' : 'Delete destination'}
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </div>
                   </div>
                   <h3 className="mt-1 font-heading text-base font-extrabold text-brand-navy">
                     {dest.nameAr || t(`destinations.items.${dest.key}.name`, dest.key)}
@@ -1092,17 +1229,15 @@ export default function AdminDashboardPage() {
                   {isArabic ? 'صورة الغلاف / النشاط' : 'Cover / Trip Photo'}
                 </label>
                 {newTripForm.imageUrl ? (
-                  <div className="relative w-full h-32 rounded-xl overflow-hidden border border-black/10 group mb-2">
-                    <img src={newTripForm.imageUrl} alt="Preview" className="w-full h-full object-cover" />
-                    <button
-                      type="button"
-                      onClick={() => setNewTripForm((p) => ({ ...p, imageUrl: '' }))}
-                      className="absolute top-2 end-2 h-7 w-7 rounded-full bg-red-600 text-white flex items-center justify-center text-xs hover:bg-red-700 shadow cursor-pointer"
-                      title={isArabic ? 'حذف الصورة' : 'Remove image'}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                  </div>
+                  <ImageFocusCropper
+                    imageUrl={newTripForm.imageUrl}
+                    position={newTripForm.imagePosition}
+                    onChange={(pos) => setNewTripForm((p) => ({ ...p, imagePosition: pos }))}
+                    onRemove={() => setNewTripForm((p) => ({ ...p, imageUrl: '' }))}
+                    aspectRatio="16/9"
+                    isArabic={isArabic}
+                    label={isArabic ? 'حدد موضع التركيز ليظهر النشاط بوضوح' : 'Select focus to keep activity in frame'}
+                  />
                 ) : (
                   <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-brand-blue/30 bg-surface-mist/50 p-4 text-center hover:border-brand-blue transition mb-2">
                     <label className="flex flex-col items-center gap-1.5 cursor-pointer w-full">
@@ -1112,7 +1247,7 @@ export default function AdminDashboardPage() {
                       <span className="text-xs font-bold text-brand-navy">
                         {isArabic ? 'اضغط لرفع صورة من جهازك' : 'Click to upload image from device'}
                       </span>
-                      <span className="text-[10px] text-brand-navy/60">PNG, JPG, WebP (Max 8MB)</span>
+                      <span className="text-[10px] text-brand-navy/60">PNG, JPG, WebP</span>
                       <input
                         type="file"
                         accept="image/*"
@@ -1130,7 +1265,7 @@ export default function AdminDashboardPage() {
                   placeholder={isArabic ? 'أو ضع رابط صورة مباشر (URL)...' : 'Or paste direct image URL...'}
                   value={newTripForm.imageUrl?.startsWith('data:') ? '' : (newTripForm.imageUrl || '')}
                   onChange={(e) => setNewTripForm((p) => ({ ...p, imageUrl: e.target.value }))}
-                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy text-[11px] font-mono"
+                  className="mt-2 w-full rounded-xl border border-black/15 p-2 text-brand-navy text-[11px] font-mono"
                 />
               </div>
 
@@ -1231,23 +1366,21 @@ export default function AdminDashboardPage() {
                 />
               </div>
 
-              {/* Image Upload for Destination */}
+              {/* Image Upload & Focus Controller for Destination */}
               <div>
                 <label className="block font-bold text-brand-navy mb-1">
-                  {isArabic ? 'صورة غلاف الوجهة' : 'Destination Cover Photo'}
+                  {isArabic ? 'صورة غلاف الوجهة وتحديد موضع الظهور' : 'Destination Cover Photo & Crop Focus'}
                 </label>
                 {newDestForm.imageUrl ? (
-                  <div className="relative w-full h-32 rounded-xl overflow-hidden border border-black/10 group mb-2">
-                    <img src={newDestForm.imageUrl} alt="Preview" className="w-full h-full object-cover" />
-                    <button
-                      type="button"
-                      onClick={() => setNewDestForm((p) => ({ ...p, imageUrl: '' }))}
-                      className="absolute top-2 end-2 h-7 w-7 rounded-full bg-red-600 text-white flex items-center justify-center text-xs hover:bg-red-700 shadow cursor-pointer"
-                      title={isArabic ? 'حذف الصورة' : 'Remove image'}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                  </div>
+                  <ImageFocusCropper
+                    imageUrl={newDestForm.imageUrl}
+                    position={newDestForm.imagePosition}
+                    onChange={(pos) => setNewDestForm((p) => ({ ...p, imagePosition: pos }))}
+                    onRemove={() => setNewDestForm((p) => ({ ...p, imageUrl: '' }))}
+                    aspectRatio="16/9"
+                    isArabic={isArabic}
+                    label={isArabic ? 'حدد موضع التركيز (أعلى/وسط/أسفل) ليظهر الوجه والمنظر بوضوح' : 'Select focus to keep faces/landscape in frame'}
+                  />
                 ) : (
                   <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-brand-blue/30 bg-surface-mist/50 p-4 text-center hover:border-brand-blue transition mb-2">
                     <label className="flex flex-col items-center gap-1.5 cursor-pointer w-full">
@@ -1257,7 +1390,7 @@ export default function AdminDashboardPage() {
                       <span className="text-xs font-bold text-brand-navy">
                         {isArabic ? 'اضغط لرفع صورة من جهازك' : 'Click to upload image from device'}
                       </span>
-                      <span className="text-[10px] text-brand-navy/60">PNG, JPG, WebP (Max 8MB)</span>
+                      <span className="text-[10px] text-brand-navy/60">PNG, JPG, WebP</span>
                       <input
                         type="file"
                         accept="image/*"
@@ -1275,7 +1408,7 @@ export default function AdminDashboardPage() {
                   placeholder={isArabic ? 'أو ضع رابط صورة مباشر (URL)...' : 'Or paste direct image URL...'}
                   value={newDestForm.imageUrl?.startsWith('data:') ? '' : (newDestForm.imageUrl || '')}
                   onChange={(e) => setNewDestForm((p) => ({ ...p, imageUrl: e.target.value }))}
-                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy text-[11px] font-mono"
+                  className="mt-2 w-full rounded-xl border border-black/15 p-2 text-brand-navy text-[11px] font-mono"
                 />
               </div>
 
@@ -1292,6 +1425,143 @@ export default function AdminDashboardPage() {
                   className="rounded-xl px-4 py-2 bg-brand-navy text-brand-yellow font-bold hover:bg-brand-blue hover:text-white transition cursor-pointer"
                 >
                   {isArabic ? 'حفظ الوجهة' : 'Save Destination'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: EDIT DESTINATION & FOCUS POSITION */}
+      {editingDest && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 overflow-y-auto">
+          <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl space-y-4 my-8">
+            <div className="flex items-center justify-between pb-2 border-b border-black/10">
+              <h3 className="font-heading font-extrabold text-base text-brand-navy">
+                {isArabic ? 'تعديل الوجهة وتحديد موضع الصورة' : 'Edit Destination & Image Focus'}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setEditingDest(null)}
+                className="text-brand-navy/60 hover:text-brand-navy cursor-pointer"
+              >
+                <FontAwesomeIcon icon={faXmark} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveDestEdit} className="space-y-3 font-body text-xs">
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الرمز (Key/Slug)' : 'Key / Slug'}</label>
+                  <input
+                    type="text"
+                    disabled
+                    value={editDestForm.key}
+                    className="w-full rounded-xl border border-black/15 p-2 text-brand-navy bg-slate-100 font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الرقم التسلسلي' : 'Number Code'}</label>
+                  <input
+                    type="text"
+                    required
+                    value={editDestForm.num}
+                    onChange={(e) => setEditDestForm({ ...editDestForm, num: e.target.value })}
+                    className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالعربي' : 'Name (Arabic)'}</label>
+                <input
+                  type="text"
+                  required
+                  value={editDestForm.nameAr}
+                  onChange={(e) => setEditDestForm({ ...editDestForm, nameAr: e.target.value })}
+                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy font-bold"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالإنجليزي' : 'Name (English)'}</label>
+                <input
+                  type="text"
+                  required
+                  value={editDestForm.nameEn}
+                  onChange={(e) => setEditDestForm({ ...editDestForm, nameEn: e.target.value })}
+                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الوصف بالعربي' : 'Description (Arabic)'}</label>
+                <textarea
+                  value={editDestForm.descAr}
+                  onChange={(e) => setEditDestForm({ ...editDestForm, descAr: e.target.value })}
+                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy h-16"
+                />
+              </div>
+
+              {/* Image Focus Cropper in Edit Modal */}
+              <div>
+                <label className="block font-bold text-brand-navy mb-1">
+                  {isArabic ? 'صورة غلاف الوجهة وتحديد موضع الظهور' : 'Destination Cover Photo & Crop Focus'}
+                </label>
+                {editDestForm.imageUrl ? (
+                  <ImageFocusCropper
+                    imageUrl={editDestForm.imageUrl}
+                    position={editDestForm.imagePosition}
+                    onChange={(pos) => setEditDestForm((p) => ({ ...p, imagePosition: pos }))}
+                    onRemove={() => setEditDestForm((p) => ({ ...p, imageUrl: '' }))}
+                    aspectRatio="16/9"
+                    isArabic={isArabic}
+                    label={isArabic ? 'حدد موضع التركيز (أعلى/وسط/أسفل) ليظهر الوجه والمنظر بوضوح' : 'Select focus to keep faces/landscape in frame'}
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-brand-blue/30 bg-surface-mist/50 p-4 text-center hover:border-brand-blue transition mb-2">
+                    <label className="flex flex-col items-center gap-1.5 cursor-pointer w-full">
+                      <div className="h-9 w-9 rounded-full bg-brand-blue/10 text-brand-blue flex items-center justify-center text-sm">
+                        <FontAwesomeIcon icon={faUpload} />
+                      </div>
+                      <span className="text-xs font-bold text-brand-navy">
+                        {isArabic ? 'اضغط لرفع صورة من جهازك' : 'Click to upload image from device'}
+                      </span>
+                      <span className="text-[10px] text-brand-navy/60">PNG, JPG, WebP</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handleFileUpload(file, (url) => setEditDestForm((p) => ({ ...p, imageUrl: url })));
+                        }}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                )}
+                <input
+                  type="url"
+                  placeholder={isArabic ? 'أو ضع رابط صورة مباشر (URL)...' : 'Or paste direct image URL...'}
+                  value={editDestForm.imageUrl?.startsWith('data:') ? '' : (editDestForm.imageUrl || '')}
+                  onChange={(e) => setEditDestForm((p) => ({ ...p, imageUrl: e.target.value }))}
+                  className="mt-2 w-full rounded-xl border border-black/15 p-2 text-brand-navy text-[11px] font-mono"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-black/10">
+                <button
+                  type="button"
+                  onClick={() => setEditingDest(null)}
+                  className="rounded-xl px-4 py-2 border border-black/15 font-bold text-brand-navy hover:bg-slate-100 cursor-pointer"
+                >
+                  {isArabic ? 'إلغاء' : 'Cancel'}
+                </button>
+                <button
+                  type="submit"
+                  className="rounded-xl px-4 py-2 bg-brand-navy text-brand-yellow font-bold hover:bg-brand-blue hover:text-white transition cursor-pointer"
+                >
+                  {isArabic ? 'حفظ التعديلات والصورة' : 'Save Changes & Image'}
                 </button>
               </div>
             </form>
@@ -1353,17 +1623,15 @@ export default function AdminDashboardPage() {
                   {isArabic ? 'تعديل صورة النشاط' : 'Update Trip Photo'}
                 </label>
                 {editTripForm.imageUrl ? (
-                  <div className="relative w-full h-32 rounded-xl overflow-hidden border border-black/10 group mb-2">
-                    <img src={editTripForm.imageUrl} alt="Preview" className="w-full h-full object-cover" />
-                    <button
-                      type="button"
-                      onClick={() => setEditTripForm((p) => ({ ...p, imageUrl: '' }))}
-                      className="absolute top-2 end-2 h-7 w-7 rounded-full bg-red-600 text-white flex items-center justify-center text-xs hover:bg-red-700 shadow cursor-pointer"
-                      title={isArabic ? 'حذف الصورة' : 'Remove image'}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                  </div>
+                  <ImageFocusCropper
+                    imageUrl={editTripForm.imageUrl}
+                    position={editTripForm.imagePosition}
+                    onChange={(pos) => setEditTripForm((p) => ({ ...p, imagePosition: pos }))}
+                    onRemove={() => setEditTripForm((p) => ({ ...p, imageUrl: '' }))}
+                    aspectRatio="16/9"
+                    isArabic={isArabic}
+                    label={isArabic ? 'حدد موضع التركيز ليظهر النشاط بوضوح' : 'Select focus to keep activity in frame'}
+                  />
                 ) : (
                   <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-brand-blue/30 bg-surface-mist/50 p-4 text-center hover:border-brand-blue transition mb-2">
                     <label className="flex flex-col items-center gap-1.5 cursor-pointer w-full">
@@ -1391,7 +1659,7 @@ export default function AdminDashboardPage() {
                   placeholder={isArabic ? 'أو ضع رابط صورة مباشر (URL)...' : 'Or paste direct image URL...'}
                   value={editTripForm.imageUrl?.startsWith('data:') ? '' : (editTripForm.imageUrl || '')}
                   onChange={(e) => setEditTripForm((p) => ({ ...p, imageUrl: e.target.value }))}
-                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy text-[11px] font-mono"
+                  className="mt-2 w-full rounded-xl border border-black/15 p-2 text-brand-navy text-[11px] font-mono"
                 />
               </div>
 
@@ -1412,7 +1680,8 @@ export default function AdminDashboardPage() {
                       editTripForm.price,
                       editTripForm.imageUrl,
                       editTripForm.titleAr,
-                      editTripForm.titleEn
+                      editTripForm.titleEn,
+                      editTripForm.imagePosition
                     );
                   }}
                   className="rounded-xl px-4 py-2 bg-brand-navy text-brand-yellow font-bold hover:bg-brand-blue hover:text-white transition cursor-pointer"
