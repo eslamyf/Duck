@@ -102,9 +102,11 @@
   --font-mono:           ui-monospace, Consolas, monospace;
 
   /* ── Layout & Header Heights ─────────────────────────────── */
-  --header-height-desktop: 100px;
-  --header-height-mobile:  52px;
-  --scroll-padding:        88px;
+  --header-height-mobile:  60px;
+  --header-height-tablet:  53px;
+  --header-height-desktop: 101px;
+  --header-offset:         var(--header-height-mobile);
+  --scroll-padding:        68px;
 
   /* ── Z-Index Scale ───────────────────────────────────────── */
   --z-base:              1;

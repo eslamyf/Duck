@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import heroVideoDesktop from '../../shared/assets/Videos/hero-desktop.mp4';
+import heroVideoDesktop from '../../shared/assets/Videos/hero-v2.mp4';
 import heroVideoMobile from '../../shared/assets/Videos/hero-mobile.mp4';
 import heroPosterDesktop from '../../shared/assets/images/hero-poster-desktop.webp';
 import heroPosterMobile from '../../shared/assets/images/hero-poster-mobile.webp';
@@ -109,36 +109,39 @@ export default function HeroSection() {
     return () => observer.disconnect();
   }, [shouldLoadVideo]);
 
+  // Directional gradient stays strictly behind text edge and fades to 0% before screen center,
+  // keeping the kayaker and Nile river colors clean and unclouded.
   const directionalScrim = isRtl
-    ? 'bg-gradient-to-l from-brand-navy/92 via-brand-navy/68 to-brand-navy/15'
-    : 'bg-gradient-to-r from-brand-navy/92 via-brand-navy/68 to-brand-navy/15';
+    ? 'max-[900px]:hidden min-[901px]:bg-gradient-to-l min-[901px]:from-brand-navy/82 min-[901px]:from-0% min-[901px]:via-brand-navy/45 min-[901px]:via-30% min-[901px]:to-transparent min-[901px]:to-50%'
+    : 'max-[900px]:hidden min-[901px]:bg-gradient-to-r min-[901px]:from-brand-navy/82 min-[901px]:from-0% min-[901px]:via-brand-navy/45 min-[901px]:via-30% min-[901px]:to-transparent min-[901px]:to-50%';
 
   return (
     <section
+      id={SECTIONS.TOP}
       ref={sectionRef}
       dir={isRtl ? 'rtl' : 'ltr'}
-      className="relative w-full bg-brand-navy font-body"
+      className="relative w-full bg-brand-navy font-body scroll-mt-[var(--header-offset)]"
       aria-label="Hero"
     >
-      {/* Navy Outer Margin Wrapper framing the Full-Width Cinematic Video */}
-      <div className="px-3 pt-2 pb-4 sm:px-5 sm:pt-3 sm:pb-5 min-[901px]:px-[4vw] min-[901px]:pt-4 min-[901px]:pb-7">
+      {/* Navy Outer Margin Wrapper framing the Full-Width Cinematic Video (all 4 corners visible below fixed navbar) */}
+      <div className="px-3 pt-4 pb-5 sm:px-5 min-[901px]:px-[4vw] min-[901px]:pt-6 min-[901px]:pb-7">
         <div
-          id="top"
-          className="relative mx-auto max-w-[1400px] w-full min-h-[75vh] min-[901px]:min-h-[calc(100svh-180px)] overflow-hidden rounded-3xl min-[901px]:rounded-[30px] border border-white/15 bg-brand-navy text-white shadow-ocean flex items-end min-[901px]:items-center"
+          data-hero-frame="true"
+          className="relative isolate [transform:translateZ(0)] mx-auto max-w-[1400px] w-full min-h-[68vh] min-[901px]:min-h-[min(620px,calc(100svh-185px))] overflow-hidden rounded-3xl min-[901px]:rounded-[28px] border border-white/15 bg-brand-navy text-white shadow-ocean flex items-end min-[901px]:items-center"
         >
-          {/* Full-Bleed Background Media (Poster + Deferred Responsive Video) */}
-          <div className="absolute inset-0 z-0 overflow-hidden bg-brand-navy" aria-hidden="true">
-            <picture className="absolute inset-0 w-full h-full">
+          {/* Full-Bleed Background Media (HD Poster + Deferred HD Responsive Video) */}
+          <div className="absolute inset-0 z-0 overflow-hidden rounded-[inherit] bg-brand-navy" aria-hidden="true">
+            <picture className="absolute inset-0 w-full h-full rounded-[inherit]">
               <source media="(min-width: 901px)" srcSet={heroPosterDesktop} />
               <source media="(max-width: 900px)" srcSet={heroPosterMobile} />
               <img
                 src={heroPosterDesktop}
                 alt={t('hero.videoPosterAlt')}
-                width={isDesktop ? 1400 : 400}
-                height={isDesktop ? 760 : 824}
+                width={isDesktop ? 1080 : 720}
+                height={isDesktop ? 1440 : 960}
                 fetchPriority="high"
                 decoding="async"
-                className="w-full h-full object-cover"
+                className="w-full h-full rounded-[inherit] object-cover object-[center_56%] contrast-[1.06] saturate-[1.12] [transform:translateZ(0)]"
               />
             </picture>
 
@@ -154,7 +157,7 @@ export default function HeroSection() {
                 poster={isDesktop ? heroPosterDesktop : heroPosterMobile}
                 onPlaying={() => setIsVideoPlaying(true)}
                 onError={() => setVideoError(true)}
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+                className={`absolute inset-0 w-full h-full rounded-[inherit] object-cover object-[center_56%] contrast-[1.06] saturate-[1.12] [transform:translateZ(0)] transition-opacity duration-700 ${
                   isVideoPlaying ? 'opacity-100' : 'opacity-0'
                 }`}
               >
@@ -165,11 +168,11 @@ export default function HeroSection() {
               </video>
             ) : null}
 
-            {/* Directional Gradient Scrim (WCAG AAA contrast over text start side) */}
+            {/* Smart Directional Scrim (Desktop: start-edge behind text only, fades before center) */}
             <div className={`absolute inset-0 z-[1] ${directionalScrim} pointer-events-none`} />
 
-            {/* Soft Bottom Vignette for Mobile Readability */}
-            <div className="absolute inset-0 z-[1] bg-gradient-to-t from-brand-navy/90 via-brand-navy/30 to-transparent pointer-events-none min-[901px]:from-brand-navy/55 min-[901px]:via-transparent" />
+            {/* Soft Bottom Vignette for Mobile Readability Only */}
+            <div className="absolute inset-0 z-[1] bg-gradient-to-t from-brand-navy/88 from-0% via-brand-navy/50 via-35% to-transparent to-60% pointer-events-none min-[901px]:hidden" />
           </div>
 
           {/* Foreground Content Aligned to Start Edge */}
@@ -191,7 +194,7 @@ export default function HeroSection() {
             </h1>
 
             {/* Subtitle */}
-            <p className="text-sm sm:text-base min-[901px]:text-lg text-white/90 leading-[1.75] max-w-[54ch] mb-6 min-[901px]:mb-8">
+            <p className="text-sm sm:text-base min-[901px]:text-lg text-white/95 leading-[1.75] max-w-[54ch] mb-6 min-[901px]:mb-8 drop-shadow-sm">
               {t('hero.desc')}
             </p>
 

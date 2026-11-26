@@ -64,6 +64,20 @@ html {
   -ms-overflow-style: none !important;
 }
 
+@media (min-width: 768px) and (max-width: 900px) {
+  :root {
+    --header-offset: var(--header-height-tablet);
+    --scroll-padding: 64px;
+  }
+}
+
+@media (min-width: 901px) {
+  :root {
+    --header-offset: var(--header-height-desktop);
+    --scroll-padding: 112px;
+  }
+}
+
 /* ================= GLOBAL SCROLLBAR REMOVAL (Clean Modern UI) ================= */
 ::-webkit-scrollbar {
   display: none !important;

@@ -422,7 +422,7 @@ export default function App() {
               ? 'p-0 m-0 min-h-screen'
               : isDashboardPage
                 ? 'p-0 m-0'
-                : 'pt-[60px] md:pt-[52px] min-[901px]:pt-[100px]'
+                : 'pt-[var(--header-offset)]'
         } print:pt-0 print:m-0 print:p-0`}
       >
         <ErrorBoundary>
