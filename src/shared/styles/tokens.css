@@ -1,77 +1,141 @@
 /* ============================================================
    DUCK Entertainment — Official Design Tokens (v3.1)
    Single Source of Truth for all Brand Variables
-   Synchronized: 2026-11-20 | IEEE 29148 SRS v3.1 | Final_4.html
+   Synchronized: 2026-11-26 | Local Baloo Bhaijaan 2 Typography
    ============================================================ */
+
+@font-face {
+  font-family: 'Baloo Bhaijaan 2';
+  src: url('../assets/fonts/Baloo_Bhaijaan_2/static/BalooBhaijaan2-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Baloo Bhaijaan 2';
+  src: url('../assets/fonts/Baloo_Bhaijaan_2/static/BalooBhaijaan2-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Baloo Bhaijaan 2';
+  src: url('../assets/fonts/Baloo_Bhaijaan_2/static/BalooBhaijaan2-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Baloo Bhaijaan 2';
+  src: url('../assets/fonts/Baloo_Bhaijaan_2/static/BalooBhaijaan2-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Baloo Bhaijaan 2';
+  src: url('../assets/fonts/Baloo_Bhaijaan_2/static/BalooBhaijaan2-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   /* ── Brand Colors (Client-Approved Exact Values) ────────── */
-  --color-yellow:        #FDFB45;   /* Primary Accent / Sunburst Yellow  (PDF: #FDFB45) */
-  --color-navy:          #0C1226;   /* Deep Navy Base — primary dark      (PDF: #0C1226) */
-  --color-blue:          #147D9F;   /* Water Blue / Nile Teal             (PDF: #147D9F) */
+  --color-yellow: #FDFB45;
+  /* Primary Accent / Sunburst Yellow  (PDF: #FDFB45) */
+  --color-navy: #0C1226;
+  /* Deep Navy Base — primary dark      (PDF: #0C1226) */
+  --color-blue: #147D9F;
+  /* Water Blue / Nile Teal             (PDF: #147D9F) */
 
   /* ── Working Aliases (backward-compat with Final_4.html) ─── */
-  --color-yellow-legacy: #F5E847;   /* Final_4.html --y */
-  --color-navy-legacy:   #121528;   /* Final_4.html --n */
-  --color-blue-legacy:   #067BA1;   /* Final_4.html --b */
+  --color-yellow-legacy: #F5E847;
+  /* Final_4.html --y */
+  --color-navy-legacy: #121528;
+  /* Final_4.html --n */
+  --color-blue-legacy: #067BA1;
+  /* Final_4.html --b */
 
   /* ── Semantic Surface Colors ─────────────────────────────── */
   --color-surface-white: #FFFFFF;
-  --color-surface-mist:  #F3FAFC;   /* Soft sea-mist tint (Final_4.html --t) */
-  --color-surface-mist2: #E4F1F6;   /* Deeper sea-mist tint (Final_4.html --t2) */
-  --color-surface-light: #F7FBFD;   /* Gradient background mid-tone */
-  --color-surface-sand:  #F7F7F4;   /* Warm desert sand tint for editorial sections */
+  --color-surface-mist: #F3FAFC;
+  /* Soft sea-mist tint (Final_4.html --t) */
+  --color-surface-mist2: #E4F1F6;
+  /* Deeper sea-mist tint (Final_4.html --t2) */
+  --color-surface-light: #F7FBFD;
+  /* Gradient background mid-tone */
+  --color-surface-sand: #F7F7F4;
+  /* Warm desert sand tint for editorial sections */
 
   /* ── State & Feedback Colors ─────────────────────────────── */
-  --color-error:         #B3261E;   /* Final_4.html --err */
-  --color-whatsapp:      #25D366;   /* WhatsApp Brand Green */
-  --color-yellow-hover:  #FFE95A;   /* Primary CTA hover state */
+  --color-error: #B3261E;
+  /* Final_4.html --err */
+  --color-whatsapp: #25D366;
+  /* WhatsApp Brand Green */
+  --color-yellow-hover: #FFE95A;
+  /* Primary CTA hover state */
 
   /* ── Marine Shadow System ────────────────────────────────── */
-  --shadow-soft:         0 12px 32px rgba(12, 18, 38, 0.08);   /* Final_4.html --sh */
-  --shadow-ocean:        0 20px 48px rgba(20, 125, 159, 0.12); /* Final_4.html --sh2 */
-  --shadow-card:         0 4px 16px rgba(12, 18, 38, 0.06);
-  --shadow-header:       0 8px 24px rgba(12, 18, 38, 0.06);
-  --shadow-whatsapp:     0 8px 24px rgba(37, 211, 102, 0.35);
+  --shadow-soft: 0 12px 32px rgba(12, 18, 38, 0.08);
+  /* Final_4.html --sh */
+  --shadow-ocean: 0 20px 48px rgba(20, 125, 159, 0.12);
+  /* Final_4.html --sh2 */
+  --shadow-hero-frame: 0 24px 56px -10px rgba(12, 18, 38, 0.24), 0 10px 24px -8px rgba(20, 125, 159, 0.16);
+  --shadow-card: 0 4px 16px rgba(12, 18, 38, 0.06);
+  --shadow-header: 0 8px 24px rgba(12, 18, 38, 0.06);
+  --shadow-whatsapp: 0 8px 24px rgba(37, 211, 102, 0.35);
 
   /* ── Borders & Outlines ──────────────────────────────────── */
-  --border-marine:       1px solid rgba(20, 125, 159, 0.16);  /* Final_4.html --bd */
-  --border-subtle:       1px solid rgba(12, 18, 38, 0.08);    /* Final_4.html --bd2 */
-  --border-glass:        1px solid rgba(255, 255, 255, 0.14);
-  --border-glass-dark:   1px solid rgba(255, 255, 255, 0.08);
+  --border-marine: 1px solid rgba(20, 125, 159, 0.16);
+  /* Final_4.html --bd */
+  --border-subtle: 1px solid rgba(12, 18, 38, 0.08);
+  /* Final_4.html --bd2 */
+  --border-glass: 1px solid rgba(255, 255, 255, 0.14);
+  --border-glass-dark: 1px solid rgba(255, 255, 255, 0.08);
 
   /* ── Border Radii ────────────────────────────────────────── */
-  --radius-pill:         9999px;
-  --radius-card:         22px;                                 /* Final_4.html --r */
-  --radius-lg:           24px;                                 /* Final_4.html --r2 */
-  --radius-md:           16px;
-  --radius-sm:           10px;
-  --radius-xs:           8px;
+  --radius-pill: 9999px;
+  --radius-card: 22px;
+  /* Final_4.html --r */
+  --radius-lg: 24px;
+  /* Final_4.html --r2 */
+  --radius-md: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 8px;
 
   /* ── Transitions & Easings ───────────────────────────────── */
-  --ease-marine:         cubic-bezier(0.22, 1, 0.36, 1);       /* Final_4.html --ease */
-  --transition-fast:     150ms var(--ease-marine);
-  --transition-base:     280ms var(--ease-marine);
-  --transition-slow:     500ms var(--ease-marine);
+  --ease-marine: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Final_4.html --ease */
+  --transition-fast: 150ms var(--ease-marine);
+  --transition-base: 280ms var(--ease-marine);
+  --transition-slow: 500ms var(--ease-marine);
 
-  /* ── Typography (Final_4.html: 'Poppins','Cairo',sans-serif) ── */
-  --font-arabic:         'Cairo', 'Poppins', system-ui, sans-serif;
-  --font-body:           'Poppins', 'Cairo', system-ui, sans-serif;
-  --font-display:        'Poppins', 'Cairo', system-ui, sans-serif;
-  --font-mono:           ui-monospace, Consolas, monospace;
+  /* ── Typography (Unified Local Font: Baloo Bhaijaan 2) ── */
+  --font-arabic: 'Baloo Bhaijaan 2', system-ui, sans-serif;
+  --font-body: 'Baloo Bhaijaan 2', system-ui, sans-serif;
+  --font-display: 'Baloo Bhaijaan 2', system-ui, sans-serif;
+  --font-heading: 'Baloo Bhaijaan 2', system-ui, sans-serif;
+  --font-mono: ui-monospace, Consolas, monospace;
 
   /* ── Layout & Header Heights ─────────────────────────────── */
-  --header-height-desktop: 100px;
-  --header-height-mobile:  52px;
-  --scroll-padding:        88px;
+  --header-height-mobile: 60px;
+  --header-height-tablet: 53px;
+  --header-height-desktop: 69px;
+  --header-offset: var(--header-height-mobile);
+  --scroll-padding: 68px;
 
   /* ── Z-Index Scale ───────────────────────────────────────── */
-  --z-base:              1;
-  --z-dock:              80;
-  --z-floating:          90;
-  --z-overlay:           100;
-  --z-drawer:            118;
-  --z-navbar:            120;
-  --z-modal:             200;
-  --z-toast:             300;
+  --z-base: 1;
+  --z-dock: 80;
+  --z-floating: 90;
+  --z-overlay: 100;
+  --z-drawer: 118;
+  --z-navbar: 120;
+  --z-modal: 200;
+  --z-toast: 300;
 }

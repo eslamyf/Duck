@@ -21,12 +21,14 @@
   --font-arabic: var(--font-arabic);
   --font-body: var(--font-body);
   --font-display: var(--font-display);
+  --font-heading: var(--font-heading);
   --font-cairo: var(--font-arabic);
   --font-poppins: var(--font-body);
   --font-sans: var(--font-body);
 
   --shadow-soft: var(--shadow-soft);
   --shadow-ocean: var(--shadow-ocean);
+  --shadow-hero-frame: var(--shadow-hero-frame);
   --shadow-card: var(--shadow-card);
   --shadow-header: var(--shadow-header);
   --shadow-whatsapp: var(--shadow-whatsapp);
@@ -61,6 +63,20 @@ html {
   scroll-padding-top: var(--scroll-padding);
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
+}
+
+@media (min-width: 768px) and (max-width: 900px) {
+  :root {
+    --header-offset: var(--header-height-tablet);
+    --scroll-padding: 64px;
+  }
+}
+
+@media (min-width: 901px) {
+  :root {
+    --header-offset: var(--header-height-desktop);
+    --scroll-padding: 80px;
+  }
 }
 
 /* ================= GLOBAL SCROLLBAR REMOVAL (Clean Modern UI) ================= */

@@ -21,6 +21,7 @@ import {
   faStar,
   faCircleQuestion,
   faUsers,
+  faMapLocationDot,
   faLanguage,
   faSun,
   faBars,
@@ -30,13 +31,13 @@ import {
   faArrowLeft,
   faArrowRight,
   faGaugeHigh,
+  faUser,
 } from '@fortawesome/free-solid-svg-icons';
 
 export default function Navbar({ onBookClick }) {
   const { lang, setLanguage, t } = useTranslation();
   const location = useLocation();
 
-  const [currency, setCurrency] = useState('EGP');
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(SECTIONS.TOP);
   const [temp, setTemp] = useState('');
@@ -149,12 +150,6 @@ export default function Navbar({ onBookClick }) {
       sectionId: SECTIONS.TRIPS,
     },
     {
-      to: ROUTES.ACTIVITIES,
-      label: lang === 'ar' ? 'الأنشطة' : 'Activities',
-      icon: faCalendarCheck,
-      isActivities: true,
-    },
-    {
       to: ROUTES.GROUPS,
       label: t('nav.groups'),
       icon: faUsersLine,
@@ -178,6 +173,12 @@ export default function Navbar({ onBookClick }) {
       icon: faUsers,
       isAbout: true,
     },
+    {
+      to: sectionLink(SECTIONS.MAP),
+      label: t('nav.exploreMapAria'),
+      icon: faMapLocationDot,
+      sectionId: SECTIONS.MAP,
+    },
   ];
 
   const isRtl = lang === 'ar';
@@ -191,17 +192,17 @@ export default function Navbar({ onBookClick }) {
   const dashboardPath = currentUser ? getPortalPathForRole(currentUser.role) : ROUTES.LOGIN;
 
   const checkIsActive = (link) => {
-    // Activities page and its details
-    if (link.isActivities) {
-      return (
-        location.pathname === ROUTES.ACTIVITIES ||
-        location.pathname.startsWith(`${ROUTES.ACTIVITIES}/`)
-      );
-    }
-
     // About page
     if (location.pathname === ROUTES.ABOUT) {
       return Boolean(link.isAbout);
+    }
+
+    // Activities / Experiences pages highlight Experiences link
+    if (
+      location.pathname === ROUTES.ACTIVITIES ||
+      location.pathname.startsWith(`${ROUTES.ACTIVITIES}/`)
+    ) {
+      return link.sectionId === SECTIONS.TRIPS;
     }
 
     // Groups page
@@ -219,323 +220,328 @@ export default function Navbar({ onBookClick }) {
   };
 
   return (
-    <header className="fixed top-0 inset-x-0 z-[9999] bg-white border-b border-[rgba(20,125,159,0.16)] shadow-[0_8px_24px_rgba(12,18,38,0.06)] font-body">
-      {/* Top Bar (Hidden on Mobile < 900px) */}
-      <div className="hidden min-[901px]:flex items-center justify-between h-10 px-[4vw] bg-brand-navy text-white text-[13px]">
-        <div className="flex items-center gap-2">
-          {/* Language Toggle */}
-          <Button
-            type="button"
-            variant="chip"
-            size="xs"
-            onClick={() => setLanguage(lang === 'ar' ? 'en' : 'ar')}
-          >
-            {t('common.languageSwitch')}
-          </Button>
-
-          {/* Currency Group */}
-          <div
-            className="inline-flex items-center gap-1"
-            role="group"
-            aria-label="Currency"
-          >
-            {['EGP', 'USD', 'EUR'].map((cur) => (
-              <Button
-                key={cur}
-                type="button"
-                variant={currency === cur ? 'chipActive' : 'chip'}
-                size="xs"
-                onClick={() => setCurrency(cur)}
-              >
-                {cur === 'EGP'
-                  ? t('common.currencyEGP')
-                  : cur === 'USD'
-                    ? t('common.currencyUSD')
-                    : t('common.currencyEUR')}
-              </Button>
-            ))}
-          </div>
-        </div>
-
-        {/* Weather Indicator */}
-        <span
-          className="text-white/85 text-xs font-semibold flex items-center gap-1.5"
-          id="tmpDesk"
-        >
-          <b className="text-brand-yellow font-bold">
-            {t('common.aswan')}
-          </b>
-
-          {temp && (
-            <span>
-              {temp}
-              {t('common.tempSuffix')}
-            </span>
-          )}
-
-          <FontAwesomeIcon
-            icon={faSun}
-            className="text-brand-yellow text-sm ms-0.5"
-          />
-        </span>
-      </div>
-
-      {/* Main Navbar */}
-      <nav
-        aria-label="Main Navigation"
-        className="flex items-center justify-between h-[52px] min-[901px]:h-[60px] px-[4vw] max-w-[1400px] mx-auto"
+    <>
+      {/* App-Style Mobile Top Header (< 768px only: Clean White matching Desktop) */}
+      <header
+        dir={isRtl ? 'rtl' : 'ltr'}
+        className="md:hidden fixed top-0 inset-x-0 z-[9999] bg-white text-brand-navy h-[60px] px-4 flex items-center justify-between border-b border-[rgba(20,125,159,0.16)] shadow-[0_8px_24px_rgba(12,18,38,0.06)] font-body print:hidden"
       >
-        {/* Brand Logo */}
         <Link
           to={ROUTES.HOME}
-          className="block focus:outline-none"
+          className="inline-flex items-center focus:outline-none"
           aria-label={t('common.brandName')}
         >
           <img
             src={duckLogo}
             alt={t('common.brandName')}
-            width="140"
-            height="38"
-            className="h-[34px] min-[901px]:h-[38px] w-auto object-contain cursor-pointer transition-transform duration-200 hover:scale-102"
+            width="124"
+            height="32"
+            className="h-[32px] w-auto object-contain"
           />
         </Link>
 
-        {/* Desktop Navigation Links */}
-        <div className="hidden min-[901px]:flex items-center gap-1 xl:gap-2">
-          {navLinks.map((link) => {
-            const isActive = checkIsActive(link);
+        <div className="flex items-center gap-2.5">
+          <NotificationBell compact tone="light" />
 
-            return (
-              <Link
-                key={link.to}
-                to={link.to}
-                className={`relative px-3 py-2 text-[14.5px] font-semibold transition-colors duration-200 ${isActive
-                    ? 'text-brand-blue font-bold after:content-[""] after:absolute after:bottom-0 after:inset-x-3 after:h-0.5 after:bg-brand-yellow'
-                    : 'text-brand-navy/78 hover:text-brand-blue'
-                  }`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-        </div>
-
-        {/* Desktop Action Buttons */}
-        <div className="hidden min-[901px]:flex items-center gap-2.5 xl:gap-3">
-          {/* Notifications Bell */}
-          <NotificationBell />
-
-          {/* Login / Dashboard Button */}
-          {currentUser ? (
-            <Link
-              to={dashboardPath}
-              aria-label={isRtl ? 'الذهاب إلى لوحة التحكم' : 'Go to Dashboard'}
-              title={accountName}
-              className="inline-flex min-h-[38px] shrink-0 items-center gap-2 rounded-full border border-brand-navy/15 bg-brand-navy px-4 py-1.5 text-xs font-bold text-brand-yellow shadow-sm transition hover:bg-brand-blue hover:text-white"
-            >
-              <FontAwesomeIcon icon={faGaugeHigh} />
-              <span>{dashboardLabel}</span>
-            </Link>
-          ) : (
-            <Button
-              as={Link}
-              to={ROUTES.LOGIN}
-              variant="ghost"
-              size="sm"
-              className="text-brand-navy border border-brand-navy/20 hover:border-brand-blue hover:text-brand-blue"
-            >
-              {t('common.login')}
-            </Button>
-          )}
-
-          {/* Book Now Button */}
-          <Button
-            as={Link}
-            to={ROUTES.BOOKING}
-            variant="primary"
-            size="sm"
-            onClick={(e) => {
-              if (onBookClick) {
-                e.preventDefault();
-                onBookClick();
-              }
-            }}
-            className="font-bold shadow-sm"
+          <Link
+            to={dashboardPath}
+            aria-label={currentUser ? t('nav.dashboard') : t('common.login')}
+            title={accountName}
+            className={`relative inline-flex h-9 w-9 items-center justify-center rounded-full border transition-all ${currentUser
+              ? 'border-brand-navy bg-brand-navy text-brand-yellow shadow-xs'
+              : 'border-brand-blue/20 bg-surface-mist text-brand-navy hover:border-brand-blue hover:bg-brand-navy hover:text-brand-yellow'
+              }`}
           >
-            {t('nav.bookTripNow')}
-          </Button>
+            <FontAwesomeIcon icon={faUser} className="text-sm" aria-hidden="true" />
+          </Link>
         </div>
+      </header>
 
-        {/* Mobile Notification Bell & Hamburger Button */}
-        <div className="flex items-center gap-2 min-[901px]:hidden">
-          <NotificationBell compact />
-
-          <button
-            type="button"
-            onClick={() => setIsMobileOpen(!isMobileOpen)}
-            aria-expanded={isMobileOpen}
-            aria-controls="mobile-nav"
-            aria-label={t('nav.menuAria')}
-            className="p-2 text-brand-navy text-xl focus:outline-none"
-          >
-            <FontAwesomeIcon icon={isMobileOpen ? faXmark : faBars} />
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile Drawer Menu */}
-      {isMobileOpen && (
-        <div
-          id="mobile-nav"
-          className="min-[901px]:hidden fixed inset-x-0 top-[52px] bottom-0 z-[10000] bg-brand-navy text-white px-[6vw] py-4 pb-[calc(88px+env(safe-area-inset-bottom))] flex flex-col gap-1 overflow-y-auto shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200"
+      {/* Tablet (>= 768px) & Full Desktop (>= 901px) Single-Row Header */}
+      <header className="hidden md:block fixed top-0 inset-x-0 z-[9999] w-full max-w-full overflow-x-clip bg-white border-b border-[rgba(20,125,159,0.16)] shadow-[0_8px_24px_rgba(12,18,38,0.06)] font-body">
+        {/* Main Navbar */}
+        <nav
+          aria-label="Main Navigation"
+          className="flex items-center justify-between gap-2 min-[1360px]:gap-4 h-[52px] min-[901px]:h-[68px] w-full max-w-[1440px] mx-auto px-4 min-[1360px]:px-6"
         >
-          {/* Mobile Top Controls */}
-          <div className="flex items-center justify-between gap-2 p-2 bg-white/8 border border-white/14 rounded-[14px] mb-2">
-            <Button
-              type="button"
-              variant="chip"
-              size="xs"
-              icon={<FontAwesomeIcon icon={faLanguage} />}
-              onClick={() => setLanguage(lang === 'ar' ? 'en' : 'ar')}
+          {/* Start: Brand Logo + Aswan Weather Pill */}
+          <div className="flex items-center gap-2 min-[1360px]:gap-3 shrink-0">
+            <Link
+              to={ROUTES.HOME}
+              className="block focus:outline-none shrink-0"
+              aria-label={t('common.brandName')}
             >
-              {t('common.languageSwitch')}
-            </Button>
+              <img
+                src={duckLogo}
+                alt={t('common.brandName')}
+                width="140"
+                height="38"
+                className="h-[34px] min-[901px]:h-[36px] w-auto object-contain cursor-pointer transition-transform duration-200 hover:scale-102"
+              />
+            </Link>
 
-            <div className="inline-flex items-center gap-1">
-              {['EGP', 'USD', 'EUR'].map((cur) => (
-                <Button
-                  key={cur}
-                  type="button"
-                  variant={currency === cur ? 'chipActive' : 'chip'}
-                  size="xs"
-                  onClick={() => setCurrency(cur)}
-                  className="px-2"
-                >
-                  {cur === 'EGP'
-                    ? t('common.currencyEGP')
-                    : cur === 'USD'
-                      ? t('common.currencyUSD')
-                      : t('common.currencyEUR')}
-                </Button>
-              ))}
-            </div>
-
-            <Badge
-              as="span"
-              variant="weather"
-              size="sm"
-              id="tmpMob"
-              icon={
-                <FontAwesomeIcon
-                  icon={faSun}
-                  className="text-brand-yellow"
-                />
-              }
-              className="bg-transparent border-0 p-0 text-white gap-1"
+            {/* Compact Aswan Weather Badge */}
+            <span
+              id="tmpDesk"
+              className="hidden min-[901px]:inline-flex items-center gap-1.5 rounded-full bg-surface-mist border border-brand-blue/15 px-2 min-[1360px]:px-2.5 py-1 text-[11px] min-[1360px]:text-xs font-bold text-brand-navy whitespace-nowrap shrink-0"
             >
-              <b className="text-brand-yellow font-bold">
-                {t('common.aswan')}
-              </b>
-
+              <span
+                className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-brand-navy text-brand-yellow text-[9px]"
+                aria-hidden="true"
+              >
+                <FontAwesomeIcon icon={faSun} />
+              </span>
+              <span>{t('common.aswan')}</span>
               {temp && (
-                <span>
+                <span className="text-brand-blue font-extrabold">
                   {temp}
                   {t('common.tempSuffix')}
                 </span>
               )}
-            </Badge>
+            </span>
           </div>
 
-          {/* Links */}
-          {navLinks.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              onClick={() => setIsMobileOpen(false)}
-              className="flex items-center justify-between min-h-[50px] px-3 text-[16px] font-semibold border-b border-white/10 rounded-xl hover:bg-brand-yellow/12 hover:text-brand-yellow transition-colors"
+          {/* Desktop Navigation Links */}
+          <div className="hidden min-[1200px]:flex items-center justify-center gap-1 min-[1420px]:gap-1.5 shrink-0">
+            {navLinks.map((link) => {
+              const isActive = checkIsActive(link);
+
+              return (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className={`relative whitespace-nowrap px-1 min-[1360px]:px-1.5 min-[1420px]:px-2 py-2 text-xs min-[1420px]:text-[13px] font-semibold transition-colors duration-200 ${
+                    isActive
+                      ? 'text-brand-blue font-bold after:content-[""] after:absolute after:bottom-0 after:inset-x-1 after:h-0.5 after:bg-brand-yellow'
+                      : 'text-brand-navy/78 hover:text-brand-blue'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Desktop Action Buttons */}
+          <div className="hidden min-[1200px]:flex items-center gap-1.5 min-[1360px]:gap-2.5 shrink-0">
+            {/* Language Switcher */}
+            <button
+              type="button"
+              onClick={() => setLanguage(lang === 'ar' ? 'en' : 'ar')}
+              aria-label={t('common.languageSwitch')}
+              className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-brand-navy/15 bg-surface-mist px-2.5 min-[1360px]:px-3 text-xs font-bold text-brand-navy transition-colors hover:bg-brand-navy hover:text-brand-yellow cursor-pointer whitespace-nowrap"
             >
-              <span className="inline-flex items-center gap-2.5">
-                <FontAwesomeIcon
-                  icon={link.icon}
-                  className="w-5 text-center opacity-90"
-                />
-                {link.label}
-              </span>
+              <FontAwesomeIcon icon={faLanguage} className="text-brand-blue text-sm shrink-0" aria-hidden="true" />
+              <span>{t('common.languageSwitch')}</span>
+            </button>
 
-              <FontAwesomeIcon
-                icon={isRtl ? faArrowLeft : faArrowRight}
-                className="text-xs opacity-60"
-              />
-            </Link>
-          ))}
+            {/* Notifications Bell */}
+            <NotificationBell />
 
-
-
-          {/* Mobile Login / Dashboard Link */}
-          {currentUser ? (
-            <Link
-              to={dashboardPath}
-              onClick={() => setIsMobileOpen(false)}
-              className="mt-2 flex min-h-[48px] w-full items-center justify-between rounded-xl border border-brand-yellow/40 bg-brand-yellow/15 px-3.5 text-[15px] font-bold text-brand-yellow transition hover:bg-brand-yellow hover:text-brand-navy"
-              aria-label={isRtl ? 'الذهاب إلى لوحة التحكم' : 'Go to Dashboard'}
-              title={accountName}
-            >
-              <span className="inline-flex items-center gap-2.5">
-                <FontAwesomeIcon
-                  icon={faGaugeHigh}
-                  className="w-5 text-center"
-                />
+            {/* Login / Dashboard Button (Unified navy + yellow across languages) */}
+            {currentUser ? (
+              <Link
+                to={dashboardPath}
+                aria-label={isRtl ? 'الذهاب إلى لوحة التحكم' : 'Go to Dashboard'}
+                title={accountName}
+                className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-brand-navy bg-brand-navy px-3 min-[1360px]:px-3.5 text-xs font-bold text-brand-yellow shadow-sm transition hover:bg-brand-navy-legacy hover:text-brand-yellow whitespace-nowrap"
+              >
+                <FontAwesomeIcon icon={faGaugeHigh} className="text-brand-yellow shrink-0" aria-hidden="true" />
                 <span>{dashboardLabel}</span>
-              </span>
-
-              <FontAwesomeIcon
-                icon={isRtl ? faArrowLeft : faArrowRight}
-                className="text-xs opacity-75"
-              />
-            </Link>
-          ) : (
-            <Link
-              to={ROUTES.LOGIN}
-              onClick={() => setIsMobileOpen(false)}
-              className="mt-2 flex min-h-[48px] w-full items-center justify-between rounded-xl border border-white/16 bg-white/8 px-3.5 text-[15px] font-semibold text-white transition-colors hover:bg-brand-yellow/12 hover:text-brand-yellow"
-            >
-              <span className="inline-flex items-center gap-2.5">
-                <FontAwesomeIcon
-                  icon={faArrowRightToBracket}
-                  className="w-5 text-center opacity-90"
-                />
+              </Link>
+            ) : (
+              <Button
+                as={Link}
+                to={ROUTES.LOGIN}
+                variant="ghost"
+                size="sm"
+                className="shrink-0 text-brand-navy border border-brand-navy/20 hover:border-brand-blue hover:text-brand-blue whitespace-nowrap"
+              >
                 {t('common.login')}
-              </span>
+              </Button>
+            )}
 
-              <FontAwesomeIcon
-                icon={isRtl ? faArrowLeft : faArrowRight}
-                className="text-xs opacity-60"
-              />
-            </Link>
-          )}
+            {/* Book Now Button */}
+            <Button
+              as={Link}
+              to={ROUTES.BOOKING}
+              variant="primary"
+              size="sm"
+              onClick={(e) => {
+                if (onBookClick) {
+                  e.preventDefault();
+                  onBookClick();
+                }
+              }}
+              className="shrink-0 px-3 min-[1360px]:px-4 font-bold shadow-sm whitespace-nowrap"
+            >
+              <span className="xl:hidden">{t('nav.bookNowShort')}</span>
+              <span className="hidden xl:inline">{t('nav.bookTripNow')}</span>
+            </Button>
+          </div>
 
-          {/* Mobile Primary CTA */}
-          <Button
-            as={Link}
-            to={ROUTES.BOOKING}
-            variant="primary"
-            size="md"
-            fullWidth
-            icon={<FontAwesomeIcon icon={faCalendarCheck} />}
-            onClick={(e) => {
-              setIsMobileOpen(false);
+          {/* Tablet / Compact Laptop Actions + Hamburger Button (< 1200px) */}
+          <div className="flex items-center gap-2 min-[1200px]:hidden shrink-0">
+            <button
+              type="button"
+              onClick={() => setLanguage(lang === 'ar' ? 'en' : 'ar')}
+              aria-label={t('common.languageSwitch')}
+              className="hidden min-[901px]:inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-brand-navy/15 bg-surface-mist px-2.5 text-xs font-bold text-brand-navy transition-colors hover:bg-brand-navy hover:text-brand-yellow cursor-pointer whitespace-nowrap"
+            >
+              <FontAwesomeIcon icon={faLanguage} className="text-brand-blue text-xs shrink-0" aria-hidden="true" />
+              <span>{t('common.languageSwitch')}</span>
+            </button>
 
-              if (onBookClick) {
-                e.preventDefault();
-                onBookClick();
-              }
-            }}
-            className="mt-4 font-extrabold shadow-lg"
+            <NotificationBell />
+
+            <button
+              type="button"
+              onClick={() => setIsMobileOpen(!isMobileOpen)}
+              aria-expanded={isMobileOpen}
+              aria-controls="mobile-nav"
+              aria-label={t('nav.menuAria')}
+              className="p-2 text-brand-navy text-xl focus:outline-none"
+            >
+              <FontAwesomeIcon icon={isMobileOpen ? faXmark : faBars} />
+            </button>
+          </div>
+        </nav>
+
+        {/* Mobile & Tablet Drawer Menu */}
+        {isMobileOpen && (
+          <div
+            id="mobile-nav"
+            className="min-[1200px]:hidden fixed inset-x-0 top-[53px] min-[901px]:top-[69px] bottom-0 z-[10000] bg-brand-navy text-white px-[6vw] py-4 pb-[calc(88px+env(safe-area-inset-bottom))] flex flex-col gap-1 overflow-y-auto shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200"
           >
-            {t('nav.bookTripNow')}
-          </Button>
-        </div>
-      )}
-    </header>
-  );
+                {/* Mobile Top Controls */}
+                <div className="flex items-center justify-between gap-2 p-2 bg-white/8 border border-white/14 rounded-[14px] mb-2">
+                  <Button
+                    type="button"
+                    variant="chip"
+                    size="xs"
+                    icon={<FontAwesomeIcon icon={faLanguage} />}
+                    onClick={() => setLanguage(lang === 'ar' ? 'en' : 'ar')}
+                  >
+                    {t('common.languageSwitch')}
+                  </Button>
+
+                  <Badge
+                    as="span"
+                    variant="weather"
+                    size="sm"
+                    id="tmpMob"
+                    icon={
+                      <FontAwesomeIcon
+                        icon={faSun}
+                        className="text-brand-yellow"
+                      />
+                    }
+                    className="bg-transparent border-0 p-0 text-white gap-1"
+                  >
+                    <b className="text-brand-yellow font-bold">
+                      {t('common.aswan')}
+                    </b>
+
+                    {temp && (
+                      <span>
+                        {temp}
+                        {t('common.tempSuffix')}
+                      </span>
+                    )}
+                  </Badge>
+                </div>
+
+                {/* Links */}
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    onClick={() => setIsMobileOpen(false)}
+                    className="flex items-center justify-between min-h-[50px] px-3 text-[16px] font-semibold border-b border-white/10 rounded-xl hover:bg-brand-yellow/12 hover:text-brand-yellow transition-colors"
+                  >
+                    <span className="inline-flex items-center gap-2.5">
+                      <FontAwesomeIcon
+                        icon={link.icon}
+                        className="w-5 text-center opacity-90"
+                      />
+                      {link.label}
+                    </span>
+
+                    <FontAwesomeIcon
+                      icon={isRtl ? faArrowLeft : faArrowRight}
+                      className="text-xs opacity-60"
+                    />
+                  </Link>
+                ))}
+
+
+
+                {/* Mobile Login / Dashboard Link */}
+                {currentUser ? (
+                  <Link
+                    to={dashboardPath}
+                    onClick={() => setIsMobileOpen(false)}
+                    className="mt-2 flex min-h-[48px] w-full items-center justify-between rounded-xl border border-brand-yellow/40 bg-brand-yellow/15 px-3.5 text-[15px] font-bold text-brand-yellow transition hover:bg-brand-yellow hover:text-brand-navy"
+                    aria-label={isRtl ? 'الذهاب إلى لوحة التحكم' : 'Go to Dashboard'}
+                    title={accountName}
+                  >
+                    <span className="inline-flex items-center gap-2.5">
+                      <FontAwesomeIcon
+                        icon={faGaugeHigh}
+                        className="w-5 text-center"
+                      />
+                      <span>{dashboardLabel}</span>
+                    </span>
+
+                    <FontAwesomeIcon
+                      icon={isRtl ? faArrowLeft : faArrowRight}
+                      className="text-xs opacity-75"
+                    />
+                  </Link>
+                ) : (
+                  <Link
+                    to={ROUTES.LOGIN}
+                    onClick={() => setIsMobileOpen(false)}
+                    className="mt-2 flex min-h-[48px] w-full items-center justify-between rounded-xl border border-white/16 bg-white/8 px-3.5 text-[15px] font-semibold text-white transition-colors hover:bg-brand-yellow/12 hover:text-brand-yellow"
+                  >
+                    <span className="inline-flex items-center gap-2.5">
+                      <FontAwesomeIcon
+                        icon={faArrowRightToBracket}
+                        className="w-5 text-center opacity-90"
+                      />
+                      {t('common.login')}
+                    </span>
+
+                    <FontAwesomeIcon
+                      icon={isRtl ? faArrowLeft : faArrowRight}
+                      className="text-xs opacity-60"
+                    />
+                  </Link>
+                )}
+
+                {/* Mobile Primary CTA */}
+                <Button
+                  as={Link}
+                  to={ROUTES.BOOKING}
+                  variant="primary"
+                  size="md"
+                  fullWidth
+                  icon={<FontAwesomeIcon icon={faCalendarCheck} />}
+                  onClick={(e) => {
+                    setIsMobileOpen(false);
+
+                    if (onBookClick) {
+                      e.preventDefault();
+                      onBookClick();
+                    }
+                  }}
+                  className="mt-4 font-extrabold shadow-lg"
+                >
+                  {t('nav.bookTripNow')}
+                </Button>
+              </div>
+            )}
+          </header>
+        </>
+        );
 }

@@ -51,7 +51,7 @@ export default function PendingBookingPopup() {
   return (
     <div
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="fixed bottom-5 start-5 z-[90] max-w-[calc(100vw-100px)] animate-in fade-in slide-in-from-bottom-3 duration-200 font-body"
+      className="fixed bottom-[154px] md:bottom-5 start-4 md:start-5 z-[90] max-w-[calc(100vw-32px)] md:max-w-[calc(100vw-100px)] animate-in fade-in slide-in-from-bottom-3 duration-200 font-body"
       role="status"
       aria-label={t('booking.pendingPopup.title')}
     >

@@ -1,10 +1,27 @@
 import { useState, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faWater,
+  faCompass,
+  faBicycle,
+  faClock,
+  faArrowLeft,
+  faArrowRight,
+  faChevronLeft,
+  faChevronRight,
+} from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
-import { SectionHeader, Button } from '../../shared/ui/index.js';
+import { SectionHeader, Button, Card } from '../../shared/ui/index.js';
 import { useCustomScrollbar } from '../../shared/hooks/index.js';
 import { TRIPS, DESTINATIONS_FILTER, ACTIVITIES } from './tripsData.js';
 import { ROUTES } from '../../shared/config/routes.js';
+
+const EXPERIENCE_TYPES = [
+  { key: 'kayak', label: 'KAYAK', slug: 'kayaking', icon: faWater },
+  { key: 'sup', label: 'SUP', slug: 'sup', icon: faCompass },
+  { key: 'waterbike', label: 'WATER BIKE', slug: 'water-bike', icon: faBicycle },
+];
 
 export default function TripsSection({ externalFilter, onFilterChange }) {
   const { t, lang } = useTranslation();
@@ -53,14 +70,47 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
     return `${amount.toLocaleString(lang === 'ar' ? 'ar-EG' : 'en-US')} ${t('trips.currency')}`;
   };
 
-  // Track mobile carousel scroll position
+  // Track mobile carousel scroll position accurately in RTL & LTR using card center proximity
   const handleCarouselScroll = () => {
     if (!carouselRef.current || visibleTrips.length === 0) return;
     const el = carouselRef.current;
-    const itemWidth = el.firstElementChild ? el.firstElementChild.offsetWidth + 14 : 300;
-    const idx = Math.min(visibleTrips.length - 1, Math.max(0, Math.round(Math.abs(el.scrollLeft) / itemWidth)));
-    setMobileActiveIdx(idx);
+    const cards = Array.from(el.querySelectorAll('article'));
+    if (!cards.length) return;
+    const elRect = el.getBoundingClientRect();
+    const elCenter = elRect.left + elRect.width / 2;
+
+    let closestIdx = 0;
+    let closestDist = Infinity;
+    cards.forEach((card, idx) => {
+      const rect = card.getBoundingClientRect();
+      const dist = Math.abs(rect.left + rect.width / 2 - elCenter);
+      if (dist < closestDist) {
+        closestDist = dist;
+        closestIdx = idx;
+      }
+    });
+    setMobileActiveIdx(closestIdx);
   };
+
+  const scrollToMobileTrip = (targetIdx) => {
+    const clampedIdx = Math.max(0, Math.min(visibleTrips.length - 1, targetIdx));
+    const el = carouselRef.current;
+    if (!el) return;
+    const cards = el.querySelectorAll('article');
+    if (cards[clampedIdx]) {
+      cards[clampedIdx].scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
+      setMobileActiveIdx(clampedIdx);
+    }
+  };
+
+  const isRtl = lang === 'ar';
+  const PrevArrowIcon = isRtl ? faChevronRight : faChevronLeft;
+  const NextArrowIcon = isRtl ? faChevronLeft : faChevronRight;
+  const safeMobileIdx = Math.min(mobileActiveIdx, Math.max(0, visibleTrips.length - 1));
 
   return (
     <section
@@ -76,6 +126,44 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
           theme="light"
           align="start"
         />
+
+        {/* Core Experience Types Strip (KAYAK · SUP · WATER BIKE) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 mb-6 min-[901px]:mb-8">
+          {EXPERIENCE_TYPES.map((exp) => {
+            const ArrowIcon = lang === 'ar' ? faArrowLeft : faArrowRight;
+            return (
+              <Card
+                key={exp.key}
+                as={Link}
+                to={`${ROUTES.ACTIVITIES}/${exp.slug}`}
+                variant="default"
+                padding="sm"
+                className="group flex items-start gap-3.5 hover:-translate-y-0.5 hover:border-brand-blue/40 hover:shadow-card"
+              >
+                <span
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-navy text-brand-yellow text-base transition-colors group-hover:bg-brand-blue group-hover:text-white"
+                  aria-hidden="true"
+                >
+                  <FontAwesomeIcon icon={exp.icon} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <span className="text-xs font-extrabold tracking-wider text-brand-navy" lang="en" dir="ltr">
+                      {exp.label}
+                    </span>
+                    <FontAwesomeIcon
+                      icon={ArrowIcon}
+                      className="text-[11px] text-brand-blue opacity-70 transition-transform group-hover:translate-x-[-2px] ltr:group-hover:translate-x-[2px]"
+                    />
+                  </div>
+                  <p className="text-xs leading-relaxed text-brand-navy/75 m-0">
+                    {t(`trips.activityDescriptions.${exp.key}`)}
+                  </p>
+                </div>
+              </Card>
+            );
+          })}
+        </div>
 
         {/* Destination Filter Tabs */}
         <div
@@ -148,7 +236,11 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                   {t(`destinations.items.${selectedTrip.destKey}.name`)}
                 </span>
                 <span className="bg-white/20 backdrop-blur-md text-white px-3 py-1 rounded-full flex items-center gap-1.5">
-                  <span aria-hidden="true">{ACTIVITIES[selectedTrip.act]?.icon}</span>
+                  <FontAwesomeIcon
+                    icon={ACTIVITIES[selectedTrip.act]?.faIcon || faWater}
+                    className="text-brand-yellow"
+                    aria-hidden="true"
+                  />
                   <span>{t(`trips.activities.${selectedTrip.act}`)}</span>
                 </span>
                 <span className="bg-white/20 backdrop-blur-md text-white px-3 py-1 rounded-full">
@@ -360,8 +452,32 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
           </div>
         </div>
 
-        {/* Mobile Layout: Horizontal Swipeable Carousel */}
+        {/* Mobile Layout: Top-Side Arrows + Horizontal Swipeable Carousel */}
         <div className="block min-[901px]:hidden">
+          {visibleTrips.length > 1 && (
+            <div className="flex items-center justify-end gap-2 mb-3">
+              <button
+                type="button"
+                onClick={() => scrollToMobileTrip(safeMobileIdx - 1)}
+                disabled={safeMobileIdx <= 0}
+                aria-label={t('nav.prevSlide')}
+                className="w-9 h-9 rounded-full border border-brand-blue/25 bg-surface-white text-brand-navy flex items-center justify-center shadow-card transition-all hover:bg-brand-navy hover:text-brand-yellow hover:border-brand-navy disabled:opacity-35 disabled:pointer-events-none cursor-pointer"
+              >
+                <FontAwesomeIcon icon={PrevArrowIcon} className="text-xs" aria-hidden="true" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => scrollToMobileTrip(safeMobileIdx + 1)}
+                disabled={safeMobileIdx >= visibleTrips.length - 1}
+                aria-label={t('nav.nextSlide')}
+                className="w-9 h-9 rounded-full border border-brand-blue/25 bg-surface-white text-brand-navy flex items-center justify-center shadow-card transition-all hover:bg-brand-navy hover:text-brand-yellow hover:border-brand-navy disabled:opacity-35 disabled:pointer-events-none cursor-pointer"
+              >
+                <FontAwesomeIcon icon={NextArrowIcon} className="text-xs" aria-hidden="true" />
+              </button>
+            </div>
+          )}
+
           <div
             ref={carouselRef}
             onScroll={handleCarouselScroll}
@@ -419,8 +535,9 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                   <div className="relative z-10 flex flex-col gap-2">
                     {/* Meta tags */}
                     <div className="flex items-center gap-2 flex-wrap text-xs">
-                      <span className="bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full text-white">
-                        ⏱ {t(`trips.durations.${trip.durKey}`)}
+                      <span className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full text-white">
+                        <FontAwesomeIcon icon={faClock} className="text-brand-yellow text-[10px]" aria-hidden="true" />
+                        <span>{t(`trips.durations.${trip.durKey}`)}</span>
                       </span>
                       {trip.act === 'waterbike' ? (
                         <span className="bg-brand-yellow text-brand-navy font-bold px-2.5 py-0.5 rounded-full">
@@ -466,14 +583,38 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
             })}
           </div>
 
-          {/* Mobile Swipe / Counter Indicator */}
+          {/* Mobile Pagination Dots + Swipe Counter Indicator */}
           {visibleTrips.length > 0 && (
-            <p className="text-center font-bold text-xs text-brand-navy/70 mt-3" aria-live="polite">
-              {t('trips.mobileSwipeNotice', {
-                current: mobileActiveIdx + 1,
-                total: visibleTrips.length,
-              })}
-            </p>
+            <>
+              {visibleTrips.length > 1 && (
+                <div
+                  className="flex justify-center items-center gap-1.5 mt-3"
+                  role="group"
+                  aria-label={t('trips.listAriaLabel')}
+                >
+                  {visibleTrips.map((item, idx) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => scrollToMobileTrip(idx)}
+                      aria-label={t(`trips.items.${item.key}.title`)}
+                      className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                        safeMobileIdx === idx
+                          ? 'w-6 bg-brand-navy'
+                          : 'w-2 bg-brand-blue/30 hover:bg-brand-blue/60'
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
+
+              <p className="text-center font-bold text-xs text-brand-navy/70 mt-2.5" aria-live="polite">
+                {t('trips.mobileSwipeNotice', {
+                  current: safeMobileIdx + 1,
+                  total: visibleTrips.length,
+                })}
+              </p>
+            </>
           )}
         </div>
       </div>

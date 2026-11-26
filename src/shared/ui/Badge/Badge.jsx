@@ -12,6 +12,8 @@ export default function Badge({
 
   const variants = {
     tag: 'bg-brand-yellow/15 text-brand-yellow font-bold tracking-[0.18em] uppercase',
+    tagLight:
+      'bg-surface-mist text-brand-navy border border-brand-blue/20 font-extrabold tracking-[0.16em] uppercase',
     safety: 'bg-white/6 text-brand-yellow border border-white/10 font-semibold',
     weather: 'bg-white/8 border border-white/14 text-white font-medium',
     subtle: 'bg-surface-mist text-brand-blue border border-[rgba(20,125,159,0.16)] font-semibold',

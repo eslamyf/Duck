@@ -8,11 +8,15 @@ import {
 } from 'react-router-dom';
 
 import Navbar from '../widgets/navbar/Navbar.jsx';
+import { MobileBottomNav } from '../widgets/header/index.js';
 import Footer from '../widgets/footer/Footer.jsx';
 import HeroSection from '../widgets/hero/HeroSection.jsx';
+import { BrandIntroSection } from '../widgets/brand-intro/index.js';
 import DestinationsSection from '../widgets/destinations/DestinationsSection.jsx';
 import TripsSection from '../widgets/trips/TripsSection.jsx';
+import { WhyDuckSection } from '../widgets/why-duck/index.js';
 import GroupsBanner from '../widgets/groups-banner/GroupsBanner.jsx';
+import { FinalCtaSection } from '../widgets/final-cta/index.js';
 
 import { TRIPS } from '../widgets/trips/tripsData.js';
 
@@ -76,6 +80,9 @@ const AgentDashboardPage = lazy(
 );
 const NotFoundPage = lazy(
   () => import('../pages/not-found/NotFoundPage.jsx')
+);
+const StaticInfoPage = lazy(
+  () => import('../pages/static/StaticInfoPage.jsx')
 );
 
 // Loading Components
@@ -264,7 +271,7 @@ function LegacyHashRedirect() {
 // Page Title Manager
 function TitleManager() {
   const { pathname } = useLocation();
-  const { lang, t } = useTranslation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (pathname === ROUTES.LOGIN || pathname === '/login') {
@@ -285,7 +292,13 @@ function TitleManager() {
     } else if (pathname.startsWith(ROUTES.TOUR_GUIDE)) {
       document.title = `Tour Guide Portal | ${t('common.brandName')}`;
     } else if (pathname === ROUTES.ACTIVITIES || pathname.startsWith('/activities/')) {
-      document.title = `${lang === 'ar' ? 'الأنشطة' : 'Activities'} | ${t('common.brandName')}`;
+      document.title = `${t('activitiesPage.metaTitle')} | ${t('common.brandName')}`;
+    } else if (pathname === ROUTES.PRIVACY) {
+      document.title = `${t('legal.privacy.metaTitle')} | ${t('common.brandName')}`;
+    } else if (pathname === ROUTES.TERMS) {
+      document.title = `${t('legal.terms.metaTitle')} | ${t('common.brandName')}`;
+    } else if (pathname === ROUTES.CANCELLATION) {
+      document.title = `${t('legal.cancellation.metaTitle')} | ${t('common.brandName')}`;
     } else if (pathname === ROUTES.GROUPS) {
       document.title = `${t('groups.metaTitle')} | ${t('common.brandName')}`;
     } else if (pathname === ROUTES.ABOUT) {
@@ -306,7 +319,7 @@ function TitleManager() {
     } else {
       document.title = `${t('common.brandName')} - ${t('nav.home')}`;
     }
-  }, [pathname, t, lang]);
+  }, [pathname, t]);
 
   return null;
 }
@@ -395,6 +408,7 @@ export default function App() {
       {!hideMainLayout && (
         <div className="print:hidden">
           <Navbar />
+          <MobileBottomNav />
         </div>
       )}
 
@@ -408,7 +422,7 @@ export default function App() {
               ? 'p-0 m-0 min-h-screen'
               : isDashboardPage
                 ? 'p-0 m-0'
-                : 'pt-[52px] min-[901px]:pt-[100px]'
+                : 'pt-[var(--header-offset)]'
         } print:pt-0 print:m-0 print:p-0`}
       >
         <ErrorBoundary>
@@ -420,6 +434,8 @@ export default function App() {
                 <>
                   <HeroSection />
 
+                  <BrandIntroSection />
+
                   <DestinationsSection
                     onSelectDestination={handleSelectDestination}
                   />
@@ -428,6 +444,8 @@ export default function App() {
                     externalFilter={selectedDestinationFilter}
                     onFilterChange={setSelectedDestinationFilter}
                   />
+
+                  <WhyDuckSection />
 
                   <GroupsBanner />
 
@@ -444,6 +462,8 @@ export default function App() {
                   <Suspense fallback={<FAQFallback />}>
                     <FAQSection />
                   </Suspense>
+
+                  <FinalCtaSection />
                 </>
               }
             />
@@ -601,6 +621,32 @@ export default function App() {
                     <AgentDashboardPage />
                   </Suspense>
                 </ProtectedRoute>
+              }
+            />
+
+            {/* Legal / Policy Pages */}
+            <Route
+              path={ROUTES.PRIVACY}
+              element={
+                <Suspense fallback={<AboutFallback />}>
+                  <StaticInfoPage policyKey="privacy" />
+                </Suspense>
+              }
+            />
+            <Route
+              path={ROUTES.TERMS}
+              element={
+                <Suspense fallback={<AboutFallback />}>
+                  <StaticInfoPage policyKey="terms" />
+                </Suspense>
+              }
+            />
+            <Route
+              path={ROUTES.CANCELLATION}
+              element={
+                <Suspense fallback={<AboutFallback />}>
+                  <StaticInfoPage policyKey="cancellation" />
+                </Suspense>
               }
             />
 

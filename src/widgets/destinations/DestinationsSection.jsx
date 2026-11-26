@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { SectionHeader, Button, Badge } from '../../shared/ui/index.js';
 import { DESTINATIONS } from './destinationsData.js';
@@ -58,21 +60,28 @@ export default function DestinationsSection({ onSelectDestination }) {
     }
   };
 
-  // Sync mobile carousel scroll with active dot
+  // Sync mobile carousel scroll position cleanly in both RTL & LTR using card centers
   useEffect(() => {
     const el = carouselRef.current;
-    if (!el) return;
+    if (!el) return undefined;
 
     const handleScroll = () => {
-      const scrollLeft = Math.abs(el.scrollLeft);
-      const cardWidth = el.scrollWidth / DESTINATIONS.length;
-      if (cardWidth > 0) {
-        const idx = Math.min(
-          DESTINATIONS.length - 1,
-          Math.max(0, Math.round(scrollLeft / cardWidth))
-        );
-        setMobileActiveIdx(idx);
-      }
+      const cards = Array.from(el.querySelectorAll('article'));
+      if (!cards.length) return;
+      const elRect = el.getBoundingClientRect();
+      const elCenter = elRect.left + elRect.width / 2;
+
+      let closestIdx = 0;
+      let closestDist = Infinity;
+      cards.forEach((card, idx) => {
+        const rect = card.getBoundingClientRect();
+        const dist = Math.abs(rect.left + rect.width / 2 - elCenter);
+        if (dist < closestDist) {
+          closestDist = dist;
+          closestIdx = idx;
+        }
+      });
+      setMobileActiveIdx(closestIdx);
     };
 
     el.addEventListener('scroll', handleScroll, { passive: true });
@@ -80,18 +89,22 @@ export default function DestinationsSection({ onSelectDestination }) {
   }, []);
 
   const scrollToMobileCard = (index) => {
+    const clampedIdx = Math.max(0, Math.min(DESTINATIONS.length - 1, index));
     const el = carouselRef.current;
     if (!el) return;
     const cards = el.querySelectorAll('article');
-    if (cards[index]) {
-      cards[index].scrollIntoView({
+    if (cards[clampedIdx]) {
+      cards[clampedIdx].scrollIntoView({
         behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
         block: 'nearest',
         inline: 'center',
       });
-      setMobileActiveIdx(index);
+      setMobileActiveIdx(clampedIdx);
     }
   };
+
+  const PrevArrowIcon = isRtl ? faChevronRight : faChevronLeft;
+  const NextArrowIcon = isRtl ? faChevronLeft : faChevronRight;
 
   return (
     <section
@@ -100,11 +113,56 @@ export default function DestinationsSection({ onSelectDestination }) {
       aria-label={t('destinations.title')}
     >
       <div className="max-w-[1360px] mx-auto">
-        <SectionHeader
-          theme="dark"
-          title={t('destinations.title')}
-          subtitle={t('destinations.subtitle')}
-        />
+        <div className="flex flex-col min-[901px]:flex-row min-[901px]:items-end justify-between gap-4 mb-7 min-[901px]:mb-9">
+          <SectionHeader
+            theme="dark"
+            tag={
+              <span
+                className="text-xs font-extrabold uppercase tracking-[0.2em] text-brand-yellow"
+                lang="en"
+                dir="ltr"
+              >
+                {t('destinations.eyebrow')}
+              </span>
+            }
+            title={t('destinations.title')}
+            subtitle={t('destinations.subtitle')}
+            className="mb-0"
+          />
+
+          <Button
+            as={Link}
+            to={sectionLink(SECTIONS.MAP)}
+            variant="outline"
+            size="sm"
+            className="w-fit shrink-0 border-white/30 text-white hover:bg-brand-yellow hover:text-brand-navy hover:border-brand-yellow font-bold"
+          >
+            {t('destinations.exploreCta')}
+          </Button>
+        </div>
+
+        {/* Mobile Top-Side Prev / Next Navigation Arrows (matches Card Reference) */}
+        <div className="flex min-[901px]:hidden items-center justify-end gap-2 mb-3">
+          <button
+            type="button"
+            onClick={() => scrollToMobileCard(mobileActiveIdx - 1)}
+            disabled={mobileActiveIdx <= 0}
+            aria-label={t('nav.prevSlide')}
+            className="w-9 h-9 rounded-full border border-white/25 bg-white/12 text-white flex items-center justify-center shadow-xs transition-all hover:bg-brand-yellow hover:text-brand-navy hover:border-brand-yellow disabled:opacity-35 disabled:pointer-events-none cursor-pointer"
+          >
+            <FontAwesomeIcon icon={PrevArrowIcon} className="text-xs" aria-hidden="true" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => scrollToMobileCard(mobileActiveIdx + 1)}
+            disabled={mobileActiveIdx >= DESTINATIONS.length - 1}
+            aria-label={t('nav.nextSlide')}
+            className="w-9 h-9 rounded-full border border-white/25 bg-white/12 text-white flex items-center justify-center shadow-xs transition-all hover:bg-brand-yellow hover:text-brand-navy hover:border-brand-yellow disabled:opacity-35 disabled:pointer-events-none cursor-pointer"
+          >
+            <FontAwesomeIcon icon={NextArrowIcon} className="text-xs" aria-hidden="true" />
+          </button>
+        </div>
 
         {/* Desktop Expanding Strips / Mobile Snap Carousel */}
         <div
