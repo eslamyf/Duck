@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLocationDot, faWater } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { TRIPS, ACTIVITIES } from '../trips/tripsData.js';
 import { ROUTES } from '../../shared/config/routes.js';
@@ -24,7 +26,7 @@ export default function TripRelatedTrips({ currentTrip }) {
         {related.map((trip) => {
           const destName = t(`destinations.items.${trip.destKey}.name`);
           const actName = t(`trips.activities.${trip.act}`);
-          const actIcon = ACTIVITIES[trip.act]?.icon || '🛶';
+          const actIcon = ACTIVITIES[trip.act]?.faIcon || faWater;
           const title = t(`trips.items.${trip.key}.title`);
 
           return (
@@ -44,8 +46,12 @@ export default function TripRelatedTrips({ currentTrip }) {
 
               <div className="zx">
                 <b>{title}</b>
-                <small>
-                  {actIcon} {actName} · 📍 {destName}
+                <small className="inline-flex items-center gap-1.5 flex-wrap">
+                  <FontAwesomeIcon icon={actIcon} className="text-brand-blue text-[11px]" aria-hidden="true" />
+                  <span>{actName}</span>
+                  <span>·</span>
+                  <FontAwesomeIcon icon={faLocationDot} className="text-brand-blue text-[11px]" aria-hidden="true" />
+                  <span>{destName}</span>
                 </small>
               </div>
 

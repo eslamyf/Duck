@@ -10,6 +10,9 @@ export const ROUTES = Object.freeze({
   GROUPS: '/groups',
   ABOUT: '/about',
   BOOKING: '/book',
+  PRIVACY: '/privacy-policy',
+  TERMS: '/terms-and-conditions',
+  CANCELLATION: '/cancellation-policy',
 
   booking: (slug) => (slug ? `/book?trip=${slug}` : '/book'),
 

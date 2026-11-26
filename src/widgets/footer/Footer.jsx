@@ -14,7 +14,6 @@ import {
   faCompass,
   faBuilding,
   faMapLocationDot,
-  faStar,
   faCircleQuestion,
   faCircleInfo,
   faEnvelope,
@@ -54,6 +53,13 @@ export default function Footer({ onDestinationClick }) {
               className="h-10 min-[901px]:h-11 w-auto brightness-0 invert opacity-95 hover:opacity-100 transition-opacity object-contain"
             />
           </Link>
+          <p
+            className="text-xs font-extrabold tracking-wide text-brand-yellow m-0"
+            lang="en"
+            dir="ltr"
+          >
+            {t('footer.tagline')}
+          </p>
           <p className="text-sm text-white/78 leading-[1.65] max-w-[38ch] m-0">
             {t('footer.bio')}
           </p>
@@ -104,15 +110,27 @@ export default function Footer({ onDestinationClick }) {
           </h4>
           <ul className="grid gap-2.5 list-none p-0 m-0">
             <li>
-              <Link to={sectionLink(SECTIONS.DESTINATIONS)} className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
-                <FontAwesomeIcon icon={faLocationDot} className="text-xs text-brand-yellow opacity-85" />
-                {t('nav.destinations')}
+              <Link to={sectionLink(SECTIONS.TOP)} className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
+                <FontAwesomeIcon icon={faCompass} className="text-xs text-brand-yellow opacity-85" />
+                {t('nav.home')}
               </Link>
             </li>
             <li>
-              <Link to={sectionLink(SECTIONS.TRIPS)} className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
+              <Link to={ROUTES.ABOUT} className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
+                <FontAwesomeIcon icon={faCircleInfo} className="text-xs text-brand-yellow opacity-85" />
+                {t('nav.about')}
+              </Link>
+            </li>
+            <li>
+              <Link to={ROUTES.ACTIVITIES} className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
                 <FontAwesomeIcon icon={faCompass} className="text-xs text-brand-yellow opacity-85" />
                 {t('nav.trips')}
+              </Link>
+            </li>
+            <li>
+              <Link to={sectionLink(SECTIONS.DESTINATIONS)} className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
+                <FontAwesomeIcon icon={faLocationDot} className="text-xs text-brand-yellow opacity-85" />
+                {t('nav.destinations')}
               </Link>
             </li>
             <li>
@@ -122,28 +140,27 @@ export default function Footer({ onDestinationClick }) {
               </Link>
             </li>
             <li>
-              <Link to={sectionLink(SECTIONS.MAP)} className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
-                <FontAwesomeIcon icon={faMapLocationDot} className="text-xs text-brand-yellow opacity-85" />
-                {t('nav.exploreMapAria')}
-              </Link>
-            </li>
-            <li>
-              <Link to={sectionLink(SECTIONS.REVIEWS)} className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
-                <FontAwesomeIcon icon={faStar} className="text-xs text-brand-yellow opacity-85" />
-                {t('nav.reviews')}
-              </Link>
-            </li>
-            <li>
               <Link to={sectionLink(SECTIONS.FAQ)} className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
                 <FontAwesomeIcon icon={faCircleQuestion} className="text-xs text-brand-yellow opacity-85" />
                 {t('nav.faq')}
               </Link>
             </li>
             <li>
-              <Link to={ROUTES.ABOUT} className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
-                <FontAwesomeIcon icon={faCircleInfo} className="text-xs text-brand-yellow opacity-85" />
-                {t('nav.about')}
+              <Link to={sectionLink(SECTIONS.MAP)} className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200">
+                <FontAwesomeIcon icon={faMapLocationDot} className="text-xs text-brand-yellow opacity-85" />
+                {t('nav.exploreMapAria')}
               </Link>
+            </li>
+            <li>
+              <a
+                href={buildWhatsAppUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/78 text-sm font-medium inline-flex items-center gap-2 hover:text-white hover:-translate-x-1 transition-all duration-200"
+              >
+                <FontAwesomeIcon icon={faWhatsapp} className="text-xs text-brand-yellow opacity-85" />
+                {t('footer.contactUsLink')}
+              </a>
             </li>
           </ul>
         </div>
@@ -227,18 +244,25 @@ export default function Footer({ onDestinationClick }) {
       <div className="border-t border-white/8 px-[5vw] min-[901px]:px-[6vw] py-5">
         <div className="max-w-[1360px] mx-auto flex flex-col min-[901px]:flex-row items-center justify-between gap-3 text-xs text-white/60">
           <p className="m-0 text-center min-[901px]:text-start">
-            {t('footer.copyright')}
+            {t('footer.copyright')}{' '}
+            <span className="font-extrabold text-brand-yellow ms-1.5" lang="en" dir="ltr">
+              {t('footer.closingPromise')}
+            </span>
           </p>
-          <div className="flex items-center gap-4">
-            <Link to={sectionLink(SECTIONS.FAQ)} className="hover:text-white transition-colors">
-              {t('footer.safetyInfo')}
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+            <Link to={ROUTES.PRIVACY} className="hover:text-white transition-colors" lang="en" dir="ltr">
+              {t('footer.privacyPolicy')}
             </Link>
             <span>•</span>
-            <Link to={sectionLink(SECTIONS.FAQ)} className="hover:text-white transition-colors">
-              {t('footer.bookingPolicy')}
+            <Link to={ROUTES.TERMS} className="hover:text-white transition-colors" lang="en" dir="ltr">
+              {t('footer.termsConditions')}
             </Link>
             <span>•</span>
-            <span className="text-white/40">{t('footer.developerCredit')}</span>
+            <Link to={ROUTES.CANCELLATION} className="hover:text-white transition-colors" lang="en" dir="ltr">
+              {t('footer.cancellationPolicy')}
+            </Link>
+            <span>•</span>
+            <span className="text-white/45">{t('footer.developerCredit')}</span>
           </div>
         </div>
       </div>

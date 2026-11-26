@@ -21,7 +21,16 @@ export default function MapSection({ onSelectDestination }) {
         <div className="flex flex-col mb-6 min-[901px]:mb-8">
           <SectionHeader
             theme="dark"
-            title={t('map.sectionTitle', 'خريطة فروع ونقاط انطلاق Duck في مصر')}
+            tag={
+              <span
+                className="text-xs font-extrabold uppercase tracking-[0.2em] text-brand-yellow"
+                lang="en"
+                dir="ltr"
+              >
+                {t('map.eyebrow')}
+              </span>
+            }
+            title={t('map.sectionTitle', 'اعرف هتبدأ مغامرتك منين.')}
             subtitle={t(
               'map.sectionSubtitle',
               'اضغط على أي محافظة أو نقطة انطلاق على الخريطة عشان تشوف صورها ووصف المكان وتفاصيل التجمع والرحلات.'

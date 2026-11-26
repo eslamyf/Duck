@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers, faHandshake, faShieldHalved, faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
+import { ROUTES } from '../../shared/config/routes.js';
 import { Button } from '../../shared/ui/index.js';
 import bannerImg640 from '../../shared/assets/images/groups-banner-640w.webp';
 import bannerImg1200 from '../../shared/assets/images/groups-banner-1200w.webp';
@@ -97,8 +99,8 @@ export default function GroupsBanner() {
 
           {/* CTA Button */}
           <Button
-            as="a"
-            href="#/groups"
+            as={Link}
+            to={ROUTES.GROUPS}
             id="planGroupBtn"
             variant="primary"
             size="lg"

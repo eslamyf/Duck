@@ -59,9 +59,9 @@ export default function FAQSection() {
         <div className="grid grid-cols-1 min-[901px]:grid-cols-[1fr_320px] gap-8 min-[901px]:gap-14 items-start">
           {/* Main Content Column */}
           <div className="w-full min-w-0">
-            {/* Category Selector Buttons */}
+            {/* Category Selector Buttons (5 Categories) */}
             <div
-              className="grid grid-cols-3 gap-2.5 min-[901px]:gap-3.5 mb-6 min-[901px]:mb-8"
+              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 mb-6 min-[901px]:mb-8"
               role="group"
               aria-label={t('faq.categoriesLabel', 'أقسام الأسئلة')}
             >

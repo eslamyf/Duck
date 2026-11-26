@@ -20,11 +20,11 @@
   "about": {
     "hero": {
       "eyebrow": "About DUCK",
-      "title": "A New Way to Experience Egypt from the Water",
-      "titleLine1": "A new way",
-      "titleLine2": "to experience Egypt",
-      "titleLine3": "from the",
-      "titleLine4": "water",
+      "title": "We Believe Life Is Better When Truly Lived.",
+      "titleLine1": "We believe",
+      "titleLine2": "life feels better",
+      "titleLine3": "when you",
+      "titleLine4": "live it.",
       "description": "DUCK is a water-experience and tourism platform founded in Aswan in 2023, creating safe, memorable and environmentally responsible experiences that connect visitors with the Nile, nature and local culture.",
       "cta": "Discover Our Story",
       "location": "Aswan, Egypt",
@@ -40,8 +40,8 @@
     },
     "story": {
       "eyebrow": "THE STORY OF DUCK",
-      "titleLine1": "FROM THE NILE OF ASWAN,",
-      "titleLine2": "THE DUCK ADVENTURE BEGAN.",
+      "titleLine1": "IT STARTED WITH AN IDEA..",
+      "titleLine2": "THE NILE IS MEANT TO BE LIVED, NOT JUST SEEN.",
       "paragraph1": "In 2023, DUCK was launched on the Nile in Aswan with a clear mission: transforming water sports into safe, inspiring, and accessible adventures for everyone.",
       "paragraph2": "From single kayaks to a comprehensive fleet of SUP boards, water bikes, and curated group expeditions, we reconnect adventurers with Egypt's authentic nature under uncompromising safety standards.",
       "closing": "Egypt's waters like you've never experienced before.",
@@ -176,7 +176,7 @@
       }
     },
     "cta": {
-      "eyebrow": "START YOUR JOURNEY",
+      "eyebrow": "IN DUCK WE TRUST.",
       "title": "The Nile is Calling. Are You Ready?",
       "description": "Book your next water adventure in minutes and experience Egypt from a whole new perspective.",
       "button": "Book Your Trip Now"
@@ -186,19 +186,20 @@
   "nav": {
     "home": "Home",
     "destinations": "Destinations",
-    "trips": "Trips",
-    "groups": "Groups & B2B",
+    "trips": "Experiences",
+    "groups": "Group Booking",
     "reviews": "Guest Reviews",
     "faq": "FAQ",
     "about": "About Us",
     "menu": "Menu",
     "menuAria": "Menu",
     "exploreMapAria": "Launch Points & Map",
-    "bookTripNow": "Book Your Trip Now",
-    "logoAlt": "Duck Entertainment"
+    "bookTripNow": "Book Your Experience",
+    "logoAlt": "Duck Entertainment",
+    "activities": "Experiences"
   },
   "footer": {
-    "bio": "The premier Egyptian platform specializing in water sports tourism across the Nile and sea. Kayak, Stand-Up Paddleboard, and water bikes with top safety standards and certified guides.",
+    "bio": "More than an activity. An experience worth remembering across Egypt’s Nile and coastal waters with certified safety gear and expert guides.",
     "quickLinksTitle": "Quick Links",
     "destinationsTitle": "Destinations in Egypt",
     "contactSafetyTitle": "Contact & Safety",
@@ -225,16 +226,22 @@
     "bookingPolicy": "Booking Policy",
     "poweredBy": "Powered by Alef",
     "whatsappAction": "Chat on WhatsApp",
-    "whatsappPrefill": "Hello, I would like to inquire about booking a trip"
+    "whatsappPrefill": "Hello, I would like to inquire about booking a trip",
+    "tagline": "More than an activity. An experience worth remembering.",
+    "contactUsLink": "Contact Us",
+    "privacyPolicy": "Privacy Policy",
+    "termsConditions": "Terms & Conditions",
+    "cancellationPolicy": "Cancellation Policy",
+    "closingPromise": "IN DUCK WE TRUST."
   },
   "hero": {
     "tag": "IN DUCK WE TRUST",
-    "titlePart1": "Your Water Adventure, ",
-    "titleHighlight": "Safe",
-    "titlePart2": " from the First Click",
-    "desc": "Experience Egypt's finest waters like never before. Kayak, Stand-Up Paddleboard, and Water Bikes — book in 3 easy steps without creating an account.",
-    "ctaTrips": "Explore Trips",
-    "ctaBook": "Book Now",
+    "titlePart1": "The Nile Isn’t Just a Sight.. ",
+    "titleHighlight": "It’s an Experience",
+    "titlePart2": " to Live.",
+    "desc": "Discover the Nile from a fresh perspective and enjoy moments full of adventure, joy, and exploration. With DUCK, pick your water experience and enjoy it your way.",
+    "ctaTrips": "Explore Experiences",
+    "ctaBook": "Book Your Experience",
     "stat1Number": "4,000+",
     "stat1Label": "Happy Adventurers",
     "stat2Number": "5",
@@ -244,11 +251,11 @@
     "videoPosterAlt": "Duck Kayak Fleet on the Aswan Nile"
   },
   "destinations": {
-    "title": "Explore Our Destinations",
-    "subtitle": "Click on any destination to discover the spot, meeting point, and available trips.",
+    "title": "New Places.. Memories Worth Telling.",
+    "subtitle": "From breathtaking natural landscapes to destinations waiting to be explored, every place with DUCK brings a distinct vibe and story. Pick your destination and discover what awaits.",
     "badgeSoon": "Coming Soon",
-    "btnViewTrips": "Explore {{name}} Trips ({{count}})",
-    "btnViewTripSingle": "Explore {{name}} Trip (1)",
+    "btnViewTrips": "Explore {{name}} Experiences ({{count}})",
+    "btnViewTripSingle": "Explore {{name}} Experience (1)",
     "tripsComingSoon": "Trips available soon",
     "tabAriaLabel": "Select a destination",
     "items": {
@@ -277,18 +284,24 @@
         "description": "A timeless sanctuary of desert mystique and history, once known as the Oasis of Amun. Surrounded by date groves, natural cold springs, and salt lakes — a sunset kayak experience suited for everyone.",
         "alt": "Siwa protected area cold lake amidst the desert sands"
       }
-    }
+    },
+    "eyebrow": "Where Will Your Next Adventure Take You?",
+    "introText": "From the tranquil Nile to wild natural beauty, each destination offers a chance to live a fresh story and uncover a new side of the place.",
+    "exploreCta": "Explore Destinations",
+    "cardCta": "Explore Destination",
+    "detailsHeadingTemplate": "Discover {{name}} with DUCK.",
+    "detailsCtaTemplate": "Choose Your Experience in {{name}}"
   },
   "trips": {
-    "title": "Featured Trips by Verified Operators",
-    "subtitle": "Discover the best water adventures from certified operators — kayak, stand-up paddleboard, and water bikes across Egypt's most stunning waters.",
+    "title": "Choose Your Experience.. Leave the Rest to Us.",
+    "subtitle": "Everyone has their own way of enjoying the water, and every experience brings a distinct vibe. Pick what suits you and discover the Nile your way.",
     "filterAriaLabel": "Filter trips by destination",
     "listAriaLabel": "Trips list",
     "filterAll": "All",
-    "bookTrip": "Book Trip",
+    "bookTrip": "Book Now",
     "bookNow": "Book Now",
-    "details": "Trip Details",
-    "detailsShort": "Details",
+    "details": "Discover Experience",
+    "detailsShort": "Discover Experience",
     "foreigner": "Foreigner",
     "egyptian": "Egyptian",
     "unified": "Unified",
@@ -386,33 +399,38 @@
         "desc": "In the historic heart of Giza on the Nile: a full hour of kayaking for everyone, solo or with friends and family, no prior experience needed. Daily from sunrise to sunset.",
         "alt": "Kayaking on the Nile near Abbas Bridge in Giza"
       }
+    },
+    "activityDescriptions": {
+      "kayak": "Grab your paddle and discover the Nile from a different angle — combining energy, exploration, and serene nature.",
+      "sup": "Balance calm and challenge, and enjoy a unique experience gliding across the water.",
+      "waterbike": "Redefine your outings and enjoy riding a bike right over the water with friends or family."
     }
   },
   "groupsBanner": {
     "badge": "GROUPS & CORPORATE EXPERIENCES",
-    "title": "Ideal for Groups, Teams & Private Events!",
-    "subtitle": "From corporate team building and company retreats to school trips, universities, and private celebrations — we ensure your water adventure is organized, certified safe, and unforgettable on Egypt's breathtaking waters.",
+    "title": "Great Memories Feel Better When Shared.",
+    "subtitle": "Whether you are planning an inspiring day for your work team, a university outing, or a group celebration with friends, DUCK crafts moments that bring everyone together on the water.",
     "perk1": "Starting from 20+ participants",
     "perk2": "Custom discounts upon inquiry",
     "perk3": "Certified guide & 100% safety insured",
-    "cta": "Plan Your Group Adventure",
+    "cta": "Plan Your Group Experience",
     "imgAlt": "Duck kayak group adventure on the Nile"
   },
   "groupsPage": {
-    "metaTitle": "Groups & Events Booking",
-    "title": "Groups & Events Booking",
+    "metaTitle": "Group & Event Booking",
+    "title": "Group & Event Booking",
     "stageAria": "Your group on the water",
     "sceneAria": "Live fleet scene for your group",
-    "stageHeroTitle": "Book Your Group Trip Easily",
-    "stageHeroHighlight": "On the Nile Waters",
-    "stageHeroDesc": "Select your group size and submit your details for a customized group experience.",
+    "stageHeroTitle": "Bring Your Team Together..",
+    "stageHeroHighlight": "and Create a Different Memory.",
+    "stageHeroDesc": "Turn team outings and group events into unforgettable water experiences with DUCK.",
     "stageCountPrompt": "Choose your group size:",
     "stageCountHint": "(Set count in form below)",
     "individuals": "people",
     "yourGroupNameHere": "Your group name here",
     "changeTimeAria": "Change time of day",
-    "cardHeading": "Book Your Group Trip",
-    "cardSubheading": "Simply set your group size, and our team will get in touch to tailor the best custom discount.",
+    "cardHeading": "Let’s Plan Your Day.",
+    "cardSubheading": "Share your group details below and our coordination team will prepare a tailored plan and quote.",
     "progressStep1": "1 · Group & Trip Details",
     "progressStep2": "2 · Contact Information",
     "groupTypeLabel": "Group Type",
@@ -445,8 +463,8 @@
     "orderSummary": "Trip Request Summary",
     "dealNote": "No fixed upfront price — our groups team will contact you to tailor the best deal. Zero prepayment required.",
     "noFixedPriceNotice": "No fixed upfront price — our groups team will tailor the best discount and custom itinerary for you with zero prepayment.",
-    "submitBtn": "Send Group Request & Invoice via WhatsApp",
-    "sendWhatsApp": "Send Group Request & Invoice via WhatsApp",
+    "submitBtn": "Request a Quote",
+    "sendWhatsApp": "Request a Quote",
     "invoiceTitle": "Group Booking Invoice & Quote",
     "invoiceSubtitle": "Official booking request and custom pricing quote for your group",
     "invoiceNumber": "Invoice Reference #",
@@ -492,23 +510,29 @@
       "afternoon": "Afternoon",
       "sunset": "Nile Sunset"
     },
-    "whatsappMessage": "Hello Duck Team\nNew group booking request ({{ref}}):\n• Group/Org: {{org}} ({{type}})\n• Coordinator: {{name}}\n• WhatsApp: {{phone}}\n• Size: {{size}} people\n• Activity: {{act}}\n• Destination: {{dest}}\n• Date & Time: {{date}} - {{time}}{{notes}}"
+    "whatsappMessage": "Hello Duck Team\nNew group booking request ({{ref}}):\n• Group/Org: {{org}} ({{type}})\n• Coordinator: {{name}}\n• WhatsApp: {{phone}}\n• Size: {{size}} people\n• Activity: {{act}}\n• Destination: {{dest}}\n• Date & Time: {{date}} - {{time}}{{notes}}",
+    "audienceHeading": "Who Can Live the Experience With DUCK?",
+    "audienceSubheading": "Structured, safe water outings tailored to the size and spirit of every group:",
+    "audienceCorporate": "Corporate Teams",
+    "audienceUniversities": "Universities & Student Groups",
+    "audienceFriends": "Friends & Families",
+    "audiencePrivate": "Private Groups & Events"
   },
   "groups": {
-    "metaTitle": "Groups & Events Booking",
-    "title": "Groups & Events Booking",
+    "metaTitle": "Group & Event Booking",
+    "title": "Group & Event Booking",
     "stageAria": "Your group on the water",
     "sceneAria": "Live fleet scene for your group",
-    "stageHeroTitle": "Book Your Group Trip Easily",
-    "stageHeroHighlight": "On the Nile Waters",
-    "stageHeroDesc": "Select your group size and submit your details for a customized group experience.",
+    "stageHeroTitle": "Bring Your Team Together..",
+    "stageHeroHighlight": "and Create a Different Memory.",
+    "stageHeroDesc": "Turn team outings and group events into unforgettable water experiences with DUCK.",
     "stageCountPrompt": "Choose your group size:",
     "stageCountHint": "(Set count in form below)",
     "individuals": "people",
     "yourGroupNameHere": "Your group name here",
     "changeTimeAria": "Change time of day",
-    "cardHeading": "Book Your Group Trip",
-    "cardSubheading": "Simply set your group size, and our team will get in touch to tailor the best custom discount.",
+    "cardHeading": "Let’s Plan Your Day.",
+    "cardSubheading": "Share your group details below and our coordination team will prepare a tailored plan and quote.",
     "progressStep1": "1 · Group & Trip Details",
     "progressStep2": "2 · Contact Information",
     "groupTypeLabel": "Group Type",
@@ -541,8 +565,8 @@
     "orderSummary": "Trip Request Summary",
     "dealNote": "No fixed upfront price — our groups team will contact you to tailor the best deal. Zero prepayment required.",
     "noFixedPriceNotice": "No fixed upfront price — our groups team will tailor the best discount and custom itinerary for you with zero prepayment.",
-    "submitBtn": "Send Group Request & Invoice via WhatsApp",
-    "sendWhatsApp": "Send Group Request & Invoice via WhatsApp",
+    "submitBtn": "Request a Quote",
+    "sendWhatsApp": "Request a Quote",
     "invoiceTitle": "Group Booking Invoice & Quote",
     "invoiceSubtitle": "Official booking request and custom pricing quote for your group",
     "invoiceNumber": "Invoice Reference #",
@@ -588,11 +612,17 @@
       "afternoon": "Afternoon",
       "sunset": "Nile Sunset"
     },
-    "whatsappMessage": "Hello Duck Team\nNew group booking request ({{ref}}):\n• Group/Org: {{org}} ({{type}})\n• Coordinator: {{name}}\n• WhatsApp: {{phone}}\n• Size: {{size}} people\n• Activity: {{act}}\n• Destination: {{dest}}\n• Date & Time: {{date}} - {{time}}{{notes}}"
+    "whatsappMessage": "Hello Duck Team\nNew group booking request ({{ref}}):\n• Group/Org: {{org}} ({{type}})\n• Coordinator: {{name}}\n• WhatsApp: {{phone}}\n• Size: {{size}} people\n• Activity: {{act}}\n• Destination: {{dest}}\n• Date & Time: {{date}} - {{time}}{{notes}}",
+    "audienceHeading": "Who Can Live the Experience With DUCK?",
+    "audienceSubheading": "Structured, safe water outings tailored to the size and spirit of every group:",
+    "audienceCorporate": "Corporate Teams",
+    "audienceUniversities": "Universities & Student Groups",
+    "audienceFriends": "Friends & Families",
+    "audiencePrivate": "Private Groups & Events"
   },
   "reviews": {
-    "sectionTitle": "What Our Guests Say",
-    "sectionSubtitle": "Real reviews from real adventurers, directly from Google.",
+    "sectionTitle": "The Best Part of the Experience.. It Stays in Memory.",
+    "sectionSubtitle": "We are not the only ones saying DUCK feels different — hear directly from those who lived it.",
     "basedOnGoogle": "Based on {{count}} reviews on Google",
     "starRatingAria": "{{rating}} out of 5 stars",
     "storyNavigation": "Navigate guest reviews",
@@ -600,19 +630,25 @@
     "prevReview": "Previous review",
     "nextReview": "Next review",
     "tickerAria": "Guest reviews animated ticker",
-    "writeReview": "Write your review on Google",
+    "writeReview": "See Guest Experiences",
     "emptyTitle": "Be the first to share your experience",
     "emptyText": "Real reviews from our guests are collected on Google. Tried an experience with us? Share your review and it will appear here.",
-    "viewOnGoogle": "See reviews on Google"
+    "viewOnGoogle": "See reviews on Google",
+    "realBadge": "Real Experiences. Real Memories.",
+    "heroTitle": "Their Experiences Say It Better.",
+    "heroSubtitle": "Every outing holds a memory, and every memory tells a story. Read from guests who lived their adventures with DUCK.",
+    "shareReview": "Share Your Experience"
   },
   "faq": {
-    "title": "Everything You Need to Know About Duck",
-    "subtitle": "Choose a category to view relevant questions and answers.",
+    "title": "Got a Question? We’re Here to Help.",
+    "subtitle": "We gathered the essential details you need to know before starting your DUCK experience.",
     "categoriesLabel": "FAQ Categories",
     "categories": {
+      "aboutExperiences": "About Experiences",
+      "bookingPayment": "Booking & Payment",
+      "beforeExperience": "Before the Experience",
       "safety": "Safety",
-      "beforeTrip": "Before the Trip",
-      "booking": "Booking"
+      "cancellationChanges": "Cancellation & Changes"
     },
     "sideCard": {
       "title": "Didn't find your answer?",
@@ -668,34 +704,51 @@
       "operatingHours": {
         "q": "What are the operating hours?",
         "a": "We operate daily from sunrise to sunset. Winter is great all day, while summer is best during sunrise and sunset."
+      },
+      "whatIncluded": {
+        "q": "What is included in a standard experience?",
+        "a": "Every standard package covers the equipped craft (Kayak, SUP board, or Water Bike), a certified life jacket, safety briefing, and on-water support."
+      },
+      "paymentMethods": {
+        "q": "Which payment options confirm my booking?",
+        "a": "You can lock your booking with full payment or a 50% deposit via InstaPay and send the transfer screenshot alongside your reference code on WhatsApp."
+      },
+      "arrivalTime": {
+        "q": "How early should I arrive?",
+        "a": "Please arrive at the launch point at least 15 minutes before departure for gear fitting and a quick safety briefing."
+      },
+      "reschedule": {
+        "q": "Can I reschedule or modify my booking?",
+        "a": "Yes! You can cancel or reschedule free of charge up to 24 hours ahead, and we also reschedule free in adverse weather."
       }
     }
   },
   "map": {
-    "sectionTitle": "Duck Egypt Launch Points & Map",
-    "sectionSubtitle": "Tap any hub or launch pin on the map to explore photos, location details, meeting points, and trips.",
+    "sectionTitle": "Know Where Your Adventure Begins.",
+    "sectionSubtitle": "Tap any destination or launch pin on the map to preview photos, meeting directions, and available experiences.",
     "allHubsChip": "All Hubs in Egypt ({{count}})",
-    "allHubsTitle": "5 Hubs from Nile to Sea ✨",
+    "allHubsTitle": "5 Hubs from Nile to Sea",
     "allHubsDesc": "Select any marker on the map or tap a card to explore launch details and trips:",
     "availableBadge": "{{count}} Trips Available",
     "availableBadgeSingle": "1 Trip Available",
-    "soonBadge": "Coming Soon ✨",
+    "soonBadge": "Coming Soon",
     "meetingPointTitle": "Launch & Meeting Point",
-    "btnExploreTrips": "Explore {{name}} Trips",
-    "btnOpenGoogleMaps": "Open in Google Maps ↗",
+    "btnExploreTrips": "Choose Your Experience in {{name}}",
+    "btnOpenGoogleMaps": "Get Directions",
     "btnGroupBooking": "Groups & Corporate Booking",
     "zoomIn": "Zoom In",
     "zoomOut": "Zoom Out",
     "mapAriaLabel": "Duck Egypt Interactive Launch Points Map",
     "pinAriaLabel": "{{name}} launch point - {{status}}",
-    "filterTripsAria": "Jump to {{name}} trips"
+    "filterTripsAria": "Jump to {{name}} trips",
+    "eyebrow": "Find Your Starting Point."
   },
   "tripDetails": {
-    "metaTitle": "Trip Details",
-    "backToTrips": "Back to Trips",
+    "metaTitle": "Experience Details",
+    "backToTrips": "Back to Experiences",
     "breadcrumbHome": "Home",
-    "breadcrumbTrips": "Trips",
-    "aboutTrip": "About This Trip",
+    "breadcrumbTrips": "Experiences",
+    "aboutTrip": "About This Experience",
     "tripInfo": "Trip Information",
     "destination": "Destination",
     "activity": "Activity",
@@ -708,7 +761,7 @@
     "egyptianPrice": "Egyptian Price:",
     "pricePerHour": "Price per hour",
     "location": "Location",
-    "bookNow": "Book Your Trip Now",
+    "bookNow": "Book Your Experience",
     "bookViaWhatsApp": "Book via WhatsApp",
     "whatsappPrefill": "Hello DUCK, I would like to book the trip: {title} ({destination})",
     "getReady": "Get ready for your next adventure with DUCK",
@@ -765,7 +818,7 @@
     "children": "Children",
     "total": "Total",
     "nextBtn": "Next →",
-    "bookTripBtn": "Book Trip",
+    "bookTripBtn": "Book Your Experience",
     "freeCancelFullRefund": "Free cancellation up to 24 hours before (full refund)",
     "haveQuestionWhatsApp": "Have a question about the trip? Ask on WhatsApp",
     "readMore": "Read more",
@@ -781,7 +834,8 @@
     "closedOnDay": "This trip does not operate on {day}. Please pick another day.",
     "selectTicketsFirst": "Please select the number of tickets (Egyptian or Foreigner).",
     "minTripReq": "This trip requires at least {count} participants.",
-    "maxTripReq": "This trip accommodates up to {count} people maximum."
+    "maxTripReq": "This trip accommodates up to {count} people maximum.",
+    "titleSuffix": "— A Different Experience Worth Living."
   },
   "auth": {
     "login": {
@@ -1047,6 +1101,193 @@
       "timeRequired": "Please select an available booking time",
       "minGuests": "Minimum 1 guest required",
       "nationalitySumMismatch": "Sum of Egyptian and International guests must equal {{total}}"
+    }
+  },
+  "legal": {
+    "backHome": "Back to Home",
+    "bookNow": "Book Your Experience",
+    "privacy": {
+      "metaTitle": "Privacy Policy",
+      "eyebrow": "Privacy Policy",
+      "title": "Privacy Policy",
+      "subtitle": "We respect your privacy and safeguard your booking and contact details.",
+      "sections": [
+        {
+          "heading": "Information We Collect",
+          "body": "We collect only the details necessary to confirm your booking and coordinate your launch point and time slot (such as your name, WhatsApp number, and booking preferences)."
+        },
+        {
+          "heading": "How We Use Information",
+          "body": "Your information is used strictly for dispatch coordination, digital ticket verification, and customer support via WhatsApp. We never sell or share data with unrelated third parties."
+        },
+        {
+          "heading": "Security & Retention",
+          "body": "Account details follow standard security controls, and you may reach out anytime via WhatsApp or email to update or remove your account records."
+        }
+      ]
+    },
+    "terms": {
+      "metaTitle": "Terms & Conditions",
+      "eyebrow": "Terms & Conditions",
+      "title": "Terms & Conditions",
+      "subtitle": "Approved operational rules to keep every water experience safe and seamless.",
+      "sections": [
+        {
+          "heading": "Safety & Participation",
+          "body": "Wearing a certified life jacket and following guide briefings is mandatory throughout every activity. Maximum participant weight is 130 kg, and children must be accompanied by an adult."
+        },
+        {
+          "heading": "Arrival & Operating Hours",
+          "body": "We operate daily from sunrise to sunset. Please arrive at your launch point at least 15 minutes ahead of your scheduled departure."
+        },
+        {
+          "heading": "Booking Confirmation",
+          "body": "Reservations are locked once transfer payment (full amount or 50% minimum deposit) and receipt screenshot are shared with our official WhatsApp team."
+        }
+      ]
+    },
+    "cancellation": {
+      "metaTitle": "Cancellation Policy",
+      "eyebrow": "Cancellation Policy",
+      "title": "Cancellation & Rescheduling Policy",
+      "subtitle": "Fair, transparent rules to protect your booking flexibility.",
+      "sections": [
+        {
+          "heading": "Free Cancellation (24h+)",
+          "body": "You may cancel free of charge with a full refund up to 24 hours prior to your scheduled experience start time."
+        },
+        {
+          "heading": "Under 24 Hours & No-Show",
+          "body": "Cancellations less than 24 hours ahead or no-shows are non-refundable due to dedicated fleet and guide allocation."
+        },
+        {
+          "heading": "Weather & Force Majeure",
+          "body": "If adverse weather or river conditions prevent safe operation, we offer complimentary rescheduling or an immediate 100% refund."
+        }
+      ]
+    }
+  },
+  "brandIntro": {
+    "eyebrow": "DUCK ENTERTAINMENT",
+    "title": "Not Just an Outing.. A New Story Waiting to Be Lived.",
+    "description": "At DUCK, we believe the best moments are the ones truly lived. That is why we curate distinct water experiences that let you explore new places, try something refreshing, and share memorable time with the people who matter. Whether you crave a new adventure or a calm break from routine, there is an experience worth living here.",
+    "cta": "Discover DUCK",
+    "imageAlt": "DUCK adventurers enjoying kayaking on the Nile in Aswan",
+    "badge": "IN DUCK WE TRUST"
+  },
+  "whyDuck": {
+    "eyebrow": "WHY DUCK",
+    "title": "Why Choose DUCK for Your Next Experience?",
+    "subtitle": "Because a memorable outing isn’t just about the spot or activity — it is every detail that makes your day smoother and more fun.",
+    "cards": [
+      {
+        "id": "diverse",
+        "title": "Diverse Experiences",
+        "description": "Varied water activities tailored to your mood, energy, and style of fun."
+      },
+      {
+        "id": "easyBooking",
+        "title": "Easy Booking",
+        "description": "Pick your experience and destination and view clear booking details effortlessly."
+      },
+      {
+        "id": "uniqueDestinations",
+        "title": "Unique Destinations",
+        "description": "Explore distinct scenic spots and enjoy the Nile and sea from a fresh angle."
+      },
+      {
+        "id": "worthRepeating",
+        "title": "Worth Repeating",
+        "description": "Every session with DUCK can spark a brand new memory worth reliving."
+      }
+    ]
+  },
+  "finalCta": {
+    "eyebrow": "IN DUCK WE TRUST.",
+    "title": "Ready to See the Nile Differently?",
+    "subtitle": "Pick your experience, choose your destination, and start creating new memories with DUCK.",
+    "button": "Book Your Experience"
+  },
+  "activitiesPage": {
+    "metaTitle": "Experiences",
+    "eyebrow": "DUCK EXPERIENCES",
+    "heroTitle": "Your Next Experience Awaits.",
+    "heroDescription": "Whether you love adventure, calm relaxation, or trying something brand new, explore our water experiences and choose what suits you.",
+    "heroButton": "Book Your Experience",
+    "exploreButton": "Explore Experiences",
+    "heroImageAlt": "Water experience on the Nile with DUCK",
+    "activitiesEyebrow": "DUCK EXPERIENCES",
+    "activitiesTitle": "Not Every Experience Is the Same.",
+    "activitiesDescription": "Choose from diverse water activities and find your favorite way to live the Nile.",
+    "duration": "Duration",
+    "capacity": "Capacity",
+    "cardDetailsButton": "Experience Details",
+    "cardBookButton": "Book Your Experience",
+    "standardsEyebrow": "YOUR EXPERIENCE, OUR PRIORITY",
+    "standardsTitle": "Standards & Inclusions",
+    "safetyTitle": "Certified Safety Gear",
+    "safetyDesc": "Certified life jackets and essential safety equipment.",
+    "leadersTitle": "Trained Trip Leaders",
+    "leadersDesc": "Experienced guides supporting your session from shore to finish.",
+    "beginnersTitle": "Accessible to Beginners",
+    "beginnersDesc": "No prior experience required — we brief and guide every step.",
+    "ctaEyebrow": "IN DUCK WE TRUST.",
+    "ctaTitle": "Ready to See the Nile Differently?",
+    "ctaDescription": "Choose your experience, pick your destination, and start creating new memories with DUCK.",
+    "ctaButton": "Book Your Experience",
+    "location": "Aswan, Egypt",
+    "items": {
+      "kayak": {
+        "title": "KAYAK",
+        "duration": "60 Minutes",
+        "capacity": "Up to 20 guests",
+        "description": "Grab your paddle and discover the Nile from a different angle — combining energy, exploration, and serene nature."
+      },
+      "water-bike": {
+        "title": "WATER BIKE",
+        "duration": "45 Minutes",
+        "capacity": "2 guests (Max 2 units)",
+        "description": "Redefine your outings and enjoy riding a bike right over the water with friends or family."
+      },
+      "sup": {
+        "title": "SUP",
+        "duration": "60 Minutes",
+        "capacity": "1 guest",
+        "description": "Balance calm and challenge, and enjoy a unique experience gliding across the water."
+      },
+      "nile-trips": {
+        "title": "Curated Nile Tours",
+        "duration": "Varies by itinerary",
+        "capacity": "Varies by destination",
+        "description": "Explore tranquil river channels and hidden islands on guided water routes led by certified professionals."
+      }
+    },
+    "details": {
+      "back": "Back to Experiences",
+      "showcaseLabel": "EXPERIENCE SHOWCASE • DUCK",
+      "titleSuffix": "— A Different Experience Worth Living.",
+      "duration": "Duration",
+      "capacity": "Capacity",
+      "overview": "About This Experience",
+      "overviewDescription": "Enjoy a tailored water experience designed to give you a fresh perspective across Egypt’s Nile and sea with full safety preparation for all skill levels.",
+      "highlights": "Experience Highlights",
+      "highlight1": "Experience stunning natural waterways from a fresh perspective.",
+      "highlight2": "Designed for solo explorers, friends, and families alike.",
+      "highlight3": "Certified life jackets and pre-launch safety orientation included.",
+      "safety": "Your Safety Comes First",
+      "safetyDescription": "We provide certified safety gear and a clear pre-launch briefing to guarantee a comfortable, memorable experience.",
+      "book": "Book Your Experience",
+      "inquireWhatsApp": "Inquire via WhatsApp",
+      "availableLabel": "AVAILABLE FOR INSTANT BOOKING",
+      "availableDesc": "Book your experience and enjoy a memorable time on the water.",
+      "safetyProvided": "Certified safety gear provided",
+      "moreEyebrow": "MORE EXPERIENCES",
+      "moreTitle": "Explore Other Experiences",
+      "exploreItem": "Experience Details",
+      "notFound": "Experience Not Found",
+      "experienceTag": "DUCK SIGNATURE EXPERIENCE",
+      "showImage": "Show image",
+      "whatsappInquiry": "Hello DUCK! I would like to inquire about the {{title}} experience."
     }
   }
 }

@@ -136,7 +136,7 @@ export default function HeroSection() {
           {/* Heading with Brand Highlight */}
           <h1 className="text-[clamp(32px,5vw,62px)] font-bold leading-[1.22] tracking-tight mb-4 text-white">
             {t('hero.titlePart1')}
-            <mark className="bg-transparent bg-gradient-to-t from-brand-yellow to-brand-yellow bg-[length:100%_24%] bg-no-repeat bg-bottom text-inherit font-bold">
+            <mark className="bg-transparent bg-gradient-to-t from-brand-yellow to-brand-yellow bg-[length:100%_14%] bg-no-repeat bg-bottom text-inherit font-bold">
               {t('hero.titleHighlight')}
             </mark>
             {t('hero.titlePart2')}

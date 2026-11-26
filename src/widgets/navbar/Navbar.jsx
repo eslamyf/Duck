@@ -21,6 +21,7 @@ import {
   faStar,
   faCircleQuestion,
   faUsers,
+  faMapLocationDot,
   faLanguage,
   faSun,
   faBars,
@@ -149,12 +150,6 @@ export default function Navbar({ onBookClick }) {
       sectionId: SECTIONS.TRIPS,
     },
     {
-      to: ROUTES.ACTIVITIES,
-      label: lang === 'ar' ? 'الأنشطة' : 'Activities',
-      icon: faCalendarCheck,
-      isActivities: true,
-    },
-    {
       to: ROUTES.GROUPS,
       label: t('nav.groups'),
       icon: faUsersLine,
@@ -178,6 +173,12 @@ export default function Navbar({ onBookClick }) {
       icon: faUsers,
       isAbout: true,
     },
+    {
+      to: sectionLink(SECTIONS.MAP),
+      label: t('nav.exploreMapAria'),
+      icon: faMapLocationDot,
+      sectionId: SECTIONS.MAP,
+    },
   ];
 
   const isRtl = lang === 'ar';
@@ -191,17 +192,17 @@ export default function Navbar({ onBookClick }) {
   const dashboardPath = currentUser ? getPortalPathForRole(currentUser.role) : ROUTES.LOGIN;
 
   const checkIsActive = (link) => {
-    // Activities page and its details
-    if (link.isActivities) {
-      return (
-        location.pathname === ROUTES.ACTIVITIES ||
-        location.pathname.startsWith(`${ROUTES.ACTIVITIES}/`)
-      );
-    }
-
     // About page
     if (location.pathname === ROUTES.ABOUT) {
       return Boolean(link.isAbout);
+    }
+
+    // Activities / Experiences pages highlight Experiences link
+    if (
+      location.pathname === ROUTES.ACTIVITIES ||
+      location.pathname.startsWith(`${ROUTES.ACTIVITIES}/`)
+    ) {
+      return link.sectionId === SECTIONS.TRIPS;
     }
 
     // Groups page
@@ -301,7 +302,7 @@ export default function Navbar({ onBookClick }) {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <div className="hidden min-[901px]:flex items-center gap-1 xl:gap-2">
+        <div className="hidden min-[901px]:flex items-center gap-0.5 xl:gap-1.5 min-w-0">
           {navLinks.map((link) => {
             const isActive = checkIsActive(link);
 
@@ -309,8 +310,8 @@ export default function Navbar({ onBookClick }) {
               <Link
                 key={link.to}
                 to={link.to}
-                className={`relative px-3 py-2 text-[14.5px] font-semibold transition-colors duration-200 ${isActive
-                    ? 'text-brand-blue font-bold after:content-[""] after:absolute after:bottom-0 after:inset-x-3 after:h-0.5 after:bg-brand-yellow'
+                className={`relative whitespace-nowrap px-2 xl:px-2.5 py-2 text-[13px] xl:text-[14px] font-semibold transition-colors duration-200 ${isActive
+                    ? 'text-brand-blue font-bold after:content-[""] after:absolute after:bottom-0 after:inset-x-2 after:h-0.5 after:bg-brand-yellow'
                     : 'text-brand-navy/78 hover:text-brand-blue'
                   }`}
               >

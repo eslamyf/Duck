@@ -97,11 +97,18 @@ export default function ReviewsSection() {
         {/* Header: Title & Subtitle + Google Rating Summary Badge */}
         <div className="flex flex-col min-[901px]:flex-row justify-between items-start min-[901px]:items-end gap-6 mb-7 min-[901px]:mb-9">
           <div>
+            <span
+              className="mb-2 inline-block text-xs font-extrabold uppercase tracking-[0.2em] text-brand-blue"
+              lang="en"
+              dir="ltr"
+            >
+              {t('reviews.realBadge')}
+            </span>
             <h2 className="text-2xl min-[901px]:text-4xl font-bold leading-tight tracking-tight text-brand-navy mb-2">
-              {t('reviews.sectionTitle', 'ماذا يقول ضيوفنا')}
+              {t('reviews.sectionTitle')}
             </h2>
             <p className="text-sm min-[901px]:text-base leading-relaxed text-brand-navy/72 max-w-[62ch]">
-              {t('reviews.sectionSubtitle', 'تقييمات حقيقية من مغامرين حقيقيين، مباشرةً من جوجل.')}
+              {t('reviews.sectionSubtitle')}
             </p>
           </div>
 

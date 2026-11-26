@@ -100,11 +100,33 @@ export default function DestinationsSection({ onSelectDestination }) {
       aria-label={t('destinations.title')}
     >
       <div className="max-w-[1360px] mx-auto">
-        <SectionHeader
-          theme="dark"
-          title={t('destinations.title')}
-          subtitle={t('destinations.subtitle')}
-        />
+        <div className="flex flex-col min-[901px]:flex-row min-[901px]:items-end justify-between gap-4 mb-7 min-[901px]:mb-9">
+          <SectionHeader
+            theme="dark"
+            tag={
+              <span
+                className="text-xs font-extrabold uppercase tracking-[0.2em] text-brand-yellow"
+                lang="en"
+                dir="ltr"
+              >
+                {t('destinations.eyebrow')}
+              </span>
+            }
+            title={t('destinations.title')}
+            subtitle={t('destinations.subtitle')}
+            className="mb-0"
+          />
+
+          <Button
+            as={Link}
+            to={sectionLink(SECTIONS.MAP)}
+            variant="outline"
+            size="sm"
+            className="w-fit shrink-0 border-white/30 text-white hover:bg-brand-yellow hover:text-brand-navy hover:border-brand-yellow font-bold"
+          >
+            {t('destinations.exploreCta')}
+          </Button>
+        </div>
 
         {/* Desktop Expanding Strips / Mobile Snap Carousel */}
         <div

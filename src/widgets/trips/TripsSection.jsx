@@ -1,10 +1,25 @@
 import { useState, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faWater,
+  faCompass,
+  faBicycle,
+  faClock,
+  faArrowLeft,
+  faArrowRight,
+} from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
-import { SectionHeader, Button } from '../../shared/ui/index.js';
+import { SectionHeader, Button, Card } from '../../shared/ui/index.js';
 import { useCustomScrollbar } from '../../shared/hooks/index.js';
 import { TRIPS, DESTINATIONS_FILTER, ACTIVITIES } from './tripsData.js';
 import { ROUTES } from '../../shared/config/routes.js';
+
+const EXPERIENCE_TYPES = [
+  { key: 'kayak', label: 'KAYAK', slug: 'kayaking', icon: faWater },
+  { key: 'sup', label: 'SUP', slug: 'sup', icon: faCompass },
+  { key: 'waterbike', label: 'WATER BIKE', slug: 'water-bike', icon: faBicycle },
+];
 
 export default function TripsSection({ externalFilter, onFilterChange }) {
   const { t, lang } = useTranslation();
@@ -77,6 +92,44 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
           align="start"
         />
 
+        {/* Core Experience Types Strip (KAYAK · SUP · WATER BIKE) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 mb-6 min-[901px]:mb-8">
+          {EXPERIENCE_TYPES.map((exp) => {
+            const ArrowIcon = lang === 'ar' ? faArrowLeft : faArrowRight;
+            return (
+              <Card
+                key={exp.key}
+                as={Link}
+                to={`${ROUTES.ACTIVITIES}/${exp.slug}`}
+                variant="default"
+                padding="sm"
+                className="group flex items-start gap-3.5 hover:-translate-y-0.5 hover:border-brand-blue/40 hover:shadow-card"
+              >
+                <span
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-navy text-brand-yellow text-base transition-colors group-hover:bg-brand-blue group-hover:text-white"
+                  aria-hidden="true"
+                >
+                  <FontAwesomeIcon icon={exp.icon} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <span className="text-xs font-extrabold tracking-wider text-brand-navy" lang="en" dir="ltr">
+                      {exp.label}
+                    </span>
+                    <FontAwesomeIcon
+                      icon={ArrowIcon}
+                      className="text-[11px] text-brand-blue opacity-70 transition-transform group-hover:translate-x-[-2px] ltr:group-hover:translate-x-[2px]"
+                    />
+                  </div>
+                  <p className="text-xs leading-relaxed text-brand-navy/75 m-0">
+                    {t(`trips.activityDescriptions.${exp.key}`)}
+                  </p>
+                </div>
+              </Card>
+            );
+          })}
+        </div>
+
         {/* Destination Filter Tabs */}
         <div
           className="flex items-center gap-2.5 overflow-x-auto pb-3 mb-6 min-[901px]:mb-8 scrollbar-none snap-x"
@@ -148,7 +201,11 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                   {t(`destinations.items.${selectedTrip.destKey}.name`)}
                 </span>
                 <span className="bg-white/20 backdrop-blur-md text-white px-3 py-1 rounded-full flex items-center gap-1.5">
-                  <span aria-hidden="true">{ACTIVITIES[selectedTrip.act]?.icon}</span>
+                  <FontAwesomeIcon
+                    icon={ACTIVITIES[selectedTrip.act]?.faIcon || faWater}
+                    className="text-brand-yellow"
+                    aria-hidden="true"
+                  />
                   <span>{t(`trips.activities.${selectedTrip.act}`)}</span>
                 </span>
                 <span className="bg-white/20 backdrop-blur-md text-white px-3 py-1 rounded-full">
@@ -419,8 +476,9 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                   <div className="relative z-10 flex flex-col gap-2">
                     {/* Meta tags */}
                     <div className="flex items-center gap-2 flex-wrap text-xs">
-                      <span className="bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full text-white">
-                        ⏱ {t(`trips.durations.${trip.durKey}`)}
+                      <span className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full text-white">
+                        <FontAwesomeIcon icon={faClock} className="text-brand-yellow text-[10px]" aria-hidden="true" />
+                        <span>{t(`trips.durations.${trip.durKey}`)}</span>
                       </span>
                       {trip.act === 'waterbike' ? (
                         <span className="bg-brand-yellow text-brand-navy font-bold px-2.5 py-0.5 rounded-full">
