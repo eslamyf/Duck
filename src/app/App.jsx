@@ -34,6 +34,7 @@ import {
   ScrollProgress,
 } from '../shared/ui/index.js';
 
+import { trackPageView } from '../shared/utils/analytics.js';
 import { PendingBookingPopup } from '../widgets/booking/index.js';
 
 // Lazy-loaded public sections
@@ -201,6 +202,10 @@ function FAQFallback() {
 // Scroll Manager
 function ScrollManager() {
   const { pathname, hash } = useLocation();
+
+  useEffect(() => {
+    trackPageView(pathname + (hash || ''));
+  }, [pathname, hash]);
 
   useEffect(() => {
     if (!hash) {

@@ -18,7 +18,7 @@ import {
   StatusBadge,
   BookingDetailsModal,
 } from '../../widgets/dashboard/index.js';
-import { useBookingsSync } from '../../shared/hooks/index.js';
+import { useBookingsSync, useCMS } from '../../shared/hooks/index.js';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { TRIPS } from '../../widgets/trips/tripsData.js';
 import {
@@ -37,7 +37,7 @@ const OPS_STATUS_OPTIONS = [
 ];
 
 export default function OperationsDashboardPage() {
-  const { lang } = useTranslation();
+  const { lang, t } = useTranslation();
   const isArabic = lang === 'ar';
   const [searchParams, setSearchParams] = useSearchParams();
   const VALID_TABS = ['overview', 'departures', 'dispatch'];
@@ -63,12 +63,14 @@ export default function OperationsDashboardPage() {
   });
 
   const { bookings } = useBookingsSync();
+  const { trips: dynamicTrips } = useCMS();
+  const tripsList = dynamicTrips?.length ? dynamicTrips : TRIPS;
 
   const handleCreateDispatch = (e) => {
     e.preventDefault();
     if (!dispatchForm.fullName.trim()) return;
 
-    const trip = TRIPS.find((t) => t.key === dispatchForm.tripKey) || TRIPS[0];
+    const trip = tripsList.find((t) => t.key === dispatchForm.tripKey) || tripsList[0];
     const totalAmount = (trip?.priceEg || 350) * Number(dispatchForm.guests || 1);
 
     addBooking({
@@ -328,9 +330,9 @@ export default function OperationsDashboardPage() {
                     }
                     className="w-full rounded-xl border border-brand-blue/20 bg-surface-mist px-3 py-2 text-xs font-bold text-brand-navy outline-none cursor-pointer"
                   >
-                    {TRIPS.map((tr) => (
+                    {tripsList.map((tr) => (
                       <option key={tr.key} value={tr.key}>
-                        {tr.titleAr || tr.key}
+                        {tr.titleAr || t(`trips.items.${tr.key}.title`, tr.key)}
                       </option>
                     ))}
                   </select>

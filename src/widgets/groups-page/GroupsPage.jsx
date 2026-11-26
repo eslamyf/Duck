@@ -10,6 +10,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { useGroupStudio } from '../../shared/hooks/index.js';
+import { trackLeadSubmission } from '../../shared/utils/analytics.js';
 import GroupStage from './GroupStage.jsx';
 import GroupProgressBar from './GroupProgressBar.jsx';
 import GroupForm from './GroupForm.jsx';
@@ -54,9 +55,15 @@ export default function GroupsPage() {
   const handleSubmit = useCallback(() => {
     const result = submitRequest();
     if (result) {
+      trackLeadSubmission({
+        partnerType: state?.type !== undefined ? `group_type_${state.type}` : 'group_rfq',
+        organization: state?.org || state?.company || state?.name,
+        groupSize: state?.size || 20,
+        date: state?.date,
+      });
       scrollToCard();
     }
-  }, [submitRequest, scrollToCard]);
+  }, [submitRequest, scrollToCard, state]);
 
   const handleEditAgain = useCallback(() => {
     setSubmitted(false);

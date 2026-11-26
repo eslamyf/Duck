@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { SectionHeader } from '../../shared/ui/index.js';
 import { MAP_PINS, DESTINATIONS } from './mapData.js';
+import { useCMS } from '../../shared/hooks/index.js';
 import EgyptInteractiveMap from './EgyptInteractiveMap.jsx';
 import DestinationMapCard from './DestinationMapCard.jsx';
 
@@ -9,6 +10,8 @@ export default function MapSection({ onSelectDestination }) {
   const { t, lang } = useTranslation();
   const [activeIdx, setActiveIdx] = useState(-1);
   const isEn = lang === 'en';
+  const { destinations: dynamicDestinations } = useCMS();
+  const destinationsList = dynamicDestinations?.length ? dynamicDestinations : DESTINATIONS;
 
   return (
     <section
@@ -88,7 +91,7 @@ export default function MapSection({ onSelectDestination }) {
           <div className="rounded-[26px] overflow-hidden border border-brand-yellow/35 shadow-card bg-[#f2efe9] relative p-0 min-h-[460px] min-[901px]:min-h-[540px] flex items-center justify-center">
             <EgyptInteractiveMap
               pins={MAP_PINS}
-              destinations={DESTINATIONS}
+              destinations={destinationsList}
               activeIdx={activeIdx}
               onSelectPin={setActiveIdx}
             />
@@ -98,7 +101,7 @@ export default function MapSection({ onSelectDestination }) {
           <DestinationMapCard
             activeIdx={activeIdx}
             pins={MAP_PINS}
-            destinations={DESTINATIONS}
+            destinations={destinationsList}
             onSelectPin={setActiveIdx}
             onSelectDestination={onSelectDestination}
           />

@@ -1,8 +1,10 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { TRIPS } from '../../widgets/trips/tripsData.js';
 import { DESTINATIONS } from '../../widgets/destinations/destinationsData.js';
 import { useTranslation } from '../../shared/i18n/index.js';
+import { useCMS } from '../../shared/hooks/index.js';
+import { trackViewActivity } from '../../shared/utils/analytics.js';
 import {
   TripTopBar,
   TripHeader,
@@ -26,12 +28,14 @@ export default function TripDetailsPage() {
   const { slug } = useParams();
   const { t, lang } = useTranslation();
   const isArabic = lang === 'ar';
+  const { trips: dynamicTrips } = useCMS();
+  const tripsList = dynamicTrips?.length ? dynamicTrips : TRIPS;
 
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const [toastMessage, setToastMessage] = useState('');
 
   const trip = useMemo(() => {
-    const base = TRIPS.find((item) => item.slug === slug);
+    const base = tripsList.find((item) => item.slug === slug);
     if (!base) return null;
     try {
       const overrides = JSON.parse(localStorage.getItem('duck_content_overrides') || '{}');
@@ -50,7 +54,14 @@ export default function TripDetailsPage() {
       // ignore
     }
     return base;
-  }, [slug]);
+  }, [slug, tripsList]);
+
+  // Track View Activity for Analytics Funnel
+  useEffect(() => {
+    if (trip) {
+      trackViewActivity(trip);
+    }
+  }, [trip]);
 
   // Gallery image pool for Lightbox
   const galleryImages = useMemo(() => {

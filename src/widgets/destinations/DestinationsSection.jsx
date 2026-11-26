@@ -5,10 +5,14 @@ import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons
 import { useTranslation } from '../../shared/i18n/index.js';
 import { SectionHeader, Button, Badge } from '../../shared/ui/index.js';
 import { DESTINATIONS } from './destinationsData.js';
+import { useCMS } from '../../shared/hooks/index.js';
 import { SECTIONS, sectionLink } from '../../shared/config/routes.js';
 
 export default function DestinationsSection({ onSelectDestination }) {
   const { t, lang } = useTranslation();
+  const { destinations: dynamicDestinations } = useCMS();
+  const destinationsList = dynamicDestinations?.length ? dynamicDestinations : DESTINATIONS;
+
   const [activeId, setActiveId] = useState(0);
   const [mobileActiveIdx, setMobileActiveIdx] = useState(0);
   const hoverTimerRef = useRef(null);
@@ -41,22 +45,22 @@ export default function DestinationsSection({ onSelectDestination }) {
   const handleKeyDown = (e, index) => {
     let nextIndex = null;
     if (e.key === 'ArrowRight') {
-      nextIndex = isRtl ? (index - 1 + DESTINATIONS.length) % DESTINATIONS.length : (index + 1) % DESTINATIONS.length;
+      nextIndex = isRtl ? (index - 1 + destinationsList.length) % destinationsList.length : (index + 1) % destinationsList.length;
     } else if (e.key === 'ArrowLeft') {
-      nextIndex = isRtl ? (index + 1) % DESTINATIONS.length : (index - 1 + DESTINATIONS.length) % DESTINATIONS.length;
+      nextIndex = isRtl ? (index + 1) % destinationsList.length : (index - 1 + destinationsList.length) % destinationsList.length;
     } else if (e.key === 'Home') {
       nextIndex = 0;
     } else if (e.key === 'End') {
-      nextIndex = DESTINATIONS.length - 1;
+      nextIndex = destinationsList.length - 1;
     } else if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      selectTab(DESTINATIONS[index].id, true);
+      selectTab(destinationsList[index].id, true);
       return;
     }
 
     if (nextIndex !== null) {
       e.preventDefault();
-      selectTab(DESTINATIONS[nextIndex].id, true);
+      selectTab(destinationsList[nextIndex].id, true);
     }
   };
 
@@ -89,7 +93,7 @@ export default function DestinationsSection({ onSelectDestination }) {
   }, []);
 
   const scrollToMobileCard = (index) => {
-    const clampedIdx = Math.max(0, Math.min(DESTINATIONS.length - 1, index));
+    const clampedIdx = Math.max(0, Math.min(destinationsList.length - 1, index));
     const el = carouselRef.current;
     if (!el) return;
     const cards = el.querySelectorAll('article');
@@ -156,7 +160,7 @@ export default function DestinationsSection({ onSelectDestination }) {
           <button
             type="button"
             onClick={() => scrollToMobileCard(mobileActiveIdx + 1)}
-            disabled={mobileActiveIdx >= DESTINATIONS.length - 1}
+            disabled={mobileActiveIdx >= destinationsList.length - 1}
             aria-label={t('nav.nextSlide')}
             className="w-9 h-9 rounded-full border border-white/25 bg-white/12 text-white flex items-center justify-center shadow-xs transition-all hover:bg-brand-yellow hover:text-brand-navy hover:border-brand-yellow disabled:opacity-35 disabled:pointer-events-none cursor-pointer"
           >
@@ -172,11 +176,17 @@ export default function DestinationsSection({ onSelectDestination }) {
           role="tablist"
           aria-label={t('destinations.tabAriaLabel')}
         >
-          {DESTINATIONS.map((item, index) => {
+          {destinationsList.map((item, index) => {
             const isActive = activeId === item.id;
-            const destName = t(`destinations.items.${item.key}.name`);
-            const destDesc = t(`destinations.items.${item.key}.description`);
-            const destAlt = t(`destinations.items.${item.key}.alt`);
+            const destName = (item.nameAr && item.nameEn)
+              ? (isRtl ? item.nameAr : item.nameEn)
+              : t(`destinations.items.${item.key}.name`);
+            const destDesc = (item.descAr && item.descEn)
+              ? (isRtl ? item.descAr : item.descEn)
+              : t(`destinations.items.${item.key}.description`);
+            const destAlt = (item.nameAr && item.nameEn)
+              ? (isRtl ? item.nameAr : item.nameEn)
+              : t(`destinations.items.${item.key}.alt`);
 
             return (
               <article
@@ -324,12 +334,12 @@ export default function DestinationsSection({ onSelectDestination }) {
           role="group"
           aria-label={t('destinations.tabAriaLabel')}
         >
-          {DESTINATIONS.map((item, idx) => (
+          {destinationsList.map((item, idx) => (
             <button
               key={item.id}
               type="button"
               onClick={() => scrollToMobileCard(idx)}
-              aria-label={t(`destinations.items.${item.key}.name`)}
+              aria-label={item.nameAr && item.nameEn ? (isRtl ? item.nameAr : item.nameEn) : t(`destinations.items.${item.key}.name`)}
               className={`h-2 rounded-full transition-all duration-300 ${
                 mobileActiveIdx === idx ? 'w-6 bg-brand-yellow' : 'w-2 bg-white/30 hover:bg-white/50'
               }`}

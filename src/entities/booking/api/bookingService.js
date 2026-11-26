@@ -1,4 +1,5 @@
 import { generateQuoteRef } from '../../../shared/config/constants.js';
+import { getEquipmentCapacity } from '../../../shared/api/cmsService.js';
 
 const BOOKINGS_KEY = 'duck_bookings';
 const QUOTES_KEY = 'duck_b2b_quotes';
@@ -265,20 +266,23 @@ export const deleteBooking = (bookingId, userId) => {
  * Live Inventory calculation from active bookings (prevents overbooking).
  */
 export const getEquipmentInventory = () => {
+  const dynamicCap = getEquipmentCapacity();
   const bookings = getAllBookings();
   const activeBookings = bookings.filter(
     (b) => !['cancelled', 'refunded'].includes(String(b.status).toLowerCase())
   );
 
   return BASE_EQUIPMENT.map((item) => {
+    const maxUnits = dynamicCap[item.id] !== undefined ? dynamicCap[item.id] : item.maxUnits;
     const bookedUnits = activeBookings
       .filter((b) => (b.equipment || 'kayak').toLowerCase() === item.id)
       .reduce((sum, b) => sum + (Number(b.units) || Number(b.guests) || 1), 0);
 
-    const remainingUnits = Math.max(0, item.maxUnits - bookedUnits);
+    const remainingUnits = Math.max(0, maxUnits - bookedUnits);
 
     return {
       ...item,
+      maxUnits,
       bookedUnits,
       remainingUnits,
       isFull: remainingUnits === 0,

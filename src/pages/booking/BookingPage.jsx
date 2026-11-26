@@ -1,10 +1,17 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES } from '../../shared/config/routes.js';
 import { TRIPS } from '../../widgets/trips/tripsData.js';
+import { useCMS } from '../../shared/hooks/index.js';
+import {
+  trackInitiateBooking,
+  trackAddBookingDetails,
+  trackInitiateCheckout,
+  trackPurchase,
+} from '../../shared/utils/analytics.js';
 import { generateBookingRef } from '../../shared/config/constants.js';
 import { addBooking, getAllBookings } from '../../entities/booking/api/bookingService.js';
 import { getCurrentUser } from '../../entities/user/api/authService.js';
@@ -66,30 +73,38 @@ function BookingFlowContent({ searchParams, setSearchParams }) {
   const stepParam = parseInt(searchParams.get('step') || '0', 10);
   const restoredRecord = useMemo(() => findRestoredBooking(refParam), [refParam]);
 
+  const { trips: dynamicTrips } = useCMS();
+  const tripsList = dynamicTrips?.length ? dynamicTrips : TRIPS;
+
   // 1. Initial Trip match (by ?trip slug, restored booking ref, or single-trip ?activity)
   const initialTrip = useMemo(() => {
     if (tripSlug) {
-      return TRIPS.find((item) => item.slug === tripSlug) || null;
+      return tripsList.find((item) => item.slug === tripSlug) || null;
     }
     if (restoredRecord?.tripKey) {
-      const byKey = TRIPS.find((item) => item.key === restoredRecord.tripKey);
+      const byKey = tripsList.find((item) => item.key === restoredRecord.tripKey);
       if (byKey) return byKey;
     }
     if (restoredRecord?.tripTitle) {
-      const byTitle = TRIPS.find((item) =>
+      const byTitle = tripsList.find((item) =>
         restoredRecord.tripTitle.includes(item.slug) ||
         t(`trips.items.${item.key}.title`, item.slug) === restoredRecord.tripTitle
       );
       if (byTitle) return byTitle;
     }
     if (initialActivity === 'waterbike' || initialActivity === 'sup') {
-      return TRIPS.find((item) => item.act === initialActivity) || null;
+      return tripsList.find((item) => item.act === initialActivity) || null;
     }
     return null;
-  }, [tripSlug, initialActivity, restoredRecord, t]);
+  }, [tripSlug, initialActivity, restoredRecord, tripsList, t]);
 
   const [userSelectedTrip, setUserSelectedTrip] = useState(null);
   const selectedTrip = userSelectedTrip || initialTrip;
+
+  // Track Initiate Booking Event on mount
+  useEffect(() => {
+    trackInitiateBooking(selectedTrip, 'booking_page');
+  }, [selectedTrip]);
 
   // 2. Initial Step
   // If trip is in URL: start on step 2 (guest details) as per spec. If refParam & step=4: start on 4.
@@ -254,7 +269,21 @@ function BookingFlowContent({ searchParams, setSearchParams }) {
               bookingData={bookingData}
               updateBookingData={updateBookingData}
               selectedTrip={selectedTrip}
-              onNext={() => goToStep(3)}
+              onNext={() => {
+                trackAddBookingDetails({
+                  tripSlug: selectedTrip?.slug,
+                  date: bookingData.date,
+                  time: bookingData.time,
+                  totalGuests:
+                    (Number(bookingData.adults) || 1) +
+                    (Number(bookingData.kids1to6) || 0) +
+                    (Number(bookingData.kids7to12) || 0),
+                  egyptianCount: bookingData.egyptianCount,
+                  foreignCount: bookingData.foreignCount,
+                  equipment: bookingData.equipment || selectedTrip?.act || 'kayak',
+                });
+                goToStep(3);
+              }}
               onBack={() => goToStep(1)}
               t={t}
               lang={lang}
@@ -270,6 +299,14 @@ function BookingFlowContent({ searchParams, setSearchParams }) {
               updateBookingData={updateBookingData}
               selectedTrip={selectedTrip}
               onNext={() => {
+                trackInitiateCheckout({
+                  tripSlug: selectedTrip?.slug,
+                  date: bookingData.date,
+                  time: bookingData.time,
+                  totalAmount: bookingData.totalAmount || bookingData.amountToPay,
+                  paymentMethod: bookingData.paymentType,
+                });
+
                 if (!savedBookingRef.current) {
                   savedBookingRef.current = true;
                   const currentUser = getCurrentUser();
@@ -277,7 +314,7 @@ function BookingFlowContent({ searchParams, setSearchParams }) {
                     (Number(bookingData.adults) || 0) +
                     (Number(bookingData.kids1to6) || 0) +
                     (Number(bookingData.kids7to12) || 0);
-                  addBooking({
+                  const createdRecord = addBooking({
                     reference: bookingRef,
                     userId: currentUser?.id || 'guest',
                     email: currentUser?.email || '',
@@ -302,6 +339,15 @@ function BookingFlowContent({ searchParams, setSearchParams }) {
                     status: 'pending',
                     source: 'web',
                     channel: 'B2C',
+                  });
+
+                  trackPurchase(createdRecord || {
+                    reference: bookingRef,
+                    totalAmount: bookingData.totalAmount,
+                    tripKey: selectedTrip?.key,
+                    tripTitle: selectedTrip?.slug,
+                    equipment: bookingData.equipment,
+                    guests,
                   });
                 }
                 goToStep(4);

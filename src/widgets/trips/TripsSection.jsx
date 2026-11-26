@@ -13,9 +13,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { SectionHeader, Button, Card } from '../../shared/ui/index.js';
-import { useCustomScrollbar } from '../../shared/hooks/index.js';
+import { useCustomScrollbar, useCMS } from '../../shared/hooks/index.js';
 import { TRIPS, DESTINATIONS_FILTER, ACTIVITIES } from './tripsData.js';
 import { ROUTES } from '../../shared/config/routes.js';
+import { trackSearch } from '../../shared/utils/analytics.js';
 
 const EXPERIENCE_TYPES = [
   { key: 'kayak', label: 'KAYAK', slug: 'kayaking', icon: faWater },
@@ -25,6 +26,9 @@ const EXPERIENCE_TYPES = [
 
 export default function TripsSection({ externalFilter, onFilterChange }) {
   const { t, lang } = useTranslation();
+  const { trips: dynamicTrips, destinations: dynamicDestinations } = useCMS();
+  const tripsList = dynamicTrips?.length ? dynamicTrips : TRIPS;
+
   const [activeTripId, setActiveTripId] = useState(0);
   const [mobileActiveIdx, setMobileActiveIdx] = useState(0);
   const carouselRef = useRef(null);
@@ -45,24 +49,40 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
   const activeFilter = externalFilter !== undefined && externalFilter !== null ? externalFilter : 'all';
 
   const handleFilterSelect = (filterId) => {
+    trackSearch(String(filterId), 'trips_filter');
     if (onFilterChange) {
       onFilterChange(filterId);
     }
   };
 
+  // Build dynamic destination filters list
+  const destinationFilters = useMemo(() => {
+    const list = [{ id: 'all', key: 'all' }];
+    const sourceDestinations = dynamicDestinations?.length ? dynamicDestinations : DESTINATIONS_FILTER.filter((d) => d.id !== 'all');
+    sourceDestinations.forEach((d) => {
+      list.push({
+        id: d.filterKey !== undefined ? d.filterKey : d.id,
+        key: d.key,
+        nameAr: d.nameAr,
+        nameEn: d.nameEn,
+      });
+    });
+    return list;
+  }, [dynamicDestinations]);
+
   // Filter visible trips
   const visibleTrips = useMemo(() => {
     if (activeFilter === 'all') {
-      return TRIPS;
+      return tripsList;
     }
-    return TRIPS.filter((trip) => trip.loc === activeFilter);
-  }, [activeFilter]);
+    return tripsList.filter((trip) => trip.loc === activeFilter || trip.destKey === activeFilter);
+  }, [activeFilter, tripsList]);
 
   // Currently selected trip for big stage card
   const selectedTrip = useMemo(() => {
     const found = visibleTrips.find((trip) => trip.id === activeTripId);
-    return found || visibleTrips[0] || TRIPS[0];
-  }, [activeTripId, visibleTrips]);
+    return found || visibleTrips[0] || tripsList[0] || TRIPS[0];
+  }, [activeTripId, visibleTrips, tripsList]);
 
   // Format currency display
   const formatPrice = (amount) => {
@@ -171,15 +191,17 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
           role="group"
           aria-label={t('trips.filterAriaLabel')}
         >
-          {DESTINATIONS_FILTER.map((dest) => {
+          {destinationFilters.map((dest) => {
             const isSelected = String(activeFilter) === String(dest.id);
             const count = dest.id === 'all'
-              ? TRIPS.length
-              : TRIPS.filter((tItem) => tItem.loc === dest.id).length;
+              ? tripsList.length
+              : tripsList.filter((tItem) => tItem.loc === dest.id || tItem.destKey === dest.key).length;
 
             const label = dest.id === 'all'
               ? t('trips.filterAll')
-              : t(`destinations.items.${dest.key}.name`);
+              : (dest.nameAr && dest.nameEn)
+                ? (lang === 'ar' ? dest.nameAr : dest.nameEn)
+                : t(`destinations.items.${dest.key}.name`);
 
             return (
               <button

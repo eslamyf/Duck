@@ -13,6 +13,12 @@ import {
   faCircleCheck,
   faEye,
   faBuilding,
+  faRotateLeft,
+  faChartLine,
+  faPlus,
+  faTrash,
+  faPenToSquare,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -22,10 +28,8 @@ import {
   StatusBadge,
   BookingDetailsModal,
 } from '../../widgets/dashboard/index.js';
-import { useBookingsSync } from '../../shared/hooks/index.js';
+import { useBookingsSync, useCMS, useAnalyticsFunnel } from '../../shared/hooks/index.js';
 import { useTranslation } from '../../shared/i18n/index.js';
-import { TRIPS } from '../../widgets/trips/tripsData.js';
-import { DESTINATIONS } from '../../widgets/destinations/destinationsData.js';
 import { DEMO_ACCOUNTS } from '../../shared/config/demoAccounts.js';
 import { ROLE_PORTAL_MAP } from '../../shared/config/rbac.js';
 import { DEFAULT_ROLE_PERMISSIONS } from '../../entities/user/model/roles.js';
@@ -34,6 +38,15 @@ import {
   getGlobalBookingStats,
   updateB2BQuote,
 } from '../../entities/booking/api/bookingService.js';
+import {
+  resetAllDemoData,
+  addDynamicDestination,
+  deleteDynamicDestination,
+  addDynamicTrip,
+  deleteDynamicTrip,
+  updateDynamicTrip,
+  updateEquipmentCapacity,
+} from '../../shared/api/cmsService.js';
 
 const ALL_STATUSES = [
   { value: 'pending', ar: 'قيد المراجعة', en: 'Pending' },
@@ -48,7 +61,16 @@ export default function AdminDashboardPage() {
   const { lang, t } = useTranslation();
   const isArabic = lang === 'ar';
   const [searchParams, setSearchParams] = useSearchParams();
-  const VALID_TABS = ['overview', 'bookings', 'trips', 'destinations', 'providers', 'b2b', 'users'];
+  const VALID_TABS = [
+    'overview',
+    'bookings',
+    'trips',
+    'destinations',
+    'providers',
+    'analytics',
+    'b2b',
+    'users',
+  ];
   const urlTab = searchParams.get('tab');
   const [localTab, setLocalTab] = useState('overview');
   const activeTab = VALID_TABS.includes(urlTab) ? urlTab : localTab;
@@ -56,11 +78,44 @@ export default function AdminDashboardPage() {
     setLocalTab(nextTab);
     setSearchParams({ tab: nextTab }, { replace: true });
   };
+
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedBooking, setSelectedBooking] = useState(null);
+  const [resetMessage, setResetMessage] = useState('');
 
+  // Modals & form state
+  const [showAddTripModal, setShowAddTripModal] = useState(false);
+  const [showAddDestModal, setShowAddDestModal] = useState(false);
+  const [editingTrip, setEditingTrip] = useState(null);
+
+  const [newTripForm, setNewTripForm] = useState({
+    titleAr: '',
+    titleEn: '',
+    destKey: 'aswan',
+    act: 'kayak',
+    priceEg: 350,
+    price: 650,
+    durKey: '2h',
+    max: 10,
+  });
+
+  const [newDestForm, setNewDestForm] = useState({
+    key: '',
+    num: '06',
+    nameAr: '',
+    nameEn: '',
+    descAr: '',
+    descEn: '',
+    tripCount: 1,
+    lat: 24.0889,
+    lng: 32.8998,
+  });
+
+  // Dynamic Hooks
   const { bookings, inventory, quotes } = useBookingsSync();
+  const { destinations: dynamicDestinations, trips: dynamicTrips, equipmentCapacity } = useCMS();
+  const { metrics, events, clearLog } = useAnalyticsFunnel();
 
   const stats = useMemo(() => {
     void bookings;
@@ -87,10 +142,95 @@ export default function AdminDashboardPage() {
     { key: 'bookings', label: isArabic ? 'إدارة الحجوزات' : 'Bookings', icon: faCalendarCheck },
     { key: 'trips', label: isArabic ? 'الأنشطة والأسعار' : 'Activities & Pricing', icon: faWater },
     { key: 'destinations', label: isArabic ? 'الوجهات' : 'Destinations', icon: faMapLocationDot },
-    { key: 'providers', label: isArabic ? 'الشركاء والمخزون' : 'Partners & Fleet', icon: faHandshake },
+    { key: 'providers', label: isArabic ? 'المخزون والأسطول' : 'Fleet & Capacity', icon: faHandshake },
+    { key: 'analytics', label: isArabic ? 'قمع التحويلات' : 'Conversion Funnel', icon: faChartLine },
     { key: 'b2b', label: isArabic ? 'طلبات عروض B2B' : 'B2B Quotes', icon: faBuilding },
     { key: 'users', label: isArabic ? 'المستخدمون والصلاحيات' : 'Users & RBAC', icon: faUsersGear },
   ];
+
+  // Actions
+  const handleResetAllData = () => {
+    if (window.confirm(isArabic ? 'هل أنت متأكد من رغبتك في إعادة ضبط كافة البيانات التجريبية إلى الوضع الافتراضي؟' : 'Are you sure you want to reset all demo data to default?')) {
+      resetAllDemoData();
+      setResetMessage(isArabic ? 'تمت إعادة ضبط كافة بيانات المنصة بنجاح!' : 'All platform demo data reset successfully!');
+      setTimeout(() => setResetMessage(''), 4000);
+    }
+  };
+
+  const handleCreateTrip = (e) => {
+    e.preventDefault();
+    if (!newTripForm.titleAr || !newTripForm.titleEn) return;
+    const key = `trip_${Date.now()}`;
+    const slug = newTripForm.titleEn.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    addDynamicTrip({
+      key,
+      slug,
+      titleAr: newTripForm.titleAr,
+      titleEn: newTripForm.titleEn,
+      destKey: newTripForm.destKey,
+      act: newTripForm.act,
+      priceEg: Number(newTripForm.priceEg) || 350,
+      price: Number(newTripForm.price) || 650,
+      durKey: newTripForm.durKey,
+      max: Number(newTripForm.max) || 10,
+      images: {
+        thumb: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=500&auto=format&fit=crop&q=80',
+        medium: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1000&auto=format&fit=crop&q=80',
+      },
+    });
+    setShowAddTripModal(false);
+    setNewTripForm({
+      titleAr: '',
+      titleEn: '',
+      destKey: 'aswan',
+      act: 'kayak',
+      priceEg: 350,
+      price: 650,
+      durKey: '2h',
+      max: 10,
+    });
+  };
+
+  const handleSaveTripPricing = (tripId, priceEg, price) => {
+    updateDynamicTrip(tripId, {
+      priceEg: Number(priceEg),
+      price: Number(price),
+    });
+    setEditingTrip(null);
+  };
+
+  const handleCreateDest = (e) => {
+    e.preventDefault();
+    if (!newDestForm.nameAr || !newDestForm.nameEn) return;
+    const key = newDestForm.key.trim() || newDestForm.nameEn.toLowerCase().replace(/[^a-z0-9]+/g, '');
+    addDynamicDestination({
+      key,
+      num: newDestForm.num,
+      nameAr: newDestForm.nameAr,
+      nameEn: newDestForm.nameEn,
+      descAr: newDestForm.descAr,
+      descEn: newDestForm.descEn,
+      tripCount: Number(newDestForm.tripCount) || 1,
+      lat: Number(newDestForm.lat) || 24.0889,
+      lng: Number(newDestForm.lng) || 32.8998,
+      filterKey: key,
+      images: {
+        cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80',
+      },
+    });
+    setShowAddDestModal(false);
+    setNewDestForm({
+      key: '',
+      num: '06',
+      nameAr: '',
+      nameEn: '',
+      descAr: '',
+      descEn: '',
+      tripCount: 1,
+      lat: 24.0889,
+      lng: 32.8998,
+    });
+  };
 
   const bookingColumns = [
     {
@@ -131,7 +271,7 @@ export default function AdminDashboardPage() {
       label: isArabic ? 'المبلغ' : 'Amount',
       render: (row) => (
         <span className="font-bold text-brand-navy">
-          {Number(row.totalAmount || 0).toLocaleString(isArabic ? 'ar-EG' : 'en-US')}{' '}
+          {(row.totalAmount || 0).toLocaleString(isArabic ? 'ar-EG' : 'en-US')}{' '}
           {isArabic ? 'ج.م' : 'EGP'}
         </span>
       ),
@@ -176,16 +316,23 @@ export default function AdminDashboardPage() {
       key: 'title',
       label: isArabic ? 'النشاط / الرحلة' : 'Activity / Trip',
       render: (row) => (
-        <span className="font-bold text-brand-navy">
-          {t(`trips.items.${row.key}.title`, row.slug)}
-        </span>
+        <div>
+          <span className="font-bold text-brand-navy block">
+            {row.titleAr || t(`trips.items.${row.key}.title`, row.slug)}
+          </span>
+          <span className="text-[11px] text-brand-navy/60 font-medium">
+            {row.act} • {row.durKey || '2h'}
+          </span>
+        </div>
       ),
     },
     {
       key: 'destKey',
       label: isArabic ? 'الوجهة' : 'Destination',
       render: (row) => (
-        <span>{t(`destinations.items.${row.destKey}.name`, row.destKey)}</span>
+        <span className="text-xs font-bold text-brand-navy">
+          {t(`destinations.items.${row.destKey}.name`, row.destKey)}
+        </span>
       ),
     },
     {
@@ -204,6 +351,34 @@ export default function AdminDashboardPage() {
         <span className="font-bold text-brand-blue">
           {row.price} {isArabic ? 'ج.م' : 'EGP'}
         </span>
+      ),
+    },
+    {
+      key: 'actions',
+      label: isArabic ? 'إدارة' : 'Actions',
+      render: (row) => (
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setEditingTrip(row)}
+            className="p-1.5 rounded-lg bg-surface-mist text-brand-navy hover:bg-brand-navy hover:text-brand-yellow transition text-xs cursor-pointer"
+            title={isArabic ? 'تعديل السعر' : 'Edit Price'}
+          >
+            <FontAwesomeIcon icon={faPenToSquare} />
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              if (window.confirm(isArabic ? 'هل تريد حذف هذه الرحلة؟' : 'Delete this trip?')) {
+                deleteDynamicTrip(row.id);
+              }
+            }}
+            className="p-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition text-xs cursor-pointer"
+            title={isArabic ? 'حذف' : 'Delete'}
+          >
+            <FontAwesomeIcon icon={faTrash} />
+          </button>
+        </div>
       ),
     },
   ];
@@ -250,7 +425,31 @@ export default function AdminDashboardPage() {
       navItems={navItems}
       activeTab={activeTab}
       onTabChange={setActiveTab}
+      headerActions={
+        <button
+          type="button"
+          onClick={handleResetAllData}
+          className="inline-flex items-center gap-1.5 rounded-xl border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-bold text-red-700 hover:bg-red-100 transition cursor-pointer"
+        >
+          <FontAwesomeIcon icon={faRotateLeft} />
+          <span>{isArabic ? 'إعادة ضبط البيانات التجريبية' : 'Reset Demo Data'}</span>
+        </button>
+      }
     >
+      {resetMessage && (
+        <div className="mb-4 rounded-xl border border-emerald-300 bg-emerald-50 p-3 text-xs font-bold text-emerald-800 flex items-center justify-between">
+          <span>{resetMessage}</span>
+          <button
+            type="button"
+            onClick={() => setResetMessage('')}
+            className="text-emerald-800 hover:opacity-75 cursor-pointer"
+          >
+            <FontAwesomeIcon icon={faXmark} />
+          </button>
+        </div>
+      )}
+
+      {/* OVERVIEW TAB */}
       {activeTab === 'overview' && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -299,7 +498,7 @@ export default function AdminDashboardPage() {
                   <div
                     className="h-full rounded-full bg-brand-blue transition-all"
                     style={{
-                      width: `${Math.min(100, Math.round((item.bookedUnits / item.maxUnits) * 100))}%`,
+                      width: `${Math.min(100, (item.bookedUnits / item.maxUnits) * 100)}%`,
                     }}
                   />
                 </div>
@@ -309,19 +508,20 @@ export default function AdminDashboardPage() {
 
           <DataTable
             columns={bookingColumns}
-            rows={bookings.slice(0, 6)}
-            emptyTitle={isArabic ? 'لا توجد حجوزات' : 'No bookings'}
+            rows={bookings.slice(0, 5)}
+            emptyTitle={isArabic ? 'لا توجد حجوزات حديثة' : 'No recent bookings'}
           />
         </div>
       )}
 
+      {/* BOOKINGS TAB */}
       {activeTab === 'bookings' && (
         <DataTable
           columns={bookingColumns}
           rows={filteredBookings}
           searchValue={search}
           onSearchChange={setSearch}
-          searchPlaceholder={isArabic ? 'ابحث بالمرجع، الاسم أو الرحلة...' : 'Search ref, guest or trip...'}
+          searchPlaceholder={isArabic ? 'ابحث بالمرجع أو اسم العميل...' : 'Search ref or guest...'}
           filters={[
             { key: 'all', label: isArabic ? 'الكل' : 'All' },
             ...ALL_STATUSES.map((s) => ({
@@ -335,62 +535,296 @@ export default function AdminDashboardPage() {
         />
       )}
 
+      {/* TRIPS & PRICING TAB */}
       {activeTab === 'trips' && (
-        <DataTable
-          columns={tripColumns}
-          rows={TRIPS}
-          rowKey={(row) => row.id}
-        />
-      )}
-
-      {activeTab === 'destinations' && (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {DESTINATIONS.map((dest) => (
-            <div
-              key={dest.id}
-              className="rounded-[18px] border border-brand-blue/16 bg-surface-white p-5 shadow-card"
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="font-heading text-lg font-extrabold text-brand-navy">
+              {isArabic ? 'إدارة الرحلات والأسعار المزدوجة (مصريين / أجانب)' : 'Dynamic Trips & Dual Pricing'}
+            </h2>
+            <button
+              type="button"
+              onClick={() => setShowAddTripModal(true)}
+              className="inline-flex items-center gap-2 rounded-xl bg-brand-navy px-3.5 py-2 text-xs font-bold text-brand-yellow hover:bg-brand-blue hover:text-white transition cursor-pointer"
             >
-              <p className="text-xs font-bold text-brand-blue uppercase">
-                {dest.num} • {dest.key}
-              </p>
-              <h3 className="mt-1 font-heading text-lg font-extrabold text-brand-navy">
-                {t(`destinations.items.${dest.key}.name`, dest.key)}
-              </h3>
-              <p className="mt-2 text-xs text-brand-navy/65">
-                {TRIPS.filter((tr) => tr.destKey === dest.key).length || dest.tripCount}{' '}
-                {isArabic ? 'رحلات نشطة' : 'active trips'}
-              </p>
-            </div>
-          ))}
+              <FontAwesomeIcon icon={faPlus} />
+              <span>{isArabic ? 'إضافة رحلة جديدة' : 'Add New Trip'}</span>
+            </button>
+          </div>
+
+          <DataTable
+            columns={tripColumns}
+            rows={dynamicTrips}
+            rowKey={(row) => row.id}
+          />
         </div>
       )}
 
-      {activeTab === 'providers' && (
+      {/* DESTINATIONS TAB */}
+      {activeTab === 'destinations' && (
         <div className="space-y-4">
-          <div className="rounded-[18px] border border-brand-blue/16 bg-surface-white p-5 shadow-card">
-            <h2 className="font-heading text-base font-extrabold text-brand-navy">
-              {isArabic ? 'مخزون المعدات المباشر (يمنع الحجز الزائد)' : 'Live Fleet Inventory (Overbooking Guard)'}
+          <div className="flex items-center justify-between">
+            <h2 className="font-heading text-lg font-extrabold text-brand-navy">
+              {isArabic ? 'إدارة الوجهات ونقاط الانطلاق الحية' : 'Dynamic Destinations & Launch Points'}
             </h2>
-            <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
-              {inventory.map((item) => (
-                <div
-                  key={item.id}
-                  className="rounded-2xl border border-brand-blue/12 bg-surface-mist/60 p-4"
-                >
-                  <p className="font-bold text-brand-navy">
-                    {isArabic ? item.nameAr : item.nameEn}
-                  </p>
-                  <p className="mt-1 text-xs text-brand-navy/70">
-                    {isArabic ? 'المحجوز:' : 'Booked:'} {item.bookedUnits} •{' '}
-                    {isArabic ? 'المتاح:' : 'Remaining:'} {item.remainingUnits} / {item.maxUnits}
+            <button
+              type="button"
+              onClick={() => setShowAddDestModal(true)}
+              className="inline-flex items-center gap-2 rounded-xl bg-brand-navy px-3.5 py-2 text-xs font-bold text-brand-yellow hover:bg-brand-blue hover:text-white transition cursor-pointer"
+            >
+              <FontAwesomeIcon icon={faPlus} />
+              <span>{isArabic ? 'إضافة وجهة جديدة' : 'Add New Destination'}</span>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {dynamicDestinations.map((dest) => (
+              <div
+                key={dest.id}
+                className="rounded-[18px] border border-brand-blue/16 bg-surface-white p-5 shadow-card flex flex-col justify-between space-y-3"
+              >
+                <div>
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-bold text-brand-blue uppercase">
+                      {dest.num} • {dest.key}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (window.confirm(isArabic ? 'هل تريد حذف هذه الوجهة؟' : 'Delete this destination?')) {
+                          deleteDynamicDestination(dest.id);
+                        }
+                      }}
+                      className="p-1 rounded text-red-500 hover:bg-red-50 transition cursor-pointer text-xs"
+                      title={isArabic ? 'حذف الوجهة' : 'Delete destination'}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </div>
+                  <h3 className="mt-1 font-heading text-base font-extrabold text-brand-navy">
+                    {dest.nameAr || t(`destinations.items.${dest.key}.name`, dest.key)}
+                  </h3>
+                  <p className="mt-1 text-xs text-brand-navy/65 line-clamp-2">
+                    {dest.descAr || t(`destinations.items.${dest.key}.desc`, '')}
                   </p>
                 </div>
-              ))}
+                <div className="pt-2 border-t border-black/5 flex items-center justify-between text-xs text-brand-navy/70">
+                  <span>
+                    {dynamicTrips.filter((tr) => tr.destKey === dest.key).length || dest.tripCount}{' '}
+                    {isArabic ? 'رحلات نشطة' : 'active trips'}
+                  </span>
+                  <span className="font-mono text-[10px]" dir="ltr">
+                    {dest.lat?.toFixed?.(2) || '24.08'}, {dest.lng?.toFixed?.(2) || '32.90'}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* PROVIDERS & FLEET CAPACITY TAB */}
+      {activeTab === 'providers' && (
+        <div className="space-y-4">
+          <div className="rounded-[18px] border border-brand-blue/16 bg-surface-white p-5 shadow-card space-y-4">
+            <div>
+              <h2 className="font-heading text-base font-extrabold text-brand-navy">
+                {isArabic ? 'مخزون المعدات الحي وحماية الحجز الزائد (Overbooking Guard)' : 'Live Fleet Capacity & Overbooking Guard'}
+              </h2>
+              <p className="text-xs text-brand-navy/65 mt-1">
+                {isArabic
+                  ? 'أي تعديل على السعة القصوى هنا ينعكس فوراً على نموذج الحجز ويمنع تجاوز السعة الميدانية.'
+                  : 'Adjusting capacity updates the booking engine instantly, enforcing strict slot limits.'}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+              {[
+                { id: 'kayak', nameAr: 'كاياك النيل', nameEn: 'Nile Kayak', defaultMax: 20 },
+                { id: 'waterbike', nameAr: 'دراجة مائية', nameEn: 'Water Bike (BR-003 Limit)', defaultMax: 2 },
+                { id: 'sup', nameAr: 'ستاند أب بادل (SUP)', nameEn: 'Stand Up Paddle (SUP)', defaultMax: 10 },
+              ].map((eq) => {
+                const currentMax = equipmentCapacity[eq.id] ?? eq.defaultMax;
+                const invItem = inventory.find((i) => i.id === eq.id);
+                const booked = invItem?.bookedUnits || 0;
+                const remaining = Math.max(0, currentMax - booked);
+
+                return (
+                  <div
+                    key={eq.id}
+                    className="rounded-2xl border border-brand-blue/12 bg-surface-mist/60 p-4 space-y-3"
+                  >
+                    <div className="flex items-center justify-between">
+                      <p className="font-extrabold text-sm text-brand-navy">
+                        {isArabic ? eq.nameAr : eq.nameEn}
+                      </p>
+                      {eq.id === 'waterbike' && (
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
+                          {isArabic ? 'سعة محدودة' : 'Strict Limit'}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex items-center justify-between text-xs text-brand-navy/70">
+                      <span>{isArabic ? 'المحجوز حالياً:' : 'Active Bookings:'} <strong>{booked}</strong></span>
+                      <span>{isArabic ? 'المتبقي:' : 'Remaining:'} <strong className="text-emerald-700">{remaining}</strong></span>
+                    </div>
+
+                    <div className="pt-2 border-t border-black/5 flex items-center justify-between">
+                      <span className="text-xs font-bold text-brand-navy">
+                        {isArabic ? 'السعة الكلية:' : 'Total Max:'}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => updateEquipmentCapacity(eq.id, Math.max(1, currentMax - 1))}
+                          className="w-7 h-7 rounded-lg bg-surface-white border border-brand-blue/20 text-brand-navy font-bold hover:bg-brand-navy hover:text-white transition flex items-center justify-center cursor-pointer"
+                        >
+                          -
+                        </button>
+                        <span className="font-mono font-black text-sm text-brand-navy w-6 text-center">
+                          {currentMax}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => updateEquipmentCapacity(eq.id, currentMax + 1)}
+                          className="w-7 h-7 rounded-lg bg-brand-navy text-brand-yellow font-bold hover:bg-brand-blue hover:text-white transition flex items-center justify-center cursor-pointer"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
       )}
 
+      {/* CONVERSION FUNNEL & ANALYTICS TAB */}
+      {activeTab === 'analytics' && (
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="font-heading text-lg font-extrabold text-brand-navy">
+                {isArabic ? 'قمع التحويلات وتتبع تحويلات المنصة' : 'Conversion Funnel & Analytics Engine'}
+              </h2>
+              <p className="text-xs text-brand-navy/65">
+                {isArabic
+                  ? 'تتبع حي لكافة أحداث GA4 / GTM و Meta Pixel من الزيارة حتى إتمام الدفع وطلبات الشركات.'
+                  : 'Live event tracking for GA4 / GTM and Meta Pixel across all 8 funnel stages.'}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={clearLog}
+              className="text-xs font-bold text-brand-blue hover:underline cursor-pointer"
+            >
+              {isArabic ? 'مسح سجل التحليلات' : 'Clear Event Log'}
+            </button>
+          </div>
+
+          {/* Metric KPI Cards */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <StatCard
+              title={isArabic ? 'مشاهدات الصفحات' : 'Page Views'}
+              value={metrics.pageViews}
+              icon={faEye}
+              tone="navy"
+            />
+            <StatCard
+              title={isArabic ? 'بدء الحجز' : 'Initiated Bookings'}
+              value={metrics.initiatedBookings}
+              icon={faCalendarCheck}
+              tone="blue"
+            />
+            <StatCard
+              title={isArabic ? 'معدل التحويل النهائي' : 'Conversion Rate'}
+              value={`${metrics.conversionRate}%`}
+              icon={faChartLine}
+              tone="success"
+            />
+            <StatCard
+              title={isArabic ? 'إيرادات التحويلات' : 'Tracked Revenue'}
+              value={`${metrics.revenueEgp.toLocaleString(isArabic ? 'ar-EG' : 'en-US')} ${isArabic ? 'ج.م' : 'EGP'}`}
+              icon={faCoins}
+              tone="yellow"
+            />
+          </div>
+
+          {/* Funnel Progression Bars */}
+          <div className="rounded-[18px] border border-brand-blue/16 bg-surface-white p-5 shadow-card space-y-4">
+            <h3 className="font-heading text-sm font-extrabold text-brand-navy">
+              {isArabic ? 'مراحل قمع التحويل التفصيلية (8 أحداث متكاملة)' : 'Detailed 8-Stage Conversion Funnel'}
+            </h3>
+            <div className="space-y-3">
+              {[
+                { label: isArabic ? '1. زيارة الصفحة (page_view)' : '1. Page Views', val: metrics.pageViews, color: 'bg-brand-navy' },
+                { label: isArabic ? '2. استعراض نشاط (view_activity)' : '2. View Activities', val: metrics.viewActivities, color: 'bg-brand-blue' },
+                { label: isArabic ? '3. بحث وفلترة (search)' : '3. Searches', val: metrics.searches, color: 'bg-brand-blue' },
+                { label: isArabic ? '4. بدء الحجز (initiate_booking)' : '4. Initiated Bookings', val: metrics.initiatedBookings, color: 'bg-indigo-600' },
+                { label: isArabic ? '5. إدخال بيانات الضيوف (add_booking_details)' : '5. Guest Details', val: metrics.addedDetails, color: 'bg-amber-600' },
+                { label: isArabic ? '6. بدء الدفع (initiate_checkout)' : '6. Initiated Checkout', val: metrics.initiatedCheckouts, color: 'bg-orange-600' },
+                { label: isArabic ? '7. تأكيد الحجز والشراء (purchase)' : '7. Purchases', val: metrics.purchases, color: 'bg-emerald-600' },
+                { label: isArabic ? '8. طلبات عروض الشركات (lead_submission)' : '8. B2B Leads', val: metrics.leads, color: 'bg-cyan-600' },
+              ].map((stage, idx) => {
+                const maxVal = Math.max(1, metrics.pageViews, metrics.purchases);
+                const pct = Math.min(100, Math.round((stage.val / maxVal) * 100));
+                return (
+                  <div key={idx} className="space-y-1">
+                    <div className="flex items-center justify-between text-xs font-bold text-brand-navy">
+                      <span>{stage.label}</span>
+                      <span className="font-mono">{stage.val}</span>
+                    </div>
+                    <div className="h-2 w-full overflow-hidden rounded-full bg-surface-mist">
+                      <div
+                        className={`h-full rounded-full ${stage.color} transition-all duration-300`}
+                        style={{ width: `${Math.max(3, pct)}%` }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Live Events Table */}
+          <div className="rounded-[18px] border border-brand-blue/16 bg-surface-white p-5 shadow-card space-y-3">
+            <h3 className="font-heading text-sm font-extrabold text-brand-navy">
+              {isArabic ? 'سجل الأحداث المباشر لحظيًا' : 'Real-Time Event Stream'}
+            </h3>
+            <div className="max-h-72 overflow-y-auto space-y-1.5 font-mono text-xs">
+              {events.length === 0 ? (
+                <p className="text-brand-navy/50 text-center py-4 font-body">
+                  {isArabic ? 'لا توجد أحداث مسجلة بعد. تصفح الموقع وسوف تظهر هنا فوراً!' : 'No events logged yet. Browse the site to see live events here!'}
+                </p>
+              ) : (
+                events.map((ev) => (
+                  <div
+                    key={ev.id}
+                    className="p-2 rounded-lg bg-surface-mist/60 border border-black/5 flex flex-wrap items-center justify-between gap-2"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded bg-brand-navy text-brand-yellow font-bold text-[10px]">
+                        {ev.name}
+                      </span>
+                      <span className="text-brand-navy/70 text-[11px] truncate max-w-xs" dir="ltr">
+                        {ev.path || '/'}
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-brand-navy/50" dir="ltr">
+                      {new Date(ev.timestamp).toLocaleTimeString()}
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* B2B QUOTES TAB */}
       {activeTab === 'b2b' && (
         <DataTable
           rowKey={(row) => row.ref}
@@ -458,12 +892,297 @@ export default function AdminDashboardPage() {
         />
       )}
 
+      {/* USERS TAB */}
       {activeTab === 'users' && (
         <DataTable
           columns={roleColumns}
           rows={DEMO_ACCOUNTS}
           rowKey={(row) => row.id}
         />
+      )}
+
+      {/* MODAL: ADD TRIP */}
+      {showAddTripModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-black/10">
+              <h3 className="font-heading font-extrabold text-base text-brand-navy">
+                {isArabic ? 'إضافة نشاط / رحلة جديدة' : 'Add New Activity / Trip'}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowAddTripModal(false)}
+                className="text-brand-navy/60 hover:text-brand-navy cursor-pointer"
+              >
+                <FontAwesomeIcon icon={faXmark} />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateTrip} className="space-y-3 font-body text-xs">
+              <div>
+                <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالعربي' : 'Title (Arabic)'}</label>
+                <input
+                  type="text"
+                  required
+                  value={newTripForm.titleAr}
+                  onChange={(e) => setNewTripForm({ ...newTripForm, titleAr: e.target.value })}
+                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
+                  placeholder="مثال: جولة غروب كوبري عباس"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالإنجليزي' : 'Title (English)'}</label>
+                <input
+                  type="text"
+                  required
+                  value={newTripForm.titleEn}
+                  onChange={(e) => setNewTripForm({ ...newTripForm, titleEn: e.target.value })}
+                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
+                  placeholder="e.g. Sunset Kayak Tour"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الوجهة' : 'Destination'}</label>
+                  <select
+                    value={newTripForm.destKey}
+                    onChange={(e) => setNewTripForm({ ...newTripForm, destKey: e.target.value })}
+                    className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
+                  >
+                    {dynamicDestinations.map((d) => (
+                      <option key={d.key} value={d.key}>
+                        {d.nameAr || d.key}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'نوع المعدة' : 'Equipment'}</label>
+                  <select
+                    value={newTripForm.act}
+                    onChange={(e) => setNewTripForm({ ...newTripForm, act: e.target.value })}
+                    className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
+                  >
+                    <option value="kayak">Kayak</option>
+                    <option value="sup">SUP</option>
+                    <option value="waterbike">Water Bike</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'سعر المصريين (ج.م)' : 'Egyptian Price (EGP)'}</label>
+                  <input
+                    type="number"
+                    min="50"
+                    required
+                    value={newTripForm.priceEg}
+                    onChange={(e) => setNewTripForm({ ...newTripForm, priceEg: e.target.value })}
+                    className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
+                  />
+                </div>
+                <div>
+                  <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'سعر الأجانب (ج.م)' : 'Foreigner Price (EGP)'}</label>
+                  <input
+                    type="number"
+                    min="50"
+                    required
+                    value={newTripForm.price}
+                    onChange={(e) => setNewTripForm({ ...newTripForm, price: e.target.value })}
+                    className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-black/10">
+                <button
+                  type="button"
+                  onClick={() => setShowAddTripModal(false)}
+                  className="rounded-xl px-4 py-2 border border-black/15 font-bold text-brand-navy hover:bg-slate-100 cursor-pointer"
+                >
+                  {isArabic ? 'إلغاء' : 'Cancel'}
+                </button>
+                <button
+                  type="submit"
+                  className="rounded-xl px-4 py-2 bg-brand-navy text-brand-yellow font-bold hover:bg-brand-blue hover:text-white transition cursor-pointer"
+                >
+                  {isArabic ? 'حفظ الرحلة' : 'Save Trip'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: ADD DESTINATION */}
+      {showAddDestModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-black/10">
+              <h3 className="font-heading font-extrabold text-base text-brand-navy">
+                {isArabic ? 'إضافة وجهة جديدة' : 'Add New Destination'}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowAddDestModal(false)}
+                className="text-brand-navy/60 hover:text-brand-navy cursor-pointer"
+              >
+                <FontAwesomeIcon icon={faXmark} />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateDest} className="space-y-3 font-body text-xs">
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الرمز (Key/Slug)' : 'Key / Slug'}</label>
+                  <input
+                    type="text"
+                    required
+                    value={newDestForm.key}
+                    onChange={(e) => setNewDestForm({ ...newDestForm, key: e.target.value })}
+                    className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
+                    placeholder="e.g. giza"
+                  />
+                </div>
+                <div>
+                  <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الرقم التسلسلي' : 'Number Code'}</label>
+                  <input
+                    type="text"
+                    required
+                    value={newDestForm.num}
+                    onChange={(e) => setNewDestForm({ ...newDestForm, num: e.target.value })}
+                    className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
+                    placeholder="06"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالعربي' : 'Name (Arabic)'}</label>
+                <input
+                  type="text"
+                  required
+                  value={newDestForm.nameAr}
+                  onChange={(e) => setNewDestForm({ ...newDestForm, nameAr: e.target.value })}
+                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
+                  placeholder="مثال: الجيزة – كوبري عباس"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالإنجليزي' : 'Name (English)'}</label>
+                <input
+                  type="text"
+                  required
+                  value={newDestForm.nameEn}
+                  onChange={(e) => setNewDestForm({ ...newDestForm, nameEn: e.target.value })}
+                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
+                  placeholder="e.g. Giza – Abbas Bridge"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الوصف بالعربي' : 'Description (Arabic)'}</label>
+                <textarea
+                  value={newDestForm.descAr}
+                  onChange={(e) => setNewDestForm({ ...newDestForm, descAr: e.target.value })}
+                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy h-16"
+                  placeholder="وصف مختصر للوجهة وطبيعة التجربة النيلية فيها..."
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-black/10">
+                <button
+                  type="button"
+                  onClick={() => setShowAddDestModal(false)}
+                  className="rounded-xl px-4 py-2 border border-black/15 font-bold text-brand-navy hover:bg-slate-100 cursor-pointer"
+                >
+                  {isArabic ? 'إلغاء' : 'Cancel'}
+                </button>
+                <button
+                  type="submit"
+                  className="rounded-xl px-4 py-2 bg-brand-navy text-brand-yellow font-bold hover:bg-brand-blue hover:text-white transition cursor-pointer"
+                >
+                  {isArabic ? 'حفظ الوجهة' : 'Save Destination'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: EDIT TRIP PRICING */}
+      {editingTrip && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-black/10">
+              <h3 className="font-heading font-extrabold text-base text-brand-navy">
+                {isArabic ? 'تعديل أسعار الرحلة' : 'Edit Trip Pricing'}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setEditingTrip(null)}
+                className="text-brand-navy/60 hover:text-brand-navy cursor-pointer"
+              >
+                <FontAwesomeIcon icon={faXmark} />
+              </button>
+            </div>
+
+            <div className="space-y-3 font-body text-xs">
+              <p className="font-bold text-brand-navy">
+                {editingTrip.titleAr || editingTrip.slug}
+              </p>
+
+              <div>
+                <label className="block font-bold text-brand-navy mb-1">
+                  {isArabic ? 'سعر المصريين (ج.م)' : 'Egyptian Price (EGP)'}
+                </label>
+                <input
+                  type="number"
+                  defaultValue={editingTrip.priceEg || editingTrip.price}
+                  id="edit-price-eg"
+                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy font-bold"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-brand-navy mb-1">
+                  {isArabic ? 'سعر الأجانب (ج.م)' : 'Foreigner Price (EGP)'}
+                </label>
+                <input
+                  type="number"
+                  defaultValue={editingTrip.price}
+                  id="edit-price-fo"
+                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy font-bold"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-black/10">
+                <button
+                  type="button"
+                  onClick={() => setEditingTrip(null)}
+                  className="rounded-xl px-4 py-2 border border-black/15 font-bold text-brand-navy hover:bg-slate-100 cursor-pointer"
+                >
+                  {isArabic ? 'إلغاء' : 'Cancel'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const peg = document.getElementById('edit-price-eg')?.value;
+                    const pfo = document.getElementById('edit-price-fo')?.value;
+                    handleSaveTripPricing(editingTrip.id, peg, pfo);
+                  }}
+                  className="rounded-xl px-4 py-2 bg-brand-navy text-brand-yellow font-bold hover:bg-brand-blue hover:text-white transition cursor-pointer"
+                >
+                  {isArabic ? 'تحديث الأسعار' : 'Update Prices'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       <BookingDetailsModal

@@ -274,3 +274,13 @@ export const TRIPS = [
     },
   },
 ];
+
+export function getTrips() {
+  if (typeof window === 'undefined') return TRIPS;
+  try {
+    const raw = localStorage.getItem('duck_cms_trips');
+    return raw ? JSON.parse(raw) : TRIPS;
+  } catch {
+    return TRIPS;
+  }
+}

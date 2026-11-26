@@ -17,6 +17,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { Input, DatePicker, Button } from '../../shared/ui/index.js';
 import { isValidPhone, isNonEmpty } from '../../shared/utils/validators.js';
+import { getSlotAvailability } from '../../shared/api/cmsService.js';
 
 function getIsoDate(offsetDays = 0) {
   const d = new Date();
@@ -83,7 +84,16 @@ export default function StepGuestDetails({
   // Total guests calculation
   const totalGuests = (bookingData.adults || 1) + (bookingData.kids1to6 || 0) + (bookingData.kids7to12 || 0);
 
-  // Handle guest counts with 30 max limit - without any presets
+  // Live Slot Availability & Overbooking Guard
+  const currentEquipment = bookingData.equipment || selectedTrip?.act || 'kayak';
+  const slotAvailability = getSlotAvailability({
+    equipment: currentEquipment,
+    date: bookingData.date || todayIso,
+    time: bookingData.time || '10:00',
+  });
+  const maxSlotLimit = Math.min(30, slotAvailability.remainingUnits);
+
+  // Handle guest counts with live slot limit - without any presets
   const handleGuestChange = (type, nextVal) => {
     const current = {
       adults: bookingData.adults || 1,
@@ -93,6 +103,15 @@ export default function StepGuestDetails({
     };
 
     const newTotal = current.adults + current.kids1to6 + current.kids7to12;
+    if (newTotal > slotAvailability.remainingUnits) {
+      setErrors((prev) => ({
+        ...prev,
+        guests: isArabic
+          ? `عفواً، السعة المتبقية في هذا الموعد هي ${slotAvailability.remainingUnits} مقاعد فقط.`
+          : `Sorry, remaining capacity for this slot is only ${slotAvailability.remainingUnits} spots.`,
+      }));
+      return;
+    }
     if (newTotal > 30) {
       setErrors((prev) => ({
         ...prev,
@@ -140,6 +159,10 @@ export default function StepGuestDetails({
 
     if (totalGuests < 1) {
       errs.guests = t('booking.errors.minGuests');
+    } else if (totalGuests > slotAvailability.remainingUnits) {
+      errs.guests = isArabic
+        ? `عفواً، السعة المتبقية في هذا الموعد هي ${slotAvailability.remainingUnits} مقاعد فقط.`
+        : `Sorry, remaining capacity for this slot is only ${slotAvailability.remainingUnits} spots.`;
     } else if (totalGuests > 30) {
       errs.guests = t('booking.guestDetails.maxGuestsNotice');
     }
@@ -369,9 +392,23 @@ export default function StepGuestDetails({
               {t('booking.guestDetails.guestsSectionTitle')}
             </h3>
           </div>
-          <span className="text-xs font-black px-2.5 py-0.5 bg-brand-yellow/30 text-brand-navy rounded-full">
-            {t('booking.guestDetails.totalGuests', { count: totalGuests })} / 30
-          </span>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className={`text-[11px] sm:text-xs font-black px-2.5 py-0.5 rounded-full inline-flex items-center gap-1.5 ${
+              slotAvailability.remainingUnits <= 2
+                ? 'bg-amber-100 text-amber-900 border border-amber-300'
+                : 'bg-emerald-100 text-emerald-900 border border-emerald-300'
+            }`}>
+              <span className={`w-1.5 h-1.5 rounded-full ${slotAvailability.remainingUnits <= 2 ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'}`} />
+              <span>
+                {isArabic
+                  ? `المتاح في الموعد: ${slotAvailability.remainingUnits} من ${slotAvailability.maxUnits}`
+                  : `Available: ${slotAvailability.remainingUnits} of ${slotAvailability.maxUnits}`}
+              </span>
+            </span>
+            <span className="text-xs font-black px-2.5 py-0.5 bg-brand-yellow/30 text-brand-navy rounded-full">
+              {t('booking.guestDetails.totalGuests', { count: totalGuests })} / {maxSlotLimit}
+            </span>
+          </div>
         </div>
 
         {/* 3 Columns Side-by-Side on Tablet/Desktop with Neat Inline Stepper [-] count [+] */}
@@ -409,7 +446,7 @@ export default function StepGuestDetails({
               <button
                 type="button"
                 onClick={() => handleGuestChange('adults', (bookingData.adults || 1) + 1)}
-                disabled={totalGuests >= 30}
+                disabled={totalGuests >= maxSlotLimit}
                 className="w-7 h-7 rounded-lg bg-brand-navy text-brand-yellow flex items-center justify-center hover:bg-brand-blue hover:text-white transition disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                 aria-label="Increase adults"
               >
@@ -451,7 +488,7 @@ export default function StepGuestDetails({
               <button
                 type="button"
                 onClick={() => handleGuestChange('kids1to6', (bookingData.kids1to6 || 0) + 1)}
-                disabled={totalGuests >= 30}
+                disabled={totalGuests >= maxSlotLimit}
                 className="w-7 h-7 rounded-lg bg-brand-navy text-brand-yellow flex items-center justify-center hover:bg-brand-blue hover:text-white transition disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                 aria-label="Increase kids 1 to 6"
               >
@@ -493,7 +530,7 @@ export default function StepGuestDetails({
               <button
                 type="button"
                 onClick={() => handleGuestChange('kids7to12', (bookingData.kids7to12 || 0) + 1)}
-                disabled={totalGuests >= 30}
+                disabled={totalGuests >= maxSlotLimit}
                 className="w-7 h-7 rounded-lg bg-brand-navy text-brand-yellow flex items-center justify-center hover:bg-brand-blue hover:text-white transition disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                 aria-label="Increase kids 7 to 12"
               >

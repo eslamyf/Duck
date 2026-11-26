@@ -110,3 +110,13 @@ export const DESTINATIONS = [
     },
   },
 ];
+
+export function getDestinations() {
+  if (typeof window === 'undefined') return DESTINATIONS;
+  try {
+    const raw = localStorage.getItem('duck_cms_destinations');
+    return raw ? JSON.parse(raw) : DESTINATIONS;
+  } catch {
+    return DESTINATIONS;
+  }
+}
