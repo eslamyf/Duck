@@ -104,13 +104,8 @@ export default function FAQSection() {
                       aria-hidden="true"
                     />
 
-                    <span className="font-bold text-xs min-[901px]:text-[14px] text-center leading-snug inline-flex items-center gap-1.5">
-                      <span>{t(`faq.categories.${cat.key}`)}</span>
-                      {isActive && (
-                        <span className="inline-flex items-center justify-center rounded-full bg-brand-yellow/20 px-1.5 py-0.5 text-[10px] text-brand-yellow font-black border border-brand-yellow/40">
-                          <FontAwesomeIcon icon={faCheck} className="text-[9px]" />
-                        </span>
-                      )}
+                    <span className="font-bold text-xs min-[901px]:text-[14px] text-center leading-snug">
+                      {t(`faq.categories.${cat.key}`)}
                     </span>
                   </button>
                 );
