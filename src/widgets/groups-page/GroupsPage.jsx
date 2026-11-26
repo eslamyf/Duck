@@ -100,14 +100,13 @@ export default function GroupsPage() {
                       key={aud.key}
                       type="button"
                       onClick={() => setField('type', aud.idx)}
-                      className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-start text-[11.5px] font-bold transition cursor-pointer ${
-                        state.type === aud.idx
-                          ? 'border-brand-navy bg-brand-navy text-brand-yellow shadow-xs'
-                          : 'border-brand-blue/15 bg-surface-white text-brand-navy hover:border-brand-blue/40'
-                      }`}
+                      className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-start text-[11.5px] font-bold transition cursor-pointer ${state.type === aud.idx
+                        ? 'border-brand-navy bg-brand-navy text-brand-yellow shadow-xs'
+                        : 'border-brand-blue/15 bg-surface-white text-brand-navy hover:border-brand-blue/40'
+                        }`}
                     >
                       <FontAwesomeIcon icon={aud.icon} className="shrink-0" />
-                      <span className="leading-snug" lang="en" dir="ltr">{t(`groupsPage.${aud.key}`)}</span>
+                      <span className="truncate" lang="en" dir="ltr">{t(`groupsPage.${aud.key}`)}</span>
                     </button>
                   ))}
                 </div>

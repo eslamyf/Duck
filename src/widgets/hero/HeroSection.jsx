@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import heroVideoDesktop from '../../shared/assets/Videos/hero-desktop.mp4';
 import heroVideoMobile from '../../shared/assets/Videos/hero-mobile.mp4';
 import heroPosterDesktop from '../../shared/assets/images/hero-poster-desktop.webp';
@@ -9,13 +11,16 @@ import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
 
 export default function HeroSection() {
   const { lang, t } = useTranslation();
-  const [isDesktop, setIsDesktop] = useState(() => (typeof window !== 'undefined' ? window.innerWidth > 900 : true));
+  const [isDesktop, setIsDesktop] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth > 900 : true
+  );
   const [videoError, setVideoError] = useState(() => {
     if (typeof window === 'undefined') return false;
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     const isSaveData = connection?.saveData === true;
-    const isSlowConnection = connection?.effectiveType === '2g' || connection?.effectiveType === 'slow-2g';
+    const isSlowConnection =
+      connection?.effectiveType === '2g' || connection?.effectiveType === 'slow-2g';
     return mediaQuery.matches || isSaveData || isSlowConnection;
   });
   const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
@@ -24,6 +29,7 @@ export default function HeroSection() {
   const sectionRef = useRef(null);
 
   const isRtl = lang === 'ar';
+  const ArrowIcon = isRtl ? faArrowLeft : faArrowRight;
 
   useEffect(() => {
     const handleResize = () => {
@@ -34,22 +40,20 @@ export default function HeroSection() {
   }, []);
 
   // Performance & Accessibility Guard:
-  // - prefers-reduced-motion
-  // - navigator.connection.saveData
-  // - 2g or slow-2g connections
-  // If any of these apply, never load the video and stick to the high-performance poster.
+  // Defer background video stream until idle and skip under reduced motion / slow network
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') return undefined;
 
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     const checkMotion = () => mediaQuery.matches;
 
     const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     const isSaveData = connection?.saveData === true;
-    const isSlowConnection = connection?.effectiveType === '2g' || connection?.effectiveType === 'slow-2g';
+    const isSlowConnection =
+      connection?.effectiveType === '2g' || connection?.effectiveType === 'slow-2g';
 
     if (checkMotion() || isSaveData || isSlowConnection) {
-      return;
+      return undefined;
     }
 
     const handleMotionChange = (e) => {
@@ -59,7 +63,6 @@ export default function HeroSection() {
     };
     mediaQuery.addEventListener('change', handleMotionChange);
 
-    // Defer video loading until browser is idle or after initial render to maximize LCP
     const startVideoLoad = () => {
       if (!checkMotion() && !isSaveData && !isSlowConnection) {
         setShouldLoadVideo(true);
@@ -74,18 +77,18 @@ export default function HeroSection() {
           window.cancelIdleCallback(idleId);
         }
       };
-    } else {
-      const timerId = setTimeout(startVideoLoad, 1000);
-      return () => {
-        mediaQuery.removeEventListener('change', handleMotionChange);
-        clearTimeout(timerId);
-      };
     }
+
+    const timerId = setTimeout(startVideoLoad, 1000);
+    return () => {
+      mediaQuery.removeEventListener('change', handleMotionChange);
+      clearTimeout(timerId);
+    };
   }, []);
 
-  // IntersectionObserver: Pause video when scrolled out of view, resume when visible
+  // Pause video when scrolled out of view, resume when visible
   useEffect(() => {
-    if (!shouldLoadVideo || !sectionRef.current) return;
+    if (!shouldLoadVideo || !sectionRef.current) return undefined;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -106,108 +109,39 @@ export default function HeroSection() {
     return () => observer.disconnect();
   }, [shouldLoadVideo]);
 
-  // Diagonal clip paths matching Final_4.html
-  const outerClipPath = isDesktop
-    ? isRtl
-      ? 'polygon(0 0, 100% 0, 84% 100%, 0 100%)'
-      : 'polygon(0 0, 100% 0, 100% 100%, 16% 100%)'
-    : 'none';
-
-  const innerClipPath = isDesktop
-    ? isRtl
-      ? 'polygon(0 0, calc(100% - 12px) 0, calc(84% - 12px) 100%, 0 100%)'
-      : 'polygon(12px 0, 100% 0, 100% 100%, calc(16% + 12px) 100%)'
-    : 'none';
+  const directionalScrim = isRtl
+    ? 'bg-gradient-to-l from-brand-navy/92 via-brand-navy/68 to-brand-navy/15'
+    : 'bg-gradient-to-r from-brand-navy/92 via-brand-navy/68 to-brand-navy/15';
 
   return (
-    <section ref={sectionRef} className="relative w-full bg-brand-navy font-body" aria-label="Hero">
-      {/* Hero Visual Container */}
-      <div
-        id="top"
-        className="relative overflow-hidden bg-brand-navy text-white min-h-[calc(100svh-60px)] md:min-h-[calc(100svh-52px)] min-[901px]:min-h-[calc(100svh-100px)] flex flex-col justify-end min-[901px]:grid min-[901px]:grid-cols-[1fr_1.15fr]"
-      >
-        {/* Content Column */}
-        <div className="relative z-10 flex flex-col justify-center px-[5vw] min-[901px]:px-[6vw] min-[901px]:pe-[2vw] pt-14 pb-36 md:pb-12 min-[901px]:py-20">
-          {/* Tag Pill */}
-          <div className="inline-flex items-center gap-2 w-fit px-3.5 py-1.5 rounded-full bg-brand-yellow/15 text-brand-yellow text-xs font-bold tracking-[0.18em] mb-4 uppercase">
-            <span lang="en" dir="ltr">{t('hero.tag')}</span>
-          </div>
-
-          {/* Heading with Brand Highlight */}
-          <h1 className="text-[clamp(32px,5vw,62px)] font-bold leading-[1.22] tracking-tight mb-4 text-white">
-            {t('hero.titlePart1')}
-            <mark className="bg-transparent bg-gradient-to-t from-brand-yellow to-brand-yellow bg-[length:100%_14%] bg-no-repeat bg-bottom text-inherit font-bold">
-              {t('hero.titleHighlight')}
-            </mark>
-            {t('hero.titlePart2')}
-          </h1>
-
-          {/* Description */}
-          <p className="text-base min-[901px]:text-lg text-white/90 leading-[1.75] max-w-[520px] mb-6 min-[901px]:mb-8">
-            {t('hero.desc')}
-          </p>
-
-          {/* Action Buttons */}
-          <div className="flex items-center gap-3 flex-wrap">
-            <Link
-              to={sectionLink(SECTIONS.TRIPS)}
-              className="inline-flex items-center justify-center min-h-[50px] min-[901px]:min-h-[52px] px-7 rounded-full bg-brand-yellow text-brand-navy font-bold text-base hover:bg-brand-yellow-hover hover:-translate-y-0.5 transition-all shadow-[0_12px_32px_rgba(12,18,38,0.08)] active:translate-y-0"
-            >
-              {t('hero.ctaTrips')}
-            </Link>
-            <Link
-              to={ROUTES.BOOKING}
-              className="inline-flex items-center justify-center min-h-[50px] min-[901px]:min-h-[52px] px-7 rounded-full bg-transparent text-white border border-white/45 font-semibold text-base hover:bg-white/15 transition-all active:bg-white/20"
-            >
-              {t('hero.ctaBook')}
-            </Link>
-          </div>
-        </div>
-
-        {/* Media Column (Desktop Diagonal Cut / Mobile Full-Bleed Stack) */}
-        <div className="absolute inset-0 min-[901px]:relative min-[901px]:inset-auto overflow-hidden">
-          {/* Yellow Divider Line (Desktop only) */}
-          {isDesktop && (
-            <div
-              className="absolute inset-0 z-[2] bg-brand-yellow pointer-events-none transition-all duration-300"
-              style={{ clipPath: outerClipPath }}
-              aria-hidden="true"
-            />
-          )}
-
-          {/* Masked Video/Image Wrapper */}
-          <div
-            className="absolute inset-0 z-[3] bg-brand-navy overflow-hidden transition-all duration-300"
-            style={{ clipPath: innerClipPath }}
-          >
-            {/* Dark gradient overlay for mobile readability */}
-            <div
-              className="absolute inset-0 z-[4] min-[901px]:hidden bg-gradient-to-t from-brand-navy via-brand-navy/70 to-transparent pointer-events-none"
-              aria-hidden="true"
-            />
-
-            {/* Subtle marine overlay on desktop */}
-            <div
-              className="hidden min-[901px]:block absolute inset-0 z-[4] bg-gradient-to-b from-[rgba(12,18,38,0.12)] to-[rgba(20,125,159,0.24)] pointer-events-none"
-              aria-hidden="true"
-            />
-
-            {/* Poster / Primary LCP Element (Responsive picture for instant visual paint) */}
+    <section
+      ref={sectionRef}
+      dir={isRtl ? 'rtl' : 'ltr'}
+      className="relative w-full bg-brand-navy font-body"
+      aria-label="Hero"
+    >
+      {/* Navy Outer Margin Wrapper framing the Full-Width Cinematic Video */}
+      <div className="px-3 pt-2 pb-4 sm:px-5 sm:pt-3 sm:pb-5 min-[901px]:px-[4vw] min-[901px]:pt-4 min-[901px]:pb-7">
+        <div
+          id="top"
+          className="relative mx-auto max-w-[1400px] w-full min-h-[75vh] min-[901px]:min-h-[calc(100svh-180px)] overflow-hidden rounded-3xl min-[901px]:rounded-[30px] border border-white/15 bg-brand-navy text-white shadow-ocean flex items-end min-[901px]:items-center"
+        >
+          {/* Full-Bleed Background Media (Poster + Deferred Responsive Video) */}
+          <div className="absolute inset-0 z-0 overflow-hidden bg-brand-navy" aria-hidden="true">
             <picture className="absolute inset-0 w-full h-full">
               <source media="(min-width: 901px)" srcSet={heroPosterDesktop} />
               <source media="(max-width: 900px)" srcSet={heroPosterMobile} />
               <img
                 src={heroPosterDesktop}
                 alt={t('hero.videoPosterAlt')}
-                width={isDesktop ? 960 : 400}
-                height={isDesktop ? 960 : 824}
+                width={isDesktop ? 1400 : 400}
+                height={isDesktop ? 760 : 824}
                 fetchPriority="high"
                 decoding="async"
-                className="absolute inset-0 w-full h-full object-cover"
+                className="w-full h-full object-cover"
               />
             </picture>
 
-            {/* Deferred HTML5 Background Video */}
             {shouldLoadVideo && !videoError ? (
               <video
                 key={isDesktop ? 'desktop-video' : 'mobile-video'}
@@ -217,12 +151,12 @@ export default function HeroSection() {
                 loop
                 playsInline
                 preload="auto"
+                poster={isDesktop ? heroPosterDesktop : heroPosterMobile}
                 onPlaying={() => setIsVideoPlaying(true)}
                 onError={() => setVideoError(true)}
                 className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
                   isVideoPlaying ? 'opacity-100' : 'opacity-0'
                 }`}
-                aria-hidden="true"
               >
                 <source
                   src={isDesktop ? heroVideoDesktop : heroVideoMobile}
@@ -230,13 +164,61 @@ export default function HeroSection() {
                 />
               </video>
             ) : null}
+
+            {/* Directional Gradient Scrim (WCAG AAA contrast over text start side) */}
+            <div className={`absolute inset-0 z-[1] ${directionalScrim} pointer-events-none`} />
+
+            {/* Soft Bottom Vignette for Mobile Readability */}
+            <div className="absolute inset-0 z-[1] bg-gradient-to-t from-brand-navy/90 via-brand-navy/30 to-transparent pointer-events-none min-[901px]:from-brand-navy/55 min-[901px]:via-transparent" />
+          </div>
+
+          {/* Foreground Content Aligned to Start Edge */}
+          <div className="relative z-10 w-full max-w-[700px] px-5 pt-24 pb-10 sm:px-9 sm:py-14 min-[901px]:px-14 min-[901px]:py-16">
+            {/* Brand Badge with Glowing Yellow Dot */}
+            <div className="inline-flex items-center gap-2.5 w-fit px-4 py-1.5 rounded-full bg-brand-navy/80 border border-brand-yellow/40 backdrop-blur-md text-brand-yellow text-xs font-extrabold tracking-[0.18em] mb-4 uppercase shadow-card">
+              <span
+                className="h-2 w-2 rounded-full bg-brand-yellow animate-pulse"
+                aria-hidden="true"
+              />
+              <span lang="en" dir="ltr">{t('hero.tag')}</span>
+            </div>
+
+            {/* Bold Headline with Yellow Highlight */}
+            <h1 className="font-heading text-[clamp(28px,4.6vw,58px)] font-extrabold leading-[1.2] tracking-tight mb-4 text-white drop-shadow-sm">
+              {t('hero.titlePart1')}
+              <span className="text-brand-yellow">{t('hero.titleHighlight')}</span>
+              {t('hero.titlePart2')}
+            </h1>
+
+            {/* Subtitle */}
+            <p className="text-sm sm:text-base min-[901px]:text-lg text-white/90 leading-[1.75] max-w-[54ch] mb-6 min-[901px]:mb-8">
+              {t('hero.desc')}
+            </p>
+
+            {/* Primary & Secondary Glass CTAs */}
+            <div className="flex items-center gap-3 flex-wrap">
+              <Link
+                to={sectionLink(SECTIONS.TRIPS)}
+                className="inline-flex items-center justify-center gap-2.5 min-h-[48px] min-[901px]:min-h-[52px] px-6 sm:px-7 rounded-full bg-brand-yellow text-brand-navy font-extrabold text-sm sm:text-base hover:bg-brand-yellow-hover hover:-translate-y-0.5 transition-all shadow-ocean active:translate-y-0"
+              >
+                <span>{t('hero.ctaTrips')}</span>
+                <FontAwesomeIcon icon={ArrowIcon} className="text-sm" aria-hidden="true" />
+              </Link>
+
+              <Link
+                to={ROUTES.BOOKING}
+                className="inline-flex items-center justify-center min-h-[48px] min-[901px]:min-h-[52px] px-6 sm:px-7 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/45 font-bold text-sm sm:text-base hover:bg-white/20 transition-all active:bg-white/25"
+              >
+                {t('hero.ctaBook')}
+              </Link>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Stats Strip under Hero (Matching Final_4.html .st) */}
+      {/* Stats Strip under Hero */}
       <div
-        className="bg-surface-mist border-y border-[rgba(20,125,159,0.16)] px-[5vw] min-[901px]:px-[6vw] py-5 min-[901px]:py-7"
+        className="bg-surface-mist border-y border-brand-blue/16 px-[5vw] min-[901px]:px-[6vw] py-5 min-[901px]:py-7"
         role="list"
         aria-label="Platform Statistics"
       >
