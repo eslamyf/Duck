@@ -344,14 +344,11 @@ export function resetAllDemoData() {
     localStorage.removeItem(CMS_DESTINATIONS_KEY);
     localStorage.removeItem(CMS_TRIPS_KEY);
     localStorage.removeItem(EQUIPMENT_CAPACITY_KEY);
-    localStorage.removeItem('duck_bookings');
-    localStorage.removeItem('duck_b2b_quotes');
+    localStorage.setItem('duck_bookings', JSON.stringify([]));
+    localStorage.setItem('duck_b2b_quotes', JSON.stringify([]));
     localStorage.removeItem('duck_content_overrides');
     localStorage.removeItem('duck_custom_media');
     clearAnalyticsLog();
-
-    // Re-seed initial bookings
-    getAllBookings();
 
     notifyCMSUpdated();
     window.dispatchEvent(new CustomEvent(BOOKINGS_UPDATED_EVENT));

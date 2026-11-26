@@ -83,6 +83,8 @@ export default function AdminDashboardPage() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [resetMessage, setResetMessage] = useState('');
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(null);
 
   // Modals & form state
   const [showAddTripModal, setShowAddTripModal] = useState(false);
@@ -149,12 +151,19 @@ export default function AdminDashboardPage() {
   ];
 
   // Actions
-  const handleResetAllData = () => {
-    if (window.confirm(isArabic ? 'هل أنت متأكد من رغبتك في إعادة ضبط كافة البيانات التجريبية إلى الوضع الافتراضي؟' : 'Are you sure you want to reset all demo data to default?')) {
-      resetAllDemoData();
-      setResetMessage(isArabic ? 'تمت إعادة ضبط كافة بيانات المنصة بنجاح!' : 'All platform demo data reset successfully!');
-      setTimeout(() => setResetMessage(''), 4000);
-    }
+  const handleOpenResetModal = () => {
+    setShowResetModal(true);
+  };
+
+  const handleConfirmReset = () => {
+    resetAllDemoData();
+    setShowResetModal(false);
+    setResetMessage(
+      isArabic
+        ? 'تم مسح وتصفير كافة البيانات التجريبية بنجاح!'
+        : 'All demo data has been wiped and reset successfully!'
+    );
+    setTimeout(() => setResetMessage(''), 4000);
   };
 
   const handleCreateTrip = (e) => {
@@ -368,11 +377,7 @@ export default function AdminDashboardPage() {
           </button>
           <button
             type="button"
-            onClick={() => {
-              if (window.confirm(isArabic ? 'هل تريد حذف هذه الرحلة؟' : 'Delete this trip?')) {
-                deleteDynamicTrip(row.id);
-              }
-            }}
+            onClick={() => setDeleteModal({ type: 'trip', id: row.id, title: row.titleAr || row.slug })}
             className="p-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition text-xs cursor-pointer"
             title={isArabic ? 'حذف' : 'Delete'}
           >
@@ -428,11 +433,11 @@ export default function AdminDashboardPage() {
       headerActions={
         <button
           type="button"
-          onClick={handleResetAllData}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-bold text-red-700 hover:bg-red-100 transition cursor-pointer"
+          onClick={handleOpenResetModal}
+          className="inline-flex items-center gap-1.5 rounded-xl border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-bold text-rose-700 hover:bg-rose-100 transition cursor-pointer"
         >
           <FontAwesomeIcon icon={faRotateLeft} />
-          <span>{isArabic ? 'إعادة ضبط البيانات التجريبية' : 'Reset Demo Data'}</span>
+          <span>{isArabic ? 'مسح وتصفير البيانات التجريبية' : 'Wipe & Reset Demo Data'}</span>
         </button>
       }
     >
@@ -590,11 +595,7 @@ export default function AdminDashboardPage() {
                     </p>
                     <button
                       type="button"
-                      onClick={() => {
-                        if (window.confirm(isArabic ? 'هل تريد حذف هذه الوجهة؟' : 'Delete this destination?')) {
-                          deleteDynamicDestination(dest.id);
-                        }
-                      }}
+                      onClick={() => setDeleteModal({ type: 'dest', id: dest.id, title: dest.nameAr || dest.key })}
                       className="p-1 rounded text-red-500 hover:bg-red-50 transition cursor-pointer text-xs"
                       title={isArabic ? 'حذف الوجهة' : 'Delete destination'}
                     >
@@ -1180,6 +1181,99 @@ export default function AdminDashboardPage() {
                   {isArabic ? 'تحديث الأسعار' : 'Update Prices'}
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: RESET & WIPE ALL DEMO DATA */}
+      {showResetModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-md rounded-[28px] bg-white p-6 sm:p-7 shadow-2xl border border-black/10 space-y-5 animate-in zoom-in-95 duration-200 text-center font-body">
+            <div className="w-16 h-16 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center mx-auto text-2xl shadow-inner">
+              <FontAwesomeIcon icon={faTrash} />
+            </div>
+
+            <div className="space-y-2">
+              <h3 className="font-heading font-extrabold text-lg sm:text-xl text-brand-navy">
+                {isArabic ? 'مسح وتصفير كافة البيانات التجريبية' : 'Wipe & Reset All Demo Data'}
+              </h3>
+              <p className="text-xs sm:text-sm text-brand-navy/70 leading-relaxed">
+                {isArabic
+                  ? 'سيتم حذف كافة الحجوزات التجريبية، طلبات عروض B2B، وسجلات التحليلات نهائياً لتصبح الجداول فارغة تماماً وجاهزة لاستقبال بياناتك الحقيقية.'
+                  : 'This will permanently wipe all demo bookings, B2B quotes, and analytics event logs so your tables become clean and empty for real data.'}
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowResetModal(false)}
+                className="flex-1 py-2.5 px-4 rounded-xl border border-black/15 bg-surface-mist text-brand-navy font-bold text-xs sm:text-sm hover:bg-slate-200 transition cursor-pointer"
+              >
+                {isArabic ? 'إلغاء' : 'Cancel'}
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmReset}
+                className="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 text-white font-bold text-xs sm:text-sm hover:bg-rose-700 shadow-sm transition cursor-pointer flex items-center justify-center gap-2"
+              >
+                <FontAwesomeIcon icon={faTrash} />
+                <span>{isArabic ? 'تأكيد المسح والتصفير' : 'Confirm & Wipe Clean'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: DELETE TRIP OR DESTINATION */}
+      {deleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-sm rounded-[24px] bg-white p-6 shadow-2xl border border-black/10 space-y-4 animate-in zoom-in-95 duration-200 text-center font-body">
+            <div className="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center mx-auto text-xl shadow-inner">
+              <FontAwesomeIcon icon={faTrash} />
+            </div>
+
+            <div className="space-y-1">
+              <h3 className="font-heading font-extrabold text-base text-brand-navy">
+                {isArabic
+                  ? deleteModal.type === 'trip'
+                    ? 'حذف النشاط / الرحلة'
+                    : 'حذف الوجهة'
+                  : deleteModal.type === 'trip'
+                    ? 'Delete Trip'
+                    : 'Delete Destination'}
+              </h3>
+              <p className="text-xs text-brand-navy/70 leading-relaxed">
+                {isArabic
+                  ? `هل أنت متأكد من رغبتك في حذف "${deleteModal.title}"؟`
+                  : `Are you sure you want to delete "${deleteModal.title}"?`}
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => setDeleteModal(null)}
+                className="flex-1 py-2 px-3 rounded-xl border border-black/15 bg-surface-mist text-brand-navy font-bold text-xs hover:bg-slate-200 transition cursor-pointer"
+              >
+                {isArabic ? 'إلغاء' : 'Cancel'}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (deleteModal.type === 'trip') {
+                    deleteDynamicTrip(deleteModal.id);
+                  } else {
+                    deleteDynamicDestination(deleteModal.id);
+                  }
+                  setDeleteModal(null);
+                }}
+                className="flex-1 py-2 px-3 rounded-xl bg-rose-600 text-white font-bold text-xs hover:bg-rose-700 shadow-sm transition cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <FontAwesomeIcon icon={faTrash} />
+                <span>{isArabic ? 'تأكيد الحذف' : 'Confirm Delete'}</span>
+              </button>
             </div>
           </div>
         </div>

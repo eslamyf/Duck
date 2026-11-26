@@ -18,6 +18,7 @@ import {
   faGlobe,
   faRightFromBracket,
   faBoxesStacked,
+  faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -97,6 +98,7 @@ export default function CustomerDashboardPage() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedBooking, setSelectedBooking] = useState(null);
+  const [cancelConfirmBooking, setCancelConfirmBooking] = useState(null);
 
   const [currentUser, setCurrentUser] = useState(() => getCurrentUser());
   const [profileForm, setProfileForm] = useState(() => ({
@@ -166,12 +168,7 @@ export default function CustomerDashboardPage() {
       .split(' ')[0] || 'DUCK';
 
   const handleCancelBooking = (booking) => {
-    const msg = isArabic
-      ? `هل تريد إلغاء الحجز ${booking.reference || booking.id}؟ (الإلغاء المجاني متاح قبل 24 ساعة من الرحلة)`
-      : `Cancel booking ${booking.reference || booking.id}? (Free cancellation up to 24h before trip)`;
-    if (window.confirm(msg)) {
-      updateBookingStatus(booking.id, 'cancelled');
-    }
+    setCancelConfirmBooking(booking);
   };
 
   const handleSaveProfile = (e) => {
@@ -843,6 +840,48 @@ export default function CustomerDashboardPage() {
               >
                 <FontAwesomeIcon icon={faRightFromBracket} />
                 <span>{isArabic ? 'تسجيل الخروج من الحساب' : 'Sign Out'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: CANCEL BOOKING CONFIRMATION */}
+      {cancelConfirmBooking && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-sm rounded-[24px] bg-white p-6 shadow-2xl border border-black/10 space-y-4 animate-in zoom-in-95 duration-200 text-center font-body">
+            <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center mx-auto text-xl shadow-inner">
+              <FontAwesomeIcon icon={faTriangleExclamation} />
+            </div>
+
+            <div className="space-y-1">
+              <h3 className="font-heading font-extrabold text-base text-brand-navy">
+                {isArabic ? 'تأكيد إلغاء الحجز' : 'Confirm Cancellation'}
+              </h3>
+              <p className="text-xs text-brand-navy/70 leading-relaxed">
+                {isArabic
+                  ? `هل تريد إلغاء الحجز ${cancelConfirmBooking.reference || cancelConfirmBooking.id}؟ (الإلغاء المجاني متاح قبل 24 ساعة من الرحلة)`
+                  : `Cancel booking ${cancelConfirmBooking.reference || cancelConfirmBooking.id}? (Free cancellation up to 24h before trip)`}
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => setCancelConfirmBooking(null)}
+                className="flex-1 py-2 px-3 rounded-xl border border-black/15 bg-surface-mist text-brand-navy font-bold text-xs hover:bg-slate-200 transition cursor-pointer"
+              >
+                {isArabic ? 'تراجع' : 'Keep'}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  updateBookingStatus(cancelConfirmBooking.id, 'cancelled');
+                  setCancelConfirmBooking(null);
+                }}
+                className="flex-1 py-2 px-3 rounded-xl bg-amber-600 text-white font-bold text-xs hover:bg-amber-700 shadow-sm transition cursor-pointer"
+              >
+                {isArabic ? 'تأكيد الإلغاء' : 'Yes, Cancel'}
               </button>
             </div>
           </div>

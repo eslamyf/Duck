@@ -5,7 +5,7 @@ const BOOKINGS_KEY = 'duck_bookings';
 const QUOTES_KEY = 'duck_b2b_quotes';
 export const BOOKINGS_UPDATED_EVENT = 'duck:bookings-updated';
 
-const INITIAL_SEED_QUOTES = [
+export const INITIAL_SEED_QUOTES = [
   {
     ref: 'QUO-2026-201',
     organization: 'Vodafone Egypt Team',
@@ -26,7 +26,7 @@ const BASE_EQUIPMENT = [
   { id: 'sup', nameAr: 'ستاند أب بادل (SUP)', nameEn: 'Stand Up Paddle (SUP)', maxUnits: 10, priceEgp: 400 },
 ];
 
-const INITIAL_SEED_BOOKINGS = [
+export const INITIAL_SEED_BOOKINGS = [
   {
     id: 'seed-bk-101',
     reference: 'DUCK-2026-101',
@@ -142,9 +142,9 @@ function notifyBookingsUpdated() {
 export const getAllBookings = () => {
   try {
     const raw = localStorage.getItem(BOOKINGS_KEY);
-    if (!raw) {
-      localStorage.setItem(BOOKINGS_KEY, JSON.stringify(INITIAL_SEED_BOOKINGS));
-      return [...INITIAL_SEED_BOOKINGS];
+    if (raw === null) {
+      localStorage.setItem(BOOKINGS_KEY, JSON.stringify([]));
+      return [];
     }
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
@@ -334,9 +334,9 @@ export const getGlobalBookingStats = () => {
 export const getB2BQuotes = () => {
   try {
     const raw = localStorage.getItem(QUOTES_KEY);
-    if (!raw) {
-      localStorage.setItem(QUOTES_KEY, JSON.stringify(INITIAL_SEED_QUOTES));
-      return [...INITIAL_SEED_QUOTES];
+    if (raw === null) {
+      localStorage.setItem(QUOTES_KEY, JSON.stringify([]));
+      return [];
     }
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
