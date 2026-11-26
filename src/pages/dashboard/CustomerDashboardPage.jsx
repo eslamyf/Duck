@@ -548,7 +548,7 @@ export default function CustomerDashboardPage() {
 
                     <div className="flex items-center gap-2 shrink-0">
                       <Link
-                        to={`/activities/${trip.slug}`}
+                        to={ROUTES.tripDetails(trip.slug)}
                         className="inline-flex min-h-[36px] shrink-0 items-center justify-center rounded-full border border-brand-navy/20 bg-white px-3.5 py-1.5 text-xs font-extrabold text-brand-navy shadow-xs transition hover:bg-brand-navy hover:text-white"
                       >
                         {isArabic ? 'التفاصيل' : 'Details'}

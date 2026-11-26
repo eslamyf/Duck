@@ -30,7 +30,27 @@ export default function TripDetailsPage() {
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const [toastMessage, setToastMessage] = useState('');
 
-  const trip = useMemo(() => TRIPS.find((item) => item.slug === slug), [slug]);
+  const trip = useMemo(() => {
+    const base = TRIPS.find((item) => item.slug === slug);
+    if (!base) return null;
+    try {
+      const overrides = JSON.parse(localStorage.getItem('duck_content_overrides') || '{}');
+      const tripOverride = overrides[base.key];
+      if (tripOverride?.customImage) {
+        return {
+          ...base,
+          images: {
+            ...base.images,
+            large: tripOverride.customImage,
+            medium: tripOverride.customImage,
+          },
+        };
+      }
+    } catch {
+      // ignore
+    }
+    return base;
+  }, [slug]);
 
   // Gallery image pool for Lightbox
   const galleryImages = useMemo(() => {

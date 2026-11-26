@@ -74,34 +74,42 @@ export default function Navbar({ onBookClick }) {
       .catch(() => { });
   }, []);
 
-  // Update active section based on scroll (only when on home page)
+  // Update active section based on scroll & hash (only when on home page)
   useEffect(() => {
     if (location.pathname !== ROUTES.HOME) return;
 
+    const sectionIds = [
+      SECTIONS.LOCATIONS,
+      SECTIONS.TRIPS,
+      SECTIONS.MAP,
+      SECTIONS.REVIEWS,
+      SECTIONS.FAQ,
+    ];
+
     const handleScroll = () => {
+      // Top of page
       if (window.scrollY < 120) {
         setActiveSection(SECTIONS.TOP);
         return;
       }
 
-      const sectionIds = [
-        SECTIONS.LOCATIONS,
-        SECTIONS.TRIPS,
-        SECTIONS.REVIEWS,
-        SECTIONS.FAQ,
-        SECTIONS.MAP,
-      ];
+      // Bottom of page: highlight FAQ
+      const scrollBottom = window.innerHeight + window.scrollY;
+      const totalHeight = document.documentElement.scrollHeight;
+      if (scrollBottom >= totalHeight - 150) {
+        setActiveSection(SECTIONS.FAQ);
+        return;
+      }
 
       let current = SECTIONS.TOP;
       const headerOffset = 220;
 
       for (const id of sectionIds) {
         const el = document.getElementById(id);
-
         if (el) {
           const rect = el.getBoundingClientRect();
-
-          if (rect.top <= headerOffset) {
+          // Active when the section top has scrolled past headerOffset and bottom is still visible
+          if (rect.top <= headerOffset && rect.bottom > 80) {
             current = id;
           }
         }
@@ -110,10 +118,20 @@ export default function Navbar({ onBookClick }) {
       setActiveSection(current);
     };
 
+    // Listen to hash changes (e.g. #reviews or #faq)
+    const handleHashChange = () => {
+      const h = window.location.hash?.replace(/^#/, '').toLowerCase();
+      if (h && [SECTIONS.TOP, ...sectionIds].includes(h)) {
+        setActiveSection(h);
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
 
     return () => {
+      window.removeEventListener('hashchange', handleHashChange);
       window.removeEventListener('scroll', handleScroll);
     };
   }, [location.pathname]);

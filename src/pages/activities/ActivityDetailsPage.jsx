@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, Navigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowLeft,
@@ -16,6 +16,7 @@ import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES } from '../../shared/config/routes.js';
 import { buildWhatsAppUrl } from '../../shared/config/constants.js';
+import { TRIPS } from '../../widgets/trips/tripsData.js';
 import NotFoundPage from '../not-found/NotFoundPage.jsx';
 
 import kayakImg from '../../shared/assets/images/trips/kayak-free-960w.webp';
@@ -69,6 +70,10 @@ export default function ActivityDetailsPage() {
     : [];
 
   if (!activity) {
+    const matchingTrip = TRIPS.find((t) => t.slug === slug);
+    if (matchingTrip) {
+      return <Navigate to={ROUTES.tripDetails(slug)} replace />;
+    }
     return <NotFoundPage />;
   }
 

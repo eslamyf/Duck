@@ -9,6 +9,10 @@ import {
   faPlus,
   faCheck,
   faSave,
+  faUpload,
+  faTrash,
+  faCamera,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -20,6 +24,7 @@ import { useTranslation } from '../../shared/i18n/index.js';
 import { TRIPS } from '../../widgets/trips/tripsData.js';
 
 const CONTENT_STORAGE_KEY = 'duck_content_overrides';
+const MEDIA_STORAGE_KEY = 'duck_custom_media';
 
 function getStoredContentOverrides() {
   try {
@@ -32,6 +37,22 @@ function getStoredContentOverrides() {
 function saveStoredContentOverrides(overrides) {
   try {
     localStorage.setItem(CONTENT_STORAGE_KEY, JSON.stringify(overrides));
+  } catch {
+    // ignore
+  }
+}
+
+function getStoredCustomMedia() {
+  try {
+    return JSON.parse(localStorage.getItem(MEDIA_STORAGE_KEY) || '[]');
+  } catch {
+    return [];
+  }
+}
+
+function saveStoredCustomMedia(mediaList) {
+  try {
+    localStorage.setItem(MEDIA_STORAGE_KEY, JSON.stringify(mediaList));
   } catch {
     // ignore
   }
@@ -55,7 +76,17 @@ export default function ContentDashboardPage() {
   const [search, setSearch] = useState('');
   const [selectedTripKey, setSelectedTripKey] = useState(TRIPS[0]?.key || 'botanicalGarden');
   const [contentOverrides, setContentOverrides] = useState(getStoredContentOverrides);
+  const [customMedia, setCustomMedia] = useState(getStoredCustomMedia);
   const [savedSuccessNotice, setSavedSuccessNotice] = useState('');
+  const [showUploadModal, setShowUploadModal] = useState(false);
+
+  // New photo upload form state
+  const [uploadForm, setUploadForm] = useState({
+    titleAr: '',
+    titleEn: '',
+    tripKey: 'general',
+    previewUrl: '',
+  });
 
   // Editing form state for selected trip
   const currentTrip = useMemo(
@@ -70,6 +101,7 @@ export default function ContentDashboardPage() {
     descEn: '',
     badgeAr: 'الأكثر طلباً',
     badgeEn: 'Most Popular',
+    customImage: '',
   });
 
   // Promotional Offers
@@ -120,8 +152,72 @@ export default function ContentDashboardPage() {
       descEn: saved.descEn || trip.descEn || '',
       badgeAr: saved.badgeAr || 'الأكثر تميزاً',
       badgeEn: saved.badgeEn || 'Featured',
+      customImage: saved.customImage || '',
     });
     setActiveTab('copy');
+  };
+
+  const handleTripPhotoUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (loadEvent) => {
+      setEditForm((p) => ({ ...p, customImage: loadEvent.target.result }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleFileChangeForGallery = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (loadEvent) => {
+      setUploadForm((p) => ({
+        ...p,
+        previewUrl: loadEvent.target.result,
+        titleAr: p.titleAr || file.name.replace(/\.[^/.]+$/, ''),
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleSaveUploadedPhoto = (e) => {
+    e.preventDefault();
+    if (!uploadForm.previewUrl) return;
+
+    const newPhoto = {
+      id: `media-${Date.now()}`,
+      src: uploadForm.previewUrl,
+      titleAr: uploadForm.titleAr.trim() || 'صورة DUCK جديدة',
+      titleEn: uploadForm.titleEn.trim() || 'DUCK Photo',
+      tripKey: uploadForm.tripKey,
+      createdAt: new Date().toISOString(),
+    };
+
+    const updated = [newPhoto, ...customMedia];
+    setCustomMedia(updated);
+    saveStoredCustomMedia(updated);
+
+    if (uploadForm.tripKey && uploadForm.tripKey !== 'general') {
+      const overrides = { ...contentOverrides };
+      overrides[uploadForm.tripKey] = {
+        ...(overrides[uploadForm.tripKey] || {}),
+        customImage: uploadForm.previewUrl,
+      };
+      setContentOverrides(overrides);
+      saveStoredContentOverrides(overrides);
+    }
+
+    setUploadForm({ titleAr: '', titleEn: '', tripKey: 'general', previewUrl: '' });
+    setShowUploadModal(false);
+    setSavedSuccessNotice(isArabic ? 'تم حفظ وإضافة الصورة للمعرض بنجاح!' : 'Photo added to library successfully!');
+    setTimeout(() => setSavedSuccessNotice(''), 3000);
+  };
+
+  const handleDeleteCustomPhoto = (id) => {
+    const updated = customMedia.filter((m) => m.id !== id);
+    setCustomMedia(updated);
+    saveStoredCustomMedia(updated);
   };
 
   const handleSaveTripContent = (e) => {
@@ -137,8 +233,8 @@ export default function ContentDashboardPage() {
     saveStoredContentOverrides(updated);
     setSavedSuccessNotice(
       isArabic
-        ? 'تم حفظ المحتوى بنجاح ونشره على الموقع!'
-        : 'Content updated and published successfully!'
+        ? 'تم حفظ المحتوى والصورة بنجاح ونشرها على الموقع!'
+        : 'Content and photo updated and published successfully!'
     );
     setTimeout(() => setSavedSuccessNotice(''), 3000);
   };
@@ -407,6 +503,58 @@ export default function ContentDashboardPage() {
               />
             </div>
 
+            {/* Trip Cover Image Upload & Preview */}
+            <div className="rounded-2xl border border-brand-blue/15 bg-surface-mist/70 p-4">
+              <label className="block text-xs font-bold text-brand-navy mb-2">
+                {isArabic ? 'صورة غلاف التجربة المعروضة' : 'Trip Cover Image'}
+              </label>
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                <div className="relative h-28 w-44 shrink-0 rounded-xl overflow-hidden border border-brand-navy/15 bg-brand-navy shadow-sm">
+                  <img
+                    src={editForm.customImage || currentTrip.images.large || currentTrip.images.medium}
+                    alt={currentTrip.key}
+                    className="h-full w-full object-cover"
+                  />
+                  {editForm.customImage && (
+                    <span className="absolute top-1.5 start-1.5 rounded-md bg-brand-navy/90 px-2 py-0.5 text-[10px] font-bold text-brand-yellow">
+                      {isArabic ? 'صورة مخصصة' : 'Custom Image'}
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex-1 w-full space-y-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <label className="inline-flex min-h-[38px] items-center gap-2 rounded-xl bg-brand-blue px-3.5 py-1.5 text-xs font-bold text-white hover:bg-brand-navy transition cursor-pointer shadow-xs">
+                      <FontAwesomeIcon icon={faUpload} />
+                      <span>{isArabic ? 'رفع صورة من جهازك' : 'Upload from Device'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleTripPhotoUpload}
+                        className="hidden"
+                      />
+                    </label>
+
+                    {editForm.customImage && (
+                      <button
+                        type="button"
+                        onClick={() => setEditForm((p) => ({ ...p, customImage: '' }))}
+                        className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-bold text-red-700 hover:bg-red-100 transition cursor-pointer"
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                        <span>{isArabic ? 'استعادة الصورة الأصلية' : 'Reset to Default'}</span>
+                      </button>
+                    )}
+                  </div>
+                  <p className="text-[11px] text-brand-navy/60">
+                    {isArabic
+                      ? 'يمكنك رفع صورة بصيغة JPG أو PNG أو WebP بوضوح عالٍ لاستبدال صورة غلاف الرحلة فوراً على الموقع.'
+                      : 'Upload a JPG, PNG, or WebP photo to customize this trip’s cover image live on the website.'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <div className="flex items-center justify-end gap-3 pt-2">
               <button
                 type="submit"
@@ -423,50 +571,230 @@ export default function ContentDashboardPage() {
       {/* 3. Media Gallery Tab */}
       {activeTab === 'media' && (
         <div className="space-y-6">
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <h2 className="font-heading text-lg font-extrabold text-brand-navy">
                 {isArabic ? 'معرض صور ووسائط DUCK' : 'DUCK Media & Visual Library'}
               </h2>
               <p className="text-xs text-brand-navy/60">
                 {isArabic
-                  ? 'معاينة واعتماد صور الرحلات عالية الدقة على الموقع'
-                  : 'Curate high-res trip photos and visual hero posters'}
+                  ? 'رفع وإدارة صور الرحلات عالية الدقة ونشرها على الموقع'
+                  : 'Upload, manage, and curate high-res trip photos live on the site'}
               </p>
             </div>
+
+            <button
+              type="button"
+              onClick={() => setShowUploadModal((p) => !p)}
+              className="inline-flex min-h-[40px] items-center gap-2 rounded-xl bg-brand-yellow px-4 py-2 text-xs font-extrabold text-brand-navy hover:bg-brand-yellow-hover transition shadow-sm cursor-pointer"
+            >
+              <FontAwesomeIcon icon={showUploadModal ? faXmark : faPlus} />
+              <span>{showUploadModal ? (isArabic ? 'إغلاق النموذج' : 'Close Form') : (isArabic ? 'إضافة / رفع صورة جديدة' : 'Add New Photo')}</span>
+            </button>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {TRIPS.map((tr) => (
-              <div
-                key={tr.id}
-                className="group relative rounded-[20px] overflow-hidden border border-brand-blue/16 bg-surface-white shadow-card transition hover:shadow-lg"
-              >
-                <div className="relative aspect-video w-full overflow-hidden bg-brand-navy">
-                  <img
-                    src={tr.images.large || tr.images.medium}
-                    alt={tr.key}
-                    className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/80 via-transparent to-transparent pointer-events-none" />
-                  <span className="absolute bottom-3 start-3 text-xs font-bold text-white">
-                    {t(`trips.items.${tr.key}.title`, tr.key)}
-                  </span>
+          {/* Upload Modal / Form */}
+          {showUploadModal && (
+            <form
+              onSubmit={handleSaveUploadedPhoto}
+              className="rounded-[20px] border-2 border-brand-yellow/60 bg-brand-yellow/10 p-5 space-y-4 animate-fadeIn"
+            >
+              <h3 className="font-heading text-sm font-extrabold text-brand-navy flex items-center gap-2">
+                <FontAwesomeIcon icon={faCamera} className="text-brand-blue" />
+                <span>{isArabic ? 'رفع صورة جديدة للمعرض أو لرحلة محددة' : 'Upload New Photo to Library'}</span>
+              </h3>
+
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {/* Upload box */}
+                <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-brand-blue/30 bg-surface-white p-5 text-center hover:border-brand-blue transition">
+                  {uploadForm.previewUrl ? (
+                    <div className="relative w-full aspect-video rounded-xl overflow-hidden shadow-sm">
+                      <img
+                        src={uploadForm.previewUrl}
+                        alt="Preview"
+                        className="h-full w-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setUploadForm((p) => ({ ...p, previewUrl: '' }))}
+                        className="absolute top-2 end-2 h-7 w-7 rounded-full bg-red-600 text-white flex items-center justify-center text-xs hover:bg-red-700 shadow"
+                        title={isArabic ? 'حذف المعاينة' : 'Remove preview'}
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </div>
+                  ) : (
+                    <label className="flex flex-col items-center gap-2 cursor-pointer py-4">
+                      <div className="h-12 w-12 rounded-full bg-brand-blue/10 text-brand-blue flex items-center justify-center text-xl">
+                        <FontAwesomeIcon icon={faUpload} />
+                      </div>
+                      <span className="text-xs font-bold text-brand-navy">
+                        {isArabic ? 'اضغط لاختيار صورة من جهازك' : 'Click to select photo from device'}
+                      </span>
+                      <span className="text-[10px] text-brand-navy/60">
+                        PNG, JPG, WebP (Max 5MB)
+                      </span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChangeForGallery}
+                        className="hidden"
+                      />
+                    </label>
+                  )}
                 </div>
-                <div className="p-3.5 flex items-center justify-between">
-                  <span className="text-[11px] font-mono text-brand-navy/60">
-                    {tr.destKey} • {tr.act}
-                  </span>
+
+                {/* Details Fields */}
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-bold text-brand-navy mb-1">
+                      {isArabic ? 'تسمية الصورة / العنوان' : 'Photo Caption / Title'}
+                    </label>
+                    <input
+                      type="text"
+                      placeholder={isArabic ? 'مثال: لحظة غروب ساحرة في كاياك النيل' : 'e.g. Magical sunset kayaking'}
+                      value={uploadForm.titleAr}
+                      onChange={(e) => setUploadForm((p) => ({ ...p, titleAr: e.target.value }))}
+                      className="w-full rounded-xl border border-brand-navy/20 bg-surface-white px-3 py-2 text-xs font-semibold text-brand-navy outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-brand-navy mb-1">
+                      {isArabic ? 'ربط الصورة برحلة محددة' : 'Attach to Specific Trip'}
+                    </label>
+                    <select
+                      value={uploadForm.tripKey}
+                      onChange={(e) => setUploadForm((p) => ({ ...p, tripKey: e.target.value }))}
+                      className="w-full rounded-xl border border-brand-navy/20 bg-surface-white px-3 py-2 text-xs font-bold text-brand-navy outline-none"
+                    >
+                      <option value="general">{isArabic ? 'معرض عام (جميع الوجهات)' : 'General Gallery'}</option>
+                      {TRIPS.map((tr) => (
+                        <option key={tr.key} value={tr.key}>
+                          {t(`trips.items.${tr.key}.title`, tr.key)} ({tr.destKey})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-brand-navy mb-1">
+                      {isArabic ? 'أو أدخل رابط صورة مباشر (URL)' : 'Or Enter Direct Image URL'}
+                    </label>
+                    <input
+                      type="url"
+                      placeholder="https://images.unsplash.com/..."
+                      value={uploadForm.previewUrl.startsWith('data:') ? '' : uploadForm.previewUrl}
+                      onChange={(e) => setUploadForm((p) => ({ ...p, previewUrl: e.target.value }))}
+                      className="w-full rounded-xl border border-brand-navy/20 bg-surface-white px-3 py-2 text-xs font-mono text-brand-navy outline-none"
+                    />
+                  </div>
+
                   <button
-                    type="button"
-                    onClick={() => handleSelectTripForEdit(tr)}
-                    className="rounded-lg bg-surface-mist px-2.5 py-1 text-xs font-bold text-brand-blue hover:bg-brand-blue hover:text-white transition cursor-pointer"
+                    type="submit"
+                    disabled={!uploadForm.previewUrl}
+                    className="w-full inline-flex min-h-[40px] items-center justify-center gap-2 rounded-xl bg-brand-navy px-4 py-2 text-xs font-black text-brand-yellow hover:bg-brand-blue hover:text-white transition shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isArabic ? 'تعديل الصور' : 'Manage Photos'}
+                    <FontAwesomeIcon icon={faCheck} />
+                    <span>{isArabic ? 'حفظ الصورة وإضافتها للمعرض' : 'Save & Publish Photo'}</span>
                   </button>
                 </div>
               </div>
-            ))}
+            </form>
+          )}
+
+          {/* Custom Uploaded Photos Section (if any) */}
+          {customMedia.length > 0 && (
+            <div className="space-y-3">
+              <h3 className="font-heading text-sm font-extrabold text-brand-navy flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-brand-blue" />
+                <span>{isArabic ? 'الصور المضافة حديثاً بواسطة فريق المحتوى' : 'Recently Uploaded Media'} ({customMedia.length})</span>
+              </h3>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {customMedia.map((media) => (
+                  <div
+                    key={media.id}
+                    className="group relative rounded-[20px] overflow-hidden border border-brand-yellow/60 bg-surface-white shadow-card"
+                  >
+                    <div className="relative aspect-video w-full overflow-hidden bg-brand-navy">
+                      <img
+                        src={media.src}
+                        alt={media.titleAr}
+                        className="h-full w-full object-cover"
+                      />
+                      <span className="absolute top-2 start-2 rounded-full bg-brand-yellow px-2 py-0.5 text-[9.5px] font-extrabold text-brand-navy shadow-xs">
+                        {isArabic ? 'صورة مرفوعة' : 'Uploaded'}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteCustomPhoto(media.id)}
+                        className="absolute top-2 end-2 h-7 w-7 rounded-full bg-red-600/90 text-white flex items-center justify-center text-xs hover:bg-red-700 transition shadow"
+                        title={isArabic ? 'حذف الصورة' : 'Delete Photo'}
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </div>
+                    <div className="p-3">
+                      <p className="font-bold text-xs text-brand-navy truncate">{media.titleAr}</p>
+                      <p className="text-[10px] text-brand-navy/60 font-mono mt-0.5">
+                        {media.tripKey === 'general' ? (isArabic ? 'معرض عام' : 'General') : media.tripKey}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* System Photos Grid */}
+          <div className="space-y-3">
+            <h3 className="font-heading text-sm font-extrabold text-brand-navy flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-brand-navy/30" />
+              <span>{isArabic ? 'مكتبة صور الرحلات الأساسية' : 'Primary Trip Visuals'}</span>
+            </h3>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {TRIPS.map((tr) => {
+                const customImg = contentOverrides[tr.key]?.customImage;
+                const displayImg = customImg || tr.images.large || tr.images.medium;
+
+                return (
+                  <div
+                    key={tr.id}
+                    className="group relative rounded-[20px] overflow-hidden border border-brand-blue/16 bg-surface-white shadow-card transition hover:shadow-lg"
+                  >
+                    <div className="relative aspect-video w-full overflow-hidden bg-brand-navy">
+                      <img
+                        src={displayImg}
+                        alt={tr.key}
+                        className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/80 via-transparent to-transparent pointer-events-none" />
+                      {customImg && (
+                        <span className="absolute top-2 start-2 rounded-full bg-brand-yellow px-2 py-0.5 text-[9.5px] font-extrabold text-brand-navy shadow-xs">
+                          {isArabic ? 'مخصصة' : 'Custom'}
+                        </span>
+                      )}
+                      <span className="absolute bottom-3 start-3 text-xs font-bold text-white">
+                        {t(`trips.items.${tr.key}.title`, tr.key)}
+                      </span>
+                    </div>
+                    <div className="p-3.5 flex items-center justify-between">
+                      <span className="text-[11px] font-mono text-brand-navy/60">
+                        {tr.destKey} • {tr.act}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleSelectTripForEdit(tr)}
+                        className="rounded-lg bg-surface-mist px-2.5 py-1 text-xs font-bold text-brand-blue hover:bg-brand-blue hover:text-white transition cursor-pointer"
+                      >
+                        {isArabic ? 'تغيير صورة الرحلة' : 'Change Photo'}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       )}
