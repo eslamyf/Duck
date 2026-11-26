@@ -24,13 +24,13 @@ export default function ReviewsSection() {
     setMobileActiveIdx((prev) => (prev - 1 + total) % total);
   }, [total]);
 
-  // Mobile Autoplay: Rotates every 4 seconds per user request
+  // Mobile Autoplay: Rotates every 7 seconds (comfortable reading time)
   useEffect(() => {
     if (total <= 1 || isPaused) return;
 
     const timer = setInterval(() => {
       setMobileActiveIdx((prev) => (prev + 1) % total);
-    }, 4000);
+    }, 7000);
 
     return () => clearInterval(timer);
   }, [isPaused, total]);
