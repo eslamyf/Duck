@@ -1127,568 +1127,646 @@ export default function AdminDashboardPage() {
         />
       )}
 
-      {/* MODAL: ADD TRIP */}
+      {/* MODAL: ADD TRIP (Wide 2-Column Responsive Layout) */}
       {showAddTripModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-black/10">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-3 sm:p-4 overflow-y-auto">
+          <div className="w-full max-w-4xl max-h-[92vh] flex flex-col rounded-3xl bg-white shadow-2xl overflow-hidden my-auto border border-black/10 animate-in zoom-in-95 duration-200">
+            {/* Fixed Header */}
+            <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-black/10 bg-white">
               <h3 className="font-heading font-extrabold text-base text-brand-navy">
                 {isArabic ? 'إضافة نشاط / رحلة جديدة' : 'Add New Activity / Trip'}
               </h3>
               <button
                 type="button"
                 onClick={() => setShowAddTripModal(false)}
-                className="text-brand-navy/60 hover:text-brand-navy cursor-pointer"
+                className="text-brand-navy/60 hover:text-brand-navy cursor-pointer p-1"
               >
                 <FontAwesomeIcon icon={faXmark} />
               </button>
             </div>
 
-            <form onSubmit={handleCreateTrip} className="space-y-3 font-body text-xs">
-              <div>
-                <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالعربي' : 'Title (Arabic)'}</label>
-                <input
-                  type="text"
-                  required
-                  value={newTripForm.titleAr}
-                  onChange={(e) => setNewTripForm({ ...newTripForm, titleAr: e.target.value })}
-                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
-                  placeholder="مثال: جولة غروب كوبري عباس"
-                />
-              </div>
-
-              <div>
-                <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالإنجليزي' : 'Title (English)'}</label>
-                <input
-                  type="text"
-                  required
-                  value={newTripForm.titleEn}
-                  onChange={(e) => setNewTripForm({ ...newTripForm, titleEn: e.target.value })}
-                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
-                  placeholder="e.g. Sunset Kayak Tour"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الوجهة' : 'Destination'}</label>
-                  <select
-                    value={newTripForm.destKey}
-                    onChange={(e) => setNewTripForm({ ...newTripForm, destKey: e.target.value })}
-                    className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
-                  >
-                    {dynamicDestinations.map((d) => (
-                      <option key={d.key} value={d.key}>
-                        {d.nameAr || d.key}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'نوع المعدة' : 'Equipment'}</label>
-                  <select
-                    value={newTripForm.act}
-                    onChange={(e) => setNewTripForm({ ...newTripForm, act: e.target.value })}
-                    className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
-                  >
-                    <option value="kayak">Kayak</option>
-                    <option value="sup">SUP</option>
-                    <option value="waterbike">Water Bike</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'سعر المصريين (ج.م)' : 'Egyptian Price (EGP)'}</label>
-                  <input
-                    type="number"
-                    min="50"
-                    required
-                    value={newTripForm.priceEg}
-                    onChange={(e) => setNewTripForm({ ...newTripForm, priceEg: e.target.value })}
-                    className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
-                  />
-                </div>
-                <div>
-                  <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'سعر الأجانب (ج.م)' : 'Foreigner Price (EGP)'}</label>
-                  <input
-                    type="number"
-                    min="50"
-                    required
-                    value={newTripForm.price}
-                    onChange={(e) => setNewTripForm({ ...newTripForm, price: e.target.value })}
-                    className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
-                  />
-                </div>
-              </div>
-
-              {/* Image Upload for Trip */}
-              <div>
-                <label className="block font-bold text-brand-navy mb-1">
-                  {isArabic ? 'صورة الغلاف / النشاط' : 'Cover / Trip Photo'}
-                </label>
-                {newTripForm.imageUrl ? (
-                  <ImageFocusCropper
-                    imageUrl={newTripForm.imageUrl}
-                    position={newTripForm.imagePosition}
-                    onChange={(pos) => setNewTripForm((p) => ({ ...p, imagePosition: pos }))}
-                    onRemove={() => setNewTripForm((p) => ({ ...p, imageUrl: '' }))}
-                    aspectRatio="16/9"
-                    isArabic={isArabic}
-                    label={isArabic ? 'حدد موضع التركيز ليظهر النشاط بوضوح' : 'Select focus to keep activity in frame'}
-                  />
-                ) : (
-                  <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-brand-blue/30 bg-surface-mist/50 p-4 text-center hover:border-brand-blue transition mb-2">
-                    <label className="flex flex-col items-center gap-1.5 cursor-pointer w-full">
-                      <div className="h-9 w-9 rounded-full bg-brand-blue/10 text-brand-blue flex items-center justify-center text-sm">
-                        <FontAwesomeIcon icon={faUpload} />
-                      </div>
-                      <span className="text-xs font-bold text-brand-navy">
-                        {isArabic ? 'اضغط لرفع صورة من جهازك' : 'Click to upload image from device'}
-                      </span>
-                      <span className="text-[10px] text-brand-navy/60">PNG, JPG, WebP</span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) handleFileUpload(file, (url) => setNewTripForm((p) => ({ ...p, imageUrl: url })));
-                        }}
-                        className="hidden"
-                      />
-                    </label>
+            {/* Scrollable Form Body: 2-Column Wide Grid */}
+            <form id="addTripForm" onSubmit={handleCreateTrip} className="flex-1 overflow-y-auto p-5 sm:p-6 font-body text-xs">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 min-[901px]:gap-6 items-start">
+                {/* Column 1: Details */}
+                <div className="space-y-3">
+                  <div>
+                    <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالعربي' : 'Title (Arabic)'}</label>
+                    <input
+                      type="text"
+                      required
+                      value={newTripForm.titleAr}
+                      onChange={(e) => setNewTripForm({ ...newTripForm, titleAr: e.target.value })}
+                      className="w-full rounded-xl border border-black/15 p-2 text-brand-navy font-bold"
+                      placeholder="مثال: جولة غروب كوبري عباس"
+                    />
                   </div>
-                )}
-                <input
-                  type="url"
-                  placeholder={isArabic ? 'أو ضع رابط صورة مباشر (URL)...' : 'Or paste direct image URL...'}
-                  value={newTripForm.imageUrl?.startsWith('data:') ? '' : (newTripForm.imageUrl || '')}
-                  onChange={(e) => setNewTripForm((p) => ({ ...p, imageUrl: e.target.value }))}
-                  className="mt-2 w-full rounded-xl border border-black/15 p-2 text-brand-navy text-[11px] font-mono"
-                />
-              </div>
 
-              <div className="flex justify-end gap-2 pt-2 border-t border-black/10">
-                <button
-                  type="button"
-                  onClick={() => setShowAddTripModal(false)}
-                  className="rounded-xl px-4 py-2 border border-black/15 font-bold text-brand-navy hover:bg-slate-100 cursor-pointer"
-                >
-                  {isArabic ? 'إلغاء' : 'Cancel'}
-                </button>
-                <button
-                  type="submit"
-                  className="rounded-xl px-4 py-2 bg-brand-navy text-brand-yellow font-bold hover:bg-brand-blue hover:text-white transition cursor-pointer"
-                >
-                  {isArabic ? 'حفظ الرحلة' : 'Save Trip'}
-                </button>
+                  <div>
+                    <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالإنجليزي' : 'Title (English)'}</label>
+                    <input
+                      type="text"
+                      required
+                      value={newTripForm.titleEn}
+                      onChange={(e) => setNewTripForm({ ...newTripForm, titleEn: e.target.value })}
+                      className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
+                      placeholder="e.g. Sunset Kayak Tour"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الوجهة' : 'Destination'}</label>
+                      <select
+                        value={newTripForm.destKey}
+                        onChange={(e) => setNewTripForm({ ...newTripForm, destKey: e.target.value })}
+                        className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
+                      >
+                        {dynamicDestinations.map((d) => (
+                          <option key={d.key} value={d.key}>
+                            {d.nameAr || d.key}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'نوع المعدة' : 'Equipment'}</label>
+                      <select
+                        value={newTripForm.act}
+                        onChange={(e) => setNewTripForm({ ...newTripForm, act: e.target.value })}
+                        className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
+                      >
+                        <option value="kayak">Kayak</option>
+                        <option value="sup">SUP</option>
+                        <option value="waterbike">Water Bike</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'سعر المصريين (ج.م)' : 'Egyptian Price (EGP)'}</label>
+                      <input
+                        type="number"
+                        min="50"
+                        required
+                        value={newTripForm.priceEg}
+                        onChange={(e) => setNewTripForm({ ...newTripForm, priceEg: e.target.value })}
+                        className="w-full rounded-xl border border-black/15 p-2 text-brand-navy font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'سعر الأجانب (ج.م)' : 'Foreigner Price (EGP)'}</label>
+                      <input
+                        type="number"
+                        min="50"
+                        required
+                        value={newTripForm.price}
+                        onChange={(e) => setNewTripForm({ ...newTripForm, price: e.target.value })}
+                        className="w-full rounded-xl border border-black/15 p-2 text-brand-navy font-bold"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-brand-navy mb-1">
+                      {isArabic ? 'رابط مباشر للصورة (URL اختياري)' : 'Direct Image URL (Optional)'}
+                    </label>
+                    <input
+                      type="url"
+                      placeholder={isArabic ? 'https://example.com/photo.jpg' : 'https://example.com/photo.jpg'}
+                      value={newTripForm.imageUrl?.startsWith('data:') ? '' : (newTripForm.imageUrl || '')}
+                      onChange={(e) => setNewTripForm((p) => ({ ...p, imageUrl: e.target.value }))}
+                      className="w-full rounded-xl border border-black/15 p-2 text-brand-navy text-[11px] font-mono"
+                    />
+                  </div>
+                </div>
+
+                {/* Column 2: Upload & Focus Cropper */}
+                <div className="space-y-3">
+                  <label className="block font-bold text-brand-navy mb-1">
+                    {isArabic ? 'صورة الغلاف وتحديد موضع الظهور' : 'Cover / Trip Photo & Crop Focus'}
+                  </label>
+                  {newTripForm.imageUrl ? (
+                    <ImageFocusCropper
+                      imageUrl={newTripForm.imageUrl}
+                      position={newTripForm.imagePosition}
+                      onChange={(pos) => setNewTripForm((p) => ({ ...p, imagePosition: pos }))}
+                      onRemove={() => setNewTripForm((p) => ({ ...p, imageUrl: '' }))}
+                      aspectRatio="16/9"
+                      isArabic={isArabic}
+                      label={isArabic ? 'حدد موضع التركيز ليظهر النشاط بوضوح' : 'Select focus to keep activity in frame'}
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-brand-blue/30 bg-surface-mist/50 p-6 text-center hover:border-brand-blue transition h-56">
+                      <label className="flex flex-col items-center gap-2 cursor-pointer w-full">
+                        <div className="h-11 w-11 rounded-full bg-brand-blue/10 text-brand-blue flex items-center justify-center text-lg">
+                          <FontAwesomeIcon icon={faUpload} />
+                        </div>
+                        <span className="text-xs font-bold text-brand-navy">
+                          {isArabic ? 'اضغط لرفع صورة من جهازك' : 'Click to upload image from device'}
+                        </span>
+                        <span className="text-[10px] text-brand-navy/60">PNG, JPG, WebP</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) handleFileUpload(file, (url) => setNewTripForm((p) => ({ ...p, imageUrl: url })));
+                          }}
+                          className="hidden"
+                        />
+                      </label>
+                    </div>
+                  )}
+                </div>
               </div>
             </form>
+
+            {/* Fixed Footer */}
+            <div className="shrink-0 px-6 py-3.5 border-t border-black/10 flex justify-end gap-3 bg-surface-mist/40">
+              <button
+                type="button"
+                onClick={() => setShowAddTripModal(false)}
+                className="rounded-xl px-4 py-2 border border-black/15 font-bold text-brand-navy hover:bg-slate-100 cursor-pointer text-xs"
+              >
+                {isArabic ? 'إلغاء' : 'Cancel'}
+              </button>
+              <button
+                type="submit"
+                form="addTripForm"
+                className="rounded-xl px-5 py-2 bg-brand-navy text-brand-yellow font-bold hover:bg-brand-blue hover:text-white transition cursor-pointer text-xs shadow-sm"
+              >
+                {isArabic ? 'حفظ الرحلة' : 'Save Trip'}
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      {/* MODAL: ADD DESTINATION */}
+      {/* MODAL: ADD DESTINATION (Wide 2-Column Responsive Layout) */}
       {showAddDestModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-black/10">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-3 sm:p-4 overflow-y-auto">
+          <div className="w-full max-w-4xl max-h-[92vh] flex flex-col rounded-3xl bg-white shadow-2xl overflow-hidden my-auto border border-black/10 animate-in zoom-in-95 duration-200">
+            {/* Fixed Header */}
+            <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-black/10 bg-white">
               <h3 className="font-heading font-extrabold text-base text-brand-navy">
                 {isArabic ? 'إضافة وجهة جديدة' : 'Add New Destination'}
               </h3>
               <button
                 type="button"
                 onClick={() => setShowAddDestModal(false)}
-                className="text-brand-navy/60 hover:text-brand-navy cursor-pointer"
+                className="text-brand-navy/60 hover:text-brand-navy cursor-pointer p-1"
               >
                 <FontAwesomeIcon icon={faXmark} />
               </button>
             </div>
 
-            <form onSubmit={handleCreateDest} className="space-y-3 font-body text-xs">
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الرمز (Key/Slug)' : 'Key / Slug'}</label>
-                  <input
-                    type="text"
-                    required
-                    value={newDestForm.key}
-                    onChange={(e) => setNewDestForm({ ...newDestForm, key: e.target.value })}
-                    className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
-                    placeholder="e.g. giza"
-                  />
-                </div>
-                <div>
-                  <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الرقم التسلسلي' : 'Number Code'}</label>
-                  <input
-                    type="text"
-                    required
-                    value={newDestForm.num}
-                    onChange={(e) => setNewDestForm({ ...newDestForm, num: e.target.value })}
-                    className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
-                    placeholder="06"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالعربي' : 'Name (Arabic)'}</label>
-                <input
-                  type="text"
-                  required
-                  value={newDestForm.nameAr}
-                  onChange={(e) => setNewDestForm({ ...newDestForm, nameAr: e.target.value })}
-                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
-                  placeholder="مثال: الجيزة – كوبري عباس"
-                />
-              </div>
-
-              <div>
-                <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالإنجليزي' : 'Name (English)'}</label>
-                <input
-                  type="text"
-                  required
-                  value={newDestForm.nameEn}
-                  onChange={(e) => setNewDestForm({ ...newDestForm, nameEn: e.target.value })}
-                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
-                  placeholder="e.g. Giza – Abbas Bridge"
-                />
-              </div>
-
-              <div>
-                <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الوصف بالعربي' : 'Description (Arabic)'}</label>
-                <textarea
-                  value={newDestForm.descAr}
-                  onChange={(e) => setNewDestForm({ ...newDestForm, descAr: e.target.value })}
-                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy h-16"
-                  placeholder="وصف مختصر للوجهة وطبيعة التجربة النيلية فيها..."
-                />
-              </div>
-
-              {/* Image Upload & Focus Controller for Destination */}
-              <div>
-                <label className="block font-bold text-brand-navy mb-1">
-                  {isArabic ? 'صورة غلاف الوجهة وتحديد موضع الظهور' : 'Destination Cover Photo & Crop Focus'}
-                </label>
-                {newDestForm.imageUrl ? (
-                  <ImageFocusCropper
-                    imageUrl={newDestForm.imageUrl}
-                    position={newDestForm.imagePosition}
-                    onChange={(pos) => setNewDestForm((p) => ({ ...p, imagePosition: pos }))}
-                    onRemove={() => setNewDestForm((p) => ({ ...p, imageUrl: '' }))}
-                    aspectRatio="16/9"
-                    isArabic={isArabic}
-                    label={isArabic ? 'حدد موضع التركيز (أعلى/وسط/أسفل) ليظهر الوجه والمنظر بوضوح' : 'Select focus to keep faces/landscape in frame'}
-                  />
-                ) : (
-                  <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-brand-blue/30 bg-surface-mist/50 p-4 text-center hover:border-brand-blue transition mb-2">
-                    <label className="flex flex-col items-center gap-1.5 cursor-pointer w-full">
-                      <div className="h-9 w-9 rounded-full bg-brand-blue/10 text-brand-blue flex items-center justify-center text-sm">
-                        <FontAwesomeIcon icon={faUpload} />
-                      </div>
-                      <span className="text-xs font-bold text-brand-navy">
-                        {isArabic ? 'اضغط لرفع صورة من جهازك' : 'Click to upload image from device'}
-                      </span>
-                      <span className="text-[10px] text-brand-navy/60">PNG, JPG, WebP</span>
+            {/* Scrollable Form Body: 2-Column Wide Grid */}
+            <form id="addDestForm" onSubmit={handleCreateDest} className="flex-1 overflow-y-auto p-5 sm:p-6 font-body text-xs">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 min-[901px]:gap-6 items-start">
+                {/* Column 1: Info Fields */}
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الرمز (Key/Slug)' : 'Key / Slug'}</label>
                       <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) handleFileUpload(file, (url) => setNewDestForm((p) => ({ ...p, imageUrl: url })));
-                        }}
-                        className="hidden"
+                        type="text"
+                        required
+                        value={newDestForm.key}
+                        onChange={(e) => setNewDestForm({ ...newDestForm, key: e.target.value })}
+                        className="w-full rounded-xl border border-black/15 p-2 text-brand-navy font-mono"
+                        placeholder="e.g. giza"
                       />
-                    </label>
+                    </div>
+                    <div>
+                      <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الرقم التسلسلي' : 'Number Code'}</label>
+                      <input
+                        type="text"
+                        required
+                        value={newDestForm.num}
+                        onChange={(e) => setNewDestForm({ ...newDestForm, num: e.target.value })}
+                        className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
+                        placeholder="06"
+                      />
+                    </div>
                   </div>
-                )}
-                <input
-                  type="url"
-                  placeholder={isArabic ? 'أو ضع رابط صورة مباشر (URL)...' : 'Or paste direct image URL...'}
-                  value={newDestForm.imageUrl?.startsWith('data:') ? '' : (newDestForm.imageUrl || '')}
-                  onChange={(e) => setNewDestForm((p) => ({ ...p, imageUrl: e.target.value }))}
-                  className="mt-2 w-full rounded-xl border border-black/15 p-2 text-brand-navy text-[11px] font-mono"
-                />
-              </div>
 
-              <div className="flex justify-end gap-2 pt-2 border-t border-black/10">
-                <button
-                  type="button"
-                  onClick={() => setShowAddDestModal(false)}
-                  className="rounded-xl px-4 py-2 border border-black/15 font-bold text-brand-navy hover:bg-slate-100 cursor-pointer"
-                >
-                  {isArabic ? 'إلغاء' : 'Cancel'}
-                </button>
-                <button
-                  type="submit"
-                  className="rounded-xl px-4 py-2 bg-brand-navy text-brand-yellow font-bold hover:bg-brand-blue hover:text-white transition cursor-pointer"
-                >
-                  {isArabic ? 'حفظ الوجهة' : 'Save Destination'}
-                </button>
+                  <div>
+                    <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالعربي' : 'Name (Arabic)'}</label>
+                    <input
+                      type="text"
+                      required
+                      value={newDestForm.nameAr}
+                      onChange={(e) => setNewDestForm({ ...newDestForm, nameAr: e.target.value })}
+                      className="w-full rounded-xl border border-black/15 p-2 text-brand-navy font-bold"
+                      placeholder="مثال: الجيزة – كوبري عباس"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالإنجليزي' : 'Name (English)'}</label>
+                    <input
+                      type="text"
+                      required
+                      value={newDestForm.nameEn}
+                      onChange={(e) => setNewDestForm({ ...newDestForm, nameEn: e.target.value })}
+                      className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
+                      placeholder="e.g. Giza – Abbas Bridge"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الوصف بالعربي' : 'Description (Arabic)'}</label>
+                    <textarea
+                      value={newDestForm.descAr}
+                      onChange={(e) => setNewDestForm({ ...newDestForm, descAr: e.target.value })}
+                      className="w-full rounded-xl border border-black/15 p-2 text-brand-navy h-20 leading-relaxed"
+                      placeholder="وصف مختصر للوجهة وطبيعة التجربة النيلية فيها..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-brand-navy mb-1">
+                      {isArabic ? 'رابط مباشر للصورة (URL اختياري)' : 'Direct Image URL (Optional)'}
+                    </label>
+                    <input
+                      type="url"
+                      placeholder={isArabic ? 'https://example.com/image.jpg' : 'https://example.com/image.jpg'}
+                      value={newDestForm.imageUrl?.startsWith('data:') ? '' : (newDestForm.imageUrl || '')}
+                      onChange={(e) => setNewDestForm((p) => ({ ...p, imageUrl: e.target.value }))}
+                      className="w-full rounded-xl border border-black/15 p-2 text-brand-navy text-[11px] font-mono"
+                    />
+                  </div>
+                </div>
+
+                {/* Column 2: Upload & Live Focus Cropper */}
+                <div className="space-y-3">
+                  <label className="block font-bold text-brand-navy mb-1">
+                    {isArabic ? 'صورة غلاف الوجهة وتحديد موضع الظهور' : 'Destination Cover Photo & Crop Focus'}
+                  </label>
+
+                  {newDestForm.imageUrl ? (
+                    <ImageFocusCropper
+                      imageUrl={newDestForm.imageUrl}
+                      position={newDestForm.imagePosition}
+                      onChange={(pos) => setNewDestForm((p) => ({ ...p, imagePosition: pos }))}
+                      onRemove={() => setNewDestForm((p) => ({ ...p, imageUrl: '' }))}
+                      aspectRatio="16/9"
+                      isArabic={isArabic}
+                      label={isArabic ? 'موضع التركيز (أعلى/وسط/أسفل) ليظهر الوجه بوضوح' : 'Select focus to keep faces/landscape in frame'}
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-brand-blue/30 bg-surface-mist/50 p-6 text-center hover:border-brand-blue transition h-56">
+                      <label className="flex flex-col items-center gap-2 cursor-pointer w-full">
+                        <div className="h-11 w-11 rounded-full bg-brand-blue/10 text-brand-blue flex items-center justify-center text-lg">
+                          <FontAwesomeIcon icon={faUpload} />
+                        </div>
+                        <span className="text-xs font-bold text-brand-navy">
+                          {isArabic ? 'اضغط لرفع صورة من جهازك' : 'Click to upload image from device'}
+                        </span>
+                        <span className="text-[10px] text-brand-navy/60">PNG, JPG, WebP</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) handleFileUpload(file, (url) => setNewDestForm((p) => ({ ...p, imageUrl: url })));
+                          }}
+                          className="hidden"
+                        />
+                      </label>
+                    </div>
+                  )}
+                </div>
               </div>
             </form>
+
+            {/* Fixed Footer */}
+            <div className="shrink-0 px-6 py-3.5 border-t border-black/10 flex justify-end gap-3 bg-surface-mist/40">
+              <button
+                type="button"
+                onClick={() => setShowAddDestModal(false)}
+                className="rounded-xl px-4 py-2 border border-black/15 font-bold text-brand-navy hover:bg-slate-100 cursor-pointer text-xs"
+              >
+                {isArabic ? 'إلغاء' : 'Cancel'}
+              </button>
+              <button
+                type="submit"
+                form="addDestForm"
+                className="rounded-xl px-5 py-2 bg-brand-navy text-brand-yellow font-bold hover:bg-brand-blue hover:text-white transition cursor-pointer text-xs shadow-sm"
+              >
+                {isArabic ? 'حفظ الوجهة' : 'Save Destination'}
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      {/* MODAL: EDIT DESTINATION & FOCUS POSITION */}
+      {/* MODAL: EDIT DESTINATION & FOCUS POSITION (Wide 2-Column Responsive Layout) */}
       {editingDest && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 overflow-y-auto">
-          <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl space-y-4 my-8">
-            <div className="flex items-center justify-between pb-2 border-b border-black/10">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-3 sm:p-4 overflow-y-auto">
+          <div className="w-full max-w-4xl max-h-[92vh] flex flex-col rounded-3xl bg-white shadow-2xl overflow-hidden my-auto border border-black/10 animate-in zoom-in-95 duration-200">
+            {/* Fixed Header */}
+            <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-black/10 bg-white">
               <h3 className="font-heading font-extrabold text-base text-brand-navy">
                 {isArabic ? 'تعديل الوجهة وتحديد موضع الصورة' : 'Edit Destination & Image Focus'}
               </h3>
               <button
                 type="button"
                 onClick={() => setEditingDest(null)}
-                className="text-brand-navy/60 hover:text-brand-navy cursor-pointer"
+                className="text-brand-navy/60 hover:text-brand-navy cursor-pointer p-1"
               >
                 <FontAwesomeIcon icon={faXmark} />
               </button>
             </div>
 
-            <form onSubmit={handleSaveDestEdit} className="space-y-3 font-body text-xs">
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الرمز (Key/Slug)' : 'Key / Slug'}</label>
-                  <input
-                    type="text"
-                    disabled
-                    value={editDestForm.key}
-                    className="w-full rounded-xl border border-black/15 p-2 text-brand-navy bg-slate-100 font-mono"
-                  />
-                </div>
-                <div>
-                  <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الرقم التسلسلي' : 'Number Code'}</label>
-                  <input
-                    type="text"
-                    required
-                    value={editDestForm.num}
-                    onChange={(e) => setEditDestForm({ ...editDestForm, num: e.target.value })}
-                    className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالعربي' : 'Name (Arabic)'}</label>
-                <input
-                  type="text"
-                  required
-                  value={editDestForm.nameAr}
-                  onChange={(e) => setEditDestForm({ ...editDestForm, nameAr: e.target.value })}
-                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy font-bold"
-                />
-              </div>
-
-              <div>
-                <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالإنجليزي' : 'Name (English)'}</label>
-                <input
-                  type="text"
-                  required
-                  value={editDestForm.nameEn}
-                  onChange={(e) => setEditDestForm({ ...editDestForm, nameEn: e.target.value })}
-                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
-                />
-              </div>
-
-              <div>
-                <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الوصف بالعربي' : 'Description (Arabic)'}</label>
-                <textarea
-                  value={editDestForm.descAr}
-                  onChange={(e) => setEditDestForm({ ...editDestForm, descAr: e.target.value })}
-                  className="w-full rounded-xl border border-black/15 p-2 text-brand-navy h-16"
-                />
-              </div>
-
-              {/* Image Focus Cropper in Edit Modal */}
-              <div>
-                <label className="block font-bold text-brand-navy mb-1">
-                  {isArabic ? 'صورة غلاف الوجهة وتحديد موضع الظهور' : 'Destination Cover Photo & Crop Focus'}
-                </label>
-                {editDestForm.imageUrl ? (
-                  <ImageFocusCropper
-                    imageUrl={editDestForm.imageUrl}
-                    position={editDestForm.imagePosition}
-                    onChange={(pos) => setEditDestForm((p) => ({ ...p, imagePosition: pos }))}
-                    onRemove={() => setEditDestForm((p) => ({ ...p, imageUrl: '' }))}
-                    aspectRatio="16/9"
-                    isArabic={isArabic}
-                    label={isArabic ? 'حدد موضع التركيز (أعلى/وسط/أسفل) ليظهر الوجه والمنظر بوضوح' : 'Select focus to keep faces/landscape in frame'}
-                  />
-                ) : (
-                  <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-brand-blue/30 bg-surface-mist/50 p-4 text-center hover:border-brand-blue transition mb-2">
-                    <label className="flex flex-col items-center gap-1.5 cursor-pointer w-full">
-                      <div className="h-9 w-9 rounded-full bg-brand-blue/10 text-brand-blue flex items-center justify-center text-sm">
-                        <FontAwesomeIcon icon={faUpload} />
-                      </div>
-                      <span className="text-xs font-bold text-brand-navy">
-                        {isArabic ? 'اضغط لرفع صورة من جهازك' : 'Click to upload image from device'}
-                      </span>
-                      <span className="text-[10px] text-brand-navy/60">PNG, JPG, WebP</span>
+            {/* Scrollable Form Body: 2-Column Wide Grid */}
+            <form id="editDestForm" onSubmit={handleSaveDestEdit} className="flex-1 overflow-y-auto p-5 sm:p-6 font-body text-xs">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 min-[901px]:gap-6 items-start">
+                {/* Column 1: Text Fields */}
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الرمز (Key/Slug)' : 'Key / Slug'}</label>
                       <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) handleFileUpload(file, (url) => setEditDestForm((p) => ({ ...p, imageUrl: url })));
-                        }}
-                        className="hidden"
+                        type="text"
+                        disabled
+                        value={editDestForm.key}
+                        className="w-full rounded-xl border border-black/15 p-2 text-brand-navy bg-slate-100 font-mono"
                       />
-                    </label>
+                    </div>
+                    <div>
+                      <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الرقم التسلسلي' : 'Number Code'}</label>
+                      <input
+                        type="text"
+                        required
+                        value={editDestForm.num}
+                        onChange={(e) => setEditDestForm({ ...editDestForm, num: e.target.value })}
+                        className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
+                      />
+                    </div>
                   </div>
-                )}
-                <input
-                  type="url"
-                  placeholder={isArabic ? 'أو ضع رابط صورة مباشر (URL)...' : 'Or paste direct image URL...'}
-                  value={editDestForm.imageUrl?.startsWith('data:') ? '' : (editDestForm.imageUrl || '')}
-                  onChange={(e) => setEditDestForm((p) => ({ ...p, imageUrl: e.target.value }))}
-                  className="mt-2 w-full rounded-xl border border-black/15 p-2 text-brand-navy text-[11px] font-mono"
-                />
-              </div>
 
-              <div className="flex justify-end gap-2 pt-2 border-t border-black/10">
-                <button
-                  type="button"
-                  onClick={() => setEditingDest(null)}
-                  className="rounded-xl px-4 py-2 border border-black/15 font-bold text-brand-navy hover:bg-slate-100 cursor-pointer"
-                >
-                  {isArabic ? 'إلغاء' : 'Cancel'}
-                </button>
-                <button
-                  type="submit"
-                  className="rounded-xl px-4 py-2 bg-brand-navy text-brand-yellow font-bold hover:bg-brand-blue hover:text-white transition cursor-pointer"
-                >
-                  {isArabic ? 'حفظ التعديلات والصورة' : 'Save Changes & Image'}
-                </button>
+                  <div>
+                    <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالعربي' : 'Name (Arabic)'}</label>
+                    <input
+                      type="text"
+                      required
+                      value={editDestForm.nameAr}
+                      onChange={(e) => setEditDestForm({ ...editDestForm, nameAr: e.target.value })}
+                      className="w-full rounded-xl border border-black/15 p-2 text-brand-navy font-bold"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالإنجليزي' : 'Name (English)'}</label>
+                    <input
+                      type="text"
+                      required
+                      value={editDestForm.nameEn}
+                      onChange={(e) => setEditDestForm({ ...editDestForm, nameEn: e.target.value })}
+                      className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الوصف بالعربي' : 'Description (Arabic)'}</label>
+                    <textarea
+                      value={editDestForm.descAr}
+                      onChange={(e) => setEditDestForm({ ...editDestForm, descAr: e.target.value })}
+                      className="w-full rounded-xl border border-black/15 p-2 text-brand-navy h-20 leading-relaxed"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-brand-navy mb-1">
+                      {isArabic ? 'رابط مباشر للصورة (URL اختياري)' : 'Direct Image URL (Optional)'}
+                    </label>
+                    <input
+                      type="url"
+                      placeholder={isArabic ? 'https://example.com/image.jpg' : 'https://example.com/image.jpg'}
+                      value={editDestForm.imageUrl?.startsWith('data:') ? '' : (editDestForm.imageUrl || '')}
+                      onChange={(e) => setEditDestForm((p) => ({ ...p, imageUrl: e.target.value }))}
+                      className="w-full rounded-xl border border-black/15 p-2 text-brand-navy text-[11px] font-mono"
+                    />
+                  </div>
+                </div>
+
+                {/* Column 2: Image Focus Cropper & Upload */}
+                <div className="space-y-3">
+                  <label className="block font-bold text-brand-navy mb-1">
+                    {isArabic ? 'صورة غلاف الوجهة وتحديد موضع الظهور' : 'Destination Cover Photo & Crop Focus'}
+                  </label>
+
+                  {editDestForm.imageUrl ? (
+                    <ImageFocusCropper
+                      imageUrl={editDestForm.imageUrl}
+                      position={editDestForm.imagePosition}
+                      onChange={(pos) => setEditDestForm((p) => ({ ...p, imagePosition: pos }))}
+                      onRemove={() => setEditDestForm((p) => ({ ...p, imageUrl: '' }))}
+                      aspectRatio="16/9"
+                      isArabic={isArabic}
+                      label={isArabic ? 'موضع التركيز (أعلى/وسط/أسفل) ليظهر الوجه بوضوح' : 'Select focus to keep faces/landscape in frame'}
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-brand-blue/30 bg-surface-mist/50 p-6 text-center hover:border-brand-blue transition h-56">
+                      <label className="flex flex-col items-center gap-2 cursor-pointer w-full">
+                        <div className="h-11 w-11 rounded-full bg-brand-blue/10 text-brand-blue flex items-center justify-center text-lg">
+                          <FontAwesomeIcon icon={faUpload} />
+                        </div>
+                        <span className="text-xs font-bold text-brand-navy">
+                          {isArabic ? 'اضغط لرفع صورة من جهازك' : 'Click to upload image from device'}
+                        </span>
+                        <span className="text-[10px] text-brand-navy/60">PNG, JPG, WebP</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) handleFileUpload(file, (url) => setEditDestForm((p) => ({ ...p, imageUrl: url })));
+                          }}
+                          className="hidden"
+                        />
+                      </label>
+                    </div>
+                  )}
+                </div>
               </div>
             </form>
+
+            {/* Fixed Footer */}
+            <div className="shrink-0 px-6 py-3.5 border-t border-black/10 flex justify-end gap-3 bg-surface-mist/40">
+              <button
+                type="button"
+                onClick={() => setEditingDest(null)}
+                className="rounded-xl px-4 py-2 border border-black/15 font-bold text-brand-navy hover:bg-slate-100 cursor-pointer text-xs"
+              >
+                {isArabic ? 'إلغاء' : 'Cancel'}
+              </button>
+              <button
+                type="submit"
+                form="editDestForm"
+                className="rounded-xl px-5 py-2 bg-brand-navy text-brand-yellow font-bold hover:bg-brand-blue hover:text-white transition cursor-pointer text-xs shadow-sm"
+              >
+                {isArabic ? 'حفظ التعديلات والصورة' : 'Save Changes & Image'}
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      {/* MODAL: EDIT TRIP PRICING & PHOTO */}
+      {/* MODAL: EDIT TRIP PRICING & PHOTO (Wide 2-Column Responsive Layout) */}
       {editingTrip && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-black/10">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-3 sm:p-4 overflow-y-auto">
+          <div className="w-full max-w-4xl max-h-[92vh] flex flex-col rounded-3xl bg-white shadow-2xl overflow-hidden my-auto border border-black/10 animate-in zoom-in-95 duration-200">
+            {/* Fixed Header */}
+            <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-black/10 bg-white">
               <h3 className="font-heading font-extrabold text-base text-brand-navy">
-                {isArabic ? 'تعديل أسعار وصورة الرحلة' : 'Edit Trip Pricing & Photo'}
+                {isArabic ? 'تعديل أسعار وصورة النشاط' : 'Edit Trip Pricing & Photo'}
               </h3>
               <button
                 type="button"
                 onClick={() => setEditingTrip(null)}
-                className="text-brand-navy/60 hover:text-brand-navy cursor-pointer"
+                className="text-brand-navy/60 hover:text-brand-navy cursor-pointer p-1"
               >
                 <FontAwesomeIcon icon={faXmark} />
               </button>
             </div>
 
-            <div className="space-y-3 font-body text-xs">
-              <p className="font-bold text-brand-navy text-sm">
-                {editingTrip.titleAr || editingTrip.slug}
-              </p>
-
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block font-bold text-brand-navy mb-1">
-                    {isArabic ? 'سعر المصريين (ج.م)' : 'Egyptian Price (EGP)'}
-                  </label>
-                  <input
-                    type="number"
-                    value={editTripForm.priceEg}
-                    onChange={(e) => setEditTripForm((p) => ({ ...p, priceEg: e.target.value }))}
-                    className="w-full rounded-xl border border-black/15 p-2 text-brand-navy font-bold"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-bold text-brand-navy mb-1">
-                    {isArabic ? 'سعر الأجانب (ج.م)' : 'Foreigner Price (EGP)'}
-                  </label>
-                  <input
-                    type="number"
-                    value={editTripForm.price}
-                    onChange={(e) => setEditTripForm((p) => ({ ...p, price: e.target.value }))}
-                    className="w-full rounded-xl border border-black/15 p-2 text-brand-navy font-bold"
-                  />
-                </div>
-              </div>
-
-              {/* Edit Trip Image */}
-              <div>
-                <label className="block font-bold text-brand-navy mb-1">
-                  {isArabic ? 'تعديل صورة النشاط' : 'Update Trip Photo'}
-                </label>
-                {editTripForm.imageUrl ? (
-                  <ImageFocusCropper
-                    imageUrl={editTripForm.imageUrl}
-                    position={editTripForm.imagePosition}
-                    onChange={(pos) => setEditTripForm((p) => ({ ...p, imagePosition: pos }))}
-                    onRemove={() => setEditTripForm((p) => ({ ...p, imageUrl: '' }))}
-                    aspectRatio="16/9"
-                    isArabic={isArabic}
-                    label={isArabic ? 'حدد موضع التركيز ليظهر النشاط بوضوح' : 'Select focus to keep activity in frame'}
-                  />
-                ) : (
-                  <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-brand-blue/30 bg-surface-mist/50 p-4 text-center hover:border-brand-blue transition mb-2">
-                    <label className="flex flex-col items-center gap-1.5 cursor-pointer w-full">
-                      <div className="h-9 w-9 rounded-full bg-brand-blue/10 text-brand-blue flex items-center justify-center text-sm">
-                        <FontAwesomeIcon icon={faUpload} />
-                      </div>
-                      <span className="text-xs font-bold text-brand-navy">
-                        {isArabic ? 'اضغط لرفع صورة جديدة' : 'Click to upload new image'}
-                      </span>
-                      <span className="text-[10px] text-brand-navy/60">PNG, JPG, WebP</span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) handleFileUpload(file, (url) => setEditTripForm((p) => ({ ...p, imageUrl: url })));
-                        }}
-                        className="hidden"
-                      />
-                    </label>
+            {/* Scrollable Form Body: 2-Column Wide Grid */}
+            <div className="flex-1 overflow-y-auto p-5 sm:p-6 font-body text-xs">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 min-[901px]:gap-6 items-start">
+                {/* Column 1: Details & Pricing */}
+                <div className="space-y-3">
+                  <div>
+                    <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالعربي' : 'Title (Arabic)'}</label>
+                    <input
+                      type="text"
+                      value={editTripForm.titleAr || ''}
+                      onChange={(e) => setEditTripForm((p) => ({ ...p, titleAr: e.target.value }))}
+                      className="w-full rounded-xl border border-black/15 p-2 text-brand-navy font-bold"
+                    />
                   </div>
-                )}
-                <input
-                  type="url"
-                  placeholder={isArabic ? 'أو ضع رابط صورة مباشر (URL)...' : 'Or paste direct image URL...'}
-                  value={editTripForm.imageUrl?.startsWith('data:') ? '' : (editTripForm.imageUrl || '')}
-                  onChange={(e) => setEditTripForm((p) => ({ ...p, imageUrl: e.target.value }))}
-                  className="mt-2 w-full rounded-xl border border-black/15 p-2 text-brand-navy text-[11px] font-mono"
-                />
-              </div>
 
-              <div className="flex justify-end gap-2 pt-2 border-t border-black/10">
-                <button
-                  type="button"
-                  onClick={() => setEditingTrip(null)}
-                  className="rounded-xl px-4 py-2 border border-black/15 font-bold text-brand-navy hover:bg-slate-100 cursor-pointer"
-                >
-                  {isArabic ? 'إلغاء' : 'Cancel'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    handleSaveTripPricing(
-                      editingTrip.id,
-                      editTripForm.priceEg,
-                      editTripForm.price,
-                      editTripForm.imageUrl,
-                      editTripForm.titleAr,
-                      editTripForm.titleEn,
-                      editTripForm.imagePosition
-                    );
-                  }}
-                  className="rounded-xl px-4 py-2 bg-brand-navy text-brand-yellow font-bold hover:bg-brand-blue hover:text-white transition cursor-pointer"
-                >
-                  {isArabic ? 'تحديث الرحلة والصورة' : 'Update Trip & Photo'}
-                </button>
+                  <div>
+                    <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالإنجليزي' : 'Title (English)'}</label>
+                    <input
+                      type="text"
+                      value={editTripForm.titleEn || ''}
+                      onChange={(e) => setEditTripForm((p) => ({ ...p, titleEn: e.target.value }))}
+                      className="w-full rounded-xl border border-black/15 p-2 text-brand-navy"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="block font-bold text-brand-navy mb-1">
+                        {isArabic ? 'سعر المصريين (ج.م)' : 'Egyptian Price (EGP)'}
+                      </label>
+                      <input
+                        type="number"
+                        value={editTripForm.priceEg}
+                        onChange={(e) => setEditTripForm((p) => ({ ...p, priceEg: e.target.value }))}
+                        className="w-full rounded-xl border border-black/15 p-2 text-brand-navy font-bold text-sm"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-brand-navy mb-1">
+                        {isArabic ? 'سعر الأجانب (ج.م)' : 'Foreigner Price (EGP)'}
+                      </label>
+                      <input
+                        type="number"
+                        value={editTripForm.price}
+                        onChange={(e) => setEditTripForm((p) => ({ ...p, price: e.target.value }))}
+                        className="w-full rounded-xl border border-black/15 p-2 text-brand-navy font-bold text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-brand-navy mb-1">
+                      {isArabic ? 'رابط مباشر للصورة (URL اختياري)' : 'Direct Image URL (Optional)'}
+                    </label>
+                    <input
+                      type="url"
+                      placeholder={isArabic ? 'أو ضع رابط صورة مباشر (URL)...' : 'Or paste direct image URL...'}
+                      value={editTripForm.imageUrl?.startsWith('data:') ? '' : (editTripForm.imageUrl || '')}
+                      onChange={(e) => setEditTripForm((p) => ({ ...p, imageUrl: e.target.value }))}
+                      className="w-full rounded-xl border border-black/15 p-2 text-brand-navy text-[11px] font-mono"
+                    />
+                  </div>
+                </div>
+
+                {/* Column 2: Upload & Focus Cropper */}
+                <div className="space-y-3">
+                  <label className="block font-bold text-brand-navy mb-1">
+                    {isArabic ? 'صورة النشاط وتحديد موضع الظهور' : 'Trip Photo & Crop Focus'}
+                  </label>
+
+                  {editTripForm.imageUrl ? (
+                    <ImageFocusCropper
+                      imageUrl={editTripForm.imageUrl}
+                      position={editTripForm.imagePosition}
+                      onChange={(pos) => setEditTripForm((p) => ({ ...p, imagePosition: pos }))}
+                      onRemove={() => setEditTripForm((p) => ({ ...p, imageUrl: '' }))}
+                      aspectRatio="16/9"
+                      isArabic={isArabic}
+                      label={isArabic ? 'موضع التركيز (أعلى/وسط/أسفل) ليظهر النشاط بوضوح' : 'Select focus to keep activity in frame'}
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-brand-blue/30 bg-surface-mist/50 p-6 text-center hover:border-brand-blue transition h-56">
+                      <label className="flex flex-col items-center gap-2 cursor-pointer w-full">
+                        <div className="h-11 w-11 rounded-full bg-brand-blue/10 text-brand-blue flex items-center justify-center text-lg">
+                          <FontAwesomeIcon icon={faUpload} />
+                        </div>
+                        <span className="text-xs font-bold text-brand-navy">
+                          {isArabic ? 'اضغط لرفع صورة جديدة' : 'Click to upload new image'}
+                        </span>
+                        <span className="text-[10px] text-brand-navy/60">PNG, JPG, WebP</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) handleFileUpload(file, (url) => setEditTripForm((p) => ({ ...p, imageUrl: url })));
+                          }}
+                          className="hidden"
+                        />
+                      </label>
+                    </div>
+                  )}
+                </div>
               </div>
+            </div>
+
+            {/* Fixed Footer */}
+            <div className="shrink-0 px-6 py-3.5 border-t border-black/10 flex justify-end gap-3 bg-surface-mist/40">
+              <button
+                type="button"
+                onClick={() => setEditingTrip(null)}
+                className="rounded-xl px-4 py-2 border border-black/15 font-bold text-brand-navy hover:bg-slate-100 cursor-pointer text-xs"
+              >
+                {isArabic ? 'إلغاء' : 'Cancel'}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  handleSaveTripPricing(
+                    editingTrip.id,
+                    editTripForm.priceEg,
+                    editTripForm.price,
+                    editTripForm.imageUrl,
+                    editTripForm.titleAr,
+                    editTripForm.titleEn,
+                    editTripForm.imagePosition
+                  );
+                }}
+                className="rounded-xl px-5 py-2 bg-brand-navy text-brand-yellow font-bold hover:bg-brand-blue hover:text-white transition cursor-pointer text-xs shadow-sm"
+              >
+                {isArabic ? 'تحديث الرحلة والصورة' : 'Update Trip & Photo'}
+              </button>
             </div>
           </div>
         </div>
