@@ -1619,7 +1619,7 @@ export default function AdminDashboardPage() {
       {/* MODAL: EDIT TRIP PRICING & PHOTO (Wide 2-Column Responsive Layout) */}
       {editingTrip && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-3 sm:p-4 overflow-y-auto">
-          <div className="w-full max-w-4xl max-h-[92vh] flex flex-col rounded-3xl bg-white shadow-2xl overflow-hidden my-auto border border-black/10 animate-in zoom-in-95 duration-200">
+          <div className="w-full max-w-4xl max-h-[92vh] flex flex-col rounded-3xl bg-white shadow-2xl border border-black/10 overflow-hidden my-auto animate-in zoom-in-95 duration-200">
             {/* Fixed Header */}
             <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-black/10 bg-white">
               <h3 className="font-heading font-extrabold text-base text-brand-navy">
@@ -1634,10 +1634,10 @@ export default function AdminDashboardPage() {
               </button>
             </div>
 
-            {/* Scrollable Form Body: 2-Column Wide Grid */}
+            {/* Scrollable Body: 2-Column Wide Grid */}
             <div className="flex-1 overflow-y-auto p-5 sm:p-6 font-body text-xs">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5 min-[901px]:gap-6 items-start">
-                {/* Column 1: Details & Pricing */}
+                {/* Column 1: Pricing and Title */}
                 <div className="space-y-3">
                   <div>
                     <label className="block font-bold text-brand-navy mb-1">{isArabic ? 'الاسم بالعربي' : 'Title (Arabic)'}</label>
