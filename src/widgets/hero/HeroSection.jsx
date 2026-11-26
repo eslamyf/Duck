@@ -120,14 +120,14 @@ export default function HeroSection() {
       id={SECTIONS.TOP}
       ref={sectionRef}
       dir={isRtl ? 'rtl' : 'ltr'}
-      className="relative w-full bg-brand-navy font-body scroll-mt-[var(--header-offset)]"
+      className="relative w-full bg-surface-white font-body scroll-mt-[var(--header-offset)]"
       aria-label="Hero"
     >
-      {/* Navy Outer Margin Wrapper framing the Full-Width Cinematic Video (all 4 corners visible below fixed navbar) */}
-      <div className="px-3 pt-4 pb-5 sm:px-5 min-[901px]:px-[4vw] min-[901px]:pt-6 min-[901px]:pb-7">
+      {/* Clean White Canvas Wrapper framing the Floating Cinematic Video (all 4 corners visible below fixed navbar) */}
+      <div className="px-3 pt-4 pb-6 sm:px-5 min-[901px]:px-[4vw] min-[901px]:pt-6 min-[901px]:pb-8">
         <div
           data-hero-frame="true"
-          className="relative isolate [transform:translateZ(0)] mx-auto max-w-[1400px] w-full min-h-[68vh] min-[901px]:min-h-[min(620px,calc(100svh-185px))] overflow-hidden rounded-3xl min-[901px]:rounded-[28px] border border-white/15 bg-brand-navy text-white shadow-ocean flex items-end min-[901px]:items-center"
+          className="relative isolate [transform:translateZ(0)] mx-auto max-w-[1400px] w-full min-h-[68vh] min-[901px]:min-h-[min(620px,calc(100svh-185px))] overflow-hidden rounded-3xl min-[901px]:rounded-[28px] border border-brand-navy/10 bg-brand-navy text-white shadow-hero-frame flex items-end min-[901px]:items-center"
         >
           {/* Full-Bleed Background Media (HD Poster + Deferred HD Responsive Video) */}
           <div className="absolute inset-0 z-0 overflow-hidden rounded-[inherit] bg-brand-navy" aria-hidden="true">
