@@ -2,10 +2,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faQuoteRight, faQuoteLeft, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useTranslation } from '../../../shared/i18n/index.js';
+import { GOOGLE_REVIEWS_URL } from '../model/reviewsData.js';
 
 export default function ReviewCard({
   review,
-  variant = 'wall',
+  variant = 'featured',
   isDark = false,
   gradientIndex = 0,
   ariaHidden = false,
@@ -38,24 +39,35 @@ export default function ReviewCard({
      ───────────────────────────────────────────────────────────── */
   if (variant === 'wall') {
     return (
-      <article
+      <a
+        href={GOOGLE_REVIEWS_URL}
+        target="_blank"
+        rel="noopener noreferrer"
         role="listitem"
         aria-hidden={ariaHidden ? 'true' : undefined}
-        className={`group relative flex-none rounded-[24px] p-[22px_22px_20px] flex flex-col gap-3.5 transition-all duration-300 ${
+        className={`group relative flex-none rounded-[24px] p-4 sm:p-5 flex flex-col gap-3 transition-all duration-300 no-underline cursor-pointer block ${
           isDark
             ? 'bg-brand-navy text-white border border-white/10 shadow-[0_12px_32px_rgba(12,18,38,0.16)] hover:shadow-[0_20px_48px_rgba(20,125,159,0.22)]'
             : 'bg-white text-brand-navy border border-[rgba(20,125,159,0.16)] shadow-[0_12px_32px_rgba(12,18,38,0.08)] hover:shadow-[0_20px_48px_rgba(20,125,159,0.14)]'
         } hover:-translate-y-1 hover:scale-[1.02] ${className}`.trim()}
       >
-        {/* Prominent Quote Icon */}
-        <div
-          className={`absolute top-4 rtl:left-5 ltr:right-5 text-3xl pointer-events-none select-none transition-opacity ${
-            isDark ? 'text-brand-yellow/85' : 'text-brand-blue/20'
-          }`}
-          aria-hidden="true"
-        >
-          <FontAwesomeIcon icon={QuoteIcon} />
-        </div>
+        {/* Real Customer Experience Photo */}
+        {review.img && (
+          <div className="w-full h-36 rounded-[16px] overflow-hidden bg-brand-navy/10 flex-none relative">
+            <img
+              src={review.img}
+              alt={reviewerActivity || reviewerName}
+              loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+            <span className="absolute top-2.5 rtl:right-2.5 ltr:left-2.5 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-white/95 backdrop-blur-xs text-brand-navy shadow-xs border border-black/5">
+              <FontAwesomeIcon icon={faGoogle} className="text-[#4285f4]" />
+              <span>Google</span>
+              <FontAwesomeIcon icon={faCheck} className="text-[10px] text-emerald-600" />
+            </span>
+          </div>
+        )}
 
         {/* 5-Star Rating */}
         <div
@@ -71,60 +83,79 @@ export default function ReviewCard({
         </div>
 
         {/* Review Quote Text */}
-        <blockquote className="text-[15px] leading-[1.75] font-normal">
-          {reviewText}
+        <blockquote className="text-[14px] leading-[1.65] font-normal line-clamp-3">
+          "{reviewText}"
         </blockquote>
 
         {/* Reviewer Meta Row */}
-        <div className="flex items-center gap-3 pt-2 mt-auto border-t border-black/5 dark:border-white/10">
+        <div className="flex items-center gap-2.5 pt-2 mt-auto border-t border-black/5 dark:border-white/10">
           <span
-            className="w-[42px] h-[42px] rounded-full grid place-items-center text-white font-bold text-base flex-none select-none shadow-sm"
+            className="w-9 h-9 rounded-full grid place-items-center text-white font-bold text-sm flex-none select-none shadow-xs"
             style={{ background: gradientToken }}
             aria-hidden="true"
           >
             {initialChar}
           </span>
           <div className="min-w-0 flex-1">
-            <b className={`block text-[15px] leading-tight font-bold truncate ${isDark ? 'text-white' : 'text-brand-navy'}`}>
+            <b className={`block text-xs sm:text-[13px] leading-tight font-bold truncate ${isDark ? 'text-white' : 'text-brand-navy'}`}>
               {reviewerName}
             </b>
-            {reviewerActivity && (
-              <span
-                className={`inline-block mt-1 text-xs font-semibold px-2.5 py-0.5 rounded-full truncate max-w-full ${
-                  isDark
-                    ? 'bg-white/16 text-white'
-                    : 'bg-surface-mist text-brand-blue border border-[rgba(20,125,159,0.12)]'
-                }`}
-              >
-                {reviewerActivity}
-              </span>
-            )}
+            <div className="flex items-center gap-1 text-[11px] opacity-70 truncate mt-0.5">
+              {reviewerDate && <span>{reviewerDate}</span>}
+              {reviewerDate && reviewerActivity && <span>•</span>}
+              {reviewerActivity && <span className="truncate">{reviewerActivity}</span>}
+            </div>
           </div>
+          <span className="text-[11px] font-bold text-brand-blue group-hover:underline flex-none">
+            {isEn ? 'Google Details ↗' : 'التفاصيل ↗'}
+          </span>
         </div>
-      </article>
+      </a>
     );
   }
 
   /* ─────────────────────────────────────────────────────────────
-     2. MOBILE CAROUSEL CARD VARIANT (< 900px Snap Slide)
+     2. FEATURED / SINGLE CARD VARIANT (Used on Mobile & Featured View)
      ───────────────────────────────────────────────────────────── */
-  if (variant === 'mobile') {
-    return (
-      <article
-        role="listitem"
-        className={`flex-none w-[86%] max-w-[340px] snap-center bg-brand-navy text-white rounded-[26px] p-6 shadow-[0_20px_48px_rgba(20,125,159,0.18)] relative overflow-hidden flex flex-col gap-4 border border-white/10 ${className}`.trim()}
+  return (
+    <a
+      href={GOOGLE_REVIEWS_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`group relative grid grid-cols-1 min-[640px]:grid-cols-[180px_1fr] gap-4 p-4 sm:p-5 rounded-[24px] bg-gradient-to-br from-[#f3fafc] to-white border border-[rgba(20,125,159,0.18)] shadow-card max-w-[680px] w-full mx-auto overflow-hidden transition-all duration-300 hover:shadow-lg no-underline cursor-pointer block text-brand-navy ${className}`.trim()}
+      aria-label={`${reviewerName} - ${reviewerActivity}`}
+    >
+      {/* Decorative Quote Accent */}
+      <span
+        className="hidden min-[640px]:block absolute top-2 rtl:left-5 ltr:right-5 text-4xl text-brand-blue/15 pointer-events-none select-none"
+        aria-hidden="true"
       >
-        {/* Large Brand Quote Accent */}
-        <div
-          className="absolute top-4 rtl:left-5 ltr:right-5 text-4xl text-brand-yellow/85 pointer-events-none select-none"
-          aria-hidden="true"
-        >
-          <FontAwesomeIcon icon={QuoteIcon} />
-        </div>
+        <FontAwesomeIcon icon={QuoteIcon} />
+      </span>
 
-        {/* Rating Stars */}
+      {/* Real Customer Experience Photo */}
+      {review.img && (
+        <div className="w-full aspect-[16/10] min-[640px]:h-full min-[640px]:aspect-auto rounded-[18px] overflow-hidden border-2 border-brand-yellow/80 shadow-xs bg-brand-navy flex-none relative">
+          <img
+            src={review.img}
+            alt={reviewerActivity || reviewerName}
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+          <span className="absolute top-2 rtl:right-2 ltr:left-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/95 backdrop-blur-xs text-brand-navy shadow-xs border border-black/5">
+            <FontAwesomeIcon icon={faGoogle} className="text-[#4285f4]" />
+            <span>Google</span>
+            <FontAwesomeIcon icon={faCheck} className="text-[9px] text-emerald-600" />
+          </span>
+        </div>
+      )}
+
+      {/* Body */}
+      <div className="relative min-w-0 flex flex-col justify-between gap-2.5">
+        {/* Star Rating */}
         <div
-          className="flex items-center gap-1 text-brand-yellow text-sm pt-2"
+          className="flex items-center gap-1 text-[var(--color-star)] text-base"
           role="img"
           aria-label={t('reviews.starRatingAria', { rating: review.r }, `${review.r} من 5 نجوم`)}
         >
@@ -134,90 +165,25 @@ export default function ReviewCard({
         </div>
 
         {/* Review Quote Text */}
-        <blockquote className="text-base leading-[1.7] font-normal min-h-[4.5rem]">
-          {reviewText}
+        <blockquote className="text-xs sm:text-sm font-semibold text-brand-navy leading-relaxed overflow-wrap-anywhere">
+          "{reviewText}"
         </blockquote>
 
-        {/* Reviewer Meta Row */}
-        <div className="flex items-center gap-3 mt-auto pt-3 border-t border-white/10">
-          <span
-            className="w-11 h-11 rounded-full grid place-items-center text-white font-bold text-base flex-none select-none shadow-sm"
-            style={{ background: gradientToken }}
-            aria-hidden="true"
-          >
-            {initialChar}
-          </span>
-          <div className="min-w-0 flex-1">
-            <b className="block text-base font-bold text-white truncate">
-              {reviewerName}
-            </b>
-            {reviewerActivity && (
-              <span className="inline-block mt-0.5 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-white/16 text-white truncate max-w-full">
-                {reviewerActivity}
-              </span>
-            )}
-          </div>
-        </div>
-      </article>
-    );
-  }
-
-  /* ─────────────────────────────────────────────────────────────
-     3. FEATURED REVIEW CARD VARIANT (Optional Hero/Detail View)
-     ───────────────────────────────────────────────────────────── */
-  return (
-    <figure
-      className={`relative grid grid-cols-1 min-[901px]:grid-cols-[220px_1fr] gap-4 min-[901px]:gap-7 items-center p-4 min-[901px]:p-7 rounded-[26px] bg-gradient-to-br from-surface-mist to-white border border-[rgba(20,125,159,0.18)] shadow-card max-w-[1100px] w-full mx-auto overflow-hidden ${className}`.trim()}
-      aria-label={`${reviewerName} - ${reviewerActivity}`}
-    >
-      <div
-        className="hidden min-[901px]:block absolute top-4 rtl:left-6 ltr:right-6 text-6xl text-brand-blue/10 pointer-events-none select-none"
-        aria-hidden="true"
-      >
-        <FontAwesomeIcon icon={QuoteIcon} />
-      </div>
-
-      {review.img && (
-        <div className="w-full aspect-[16/9] min-[901px]:aspect-square rounded-[18px] min-[901px]:rounded-[20px] overflow-hidden border-2 border-brand-yellow shadow-sm bg-brand-navy flex-none">
-          <img
-            src={review.img}
-            alt={reviewerActivity || reviewerName}
-            loading="lazy"
-            decoding="async"
-            className="w-full h-full object-cover"
-          />
-        </div>
-      )}
-
-      <div className="relative min-w-0 flex flex-col justify-between h-full">
-        <div
-          className="flex items-center gap-1 text-[var(--color-star)] text-base min-[901px]:text-lg mb-1"
-          role="img"
-          aria-label={t('reviews.starRatingAria', { rating: review.r }, `${review.r} من 5 نجوم`)}
-        >
-          {[...Array(review.r)].map((_, i) => (
-            <FontAwesomeIcon key={i} icon={faStar} className="w-4 h-4 min-[901px]:w-5 min-[901px]:h-5" />
-          ))}
-        </div>
-
-        <blockquote className="text-base min-[901px]:text-xl font-semibold text-brand-navy leading-relaxed my-2 min-[901px]:my-3">
-          {reviewText}
-        </blockquote>
-
-        <figcaption className="flex items-center justify-between gap-3 pt-3 border-t border-[rgba(18,21,40,0.08)] mt-auto min-h-[44px]">
-          <div className="flex items-center gap-2.5 min-w-0 flex-1">
+        {/* Author Figcaption */}
+        <div className="flex items-center justify-between gap-2 pt-2.5 border-t border-[rgba(18,21,40,0.08)] mt-auto">
+          <div className="flex items-center gap-2 min-w-0 flex-1">
             <span
-              className="w-9 h-9 min-[901px]:w-10 min-[901px]:h-10 rounded-full text-white font-extrabold text-sm min-[901px]:text-base grid place-items-center flex-none shadow-sm select-none"
+              className="w-8 h-8 rounded-full text-white font-extrabold text-xs grid place-items-center flex-none shadow-xs select-none"
               style={{ background: gradientToken }}
               aria-hidden="true"
             >
               {initialChar}
             </span>
             <div className="min-w-0 flex flex-col">
-              <b className="text-[13.5px] min-[901px]:text-[15px] font-bold text-brand-navy leading-tight truncate">
+              <b className="text-xs sm:text-[13px] font-bold text-brand-navy leading-tight truncate">
                 {reviewerName}
               </b>
-              <div className="flex items-center gap-1.5 text-[11px] min-[901px]:text-xs text-brand-navy/70 leading-normal truncate">
+              <div className="flex items-center gap-1 text-[11px] text-brand-navy/70 leading-normal truncate mt-0.5">
                 {reviewerDate && <span>{reviewerDate}</span>}
                 {reviewerDate && reviewerActivity && <span className="opacity-40">·</span>}
                 {reviewerActivity && <span className="truncate">{reviewerActivity}</span>}
@@ -225,15 +191,11 @@ export default function ReviewCard({
             </div>
           </div>
 
-          <div className="flex items-center gap-2 flex-none">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] min-[901px]:text-xs font-bold text-brand-blue bg-[rgba(6,123,161,0.1)] border border-[rgba(6,123,161,0.18)] whitespace-nowrap">
-              <FontAwesomeIcon icon={faGoogle} className="text-[#4285f4]" />
-              <span>Google</span>
-              <FontAwesomeIcon icon={faCheck} className="text-xs" />
-            </span>
-          </div>
-        </figcaption>
+          <span className="text-[11px] font-bold text-brand-blue group-hover:underline flex items-center gap-1 shrink-0">
+            <span>{isEn ? 'Google Details ↗' : 'التفاصيل على Google ↗'}</span>
+          </span>
+        </div>
       </div>
-    </figure>
+    </a>
   );
 }
