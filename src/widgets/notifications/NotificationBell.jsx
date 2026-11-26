@@ -36,7 +36,7 @@ const KIND_STYLES = {
   },
 };
 
-export default function NotificationBell({ compact = false, tone = 'light' }) {
+export default function NotificationBell({ tone = 'light' }) {
   const { lang } = useTranslation();
   const isArabic = lang === 'ar';
   const location = useLocation();
@@ -119,9 +119,7 @@ export default function NotificationBell({ compact = false, tone = 'light' }) {
         aria-haspopup="menu"
         aria-label={isArabic ? 'التنبيهات والإشعارات' : 'Notifications'}
         title={isArabic ? 'التنبيهات' : 'Notifications'}
-        className={`relative inline-flex items-center justify-center rounded-full border transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue ${
-          compact ? 'h-9 w-9 text-sm' : 'h-9 w-9 xl:h-10 xl:w-10 text-sm'
-        } ${buttonToneClass}`}
+        className={`relative inline-flex h-9 w-9 items-center justify-center rounded-full border text-sm transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue ${buttonToneClass}`}
       >
         <FontAwesomeIcon icon={faBell} />
 
