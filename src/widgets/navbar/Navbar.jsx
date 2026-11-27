@@ -82,10 +82,10 @@ export default function Navbar({ onBookClick }) {
     if (location.pathname !== ROUTES.HOME) return;
 
     const sectionIds = [
-      SECTIONS.LOCATIONS,
       SECTIONS.TRIPS,
-      SECTIONS.MAP,
+      SECTIONS.LOCATIONS,
       SECTIONS.REVIEWS,
+      SECTIONS.MAP,
       SECTIONS.FAQ,
     ];
 
@@ -159,6 +159,12 @@ export default function Navbar({ onBookClick }) {
       sectionId: SECTIONS.TOP,
     },
     {
+      to: tripsTarget,
+      label: t('nav.trips'),
+      icon: 'faCompass',
+      sectionId: SECTIONS.TRIPS,
+    },
+    {
       to: sectionLink(SECTIONS.DESTINATIONS),
       label: t('nav.destinations'),
       icon: 'faLocationDot',
@@ -171,22 +177,22 @@ export default function Navbar({ onBookClick }) {
       isActivities: true,
     },
     {
-      to: tripsTarget,
-      label: t('nav.trips'),
-      icon: 'faCompass',
-      sectionId: SECTIONS.TRIPS,
+      to: sectionLink(SECTIONS.REVIEWS),
+      label: t('nav.reviews'),
+      icon: 'faStar',
+      sectionId: SECTIONS.REVIEWS,
+    },
+    {
+      to: sectionLink(SECTIONS.MAP),
+      label: t('nav.exploreMapAria'),
+      icon: 'faMapLocationDot',
+      sectionId: SECTIONS.MAP,
     },
     {
       to: ROUTES.GROUPS,
       label: t('nav.groups'),
       icon: 'faUsersLine',
       isGroups: true,
-    },
-    {
-      to: sectionLink(SECTIONS.REVIEWS),
-      label: t('nav.reviews'),
-      icon: 'faStar',
-      sectionId: SECTIONS.REVIEWS,
     },
     {
       to: sectionLink(SECTIONS.FAQ),
@@ -201,10 +207,10 @@ export default function Navbar({ onBookClick }) {
       isAbout: true,
     },
     {
-      to: sectionLink(SECTIONS.MAP),
-      label: t('nav.exploreMapAria'),
-      icon: 'faMapLocationDot',
-      sectionId: SECTIONS.MAP,
+      to: ROUTES.CONTACT,
+      label: t('nav.contact'),
+      icon: 'faHeadset',
+      isContact: true,
     },
   ];
 
@@ -242,6 +248,11 @@ export default function Navbar({ onBookClick }) {
     // Groups page
     if (location.pathname === ROUTES.GROUPS) {
       return Boolean(link.isGroups);
+    }
+
+    // Contact page
+    if (location.pathname === ROUTES.CONTACT) {
+      return Boolean(link.isContact);
     }
 
     // Don't keep Home section links active on other pages

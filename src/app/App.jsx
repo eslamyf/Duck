@@ -69,6 +69,7 @@ const ReviewsSection = lazy(() => import('../widgets/reviews/index.js'));
 const FAQSection = lazy(() => import('../widgets/faq/index.js'));
 const GroupsPage = lazy(() => import('../widgets/groups-page/GroupsPage.jsx'));
 const AboutPage = lazy(() => import('../pages/about/AboutPage.jsx'));
+const ContactPage = lazy(() => import('../pages/contact/ContactPage.jsx'));
 const TripDetailsPage = lazy(() => import('../pages/trip-details/TripDetailsPage.jsx'));
 
 const PublicActivitiesPage = lazy(
@@ -557,6 +558,14 @@ function TitleManager() {
         lang,
         indexable: true,
       });
+    } else if (normalizedPath === ROUTES.CONTACT) {
+      applyRouteSeo({
+        title: `${t('contactPage.metaTitle')} | ${brand}`,
+        description: t('contactPage.subtitle'),
+        canonicalPath: ROUTES.CONTACT,
+        lang,
+        indexable: true,
+      });
     } else if (normalizedPath.startsWith('/trips/')) {
       let active = true;
       const slug = normalizedPath.split('/')[2] || '';
@@ -736,6 +745,7 @@ export default function App() {
       import('../pages/activities/ActivitiesPage.jsx').catch(() => {});
       import('../pages/booking/index.js').catch(() => {});
       import('../pages/about/AboutPage.jsx').catch(() => {});
+      import('../pages/contact/ContactPage.jsx').catch(() => {});
       import('../widgets/groups-page/GroupsPage.jsx').catch(() => {});
     };
 
@@ -891,9 +901,14 @@ export default function App() {
               path="/map"
               element={<Navigate to="/#map" replace />}
             />
+            {/* Contact Us */}
             <Route
-              path="/contact"
-              element={<Navigate to="/#final-cta" replace />}
+              path={ROUTES.CONTACT}
+              element={
+                <Suspense fallback={<AboutFallback />}>
+                  <ContactPage />
+                </Suspense>
+              }
             />
             <Route
               path="/experiences"

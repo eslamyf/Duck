@@ -140,15 +140,13 @@ export default function Footer({ onDestinationClick }) {
               </Link>
             </li>
             <li>
-              <a
-                href={buildWhatsAppUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to={ROUTES.CONTACT}
                 className="text-brand-navy/80 text-sm font-medium inline-flex items-center gap-2 hover:text-brand-blue hover:-translate-x-1 rtl:hover:-translate-x-1 ltr:hover:translate-x-1 transition-all duration-200"
               >
-                <DuckIcon icon="faWhatsapp" className="text-xs text-brand-blue" />
+                <DuckIcon icon="faHeadset" className="text-xs text-brand-blue" />
                 {t('footer.contactUsLink')}
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

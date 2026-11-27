@@ -285,34 +285,6 @@ export function buildNotifications({
     });
   }
 
-  // Helpful platform/availability alerts for guests (and customers with no booking notifications yet)
-  if (!role || (role === ROLES.CUSTOMER && items.length === 0)) {
-    const scarceEquipment = inventory.find((item) => item.remainingUnits > 0 && item.remainingUnits <= 2);
-    if (scarceEquipment) {
-      items.push({
-        id: `guest-inv-${scarceEquipment.id}`,
-        kind: 'alert',
-        title: isArabic
-          ? `أماكن محدودة: ${scarceEquipment.nameAr}`
-          : `Limited Availability: ${scarceEquipment.nameEn}`,
-        message: isArabic
-          ? `متبقي ${scarceEquipment.remainingUnits} وحدات فقط اليوم — احجز قبل نفاد الأماكن.`
-          : `Only ${scarceEquipment.remainingUnits} units remaining today — book before slots fill.`,
-        to: `${ROUTES.BOOKING}?activity=${scarceEquipment.id}`,
-      });
-    }
-
-    items.push({
-      id: 'guest-groups-offer',
-      kind: 'group',
-      title: isArabic ? 'تنظيم رحلات المجموعات (+20 فرد)' : 'Group & Corporate Trips (20+)',
-      message: isArabic
-        ? 'باقات مخصصة للشركات والجامعات مع مرشدين معتمدين.'
-        : 'Custom packages for corporates & universities with certified guides.',
-      to: ROUTES.GROUPS,
-    });
-  }
-
   const scopeKey = getNotificationScopeKey(currentUser);
   const readSet = getReadNotificationIds(scopeKey);
 

@@ -87,14 +87,14 @@ export default function MobileBottomNav() {
 
   const moreLinks = [
     {
-      to: ROUTES.GROUPS,
-      label: t('nav.groups'),
-      icon: 'faUsersLine',
-    },
-    {
       to: ROUTES.ACTIVITIES,
       label: t('nav.activities'),
       icon: 'faCompass',
+    },
+    {
+      to: sectionLink(SECTIONS.REVIEWS),
+      label: t('nav.reviews'),
+      icon: 'faStar',
     },
     {
       to: sectionLink(SECTIONS.MAP),
@@ -102,9 +102,9 @@ export default function MobileBottomNav() {
       icon: 'faMapLocationDot',
     },
     {
-      to: sectionLink(SECTIONS.REVIEWS),
-      label: t('nav.reviews'),
-      icon: 'faStar',
+      to: ROUTES.GROUPS,
+      label: t('nav.groups'),
+      icon: 'faUsersLine',
     },
     {
       to: sectionLink(SECTIONS.FAQ),
@@ -115,6 +115,11 @@ export default function MobileBottomNav() {
       to: ROUTES.ABOUT,
       label: t('nav.about'),
       icon: 'faUsers',
+    },
+    {
+      to: ROUTES.CONTACT,
+      label: t('nav.contact'),
+      icon: 'faHeadset',
     },
   ];
 

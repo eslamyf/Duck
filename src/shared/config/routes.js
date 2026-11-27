@@ -11,6 +11,7 @@ export const ROUTES = Object.freeze({
   activityDetails: (slug) => `/activities/${slug}`,
   GROUPS: '/groups',
   ABOUT: '/about',
+  CONTACT: '/contact',
   BOOKING: '/book',
   PRIVACY: '/privacy-policy',
   TERMS: '/terms-and-conditions',
