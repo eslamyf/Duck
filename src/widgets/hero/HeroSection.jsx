@@ -14,136 +14,68 @@ export default function HeroSection() {
   const [videoTarget, setVideoTarget] = useState(null); // 'desktop' | 'mobile' | null
   const [videoError, setVideoError] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-  const [isUserPaused, setIsUserPaused] = useState(false);
   const videoRef = useRef(null);
   const sectionRef = useRef(null);
-  const userPausedRef = useRef(false);
-  const motionOverrideRef = useRef(false);
+  const isInViewRef = useRef(true);
 
   const isRtl = lang === 'ar';
   const ArrowIcon = isRtl ? 'faArrowLeft' : 'faArrowRight';
 
-  // Performance & Accessibility Guard:
-  // Defer background video stream until idle and skip under reduced motion / slow network
+  // Mount responsive background video immediately on load for autoplay (respecting reduced motion)
   useEffect(() => {
     if (typeof window === 'undefined') return undefined;
 
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const checkMotion = () => mediaQuery.matches;
+    const getTarget = () => (window.innerWidth > 900 ? 'desktop' : 'mobile');
 
-    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-    const isSaveData = connection?.saveData === true;
-    const isSlowConnection =
-      connection?.effectiveType === '2g' ||
-      connection?.effectiveType === 'slow-2g' ||
-      connection?.effectiveType === '3g';
-
-    if (checkMotion() || isSaveData || isSlowConnection) {
-      return undefined;
-    }
-
-    const handleMotionChange = (e) => {
-      if (e.matches && !motionOverrideRef.current) {
-        userPausedRef.current = true;
-        setIsUserPaused(true);
-        if (videoRef.current) {
-          videoRef.current.pause();
-        }
+    const syncTarget = () => {
+      if (mediaQuery.matches) {
+        setVideoTarget(null);
+        return;
       }
+      setVideoError(false);
+      setVideoTarget(getTarget());
     };
-    mediaQuery.addEventListener('change', handleMotionChange);
 
-    let loaded = false;
-    let timerId = null;
-    const startVideoLoad = () => {
-      if (loaded || userPausedRef.current) return;
-      if (motionOverrideRef.current || (!checkMotion() && !isSaveData && !isSlowConnection)) {
-        loaded = true;
-        setVideoTarget(window.innerWidth > 900 ? 'desktop' : 'mobile');
-      }
-    };
+    syncTarget();
 
     const onResize = () => {
-      if (loaded) {
-        setVideoTarget(window.innerWidth > 900 ? 'desktop' : 'mobile');
+      if (!mediaQuery.matches) {
+        setVideoTarget(getTarget());
       }
     };
 
-    const onInteract = () => {
-      startVideoLoad();
-    };
-
-    const triggerVideo = () => {
-      timerId = setTimeout(startVideoLoad, 4500);
-      window.addEventListener('pointerdown', onInteract, { once: true, passive: true });
-      window.addEventListener('scroll', onInteract, { once: true, passive: true });
-      window.addEventListener('keydown', onInteract, { once: true, passive: true });
-      window.addEventListener('resize', onResize, { passive: true });
-    };
-
-    if (document.readyState === 'complete') {
-      triggerVideo();
-    } else {
-      window.addEventListener('load', triggerVideo, { once: true });
-    }
+    mediaQuery.addEventListener('change', syncTarget);
+    window.addEventListener('resize', onResize, { passive: true });
 
     return () => {
-      if (timerId) clearTimeout(timerId);
-      mediaQuery.removeEventListener('change', handleMotionChange);
-      window.removeEventListener('load', triggerVideo);
-      window.removeEventListener('pointerdown', onInteract);
-      window.removeEventListener('scroll', onInteract);
-      window.removeEventListener('keydown', onInteract);
+      mediaQuery.removeEventListener('change', syncTarget);
       window.removeEventListener('resize', onResize);
     };
   }, []);
 
-  // Pause video when scrolled out of view, resume when visible unless user paused it
+  // Autoplay only while Hero is visible in viewport; pause when scrolled down past Hero
   useEffect(() => {
     if (!videoTarget || !sectionRef.current) return undefined;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (videoRef.current) {
-            if (entry.isIntersecting && !userPausedRef.current) {
-              videoRef.current.play().catch(() => { });
-            } else {
-              videoRef.current.pause();
-            }
+          isInViewRef.current = entry.isIntersecting;
+          if (!videoRef.current) return;
+          if (entry.isIntersecting) {
+            videoRef.current.play().catch(() => { });
+          } else {
+            videoRef.current.pause();
           }
         });
       },
-      { threshold: 0.15 }
+      { threshold: 0.05 }
     );
 
     observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, [videoTarget]);
-
-  const handleToggleVideo = () => {
-    if (videoTarget && !videoError && videoRef.current) {
-      if (videoRef.current.paused) {
-        userPausedRef.current = false;
-        motionOverrideRef.current = true;
-        setIsUserPaused(false);
-        videoRef.current.play().catch(() => { });
-      } else {
-        userPausedRef.current = true;
-        setIsUserPaused(true);
-        videoRef.current.pause();
-      }
-      return;
-    }
-
-    userPausedRef.current = false;
-    motionOverrideRef.current = true;
-    setVideoError(false);
-    setIsUserPaused(false);
-    setVideoTarget(window.innerWidth > 900 ? 'desktop' : 'mobile');
-  };
-
-  const isActivelyPlaying = Boolean(videoTarget && !videoError && isVideoPlaying && !isUserPaused);
 
   // Directional gradient stays strictly behind text edge and fades to 0% before screen center,
   // keeping the kayaker and Nile river colors clean and unclouded.
@@ -156,15 +88,81 @@ export default function HeroSection() {
       id={SECTIONS.TOP}
       ref={sectionRef}
       dir={isRtl ? 'rtl' : 'ltr'}
-      className="relative w-full bg-surface-white font-body scroll-mt-[var(--header-offset)]"
+      className="relative w-full bg-surface-white font-body scroll-mt-[var(--header-offset)] overflow-hidden"
       aria-label="Hero"
     >
+      {/* Background Nile River Current Accent Lines (Vector, 0 performance cost) */}
+      <div className="absolute inset-0 pointer-events-none select-none overflow-hidden" aria-hidden="true">
+        <svg
+          viewBox="0 0 1440 600"
+          fill="none"
+          className="absolute -top-10 left-1/2 -translate-x-1/2 w-[1600px] h-[600px] max-w-none opacity-25"
+        >
+          <path
+            d="M-100 120 C 300 240, 600 40, 1000 160 C 1200 220, 1400 100, 1600 140"
+            stroke="var(--brand-blue, #12718F)"
+            strokeWidth="1.5"
+            strokeDasharray="6 8"
+          />
+          <path
+            d="M-50 180 C 350 290, 650 90, 1050 210 C 1250 270, 1450 150, 1650 190"
+            stroke="var(--brand-yellow, #FDFB45)"
+            strokeWidth="1"
+            opacity="0.8"
+          />
+        </svg>
+      </div>
+
       {/* Clean White Canvas Wrapper framing the Floating Cinematic Video (all 4 corners visible below fixed navbar) */}
-      <div className="px-3 pt-4 pb-6 sm:px-5 min-[901px]:px-[4vw] min-[901px]:pt-6 min-[901px]:pb-8">
+      <div className="relative px-3 pt-3 pb-6 sm:px-5 min-[901px]:px-[4vw] min-[901px]:pt-4 min-[901px]:pb-8">
+        {/* Editorial Micro-Bar above the video frame (coordinates & river expedition indicator) */}
+        <div className="max-w-[1400px] mx-auto mb-2 px-2 hidden sm:flex items-center justify-between text-[11px] min-[901px]:text-xs font-bold text-brand-navy/60 tracking-wider uppercase select-none">
+          <div className="inline-flex items-center gap-2">
+            <DuckIcon icon="faCompass" className="text-brand-blue text-xs" aria-hidden="true" />
+            <span>{t('hero.coordinates')}</span>
+          </div>
+          <div className="inline-flex items-center gap-2">
+            <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
+            <DuckIcon icon="faWater" className="text-brand-blue text-xs" aria-hidden="true" />
+            <span>{t('hero.expedition')}</span>
+          </div>
+        </div>
+
+        {/* Floating Adventure Seal / Stamp Badge (Desktop & Tablet) */}
+        <div
+          className="hidden min-[1100px]:flex absolute top-3 end-[5vw] z-20 pointer-events-none select-none items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-yellow text-brand-navy shadow-ocean border-2 border-surface-white font-extrabold text-xs [transform:rotate(3deg)]"
+          aria-hidden="true"
+        >
+          <DuckIcon icon="faSun" className="text-brand-navy text-xs" aria-hidden="true" />
+          <span>{t('hero.badgeSticker')}</span>
+        </div>
+
         <div
           data-hero-frame="true"
           className="relative isolate [transform:translateZ(0)] mx-auto max-w-[1400px] w-full min-h-[68vh] min-[901px]:min-h-[min(620px,calc(100svh-185px))] overflow-hidden rounded-3xl min-[901px]:rounded-[28px] border border-brand-navy/10 bg-brand-navy text-white shadow-hero-frame flex items-end min-[901px]:items-center"
         >
+          {/* Cinematic Viewfinder Corner Guides */}
+          <div className="absolute top-3 start-3 sm:top-5 sm:start-5 w-4 h-4 sm:w-6 sm:h-6 border-t-2 border-s-2 border-white/35 rounded-tl-lg pointer-events-none z-10" aria-hidden="true" />
+          <div className="absolute top-3 end-3 sm:top-5 sm:end-5 w-4 h-4 sm:w-6 sm:h-6 border-t-2 border-e-2 border-white/35 rounded-tr-lg pointer-events-none z-10" aria-hidden="true" />
+          <div className="absolute bottom-3 start-3 sm:bottom-5 sm:start-5 w-4 h-4 sm:w-6 sm:h-6 border-b-2 border-s-2 border-white/35 rounded-bl-lg pointer-events-none z-10" aria-hidden="true" />
+          <div className="absolute bottom-3 end-3 sm:bottom-5 sm:end-5 w-4 h-4 sm:w-6 sm:h-6 border-b-2 border-e-2 border-white/35 rounded-br-lg pointer-events-none z-10" aria-hidden="true" />
+
+          {/* Live Nile Conditions Micro-Chip */}
+          <div
+            className="absolute top-4 end-4 sm:top-6 sm:end-7 min-[901px]:top-7 min-[901px]:end-8 z-10 pointer-events-none select-none"
+            aria-hidden="true"
+          >
+            <div className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-brand-navy/75 backdrop-blur-md border border-white/20 text-white shadow-xl">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+              <span className="text-[11px] sm:text-xs font-bold tracking-wide text-brand-yellow">
+                {t('hero.liveStatus')}
+              </span>
+              <span className="text-white/40 text-[10px]">•</span>
+              <span className="text-[10px] sm:text-[11px] text-white/90 font-medium">
+                {t('hero.badgeSub')}
+              </span>
+            </div>
+          </div>
           {/* Full-Bleed Background Media (HD Poster + Deferred HD Responsive Video) */}
           <div className="absolute inset-0 z-0 overflow-hidden rounded-[inherit] bg-brand-navy" aria-hidden="true">
             <picture className="absolute inset-0 w-full h-full rounded-[inherit]">
@@ -189,14 +187,15 @@ export default function HeroSection() {
                 muted
                 loop
                 playsInline
-                preload="none"
-                onPlay={() => {
-                  setIsVideoPlaying(true);
-                  setIsUserPaused(false);
+                preload="auto"
+                onCanPlay={() => {
+                  if (isInViewRef.current && videoRef.current?.paused) {
+                    videoRef.current.play().catch(() => { });
+                  }
                 }}
                 onPlaying={() => setIsVideoPlaying(true)}
                 onError={() => setVideoError(true)}
-                className={`absolute inset-0 w-full h-full rounded-[inherit] object-cover object-[center_56%] contrast-[1.06] saturate-[1.12] [transform:translateZ(0)] transition-opacity duration-700 ${isVideoPlaying ? 'opacity-100' : 'opacity-0'
+                className={`absolute inset-0 w-full h-full rounded-[inherit] object-cover object-[center_56%] contrast-[1.06] saturate-[1.12] [transform:translateZ(0)] transition-opacity duration-200 ${isVideoPlaying ? 'opacity-100' : 'opacity-0'
                   }`}
               >
                 <source
@@ -212,22 +211,6 @@ export default function HeroSection() {
             {/* Soft Bottom Vignette for Mobile Readability Only */}
             <div className="absolute inset-0 z-[1] bg-gradient-to-t from-brand-navy/88 from-0% via-brand-navy/50 via-35% to-transparent to-60% pointer-events-none min-[901px]:hidden" />
           </div>
-
-          {/* Accessible Background Video Toggle (WCAG 2.2.2 Pause, Stop, Hide) */}
-          <button
-            type="button"
-            onClick={handleToggleVideo}
-            aria-label={isActivelyPlaying ? t('hero.pauseVideo') : t('hero.playVideo')}
-            className="absolute top-4 end-4 min-[901px]:top-auto min-[901px]:bottom-6 min-[901px]:end-6 z-20 inline-flex items-center justify-center gap-2 min-h-[44px] min-w-[44px] px-3 min-[901px]:px-4 rounded-full bg-brand-navy/90 hover:bg-brand-navy text-white border border-white/25 hover:border-brand-yellow/60 shadow-lg text-xs font-bold transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy"
-          >
-            <DuckIcon
-              icon={isActivelyPlaying ? 'faPause' : 'faPlay'}
-              className="w-3.5 h-3.5 text-brand-yellow shrink-0"
-            />
-            <span className="hidden min-[901px]:inline">
-              {isActivelyPlaying ? t('hero.pauseShort') : t('hero.playShort')}
-            </span>
-          </button>
 
           {/* Foreground Content Aligned to Start Edge */}
           <div className="relative z-10 w-full max-w-[700px] px-5 pt-24 pb-10 sm:px-9 sm:py-14 min-[901px]:px-14 min-[901px]:py-16">

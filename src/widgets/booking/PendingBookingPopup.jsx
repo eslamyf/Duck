@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from '../../shared/i18n/index.js';
-import DuckIcon from '../../shared/ui/Icon/DuckIcon.jsx';
+import { DuckIcon } from '../../shared/ui/index.js';
 import { useNotificationsSync } from '../../shared/hooks/useNotificationsSync.js';
 import { ROUTES } from '../../shared/config/routes.js';
 import { CONTACT, buildWhatsAppUrl } from '../../shared/config/constants.js';
@@ -61,17 +61,17 @@ export default function PendingBookingPopup() {
 
   const waReceiptMessage = isArabic
     ? `مرحباً DUCK، أود تأكيد حجزي المبدئي:\n` +
-      `رقم الحجز: ${pendingBooking.ref}\n` +
-      `الرحلة: ${pendingBooking.tripTitle}\n` +
-      (bookingDate ? `التاريخ: ${bookingDate}\n` : '') +
-      (amountDue ? `المبلغ: ${formatPrice(amountDue)} ج.م\n` : '') +
-      `مرفق إيصال الدفع لتأكيد الحجز:`
+    `رقم الحجز: ${pendingBooking.ref}\n` +
+    `الرحلة: ${pendingBooking.tripTitle}\n` +
+    (bookingDate ? `التاريخ: ${bookingDate}\n` : '') +
+    (amountDue ? `المبلغ: ${formatPrice(amountDue)} ج.م\n` : '') +
+    `مرفق إيصال الدفع لتأكيد الحجز:`
     : `Hello DUCK, I want to confirm my pending booking:\n` +
-      `Ref: ${pendingBooking.ref}\n` +
-      `Trip: ${pendingBooking.tripTitle}\n` +
-      (bookingDate ? `Date: ${bookingDate}\n` : '') +
-      (amountDue ? `Amount: ${formatPrice(amountDue)} EGP\n` : '') +
-      `Attached is the payment receipt for confirmation:`;
+    `Ref: ${pendingBooking.ref}\n` +
+    `Trip: ${pendingBooking.tripTitle}\n` +
+    (bookingDate ? `Date: ${bookingDate}\n` : '') +
+    (amountDue ? `Amount: ${formatPrice(amountDue)} EGP\n` : '') +
+    `Attached is the payment receipt for confirmation:`;
 
   const waUrl = buildWhatsAppUrl(waReceiptMessage, CONTACT.PHONE);
 
