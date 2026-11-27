@@ -1,19 +1,14 @@
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowLeft,
-  faArrowRight,
-} from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES } from '../../shared/config/routes.js';
-import { Button, DuckManifesto } from '../../shared/ui/index.js';
+import { Button, DuckManifesto, DuckIcon } from '../../shared/ui/index.js';
 import introImg480 from '../../shared/assets/images/image1-480w.webp';
 import introImg720 from '../../shared/assets/images/image1-720w.webp';
 
 export default function BrandIntroSection() {
   const { t, lang } = useTranslation();
   const isArabic = lang === 'ar';
-  const ArrowIcon = isArabic ? faArrowLeft : faArrowRight;
+  const ArrowIcon = isArabic ? 'faArrowLeft' : 'faArrowRight';
 
   return (
     <section
@@ -48,7 +43,7 @@ export default function BrandIntroSection() {
             to={ROUTES.ABOUT}
             variant="secondary"
             size="md"
-            icon={<FontAwesomeIcon icon={ArrowIcon} className="text-sm" />}
+            icon={<DuckIcon icon={ArrowIcon} className="text-sm" />}
             iconPosition="end"
             className="font-bold shadow-card"
           >

@@ -1,10 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTrash,
-  faArrowsUpDown,
-  faArrowsLeftRight,
-  faCrosshairs,
-} from '@fortawesome/free-solid-svg-icons';
+import DuckIcon from './Icon/DuckIcon.jsx';
 
 /**
  * Parse CSS object-position string into { x: number, y: number }
@@ -102,7 +96,7 @@ export default function ImageFocusCropper({
       {/* Header with Title and Delete Button */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1.5 text-brand-navy font-bold text-xs">
-          <FontAwesomeIcon icon={faCrosshairs} className="text-brand-blue" />
+          <DuckIcon icon="faCrosshairs" className="text-brand-blue" />
           <span>
             {label || (isArabic ? 'معاينة وضبط موضع ظهور الصورة' : 'Crop & Focus Position')}
           </span>
@@ -114,7 +108,7 @@ export default function ImageFocusCropper({
             className="inline-flex items-center gap-1 text-[11px] font-bold text-red-600 hover:text-red-700 hover:bg-red-50 px-2 py-1 rounded-lg transition-colors cursor-pointer"
             title={isArabic ? 'حذف الصورة' : 'Remove Image'}
           >
-            <FontAwesomeIcon icon={faTrash} />
+            <DuckIcon icon="faTrash" />
             <span>{isArabic ? 'حذف' : 'Remove'}</span>
           </button>
         )}
@@ -199,7 +193,7 @@ export default function ImageFocusCropper({
         <div>
           <div className="flex items-center justify-between text-[11px] font-bold text-brand-navy mb-1">
             <span className="flex items-center gap-1">
-              <FontAwesomeIcon icon={faArrowsUpDown} className="text-brand-blue text-[10px]" />
+              <DuckIcon icon="faArrowsUpDown" className="text-brand-blue text-[10px]" />
               <span>{isArabic ? 'التحكم الرأسي (أعلى ↔ أسفل):' : 'Vertical Focus (Top ↔ Bottom):'}</span>
             </span>
             <span className="font-mono text-brand-blue text-xs font-black">{posY}%</span>
@@ -223,7 +217,7 @@ export default function ImageFocusCropper({
         <div>
           <div className="flex items-center justify-between text-[11px] font-bold text-brand-navy mb-1">
             <span className="flex items-center gap-1">
-              <FontAwesomeIcon icon={faArrowsLeftRight} className="text-brand-blue text-[10px]" />
+              <DuckIcon icon="faArrowsLeftRight" className="text-brand-blue text-[10px]" />
               <span>{isArabic ? 'التحكم الأفقي (يمين ↔ يسار):' : 'Horizontal Focus (Left ↔ Right):'}</span>
             </span>
             <span className="font-mono text-brand-blue text-xs font-black">{posX}%</span>

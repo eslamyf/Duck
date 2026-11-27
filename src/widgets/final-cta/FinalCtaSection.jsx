@@ -1,16 +1,14 @@
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarCheck, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES } from '../../shared/config/routes.js';
-import { Button, DuckManifesto } from '../../shared/ui/index.js';
+import { Button, DuckManifesto, DuckIcon } from '../../shared/ui/index.js';
 import ctaBg640 from '../../shared/assets/images/about/cta-bg-640w.webp';
 import ctaBg1200 from '../../shared/assets/images/about/cta-bg-1200w.webp';
 
 export default function FinalCtaSection() {
   const { t, lang } = useTranslation();
   const isArabic = lang === 'ar';
-  const ArrowIcon = isArabic ? faArrowLeft : faArrowRight;
+  const ArrowIcon = isArabic ? 'faArrowLeft' : 'faArrowRight';
 
   return (
     <section
@@ -23,7 +21,7 @@ export default function FinalCtaSection() {
         <img
           src={ctaBg1200}
           srcSet={`${ctaBg640} 640w, ${ctaBg1200} 1200w`}
-          sizes="(max-width: 640px) 92vw, 1300px"
+          sizes="(max-width: 640px) 356px, (max-width: 900px) 92vw, 1300px"
           alt=""
           width={1200}
           height={675}
@@ -58,11 +56,11 @@ export default function FinalCtaSection() {
               to={ROUTES.BOOKING}
               variant="primary"
               size="lg"
-              icon={<FontAwesomeIcon icon={faCalendarCheck} className="text-base" />}
+              icon={<DuckIcon icon="faCalendarCheck" className="text-base" />}
               className="font-extrabold px-8 shadow-ocean inline-flex items-center gap-2.5"
             >
               <span>{t('finalCta.button')}</span>
-              <FontAwesomeIcon icon={ArrowIcon} className="text-sm" />
+              <DuckIcon icon={ArrowIcon} className="text-sm" />
             </Button>
           </div>
         </div>

@@ -1,11 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
-import { SectionHeader, Button, Badge } from '../../shared/ui/index.js';
+import { SectionHeader, Button, Badge, DuckIcon } from '../../shared/ui/index.js';
 import { DESTINATIONS } from './destinationsData.js';
-import { useCMS } from '../../shared/hooks/index.js';
+import { useCMS } from '../../shared/hooks/useCMS.js';
 import { SECTIONS, sectionLink } from '../../shared/config/routes.js';
 
 export default function DestinationsSection({ onSelectDestination }) {
@@ -107,8 +105,8 @@ export default function DestinationsSection({ onSelectDestination }) {
     }
   };
 
-  const PrevArrowIcon = isRtl ? faChevronRight : faChevronLeft;
-  const NextArrowIcon = isRtl ? faChevronLeft : faChevronRight;
+  const PrevArrowIcon = isRtl ? 'faChevronRight' : 'faChevronLeft';
+  const NextArrowIcon = isRtl ? 'faChevronLeft' : 'faChevronRight';
 
   return (
     <section
@@ -154,7 +152,7 @@ export default function DestinationsSection({ onSelectDestination }) {
             aria-label={t('nav.prevSlide')}
             className="w-9 h-9 rounded-full border border-white/25 bg-white/12 text-white flex items-center justify-center shadow-xs transition-all hover:bg-brand-yellow hover:text-brand-navy hover:border-brand-yellow disabled:opacity-35 disabled:pointer-events-none cursor-pointer"
           >
-            <FontAwesomeIcon icon={PrevArrowIcon} className="text-xs" aria-hidden="true" />
+            <DuckIcon icon={PrevArrowIcon} className="text-xs" aria-hidden="true" />
           </button>
 
           <button
@@ -164,7 +162,7 @@ export default function DestinationsSection({ onSelectDestination }) {
             aria-label={t('nav.nextSlide')}
             className="w-9 h-9 rounded-full border border-white/25 bg-white/12 text-white flex items-center justify-center shadow-xs transition-all hover:bg-brand-yellow hover:text-brand-navy hover:border-brand-yellow disabled:opacity-35 disabled:pointer-events-none cursor-pointer"
           >
-            <FontAwesomeIcon icon={NextArrowIcon} className="text-xs" aria-hidden="true" />
+            <DuckIcon icon={NextArrowIcon} className="text-xs" aria-hidden="true" />
           </button>
         </div>
 
@@ -190,12 +188,12 @@ export default function DestinationsSection({ onSelectDestination }) {
             // Dynamically synchronize trip count with real inventory store (U1, U2, U6)
             const actualTripCount = dynamicTrips?.length
               ? dynamicTrips.filter(
-                  (t) =>
-                    t.destKey === item.key ||
-                    t.destKey === item.filterKey ||
-                    t.loc === item.id ||
-                    t.loc === item.filterKey
-                ).length
+                (t) =>
+                  t.destKey === item.key ||
+                  t.destKey === item.filterKey ||
+                  t.loc === item.id ||
+                  t.loc === item.filterKey
+              ).length
               : (item.tripCount || 0);
 
             const isSoon = actualTripCount === 0;
@@ -208,11 +206,10 @@ export default function DestinationsSection({ onSelectDestination }) {
                 onKeyDown={(e) => handleKeyDown(e, index)}
                 onPointerEnter={() => handlePointerEnter(item.id)}
                 onClick={() => selectTab(item.id)}
-                className={`relative min-w-0 rounded-[28px] overflow-hidden bg-[#0C1226] cursor-pointer transition-[flex,border-color] duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] snap-center flex-shrink-0 ${
-                  isActive
-                    ? 'min-[901px]:flex-[5.5] border-2 border-brand-yellow shadow-[0_12px_36px_rgba(253,251,69,0.12)]'
-                    : 'min-[901px]:flex-1 border border-white/18 hover:border-white/40'
-                } w-[84%] max-w-[340px] min-[901px]:max-w-none min-[901px]:w-auto`}
+                className={`relative min-w-0 rounded-[28px] overflow-hidden bg-[#0C1226] cursor-pointer transition-[flex,border-color] duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] snap-center flex-shrink-0 ${isActive
+                  ? 'min-[901px]:flex-[5.5] border-2 border-brand-yellow shadow-[0_12px_36px_rgba(253,251,69,0.12)]'
+                  : 'min-[901px]:flex-1 border border-white/18 hover:border-white/40'
+                  } w-[84%] max-w-[340px] min-[901px]:max-w-none min-[901px]:w-auto`}
               >
                 {/* Background Image Container */}
                 <div className="absolute inset-0 overflow-hidden bg-brand-navy" aria-hidden="true">
@@ -249,9 +246,8 @@ export default function DestinationsSection({ onSelectDestination }) {
                             e.currentTarget.style.display = 'block';
                           }
                         }}
-                        className={`w-full h-full object-cover transition-transform duration-1200 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                          isActive ? 'scale-106' : 'scale-100'
-                        }`}
+                        className={`w-full h-full object-cover transition-transform duration-1200 ease-[cubic-bezier(0.16,1,0.3,1)] ${isActive ? 'scale-106' : 'scale-100'
+                          }`}
                       />
                     );
                   })()}
@@ -269,9 +265,8 @@ export default function DestinationsSection({ onSelectDestination }) {
                     e.stopPropagation();
                     selectTab(item.id, true);
                   }}
-                  className={`hidden min-[901px]:flex absolute z-[3] inset-0 bg-transparent border-0 text-white cursor-pointer flex-col items-center justify-between py-6 px-1.5 focus-visible:outline-2 focus-visible:outline-brand-yellow ${
-                    isActive ? 'min-[901px]:!hidden' : ''
-                  }`}
+                  className={`hidden min-[901px]:flex absolute z-[3] inset-0 bg-transparent border-0 text-white cursor-pointer flex-col items-center justify-between py-6 px-1.5 focus-visible:outline-2 focus-visible:outline-brand-yellow ${isActive ? 'min-[901px]:!hidden' : ''
+                    }`}
                 >
                   <span className="font-bold text-brand-yellow text-sm tracking-widest">{item.num}</span>
                   <div className="flex-1 flex items-center justify-center my-auto">
@@ -291,11 +286,10 @@ export default function DestinationsSection({ onSelectDestination }) {
                 {/* Expanded Card Content (Desktop active / Always visible on mobile snap card) */}
                 <div
                   id={`dcc${item.id}`}
-                  className={`absolute z-[2] inset-x-0 bottom-0 p-5 min-[901px]:p-8 flex flex-col gap-2.5 text-start transition-opacity duration-300 ${
-                    isActive
-                      ? 'opacity-100 visible pointer-events-auto'
-                      : 'min-[901px]:opacity-0 min-[901px]:invisible min-[901px]:pointer-events-none opacity-100 visible'
-                  }`}
+                  className={`absolute z-[2] inset-x-0 bottom-0 p-5 min-[901px]:p-8 flex flex-col gap-2.5 text-start transition-opacity duration-300 ${isActive
+                    ? 'opacity-100 visible pointer-events-auto'
+                    : 'min-[901px]:opacity-0 min-[901px]:invisible min-[901px]:pointer-events-none opacity-100 visible'
+                    }`}
                 >
                   <h3
                     ref={(el) => {
@@ -336,10 +330,10 @@ export default function DestinationsSection({ onSelectDestination }) {
                             actualTripCount === 1
                               ? `استكشف رحلة ${destName} (رحلة واحدة)`
                               : actualTripCount === 2
-                              ? `استكشف رحلات ${destName} (رحلتان)`
-                              : actualTripCount >= 3 && actualTripCount <= 10
-                              ? `استكشف رحلات ${destName} (${actualTripCount} رحلات)`
-                              : `استكشف رحلات ${destName} (${actualTripCount} رحلة)`
+                                ? `استكشف رحلات ${destName} (رحلتان)`
+                                : actualTripCount >= 3 && actualTripCount <= 10
+                                  ? `استكشف رحلات ${destName} (${actualTripCount} رحلات)`
+                                  : `استكشف رحلات ${destName} (${actualTripCount} رحلة)`
                           ) : (
                             actualTripCount === 1
                               ? `Explore ${destName} (${actualTripCount} trip)`
@@ -381,9 +375,8 @@ export default function DestinationsSection({ onSelectDestination }) {
               className="grid place-items-center min-w-7 h-7 p-1 cursor-pointer"
             >
               <span
-                className={`block h-2 rounded-full transition-all duration-300 ${
-                  mobileActiveIdx === idx ? 'w-6 bg-brand-yellow' : 'w-2 bg-white/30 hover:bg-white/50'
-                }`}
+                className={`block h-2 rounded-full transition-all duration-300 ${mobileActiveIdx === idx ? 'w-6 bg-brand-yellow' : 'w-2 bg-white/30 hover:bg-white/50'
+                  }`}
               />
             </button>
           ))}

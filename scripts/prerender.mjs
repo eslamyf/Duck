@@ -263,7 +263,10 @@ async function run() {
     const cssHref = cssMatch[1];
     const cssFilePath = path.join(DIST_DIR, cssHref.replace(/^\//, ''));
     const fullCss = fs.readFileSync(cssFilePath, 'utf8');
-    const criticalCss = extractCriticalCss(fullCss, ssrHtml);
+    // Inject floating fixed WhatsApp FAB markup before locations cutoff so fixed above-the-fold styles stay critical
+    const fixedFabHtml = ssrHtml.match(/<a[^>]+z-\[90\][\s\S]*?<\/a>/)?.[0] || '';
+    const critSourceHtml = fixedFabHtml ? `${fixedFabHtml}${ssrHtml}` : ssrHtml;
+    const criticalCss = extractCriticalCss(fullCss, critSourceHtml);
 
     const replacement = [
       `<style id="critical-css">${criticalCss}</style>`,
@@ -275,16 +278,17 @@ async function run() {
     console.log(`[prerender] / -> SSR ${(ssrHtml.length / 1024).toFixed(1)} KB, Critical CSS ${(criticalCss.length / 1024).toFixed(1)} KB (full CSS ${(fullCss.length / 1024).toFixed(1)} KB)`);
   }
 
-  // Reorder head so high-priority LCP image preload comes BEFORE font & JS module scripts
-  const heroPreloads = [];
-  html = html.replace(/<link rel="preload" as="image"[^>]+hero-poster[^>]+>\s*/g, (m) => {
-    heroPreloads.push(m.trim());
-    return '';
-  });
+  // Inject hashed responsive Hero LCP image preloads BEFORE font preload for minimal resource load delay
+  const mobPoster = assetByBaseExt.get('hero-poster-mobile.webp');
+  const dskPoster = assetByBaseExt.get('hero-poster-desktop.webp');
+  const heroPreloads = [
+    mobPoster && `<link rel="preload" as="image" href="${mobPoster}" media="(max-width: 900px)" type="image/webp" fetchpriority="high" />`,
+    dskPoster && `<link rel="preload" as="image" href="${dskPoster}" media="(min-width: 901px)" type="image/webp" fetchpriority="high" />`,
+  ].filter(Boolean);
   if (heroPreloads.length > 0) {
     html = html.replace(
-      '<!-- Critical Assets Preload -->',
-      `<!-- Critical Assets Preload (Hero LCP Image First) -->\n  ${heroPreloads.join('\n  ')}`
+      '<!-- Critical Assets Preload (Hero LCP Image First, then Variable Font) -->',
+      `<!-- Critical Assets Preload (Hero LCP Image First, then Variable Font) -->\n  ${heroPreloads.join('\n  ')}`
     );
   }
 

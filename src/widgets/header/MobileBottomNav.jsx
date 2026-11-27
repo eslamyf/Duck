@@ -1,33 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faHouse,
-  faWater,
-  faCalendarCheck,
-  faMapLocationDot,
-  faBars,
-  faXmark,
-  faUsersLine,
-  faCompass,
-  faStar,
-  faCircleQuestion,
-  faUsers,
-  faLanguage,
-  faArrowLeft,
-  faArrowRight,
-} from '@fortawesome/free-solid-svg-icons';
-import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
 import { buildWhatsAppUrl } from '../../shared/config/constants.js';
+import { DuckIcon } from '../../shared/ui/index.js';
 
 export default function MobileBottomNav() {
   const { lang, setLanguage, t } = useTranslation();
   const location = useLocation();
   const isArabic = lang === 'ar';
-  const ArrowIcon = isArabic ? faArrowLeft : faArrowRight;
+  const ArrowIcon = isArabic ? 'faArrowLeft' : 'faArrowRight';
 
   const routeKey = `${location.pathname}${location.hash}`;
   const [moreRouteKey, setMoreRouteKey] = useState(null);
@@ -106,32 +89,32 @@ export default function MobileBottomNav() {
     {
       to: ROUTES.GROUPS,
       label: t('nav.groups'),
-      icon: faUsersLine,
+      icon: 'faUsersLine',
     },
     {
       to: ROUTES.ACTIVITIES,
       label: t('nav.activities'),
-      icon: faCompass,
+      icon: 'faCompass',
     },
     {
       to: sectionLink(SECTIONS.MAP),
       label: t('nav.exploreMapAria'),
-      icon: faMapLocationDot,
+      icon: 'faMapLocationDot',
     },
     {
       to: sectionLink(SECTIONS.REVIEWS),
       label: t('nav.reviews'),
-      icon: faStar,
+      icon: 'faStar',
     },
     {
       to: sectionLink(SECTIONS.FAQ),
       label: t('nav.faq'),
-      icon: faCircleQuestion,
+      icon: 'faCircleQuestion',
     },
     {
       to: ROUTES.ABOUT,
       label: t('nav.about'),
-      icon: faUsers,
+      icon: 'faUsers',
     },
   ];
 
@@ -149,7 +132,7 @@ export default function MobileBottomNav() {
         dir={isArabic ? 'rtl' : 'ltr'}
         aria-label={t('nav.bottomNavAria')}
         data-mobile-bottom-nav="true"
-        className="md:hidden fixed bottom-0 inset-x-0 z-[9995] bg-surface-white/95 backdrop-blur-md border-t border-brand-blue/15 shadow-header font-body print:hidden"
+        className="md:hidden fixed bottom-0 inset-x-0 z-[9995] bg-surface-white border-t border-brand-blue/15 shadow-header font-body print:hidden"
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       >
         <div className="grid grid-cols-5 items-end h-[66px] max-w-lg mx-auto px-1">
@@ -159,7 +142,7 @@ export default function MobileBottomNav() {
             aria-current={isHomeActive ? 'page' : undefined}
             className={tabClass(isHomeActive)}
           >
-            <FontAwesomeIcon icon={faHouse} className="text-[17px]" aria-hidden="true" />
+            <DuckIcon icon="faHouse" className="text-[17px]" aria-hidden="true" />
             <span className="truncate max-w-full px-0.5">{t('nav.home')}</span>
           </Link>
 
@@ -169,7 +152,7 @@ export default function MobileBottomNav() {
             aria-current={isExperiencesActive ? 'page' : undefined}
             className={tabClass(isExperiencesActive)}
           >
-            <FontAwesomeIcon icon={faWater} className="text-[17px]" aria-hidden="true" />
+            <DuckIcon icon="faWater" className="text-[17px]" aria-hidden="true" />
             <span className="truncate max-w-full px-0.5">{t('nav.trips')}</span>
           </Link>
 
@@ -184,7 +167,7 @@ export default function MobileBottomNav() {
                 isBookingActive ? 'ring-2 ring-brand-navy' : ''
               }`}
             >
-              <FontAwesomeIcon icon={faCalendarCheck} className="text-xl" aria-hidden="true" />
+              <DuckIcon icon="faCalendarCheck" className="text-xl" aria-hidden="true" />
             </span>
             <span className="-mt-3 text-[11px] font-extrabold text-brand-navy whitespace-nowrap">
               {t('nav.bookNowShort')}
@@ -197,7 +180,7 @@ export default function MobileBottomNav() {
             aria-current={isDestinationsActive ? 'page' : undefined}
             className={tabClass(isDestinationsActive)}
           >
-            <FontAwesomeIcon icon={faMapLocationDot} className="text-[17px]" aria-hidden="true" />
+            <DuckIcon icon="faMapLocationDot" className="text-[17px]" aria-hidden="true" />
             <span className="truncate max-w-full px-0.5">{t('nav.destinations')}</span>
           </Link>
 
@@ -209,7 +192,7 @@ export default function MobileBottomNav() {
             aria-haspopup="dialog"
             className={`${tabClass(isMoreOpen)} cursor-pointer`}
           >
-            <FontAwesomeIcon icon={isMoreOpen ? faXmark : faBars} className="text-[17px]" aria-hidden="true" />
+            <DuckIcon icon={isMoreOpen ? 'faXmark' : 'faBars'} className="text-[17px]" aria-hidden="true" />
             <span className="truncate max-w-full px-0.5">{t('nav.more')}</span>
           </button>
         </div>
@@ -248,7 +231,7 @@ export default function MobileBottomNav() {
                 aria-label={t('nav.closeMenu')}
                 className="flex h-8 w-8 items-center justify-center rounded-full bg-surface-mist text-brand-navy hover:bg-brand-navy hover:text-brand-yellow transition-colors cursor-pointer"
               >
-                <FontAwesomeIcon icon={faXmark} className="text-sm" />
+                <DuckIcon icon="faXmark" className="text-sm" />
               </button>
             </div>
 
@@ -262,12 +245,12 @@ export default function MobileBottomNav() {
                 >
                   <span className="inline-flex items-center gap-3">
                     <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-navy text-brand-yellow text-xs">
-                      <FontAwesomeIcon icon={item.icon} />
+                      <DuckIcon icon={item.icon} />
                     </span>
                     <span>{item.label}</span>
                   </span>
 
-                  <FontAwesomeIcon icon={ArrowIcon} className="text-xs text-brand-navy/45" />
+                  <DuckIcon icon={ArrowIcon} className="text-xs text-brand-navy/45" />
                 </Link>
               ))}
             </div>
@@ -282,7 +265,7 @@ export default function MobileBottomNav() {
                 }}
                 className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-brand-blue/25 bg-surface-white px-3 py-2 text-xs font-extrabold text-brand-navy hover:bg-brand-navy hover:text-brand-yellow transition-colors cursor-pointer"
               >
-                <FontAwesomeIcon icon={faLanguage} className="text-brand-blue" />
+                <DuckIcon icon="faLanguage" className="text-brand-blue" />
                 <span>{t('common.languageSwitch')}</span>
               </button>
 
@@ -293,7 +276,7 @@ export default function MobileBottomNav() {
                 onClick={() => setMoreRouteKey(null)}
                 className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-brand-whatsapp px-3 py-2 text-xs font-extrabold text-brand-navy shadow-card hover:opacity-95 transition-opacity"
               >
-                <FontAwesomeIcon icon={faWhatsapp} className="text-base" />
+                <DuckIcon icon="faWhatsapp" className="text-base" />
                 <span>{t('common.whatsapp')}</span>
               </a>
             </div>

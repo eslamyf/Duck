@@ -9,15 +9,13 @@ export default defineConfig({
     react(),
   ],
   build: {
+    assetsInlineLimit: 0,
     rollupOptions: {
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
+            if (/[\\/](react|react-dom|react-router|react-router-dom|scheduler)[\\/]/.test(id)) {
               return 'vendor-react';
-            }
-            if (id.includes('@fortawesome')) {
-              return 'vendor-icons';
             }
             if (id.includes('leaflet')) {
               return 'vendor-leaflet';

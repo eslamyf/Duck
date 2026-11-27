@@ -1,18 +1,11 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCompass,
-  faCalendarCheck,
-  faMapLocationDot,
-  faHeart,
-} from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
-import { SectionHeader, Card, Badge } from '../../shared/ui/index.js';
+import { SectionHeader, Card, Badge, DuckIcon } from '../../shared/ui/index.js';
 
 const CARD_ICONS = {
-  diverse: faCompass,
-  easyBooking: faCalendarCheck,
-  uniqueDestinations: faMapLocationDot,
-  worthRepeating: faHeart,
+  diverse: 'faCompass',
+  easyBooking: 'faCalendarCheck',
+  uniqueDestinations: 'faMapLocationDot',
+  worthRepeating: 'faHeart',
 };
 
 export default function WhyDuckSection() {
@@ -47,7 +40,7 @@ export default function WhyDuckSection() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 min-[901px]:gap-6">
           {cards.map((item) => {
-            const icon = CARD_ICONS[item.id] || faCompass;
+            const icon = CARD_ICONS[item.id] || 'faCompass';
             return (
               <Card
                 key={item.id}
@@ -59,7 +52,7 @@ export default function WhyDuckSection() {
                   className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-navy text-xl text-brand-yellow shadow-card"
                   aria-hidden="true"
                 >
-                  <FontAwesomeIcon icon={icon} />
+                  <DuckIcon icon={icon} />
                 </span>
 
                 <div>

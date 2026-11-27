@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
-import { getCurrentUser } from '../../entities/user/api/authService.js';
+import { getCurrentUser } from '../../entities/user/api/authSession.js';
 import { can } from '../../entities/user/model/roles.js';
 import { DASHBOARD_ROLES, getPortalPathForRole } from '../../shared/config/rbac.js';
 import { ROUTES } from '../../shared/config/routes.js';

@@ -12,13 +12,7 @@ import { MobileBottomNav } from '../widgets/header/index.js';
 import Footer from '../widgets/footer/Footer.jsx';
 import HeroSection from '../widgets/hero/HeroSection.jsx';
 import { BrandIntroSection } from '../widgets/brand-intro/index.js';
-import DestinationsSection from '../widgets/destinations/DestinationsSection.jsx';
-import TripsSection from '../widgets/trips/TripsSection.jsx';
-import { WhyDuckSection } from '../widgets/why-duck/index.js';
-import GroupsBanner from '../widgets/groups-banner/GroupsBanner.jsx';
-import { FinalCtaSection } from '../widgets/final-cta/index.js';
-
-import { TRIPS } from '../widgets/trips/tripsData.js';
+import LazyViewportSection from './LazyViewportSection.jsx';
 
 import { useTranslation } from '../shared/i18n/index.js';
 import {
@@ -35,9 +29,14 @@ import {
 } from '../shared/ui/index.js';
 
 import { trackPageView } from '../shared/utils/analytics.js';
-import { PendingBookingPopup } from '../widgets/booking/index.js';
+import PendingBookingPopup from '../widgets/booking/PendingBookingPopup.jsx';
 
 // Lazy-loaded public sections
+const DestinationsSection = lazy(() => import('../widgets/destinations/DestinationsSection.jsx'));
+const TripsSection = lazy(() => import('../widgets/trips/TripsSection.jsx'));
+const WhyDuckSection = lazy(() => import('../widgets/why-duck/WhyDuckSection.jsx'));
+const GroupsBanner = lazy(() => import('../widgets/groups-banner/GroupsBanner.jsx'));
+const FinalCtaSection = lazy(() => import('../widgets/final-cta/FinalCtaSection.jsx'));
 const MapSection = lazy(() => import('../widgets/map/index.js'));
 const ReviewsSection = lazy(() => import('../widgets/reviews/index.js'));
 const FAQSection = lazy(() => import('../widgets/faq/index.js'));
@@ -163,6 +162,56 @@ function AuthFallback() {
   );
 }
 
+function DestinationsFallback() {
+  return (
+    <div
+      id={SECTIONS.DESTINATIONS}
+      aria-hidden="true"
+      className="bg-brand-navy min-h-[600px] min-[901px]:min-h-[680px] border-t border-white/8"
+    />
+  );
+}
+
+function TripsFallback() {
+  return (
+    <div
+      id={SECTIONS.TRIPS}
+      aria-hidden="true"
+      className="bg-gradient-to-b from-[#f3fafc] to-white min-h-[780px] min-[901px]:min-h-[820px]"
+    />
+  );
+}
+
+function WhyDuckFallback() {
+  return (
+    <div
+      id="why-duck"
+      aria-hidden="true"
+      className="bg-surface-sand min-h-[420px] border-t border-brand-blue/12"
+    />
+  );
+}
+
+function GroupsBannerFallback() {
+  return (
+    <div
+      id={SECTIONS.GROUPS}
+      aria-hidden="true"
+      className="my-10 min-[901px]:my-12 min-h-[540px] min-[901px]:min-h-[580px] bg-brand-navy"
+    />
+  );
+}
+
+function FinalCtaFallback() {
+  return (
+    <div
+      id="final-cta"
+      aria-hidden="true"
+      className="bg-surface-white min-h-[380px] border-t border-brand-blue/12"
+    />
+  );
+}
+
 function MapFallback() {
   return (
     <section
@@ -179,7 +228,7 @@ function ReviewsFallback() {
   return (
     <section
       id="reviews"
-      className="relative w-full min-h-[420px] bg-surface-sand flex items-center justify-center text-brand-navy/30"
+      className="relative w-full min-h-[600px] bg-surface-sand flex items-center justify-center text-brand-navy/30"
       aria-label="Loading Reviews"
     >
       <div className="w-10 h-10 border-4 border-brand-blue/30 border-t-brand-blue rounded-full animate-spin" />
@@ -191,7 +240,7 @@ function FAQFallback() {
   return (
     <section
       id="faq"
-      className="relative w-full min-h-[420px] bg-surface-white flex items-center justify-center text-brand-navy/30"
+      className="relative w-full min-h-[500px] bg-surface-white flex items-center justify-center text-brand-navy/30"
       aria-label="Loading FAQ"
     >
       <div className="w-10 h-10 border-4 border-brand-blue/30 border-t-brand-blue rounded-full animate-spin" />
@@ -328,16 +377,21 @@ function TitleManager() {
     } else if (pathname === ROUTES.BOOKING) {
       document.title = `${t('tripDetails.bookNow')} | ${t('common.brandName')}`;
     } else if (pathname.startsWith('/trips/')) {
+      let active = true;
       const slug = pathname.split('/')[2];
-
-      const trip = TRIPS.find((item) => item.slug === slug);
-
-      if (trip) {
-        const tripTitle = t(`trips.items.${trip.key}.title`);
-        document.title = `${tripTitle} | ${t('common.brandName')}`;
-      } else {
-        document.title = `${t('tripDetails.notFoundTitle')} | ${t('common.brandName')}`;
-      }
+      import('../widgets/trips/tripsData.js').then(({ TRIPS }) => {
+        if (!active) return;
+        const trip = TRIPS.find((item) => item.slug === slug);
+        if (trip) {
+          const tripTitle = t(`trips.items.${trip.key}.title`);
+          document.title = `${tripTitle} | ${t('common.brandName')}`;
+        } else {
+          document.title = `${t('tripDetails.notFoundTitle')} | ${t('common.brandName')}`;
+        }
+      });
+      return () => {
+        active = false;
+      };
     } else {
       document.title = `${t('common.brandName')} - ${t('nav.home')}`;
     }
@@ -373,45 +427,47 @@ function HomePageView({
 
       <BrandIntroSection />
 
-      <DestinationsSection
-        onSelectDestination={onSelectDestination}
-      />
+      <LazyViewportSection id={SECTIONS.DESTINATIONS} fallback={<DestinationsFallback />}>
+        <DestinationsSection
+          onSelectDestination={onSelectDestination}
+        />
+      </LazyViewportSection>
 
-      <TripsSection
-        externalFilter={selectedDestinationFilter}
-        onFilterChange={setSelectedDestinationFilter}
-      />
+      <LazyViewportSection id={SECTIONS.TRIPS} fallback={<TripsFallback />}>
+        <TripsSection
+          externalFilter={selectedDestinationFilter}
+          onFilterChange={setSelectedDestinationFilter}
+        />
+      </LazyViewportSection>
 
       <div className="content-visibility-auto">
+        <LazyViewportSection id="why-duck" fallback={<WhyDuckFallback />}>
         <WhyDuckSection />
+      </LazyViewportSection>
       </div>
 
       <div className="content-visibility-auto">
+        <LazyViewportSection id={SECTIONS.GROUPS} fallback={<GroupsBannerFallback />}>
         <GroupsBanner />
+      </LazyViewportSection>
       </div>
 
-      <div className="content-visibility-auto">
-        <Suspense fallback={<MapFallback />}>
-          <MapSection
-            onSelectDestination={onSelectDestination}
-          />
-        </Suspense>
-      </div>
+      <LazyViewportSection id="map" fallback={<MapFallback />}>
+        <MapSection onSelectDestination={onSelectDestination} />
+      </LazyViewportSection>
+
+      <LazyViewportSection id="reviews" fallback={<ReviewsFallback />}>
+        <ReviewsSection />
+      </LazyViewportSection>
+
+      <LazyViewportSection id="faq" fallback={<FAQFallback />}>
+        <FAQSection />
+      </LazyViewportSection>
 
       <div className="content-visibility-auto">
-        <Suspense fallback={<ReviewsFallback />}>
-          <ReviewsSection />
-        </Suspense>
-      </div>
-
-      <div className="content-visibility-auto">
-        <Suspense fallback={<FAQFallback />}>
-          <FAQSection />
-        </Suspense>
-      </div>
-
-      <div className="content-visibility-auto">
+        <LazyViewportSection id="final-cta" fallback={<FinalCtaFallback />}>
         <FinalCtaSection />
+      </LazyViewportSection>
       </div>
     </>
   );
@@ -440,31 +496,6 @@ export default function App() {
   const isPortalPage = pathname.startsWith('/portal/');
   const hideMainLayout = isAuthPage || isDashboardPage || isPortalPage;
 
-  // Idle prewarm for below-the-fold dynamic chunks
-  useEffect(() => {
-    const prewarm = () => {
-      import('../widgets/map/index.js');
-      import('../widgets/reviews/index.js');
-      import('../widgets/faq/index.js');
-    };
-
-    if ('requestIdleCallback' in window) {
-      const id = window.requestIdleCallback(prewarm, {
-        timeout: 2500,
-      });
-
-      return () => {
-        if ('cancelIdleCallback' in window) {
-          window.cancelIdleCallback(id);
-        }
-      };
-    } else {
-      const id = setTimeout(prewarm, 2000);
-
-      return () => clearTimeout(id);
-    }
-  }, []);
-
   const handleSelectDestination = (filterKey) => {
     setSelectedDestinationFilter(filterKey);
 
@@ -482,8 +513,8 @@ export default function App() {
   return (
     <div
       className={`font-body selection:bg-brand-yellow selection:text-brand-navy ${isAuthPage
-          ? 'h-screen max-h-screen overflow-hidden flex flex-col'
-          : 'min-h-screen flex flex-col'
+        ? 'h-screen max-h-screen overflow-hidden flex flex-col'
+        : 'min-h-screen flex flex-col'
         }`}
     >
       <ScrollManager />
@@ -508,15 +539,14 @@ export default function App() {
       <main
         id="main"
         role="main"
-        className={`flex-1 ${
-          isAuthPage
-            ? 'h-full max-h-screen overflow-hidden p-0 m-0'
-            : isPortalPage
-              ? 'p-0 m-0 min-h-screen'
-              : isDashboardPage
-                ? 'p-0 m-0'
-                : 'pt-[var(--header-offset)]'
-        } print:pt-0 print:m-0 print:p-0`}
+        className={`flex-1 ${isAuthPage
+          ? 'h-full max-h-screen overflow-hidden p-0 m-0'
+          : isPortalPage
+            ? 'p-0 m-0 min-h-screen'
+            : isDashboardPage
+              ? 'p-0 m-0'
+              : 'pt-[var(--header-offset)]'
+          } print:pt-0 print:m-0 print:p-0`}
       >
         <ErrorBoundary>
           <Routes>

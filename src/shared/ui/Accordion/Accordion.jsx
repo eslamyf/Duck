@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import DuckIcon from '../Icon/DuckIcon.jsx';
 
 export default function Accordion({
   items = [],
@@ -86,7 +85,7 @@ export default function Accordion({
                   }`}
                   aria-hidden="true"
                 >
-                  <FontAwesomeIcon icon={faPlus} className="w-3.5 h-3.5" />
+                  <DuckIcon icon="faPlus" className="w-3.5 h-3.5" />
                 </span>
               </button>
             </h3>

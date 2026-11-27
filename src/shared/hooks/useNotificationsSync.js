@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useBookingsSync } from './useBookingsSync.js';
-import { getCurrentUser } from '../../entities/user/api/authService.js';
+import { getCurrentUser } from '../../entities/user/api/authSession.js';
 import { useTranslation } from '../i18n/index.js';
 import {
   AUTH_UPDATED_EVENT,

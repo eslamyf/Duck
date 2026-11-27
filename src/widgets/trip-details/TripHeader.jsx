@@ -1,7 +1,6 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot, faWater } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ACTIVITIES } from '../trips/tripsData.js';
+import { DuckIcon } from '../../shared/ui/index.js';
 
 export default function TripHeader({ trip }) {
   const { t } = useTranslation();
@@ -9,7 +8,7 @@ export default function TripHeader({ trip }) {
   const destinationName = t(`destinations.items.${trip.destKey}.name`);
   const tripTitle = t(`trips.items.${trip.key}.title`);
   const activityName = t(`trips.activities.${trip.act}`);
-  const actIcon = ACTIVITIES[trip.act]?.faIcon || faWater;
+  const actIcon = ACTIVITIES[trip.act]?.faIcon || 'faWater';
 
   return (
     <header className="dh1">
@@ -21,12 +20,12 @@ export default function TripHeader({ trip }) {
       </h1>
       <p className="dsub">
         <span className="inline-flex items-center gap-1.5">
-          <FontAwesomeIcon icon={actIcon} className="text-brand-blue" aria-hidden="true" />
+          <DuckIcon icon={actIcon} className="text-brand-blue" aria-hidden="true" />
           <span>{activityName}</span>
         </span>
         {' · '}
         <span className="inline-flex items-center gap-1.5">
-          <FontAwesomeIcon icon={faLocationDot} className="text-brand-blue" aria-hidden="true" />
+          <DuckIcon icon="faLocationDot" className="text-brand-blue" aria-hidden="true" />
           <span>{destinationName}</span>
         </span>
         {' · '}

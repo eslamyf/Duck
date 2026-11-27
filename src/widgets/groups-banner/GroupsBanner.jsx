@@ -1,9 +1,7 @@
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers, faHandshake, faShieldHalved, faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES } from '../../shared/config/routes.js';
-import { Button } from '../../shared/ui/index.js';
+import { Button, DuckIcon } from '../../shared/ui/index.js';
 import bannerImg640 from '../../shared/assets/images/groups-banner-640w.webp';
 import bannerImg1200 from '../../shared/assets/images/groups-banner-1200w.webp';
 
@@ -84,15 +82,15 @@ export default function GroupsBanner() {
           {/* Perks Row */}
           <div className="flex flex-wrap justify-center gap-2 min-[901px]:gap-3 my-2 min-[901px]:my-3">
             <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md border border-white/25 rounded-full px-3.5 py-1.5 text-xs min-[901px]:text-sm font-bold text-white shadow-sm">
-              <FontAwesomeIcon icon={faUsers} className="text-brand-yellow text-sm" aria-hidden="true" />
+              <DuckIcon icon="faUsers" className="text-brand-yellow text-sm" aria-hidden="true" />
               <span>{t('groupsBanner.perk1')}</span>
             </div>
             <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md border border-white/25 rounded-full px-3.5 py-1.5 text-xs min-[901px]:text-sm font-bold text-white shadow-sm">
-              <FontAwesomeIcon icon={faHandshake} className="text-brand-yellow text-sm" aria-hidden="true" />
+              <DuckIcon icon="faHandshake" className="text-brand-yellow text-sm" aria-hidden="true" />
               <span>{t('groupsBanner.perk2')}</span>
             </div>
             <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md border border-white/25 rounded-full px-3.5 py-1.5 text-xs min-[901px]:text-sm font-bold text-white shadow-sm">
-              <FontAwesomeIcon icon={faShieldHalved} className="text-brand-yellow text-sm" aria-hidden="true" />
+              <DuckIcon icon="faShieldHalved" className="text-brand-yellow text-sm" aria-hidden="true" />
               <span>{t('groupsBanner.perk3')}</span>
             </div>
           </div>
@@ -106,7 +104,7 @@ export default function GroupsBanner() {
             size="lg"
             className="inline-flex items-center gap-2.5 font-extrabold text-base px-8 py-3.5 rounded-2xl shadow-[0_10px_28px_rgba(245,232,71,0.45)] hover:scale-102 transition-all cursor-pointer"
           >
-            <FontAwesomeIcon icon={faCalendarCheck} aria-hidden="true" />
+            <DuckIcon icon="faCalendarCheck" aria-hidden="true" />
             <span>{t('groupsBanner.cta')}</span>
           </Button>
         </div>

@@ -1,5 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import DuckIcon from '../Icon/DuckIcon.jsx';
 
 export default function Checkbox({
   label,
@@ -51,7 +50,7 @@ export default function Checkbox({
                 : 'bg-white border-brand-navy/25 hover:border-brand-blue'
             } peer-focus-visible:ring-2 peer-focus-visible:ring-brand-blue/30 peer-focus-visible:ring-offset-1`}
           >
-            {checked && <FontAwesomeIcon icon={faCheck} className="text-xs text-white" />}
+            {checked && <DuckIcon icon="faCheck" className="text-xs text-white" />}
           </div>
         </div>
 

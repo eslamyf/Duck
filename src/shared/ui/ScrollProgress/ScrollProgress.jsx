@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import DuckIcon from '../Icon/DuckIcon.jsx';
 import { useTranslation } from '../../i18n/index.js';
 
 export default function ScrollProgress() {
@@ -108,8 +107,8 @@ export default function ScrollProgress() {
           </svg>
 
           {/* Up Arrow Icon */}
-          <FontAwesomeIcon
-            icon={faArrowUp}
+          <DuckIcon
+            icon="faArrowUp"
             className="text-sm transition-transform duration-200 group-hover:-translate-y-0.5"
           />
         </button>

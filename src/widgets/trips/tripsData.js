@@ -1,5 +1,3 @@
-import { faWater, faCompass, faBicycle } from '@fortawesome/free-solid-svg-icons';
-
 import bot160 from '../../shared/assets/images/trips/botanical-garden-160w.webp';
 import bot480 from '../../shared/assets/images/trips/botanical-garden-480w.webp';
 import bot640 from '../../shared/assets/images/trips/botanical-garden-640w.webp';
@@ -56,9 +54,9 @@ import giza640 from '../../shared/assets/images/trips/giza-abbas-bridge-640w.web
 import giza960 from '../../shared/assets/images/trips/giza-abbas-bridge-960w.webp';
 
 export const ACTIVITIES = {
-  kayak: { id: 'kayak', faIcon: faWater },
-  sup: { id: 'sup', faIcon: faCompass },
-  waterbike: { id: 'waterbike', faIcon: faBicycle },
+  kayak: { id: 'kayak', faIcon: 'faWater' },
+  sup: { id: 'sup', faIcon: 'faCompass' },
+  waterbike: { id: 'waterbike', faIcon: 'faBicycle' },
 };
 
 export const DESTINATIONS_FILTER = [

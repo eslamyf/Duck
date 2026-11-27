@@ -1,10 +1,21 @@
-import { useEffect, useCallback, useSyncExternalStore } from 'react';
+import { useState, useEffect, useCallback, useSyncExternalStore } from 'react';
 import ar from './ar.json';
-import en from './en.json';
 import { I18nContext } from './I18nContext.js';
 
-const translations = { ar, en };
 const LANG_EVENT = 'duck:lang-change';
+let cachedEn = null;
+let loadingEnPromise = null;
+
+function loadEnDict() {
+  if (cachedEn) return Promise.resolve(cachedEn);
+  if (!loadingEnPromise) {
+    loadingEnPromise = import('./en.json').then((mod) => {
+      cachedEn = mod.default || mod;
+      return cachedEn;
+    });
+  }
+  return loadingEnPromise;
+}
 
 const subscribeLang = (callback) => {
   window.addEventListener(LANG_EVENT, callback);
@@ -28,17 +39,35 @@ const getClientLang = () => {
 const getServerLang = () => 'ar';
 
 export function I18nProvider({ children }) {
-  // Server and initial hydration both use getServerLang ('ar'), then React smoothly syncs getClientLang.
-  const lang = useSyncExternalStore(subscribeLang, getClientLang, getServerLang);
+  const storedLang = useSyncExternalStore(subscribeLang, getClientLang, getServerLang);
+  const [enDict, setEnDict] = useState(() => cachedEn);
+
+  useEffect(() => {
+    if (storedLang === 'en' && !enDict) {
+      loadEnDict().then((dict) => setEnDict(dict));
+    }
+  }, [storedLang, enDict]);
+
+  // Only render 'en' once en.json chunk has loaded, avoiding raw i18n keys during switch
+  const lang = storedLang === 'en' && enDict ? 'en' : 'ar';
 
   const setLanguage = useCallback((newLang) => {
-    if (newLang === 'ar' || newLang === 'en') {
+    if (newLang !== 'ar' && newLang !== 'en') return;
+    const apply = () => {
       try {
         localStorage.setItem('duck_lang', newLang);
         window.dispatchEvent(new Event(LANG_EVENT));
       } catch {
         // Safe fallback if localStorage is unavailable
       }
+    };
+    if (newLang === 'en' && !cachedEn) {
+      loadEnDict().then((dict) => {
+        setEnDict(dict);
+        apply();
+      });
+    } else {
+      apply();
     }
   }, []);
 
@@ -58,8 +87,9 @@ export function I18nProvider({ children }) {
     const params = isParamsObj ? paramsOrFallback : {};
     const fallback = typeof paramsOrFallback === 'string' ? paramsOrFallback : maybeFallback;
 
+    const dict = lang === 'en' && enDict ? enDict : ar;
     const keys = path.split('.');
-    let current = translations[lang];
+    let current = dict;
     for (const key of keys) {
       if (current && typeof current === 'object' && key in current) {
         current = current[key];
@@ -83,12 +113,11 @@ export function I18nProvider({ children }) {
         return '';
       });
     }
-
     return result;
-  }, [lang]);
+  }, [lang, enDict]);
 
   return (
-    <I18nContext.Provider value={{ lang, setLanguage, t }}>
+    <I18nContext.Provider value={{ lang, isArabic: lang === 'ar', setLanguage, t }}>
       {children}
     </I18nContext.Provider>
   );

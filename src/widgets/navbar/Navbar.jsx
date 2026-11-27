@@ -1,38 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import duckLogo280 from '../../shared/assets/icons/duck-logo-280w.webp';
 import duckLogo560 from '../../shared/assets/icons/duck-logo-560w.webp';
 
 import { useTranslation } from '../../shared/i18n/index.js';
-import { Button, Badge } from '../../shared/ui/index.js';
+import { Button, Badge, DuckIcon } from '../../shared/ui/index.js';
 import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
 import { getPortalPathForRole, ROLES } from '../../shared/config/rbac.js';
 
-import { getCurrentUser } from '../../entities/user/api/authService.js';
+import { getCurrentUser } from '../../entities/user/api/authSession.js';
 import { AUTH_UPDATED_EVENT } from '../../entities/notification/index.js';
 import { NotificationBell } from '../notifications/index.js';
-
-import {
-  faHouse,
-  faLocationDot,
-  faCompass,
-  faUsersLine,
-  faStar,
-  faCircleQuestion,
-  faUsers,
-  faMapLocationDot,
-  faLanguage,
-  faSun,
-  faBars,
-  faXmark,
-  faArrowRightToBracket,
-  faCalendarCheck,
-  faArrowLeft,
-  faArrowRight,
-  faGaugeHigh,
-} from '@fortawesome/free-solid-svg-icons';
 
 export default function Navbar({ onBookClick }) {
   const { lang, setLanguage, t } = useTranslation();
@@ -59,19 +38,35 @@ export default function Navbar({ onBookClick }) {
     return getCurrentUser();
   })();
 
-  // Fetch weather data for Aswan
+  // Defer non-critical weather fetch until idle so initial LCP/TBT stays zero-overhead
   useEffect(() => {
-    fetch(
-      'https://api.open-meteo.com/v1/forecast?latitude=24.09&longitude=32.9&current=temperature_2m'
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        if (data?.current?.temperature_2m !== undefined) {
-          const val = Math.round(data.current.temperature_2m);
-          setTemp(String(val));
-        }
-      })
-      .catch(() => { });
+    let cancelled = false;
+    const fetchWeather = () => {
+      fetch(
+        'https://api.open-meteo.com/v1/forecast?latitude=24.09&longitude=32.9&current=temperature_2m'
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (!cancelled && data?.current?.temperature_2m !== undefined) {
+            const val = Math.round(data.current.temperature_2m);
+            setTemp(String(val));
+          }
+        })
+        .catch(() => { });
+    };
+
+    if ('requestIdleCallback' in window) {
+      const id = window.requestIdleCallback(fetchWeather, { timeout: 3000 });
+      return () => {
+        cancelled = true;
+        if ('cancelIdleCallback' in window) window.cancelIdleCallback(id);
+      };
+    }
+    const timer = setTimeout(fetchWeather, 1800);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
   }, []);
 
   // Update active section based on scroll & hash (only when on home page)
@@ -152,49 +147,49 @@ export default function Navbar({ onBookClick }) {
     {
       to: sectionLink(SECTIONS.TOP),
       label: t('nav.home'),
-      icon: faHouse,
+      icon: 'faHouse',
       sectionId: SECTIONS.TOP,
     },
     {
       to: sectionLink(SECTIONS.DESTINATIONS),
       label: t('nav.destinations'),
-      icon: faLocationDot,
+      icon: 'faLocationDot',
       sectionId: SECTIONS.DESTINATIONS,
     },
     {
       to: tripsTarget,
       label: t('nav.trips'),
-      icon: faCompass,
+      icon: 'faCompass',
       sectionId: SECTIONS.TRIPS,
     },
     {
       to: ROUTES.GROUPS,
       label: t('nav.groups'),
-      icon: faUsersLine,
+      icon: 'faUsersLine',
       isGroups: true,
     },
     {
       to: sectionLink(SECTIONS.REVIEWS),
       label: t('nav.reviews'),
-      icon: faStar,
+      icon: 'faStar',
       sectionId: SECTIONS.REVIEWS,
     },
     {
       to: sectionLink(SECTIONS.FAQ),
       label: t('nav.faq'),
-      icon: faCircleQuestion,
+      icon: 'faCircleQuestion',
       sectionId: SECTIONS.FAQ,
     },
     {
       to: ROUTES.ABOUT,
       label: t('nav.about'),
-      icon: faUsers,
+      icon: 'faUsers',
       isAbout: true,
     },
     {
       to: sectionLink(SECTIONS.MAP),
       label: t('nav.exploreMapAria'),
-      icon: faMapLocationDot,
+      icon: 'faMapLocationDot',
       sectionId: SECTIONS.MAP,
     },
   ];
@@ -294,7 +289,7 @@ export default function Navbar({ onBookClick }) {
               aria-label={t('common.login')}
               className="inline-flex h-8 items-center gap-1.5 rounded-full border border-brand-navy/20 bg-surface-mist px-2.5 text-xs font-bold text-brand-navy transition hover:bg-brand-navy hover:text-brand-yellow"
             >
-              <FontAwesomeIcon icon={faArrowRightToBracket} className="text-brand-blue text-xs" />
+              <DuckIcon icon="faArrowRightToBracket" className="text-brand-blue text-xs" />
               <span>{t('common.login')}</span>
             </Link>
           )}
@@ -335,7 +330,7 @@ export default function Navbar({ onBookClick }) {
                 className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-brand-navy text-brand-yellow text-[9px]"
                 aria-hidden="true"
               >
-                <FontAwesomeIcon icon={faSun} />
+                <DuckIcon icon="faSun" />
               </span>
               <span>{t('common.aswan')}</span>
               {temp && (
@@ -356,11 +351,10 @@ export default function Navbar({ onBookClick }) {
                 <Link
                   key={link.to}
                   to={link.to}
-                  className={`relative whitespace-nowrap px-1 min-[1360px]:px-1.5 min-[1420px]:px-2 py-2 text-xs min-[1420px]:text-[13px] font-bold transition-colors duration-200 ${
-                    isActive
-                      ? 'text-brand-blue font-extrabold after:content-[""] after:absolute after:bottom-0 after:inset-x-1 after:h-[2.5px] after:rounded-full after:bg-brand-blue'
-                      : 'text-brand-navy hover:text-brand-blue'
-                  }`}
+                  className={`relative whitespace-nowrap px-1 min-[1360px]:px-1.5 min-[1420px]:px-2 py-2 text-xs min-[1420px]:text-[13px] font-bold transition-colors duration-200 ${isActive
+                    ? 'text-brand-blue font-extrabold after:content-[""] after:absolute after:bottom-0 after:inset-x-1 after:h-[2.5px] after:rounded-full after:bg-brand-blue'
+                    : 'text-brand-navy hover:text-brand-blue'
+                    }`}
                 >
                   {link.label}
                 </Link>
@@ -377,7 +371,7 @@ export default function Navbar({ onBookClick }) {
               aria-label={t('common.languageSwitch')}
               className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-brand-navy/15 bg-surface-mist px-2.5 min-[1360px]:px-3 text-xs font-bold text-brand-navy transition-colors hover:bg-brand-navy hover:text-brand-yellow cursor-pointer whitespace-nowrap"
             >
-              <FontAwesomeIcon icon={faLanguage} className="text-brand-blue text-sm shrink-0" aria-hidden="true" />
+              <DuckIcon icon="faLanguage" className="text-brand-blue text-sm shrink-0" aria-hidden="true" />
               <span>{t('common.languageSwitch')}</span>
             </button>
 
@@ -392,7 +386,7 @@ export default function Navbar({ onBookClick }) {
                 title={accountName}
                 className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-brand-navy bg-brand-navy px-3 min-[1360px]:px-3.5 text-xs font-bold text-brand-yellow shadow-sm transition hover:bg-brand-navy-legacy hover:text-brand-yellow whitespace-nowrap"
               >
-                <FontAwesomeIcon icon={faGaugeHigh} className="text-brand-yellow shrink-0" aria-hidden="true" />
+                <DuckIcon icon="faGaugeHigh" className="text-brand-yellow shrink-0" aria-hidden="true" />
                 <span>{dashboardLabel}</span>
               </Link>
             ) : (
@@ -434,7 +428,7 @@ export default function Navbar({ onBookClick }) {
               aria-label={t('common.languageSwitch')}
               className="hidden min-[901px]:inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-brand-navy/15 bg-surface-mist px-2.5 text-xs font-bold text-brand-navy transition-colors hover:bg-brand-navy hover:text-brand-yellow cursor-pointer whitespace-nowrap"
             >
-              <FontAwesomeIcon icon={faLanguage} className="text-brand-blue text-xs shrink-0" aria-hidden="true" />
+              <DuckIcon icon="faLanguage" className="text-brand-blue text-xs shrink-0" aria-hidden="true" />
               <span>{t('common.languageSwitch')}</span>
             </button>
 
@@ -448,7 +442,7 @@ export default function Navbar({ onBookClick }) {
               aria-label={t('nav.menuAria')}
               className="p-2 text-brand-navy text-xl rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue"
             >
-              <FontAwesomeIcon icon={isMobileOpen ? faXmark : faBars} />
+              <DuckIcon icon={isMobileOpen ? 'faXmark' : 'faBars'} />
             </button>
           </div>
         </nav>
@@ -459,135 +453,135 @@ export default function Navbar({ onBookClick }) {
             id="mobile-nav"
             className="min-[1200px]:hidden fixed inset-x-0 top-[53px] min-[901px]:top-[69px] bottom-0 z-[10000] bg-brand-navy text-white px-[6vw] py-4 pb-[calc(88px+env(safe-area-inset-bottom))] flex flex-col gap-1 overflow-y-auto shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200"
           >
-                {/* Mobile Top Controls */}
-                <div className="flex items-center justify-between gap-2 p-2 bg-white/8 border border-white/14 rounded-[14px] mb-2">
-                  <Button
-                    type="button"
-                    variant="chip"
-                    size="xs"
-                    icon={<FontAwesomeIcon icon={faLanguage} />}
-                    onClick={() => setLanguage(lang === 'ar' ? 'en' : 'ar')}
-                  >
-                    {t('common.languageSwitch')}
-                  </Button>
+            {/* Mobile Top Controls */}
+            <div className="flex items-center justify-between gap-2 p-2 bg-white/8 border border-white/14 rounded-[14px] mb-2">
+              <Button
+                type="button"
+                variant="chip"
+                size="xs"
+                icon={<DuckIcon icon="faLanguage" />}
+                onClick={() => setLanguage(lang === 'ar' ? 'en' : 'ar')}
+              >
+                {t('common.languageSwitch')}
+              </Button>
 
-                  <Badge
-                    as="span"
-                    variant="weather"
-                    size="sm"
-                    id="tmpMob"
-                    icon={
-                      <FontAwesomeIcon
-                        icon={faSun}
-                        className="text-brand-yellow"
-                      />
-                    }
-                    className="bg-transparent border-0 p-0 text-white gap-1"
-                  >
-                    <b className="text-brand-yellow font-bold">
-                      {t('common.aswan')}
-                    </b>
+              <Badge
+                as="span"
+                variant="weather"
+                size="sm"
+                id="tmpMob"
+                icon={
+                  <DuckIcon
+                    icon="faSun"
+                    className="text-brand-yellow"
+                  />
+                }
+                className="bg-transparent border-0 p-0 text-white gap-1"
+              >
+                <b className="text-brand-yellow font-bold">
+                  {t('common.aswan')}
+                </b>
 
-                    {temp && (
-                      <span>
-                        {temp}
-                        {t('common.tempSuffix')}
-                      </span>
-                    )}
-                  </Badge>
-                </div>
-
-                {/* Links */}
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.to}
-                    to={link.to}
-                    onClick={() => setIsMobileOpen(false)}
-                    className="flex items-center justify-between min-h-[50px] px-3 text-[16px] font-semibold border-b border-white/10 rounded-xl hover:bg-brand-yellow/12 hover:text-brand-yellow transition-colors"
-                  >
-                    <span className="inline-flex items-center gap-2.5">
-                      <FontAwesomeIcon
-                        icon={link.icon}
-                        className="w-5 text-center opacity-90"
-                      />
-                      {link.label}
-                    </span>
-
-                    <FontAwesomeIcon
-                      icon={isRtl ? faArrowLeft : faArrowRight}
-                      className="text-xs opacity-60"
-                    />
-                  </Link>
-                ))}
-
-
-
-                {/* Mobile Login / Dashboard Link */}
-                {currentUser ? (
-                  <Link
-                    to={dashboardPath}
-                    onClick={() => setIsMobileOpen(false)}
-                    className="mt-2 flex min-h-[48px] w-full items-center justify-between rounded-xl border border-brand-yellow/40 bg-brand-yellow/15 px-3.5 text-[15px] font-bold text-brand-yellow transition hover:bg-brand-yellow hover:text-brand-navy"
-                    aria-label={isRtl ? 'الذهاب إلى لوحة التحكم' : 'Go to Dashboard'}
-                    title={accountName}
-                  >
-                    <span className="inline-flex items-center gap-2.5">
-                      <FontAwesomeIcon
-                        icon={faGaugeHigh}
-                        className="w-5 text-center"
-                      />
-                      <span>{dashboardLabel}</span>
-                    </span>
-
-                    <FontAwesomeIcon
-                      icon={isRtl ? faArrowLeft : faArrowRight}
-                      className="text-xs opacity-75"
-                    />
-                  </Link>
-                ) : (
-                  <Link
-                    to={ROUTES.LOGIN}
-                    onClick={() => setIsMobileOpen(false)}
-                    className="mt-2 flex min-h-[48px] w-full items-center justify-between rounded-xl border border-white/16 bg-white/8 px-3.5 text-[15px] font-semibold text-white transition-colors hover:bg-brand-yellow/12 hover:text-brand-yellow"
-                  >
-                    <span className="inline-flex items-center gap-2.5">
-                      <FontAwesomeIcon
-                        icon={faArrowRightToBracket}
-                        className="w-5 text-center opacity-90"
-                      />
-                      {t('common.login')}
-                    </span>
-
-                    <FontAwesomeIcon
-                      icon={isRtl ? faArrowLeft : faArrowRight}
-                      className="text-xs opacity-60"
-                    />
-                  </Link>
+                {temp && (
+                  <span>
+                    {temp}
+                    {t('common.tempSuffix')}
+                  </span>
                 )}
+              </Badge>
+            </div>
 
-                {/* Mobile Primary CTA */}
-                <Button
-                  as={Link}
-                  to={ROUTES.BOOKING}
-                  variant="primary"
-                  size="md"
-                  fullWidth
-                  icon={<FontAwesomeIcon icon={faCalendarCheck} />}
-                  onClick={(e) => {
-                    setIsMobileOpen(false);
+            {/* Links */}
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                onClick={() => setIsMobileOpen(false)}
+                className="flex items-center justify-between min-h-[50px] px-3 text-[16px] font-semibold border-b border-white/10 rounded-xl hover:bg-brand-yellow/12 hover:text-brand-yellow transition-colors"
+              >
+                <span className="inline-flex items-center gap-2.5">
+                  <DuckIcon
+                    icon={link.icon}
+                    className="w-5 text-center opacity-90"
+                  />
+                  {link.label}
+                </span>
 
-                    if (onBookClick) {
-                      e.preventDefault();
-                      onBookClick();
-                    }
-                  }}
-                  className="mt-4 font-extrabold shadow-lg"
-                >
-                  {t('nav.bookTripNow')}
-                </Button>
-              </div>
+                <DuckIcon
+                  icon={isRtl ? 'faArrowLeft' : 'faArrowRight'}
+                  className="text-xs opacity-60"
+                />
+              </Link>
+            ))}
+
+
+
+            {/* Mobile Login / Dashboard Link */}
+            {currentUser ? (
+              <Link
+                to={dashboardPath}
+                onClick={() => setIsMobileOpen(false)}
+                className="mt-2 flex min-h-[48px] w-full items-center justify-between rounded-xl border border-brand-yellow/40 bg-brand-yellow/15 px-3.5 text-[15px] font-bold text-brand-yellow transition hover:bg-brand-yellow hover:text-brand-navy"
+                aria-label={isRtl ? 'الذهاب إلى لوحة التحكم' : 'Go to Dashboard'}
+                title={accountName}
+              >
+                <span className="inline-flex items-center gap-2.5">
+                  <DuckIcon
+                    icon="faGaugeHigh"
+                    className="w-5 text-center"
+                  />
+                  <span>{dashboardLabel}</span>
+                </span>
+
+                <DuckIcon
+                  icon={isRtl ? 'faArrowLeft' : 'faArrowRight'}
+                  className="text-xs opacity-75"
+                />
+              </Link>
+            ) : (
+              <Link
+                to={ROUTES.LOGIN}
+                onClick={() => setIsMobileOpen(false)}
+                className="mt-2 flex min-h-[48px] w-full items-center justify-between rounded-xl border border-white/16 bg-white/8 px-3.5 text-[15px] font-semibold text-white transition-colors hover:bg-brand-yellow/12 hover:text-brand-yellow"
+              >
+                <span className="inline-flex items-center gap-2.5">
+                  <DuckIcon
+                    icon="faArrowRightToBracket"
+                    className="w-5 text-center opacity-90"
+                  />
+                  {t('common.login')}
+                </span>
+
+                <DuckIcon
+                  icon={isRtl ? 'faArrowLeft' : 'faArrowRight'}
+                  className="text-xs opacity-60"
+                />
+              </Link>
             )}
-          </header>
-        </>
-        );
+
+            {/* Mobile Primary CTA */}
+            <Button
+              as={Link}
+              to={ROUTES.BOOKING}
+              variant="primary"
+              size="md"
+              fullWidth
+              icon={<DuckIcon icon="faCalendarCheck" />}
+              onClick={(e) => {
+                setIsMobileOpen(false);
+
+                if (onBookClick) {
+                  e.preventDefault();
+                  onBookClick();
+                }
+              }}
+              className="mt-4 font-extrabold shadow-lg"
+            >
+              {t('nav.bookTripNow')}
+            </Button>
+          </div>
+        )}
+      </header>
+    </>
+  );
 }

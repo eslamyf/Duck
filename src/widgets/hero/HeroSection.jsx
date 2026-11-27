@@ -1,14 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import heroVideoDesktop from '../../shared/assets/Videos/hero-v2.mp4';
 import heroVideoMobile from '../../shared/assets/Videos/hero-mobile.mp4';
 import heroPosterDesktop from '../../shared/assets/images/hero-poster-desktop.webp';
 import heroPosterMobile from '../../shared/assets/images/hero-poster-mobile.webp';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
-import { DuckManifesto } from '../../shared/ui/index.js';
+import { DuckManifesto, DuckIcon } from '../../shared/ui/index.js';
 
 export default function HeroSection() {
   const { lang, t } = useTranslation();
@@ -19,7 +17,7 @@ export default function HeroSection() {
   const sectionRef = useRef(null);
 
   const isRtl = lang === 'ar';
-  const ArrowIcon = isRtl ? faArrowLeft : faArrowRight;
+  const ArrowIcon = isRtl ? 'faArrowLeft' : 'faArrowRight';
 
   // Performance & Accessibility Guard:
   // Defer background video stream until idle and skip under reduced motion / slow network
@@ -208,7 +206,7 @@ export default function HeroSection() {
                 className="inline-flex items-center justify-center gap-2.5 min-h-[48px] min-[901px]:min-h-[52px] px-6 sm:px-7 rounded-full bg-brand-yellow text-brand-navy font-extrabold text-sm sm:text-base hover:bg-brand-yellow-hover hover:-translate-y-0.5 transition-all shadow-ocean active:translate-y-0"
               >
                 <span>{t('hero.ctaTrips')}</span>
-                <FontAwesomeIcon icon={ArrowIcon} className="text-sm" aria-hidden="true" />
+                <DuckIcon icon={ArrowIcon} className="text-sm" aria-hidden="true" />
               </Link>
 
               <Link

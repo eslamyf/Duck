@@ -1,36 +1,19 @@
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import duckLogo280 from '../../shared/assets/icons/duck-logo-280w.webp';
 import duckLogo560 from '../../shared/assets/icons/duck-logo-560w.webp';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
-import {
-  faFacebookF,
-  faInstagram,
-  faTiktok,
-  faWhatsapp,
-} from '@fortawesome/free-brands-svg-icons';
-import {
-  faLocationDot,
-  faCompass,
-  faBuilding,
-  faMapLocationDot,
-  faCircleQuestion,
-  faCircleInfo,
-  faEnvelope,
-  faCheck,
-  faCertificate,
-} from '@fortawesome/free-solid-svg-icons';
+import { DuckIcon } from '../../shared/ui/index.js';
 
 export default function Footer({ onDestinationClick }) {
   const { t } = useTranslation();
 
   const destinationItems = [
-    { id: 'aswan', label: t('footer.destAswan'), icon: faLocationDot },
-    { id: 'soheil', label: t('footer.destSoheil'), icon: faLocationDot },
-    { id: 'matrouh', label: t('footer.destMatrouh'), icon: faLocationDot },
-    { id: 'giza', label: t('footer.destGiza'), icon: faLocationDot },
-    { id: 'siwa', label: t('footer.destSiwa'), icon: faLocationDot },
+    { id: 'aswan', label: t('footer.destAswan'), icon: 'faLocationDot' },
+    { id: 'soheil', label: t('footer.destSoheil'), icon: 'faLocationDot' },
+    { id: 'matrouh', label: t('footer.destMatrouh'), icon: 'faLocationDot' },
+    { id: 'giza', label: t('footer.destGiza'), icon: 'faLocationDot' },
+    { id: 'siwa', label: t('footer.destSiwa'), icon: 'faLocationDot' },
   ];
 
   const buildWhatsAppUrl = (customText) => {
@@ -53,6 +36,8 @@ export default function Footer({ onDestinationClick }) {
               alt={t('common.brandName')}
               width={188}
               height={40}
+              loading="lazy"
+              decoding="async"
               className="h-10 min-[901px]:h-11 w-auto opacity-95 hover:opacity-100 transition-opacity object-contain"
             />
           </Link>
@@ -74,7 +59,7 @@ export default function Footer({ onDestinationClick }) {
               aria-label="Instagram"
               className="w-[38px] h-[38px] rounded-full bg-surface-mist text-brand-navy border border-brand-blue/20 flex items-center justify-center text-sm hover:bg-brand-navy hover:text-brand-yellow hover:border-brand-navy hover:-translate-y-0.5 transition-all duration-200"
             >
-              <FontAwesomeIcon icon={faInstagram} />
+              <DuckIcon icon="faInstagram" />
             </a>
             <a
               href="https://www.facebook.com/share/1AyX9yr91p/?mibextid=wwXIfr"
@@ -83,7 +68,7 @@ export default function Footer({ onDestinationClick }) {
               aria-label="Facebook"
               className="w-[38px] h-[38px] rounded-full bg-surface-mist text-brand-navy border border-brand-blue/20 flex items-center justify-center text-sm hover:bg-brand-navy hover:text-brand-yellow hover:border-brand-navy hover:-translate-y-0.5 transition-all duration-200"
             >
-              <FontAwesomeIcon icon={faFacebookF} />
+              <DuckIcon icon="faFacebookF" />
             </a>
             <a
               href="https://www.tiktok.com/@duckegy?_t=ZS-8yXR9sJsezl&_r=1"
@@ -92,7 +77,7 @@ export default function Footer({ onDestinationClick }) {
               aria-label="TikTok"
               className="w-[38px] h-[38px] rounded-full bg-surface-mist text-brand-navy border border-brand-blue/20 flex items-center justify-center text-sm hover:bg-brand-navy hover:text-brand-yellow hover:border-brand-navy hover:-translate-y-0.5 transition-all duration-200"
             >
-              <FontAwesomeIcon icon={faTiktok} />
+              <DuckIcon icon="faTiktok" />
             </a>
             <a
               href={buildWhatsAppUrl()}
@@ -101,7 +86,7 @@ export default function Footer({ onDestinationClick }) {
               aria-label="WhatsApp"
               className="w-[38px] h-[38px] rounded-full bg-surface-mist text-brand-navy border border-brand-blue/20 flex items-center justify-center text-sm hover:bg-brand-navy hover:text-brand-yellow hover:border-brand-navy hover:-translate-y-0.5 transition-all duration-200"
             >
-              <FontAwesomeIcon icon={faWhatsapp} />
+              <DuckIcon icon="faWhatsapp" />
             </a>
           </div>
         </div>
@@ -114,43 +99,43 @@ export default function Footer({ onDestinationClick }) {
           <ul className="grid gap-2.5 list-none p-0 m-0">
             <li>
               <Link to={sectionLink(SECTIONS.TOP)} className="text-brand-navy/80 text-sm font-medium inline-flex items-center gap-2 hover:text-brand-blue hover:-translate-x-1 rtl:hover:-translate-x-1 ltr:hover:translate-x-1 transition-all duration-200">
-                <FontAwesomeIcon icon={faCompass} className="text-xs text-brand-blue" />
+                <DuckIcon icon="faCompass" className="text-xs text-brand-blue" />
                 {t('nav.home')}
               </Link>
             </li>
             <li>
               <Link to={ROUTES.ABOUT} className="text-brand-navy/80 text-sm font-medium inline-flex items-center gap-2 hover:text-brand-blue hover:-translate-x-1 rtl:hover:-translate-x-1 ltr:hover:translate-x-1 transition-all duration-200">
-                <FontAwesomeIcon icon={faCircleInfo} className="text-xs text-brand-blue" />
+                <DuckIcon icon="faCircleInfo" className="text-xs text-brand-blue" />
                 {t('nav.about')}
               </Link>
             </li>
             <li>
               <Link to={ROUTES.ACTIVITIES} className="text-brand-navy/80 text-sm font-medium inline-flex items-center gap-2 hover:text-brand-blue hover:-translate-x-1 rtl:hover:-translate-x-1 ltr:hover:translate-x-1 transition-all duration-200">
-                <FontAwesomeIcon icon={faCompass} className="text-xs text-brand-blue" />
+                <DuckIcon icon="faCompass" className="text-xs text-brand-blue" />
                 {t('nav.trips')}
               </Link>
             </li>
             <li>
               <Link to={sectionLink(SECTIONS.DESTINATIONS)} className="text-brand-navy/80 text-sm font-medium inline-flex items-center gap-2 hover:text-brand-blue hover:-translate-x-1 rtl:hover:-translate-x-1 ltr:hover:translate-x-1 transition-all duration-200">
-                <FontAwesomeIcon icon={faLocationDot} className="text-xs text-brand-blue" />
+                <DuckIcon icon="faLocationDot" className="text-xs text-brand-blue" />
                 {t('nav.destinations')}
               </Link>
             </li>
             <li>
               <Link to={ROUTES.GROUPS} className="text-brand-navy/80 text-sm font-medium inline-flex items-center gap-2 hover:text-brand-blue hover:-translate-x-1 rtl:hover:-translate-x-1 ltr:hover:translate-x-1 transition-all duration-200">
-                <FontAwesomeIcon icon={faBuilding} className="text-xs text-brand-blue" />
+                <DuckIcon icon="faBuilding" className="text-xs text-brand-blue" />
                 {t('nav.groups')}
               </Link>
             </li>
             <li>
               <Link to={sectionLink(SECTIONS.FAQ)} className="text-brand-navy/80 text-sm font-medium inline-flex items-center gap-2 hover:text-brand-blue hover:-translate-x-1 rtl:hover:-translate-x-1 ltr:hover:translate-x-1 transition-all duration-200">
-                <FontAwesomeIcon icon={faCircleQuestion} className="text-xs text-brand-blue" />
+                <DuckIcon icon="faCircleQuestion" className="text-xs text-brand-blue" />
                 {t('nav.faq')}
               </Link>
             </li>
             <li>
               <Link to={sectionLink(SECTIONS.MAP)} className="text-brand-navy/80 text-sm font-medium inline-flex items-center gap-2 hover:text-brand-blue hover:-translate-x-1 rtl:hover:-translate-x-1 ltr:hover:translate-x-1 transition-all duration-200">
-                <FontAwesomeIcon icon={faMapLocationDot} className="text-xs text-brand-blue" />
+                <DuckIcon icon="faMapLocationDot" className="text-xs text-brand-blue" />
                 {t('nav.exploreMapAria')}
               </Link>
             </li>
@@ -161,7 +146,7 @@ export default function Footer({ onDestinationClick }) {
                 rel="noopener noreferrer"
                 className="text-brand-navy/80 text-sm font-medium inline-flex items-center gap-2 hover:text-brand-blue hover:-translate-x-1 rtl:hover:-translate-x-1 ltr:hover:translate-x-1 transition-all duration-200"
               >
-                <FontAwesomeIcon icon={faWhatsapp} className="text-xs text-brand-blue" />
+                <DuckIcon icon="faWhatsapp" className="text-xs text-brand-blue" />
                 {t('footer.contactUsLink')}
               </a>
             </li>
@@ -181,7 +166,7 @@ export default function Footer({ onDestinationClick }) {
                   onClick={() => onDestinationClick && onDestinationClick(loc.id)}
                   className="text-brand-navy/80 text-sm font-medium inline-flex items-center gap-2 hover:text-brand-blue hover:-translate-x-1 rtl:hover:-translate-x-1 ltr:hover:translate-x-1 transition-all duration-200"
                 >
-                  <FontAwesomeIcon icon={loc.icon} className="text-xs text-brand-blue" />
+                  <DuckIcon icon={loc.icon} className="text-xs text-brand-blue" />
                   {loc.label}
                 </Link>
               </li>
@@ -206,7 +191,7 @@ export default function Footer({ onDestinationClick }) {
               className="text-brand-navy text-sm font-bold inline-flex items-center gap-2.5 hover:text-brand-blue transition-colors"
             >
               <span className="w-7 h-7 rounded-full bg-surface-mist border border-brand-blue/20 flex items-center justify-center text-xs text-brand-blue">
-                <FontAwesomeIcon icon={faWhatsapp} />
+                <DuckIcon icon="faWhatsapp" />
               </span>
               <span dir="ltr">+20 155 006 1006</span>
             </a>
@@ -216,14 +201,14 @@ export default function Footer({ onDestinationClick }) {
               className="text-brand-navy text-sm font-semibold inline-flex items-center gap-2.5 hover:text-brand-blue transition-colors"
             >
               <span className="w-7 h-7 rounded-full bg-surface-mist border border-brand-blue/20 flex items-center justify-center text-xs text-brand-blue">
-                <FontAwesomeIcon icon={faEnvelope} />
+                <DuckIcon icon="faEnvelope" />
               </span>
               <span>duck.asw@gmail.com</span>
             </a>
 
             <div className="text-brand-navy/75 text-xs font-medium inline-flex items-center gap-2.5">
               <span className="w-7 h-7 rounded-full bg-surface-mist border border-brand-blue/20 flex items-center justify-center text-xs text-brand-blue">
-                <FontAwesomeIcon icon={faLocationDot} />
+                <DuckIcon icon="faLocationDot" />
               </span>
               <span>{t('footer.headquarters')}</span>
             </div>
@@ -232,11 +217,11 @@ export default function Footer({ onDestinationClick }) {
           {/* Trust Badges */}
           <div className="flex flex-col gap-2 mt-2">
             <div className="inline-flex items-center gap-2 text-xs font-bold text-brand-navy bg-surface-mist border border-brand-blue/20 rounded-full px-3 py-1.5 w-fit">
-              <FontAwesomeIcon icon={faCheck} className="text-brand-blue" />
+              <DuckIcon icon="faCheck" className="text-brand-blue" />
               <span>{t('footer.freeCancel')}</span>
             </div>
             <div className="inline-flex items-center gap-2 text-xs font-bold text-brand-navy bg-surface-mist border border-brand-blue/20 rounded-full px-3 py-1.5 w-fit">
-              <FontAwesomeIcon icon={faCertificate} className="text-brand-blue" />
+              <DuckIcon icon="faCertificate" className="text-brand-blue" />
               <span>{t('footer.certifiedVests')}</span>
             </div>
           </div>
@@ -279,7 +264,7 @@ export default function Footer({ onDestinationClick }) {
         title={t('footer.whatsappAction')}
         className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+5.75rem)] min-[901px]:bottom-6 end-4 min-[901px]:end-6 z-[90] flex h-12 w-12 sm:h-13 sm:w-13 items-center justify-center rounded-full bg-brand-whatsapp text-brand-navy shadow-[0_8px_24px_rgba(37,211,102,0.45)] transition-all duration-200 hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
       >
-        <FontAwesomeIcon icon={faWhatsapp} className="text-2xl" aria-hidden="true" />
+        <DuckIcon icon="faWhatsapp" className="text-2xl" aria-hidden="true" />
       </a>
     </footer>
   );

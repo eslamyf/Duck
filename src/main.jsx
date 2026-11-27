@@ -11,9 +11,13 @@ if (mainCss && mainCss.media !== 'all') {
   if (mainCss.sheet) {
     mainCss.media = 'all';
   } else {
-    mainCss.addEventListener('load', () => {
-      mainCss.media = 'all';
-    }, { once: true });
+    mainCss.addEventListener(
+      'load',
+      () => {
+        mainCss.media = 'all';
+      },
+      { once: true }
+    );
     // Safety fallback if load already fired right before listener attached
     setTimeout(() => {
       if (mainCss.media !== 'all') mainCss.media = 'all';
@@ -23,7 +27,8 @@ if (mainCss && mainCss.media !== 'all') {
 
 const container = document.getElementById('root');
 const currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
-const ssrPath = container?.dataset?.ssrPath?.replace(/\/+$/, '') || '';
+const rawSsrPath = container?.dataset?.ssrPath;
+const ssrPath = rawSsrPath !== undefined ? rawSsrPath.replace(/\/+$/, '') || '/' : '';
 
 const appTree = (
   <StrictMode>

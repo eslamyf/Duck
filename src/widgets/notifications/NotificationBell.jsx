@@ -1,37 +1,26 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faBell,
-  faCheckDouble,
-  faTicket,
-  faCalendarCheck,
-  faTriangleExclamation,
-  faUsers,
-  faArrowLeft,
-  faArrowRight,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
-import { useNotificationsSync } from '../../shared/hooks/index.js';
+import { useNotificationsSync } from '../../shared/hooks/useNotificationsSync.js';
 import { ROUTES } from '../../shared/config/routes.js';
 import { getPortalPathForRole } from '../../shared/config/rbac.js';
+import { DuckIcon } from '../../shared/ui/index.js';
 
 const KIND_STYLES = {
   ticket: {
-    icon: faTicket,
+    icon: 'faTicket',
     badgeClass: 'bg-brand-yellow/35 text-brand-navy',
   },
   alert: {
-    icon: faTriangleExclamation,
+    icon: 'faTriangleExclamation',
     badgeClass: 'bg-brand-error/12 text-brand-error',
   },
   group: {
-    icon: faUsers,
+    icon: 'faUsers',
     badgeClass: 'bg-brand-blue/15 text-brand-blue',
   },
   booking: {
-    icon: faCalendarCheck,
+    icon: 'faCalendarCheck',
     badgeClass: 'bg-surface-mist2 text-brand-blue',
   },
 };
@@ -120,7 +109,7 @@ export default function NotificationBell({ tone = 'light' }) {
         title={isArabic ? 'التنبيهات' : 'Notifications'}
         className={`relative inline-flex h-9 w-9 items-center justify-center rounded-full border text-sm transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue ${buttonToneClass}`}
       >
-        <FontAwesomeIcon icon={faBell} aria-hidden="true" />
+        <DuckIcon icon="faBell" aria-hidden="true" />
         <span className="sr-only">
           {isArabic ? 'التنبيهات والإشعارات' : 'Notifications'}
         </span>
@@ -144,7 +133,7 @@ export default function NotificationBell({ tone = 'light' }) {
           {/* Dropdown Header */}
           <div className="flex items-center justify-between gap-2 border-b border-brand-blue/15 bg-brand-navy px-4 py-3 text-white">
             <div className="flex items-center gap-2">
-              <FontAwesomeIcon icon={faBell} className="text-brand-yellow text-sm" />
+              <DuckIcon icon="faBell" className="text-brand-yellow text-sm" />
               <span className="font-heading text-sm font-extrabold">
                 {isArabic ? 'التنبيهات' : 'Notifications'}
               </span>
@@ -162,7 +151,7 @@ export default function NotificationBell({ tone = 'light' }) {
                   onClick={markAllAsRead}
                   className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-[11px] font-semibold text-brand-yellow transition hover:bg-white/20 cursor-pointer"
                 >
-                  <FontAwesomeIcon icon={faCheckDouble} className="text-[10px]" />
+                  <DuckIcon icon="faCheckDouble" className="text-[10px]" />
                   <span>{isArabic ? 'قراءة الكل' : 'Mark all'}</span>
                 </button>
               )}
@@ -173,7 +162,7 @@ export default function NotificationBell({ tone = 'light' }) {
                 aria-label={isArabic ? 'إغلاق' : 'Close'}
                 className="flex h-7 w-7 items-center justify-center rounded-full text-white/70 transition hover:bg-white/12 hover:text-white cursor-pointer"
               >
-                <FontAwesomeIcon icon={faXmark} className="text-xs" />
+                <DuckIcon icon="faXmark" className="text-xs" />
               </button>
             </div>
           </div>
@@ -182,8 +171,8 @@ export default function NotificationBell({ tone = 'light' }) {
           <div className="max-h-[340px] divide-y divide-brand-blue/10 overflow-y-auto">
             {notifications.length === 0 ? (
               <div className="px-5 py-8 text-center">
-                <FontAwesomeIcon
-                  icon={faBell}
+                <DuckIcon
+                  icon="faBell"
                   className="mb-2 text-2xl text-brand-navy/20"
                 />
                 <p className="text-xs font-bold text-brand-navy/65">
@@ -201,16 +190,15 @@ export default function NotificationBell({ tone = 'light' }) {
                     type="button"
                     role="menuitem"
                     onClick={() => handleSelectItem(item)}
-                    className={`flex w-full items-start gap-3 px-4 py-3 text-start transition-colors cursor-pointer ${
-                      item.isRead
-                        ? 'bg-surface-white hover:bg-surface-mist/70 opacity-80'
-                        : 'bg-surface-mist/90 hover:bg-surface-mist2/70'
-                    }`}
+                    className={`flex w-full items-start gap-3 px-4 py-3 text-start transition-colors cursor-pointer ${item.isRead
+                      ? 'bg-surface-white hover:bg-surface-mist/70 opacity-80'
+                      : 'bg-surface-mist/90 hover:bg-surface-mist2/70'
+                      }`}
                   >
                     <span
                       className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs font-bold ${style.badgeClass}`}
                     >
-                      <FontAwesomeIcon icon={style.icon} />
+                      <DuckIcon icon={style.icon} />
                     </span>
 
                     <span className="min-w-0 flex-1">
@@ -234,8 +222,8 @@ export default function NotificationBell({ tone = 'light' }) {
                       )}
                     </span>
 
-                    <FontAwesomeIcon
-                      icon={isArabic ? faArrowLeft : faArrowRight}
+                    <DuckIcon
+                      icon={isArabic ? 'faArrowLeft' : 'faArrowRight'}
                       className="mt-2 shrink-0 text-[10px] text-brand-navy/35"
                     />
                   </button>
@@ -267,8 +255,8 @@ export default function NotificationBell({ tone = 'light' }) {
                     ? 'احجز رحلتك الآن'
                     : 'Book Your Trip Now'}
               </span>
-              <FontAwesomeIcon
-                icon={isArabic ? faArrowLeft : faArrowRight}
+              <DuckIcon
+                icon={isArabic ? 'faArrowLeft' : 'faArrowRight'}
                 className="text-[11px]"
               />
             </button>

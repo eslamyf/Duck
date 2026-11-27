@@ -1,27 +1,17 @@
 import { useState, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faWater,
-  faCompass,
-  faBicycle,
-  faClock,
-  faArrowLeft,
-  faArrowRight,
-  faChevronLeft,
-  faChevronRight,
-} from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
-import { SectionHeader, Button, Card } from '../../shared/ui/index.js';
-import { useCustomScrollbar, useCMS } from '../../shared/hooks/index.js';
+import { SectionHeader, Button, Card, DuckIcon } from '../../shared/ui/index.js';
+import { useCustomScrollbar } from '../../shared/hooks/useCustomScrollbar.js';
+import { useCMS } from '../../shared/hooks/useCMS.js';
 import { TRIPS, DESTINATIONS_FILTER, ACTIVITIES } from './tripsData.js';
 import { ROUTES } from '../../shared/config/routes.js';
 import { trackSearch } from '../../shared/utils/analytics.js';
 
 const EXPERIENCE_TYPES = [
-  { key: 'kayak', label: 'KAYAK', slug: 'kayaking', icon: faWater },
-  { key: 'sup', label: 'SUP', slug: 'sup', icon: faCompass },
-  { key: 'waterbike', label: 'WATER BIKE', slug: 'water-bike', icon: faBicycle },
+  { key: 'kayak', label: 'KAYAK', slug: 'kayaking', icon: 'faWater' },
+  { key: 'sup', label: 'SUP', slug: 'sup', icon: 'faCompass' },
+  { key: 'waterbike', label: 'WATER BIKE', slug: 'water-bike', icon: 'faBicycle' },
 ];
 
 export default function TripsSection({ externalFilter, onFilterChange }) {
@@ -129,8 +119,8 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
   };
 
   const isRtl = lang === 'ar';
-  const PrevArrowIcon = isRtl ? faChevronRight : faChevronLeft;
-  const NextArrowIcon = isRtl ? faChevronLeft : faChevronRight;
+  const PrevArrowIcon = isRtl ? 'faChevronRight' : 'faChevronLeft';
+  const NextArrowIcon = isRtl ? 'faChevronLeft' : 'faChevronRight';
   const safeMobileIdx = Math.min(mobileActiveIdx, Math.max(0, visibleTrips.length - 1));
 
   return (
@@ -151,7 +141,7 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
         {/* Core Experience Types Strip (KAYAK · SUP · WATER BIKE) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 mb-6 min-[901px]:mb-8">
           {EXPERIENCE_TYPES.map((exp) => {
-            const ArrowIcon = lang === 'ar' ? faArrowLeft : faArrowRight;
+            const ArrowIcon = lang === 'ar' ? 'faArrowLeft' : 'faArrowRight';
             return (
               <Card
                 key={exp.key}
@@ -165,14 +155,14 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                   className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-navy text-brand-yellow text-base transition-colors group-hover:bg-brand-blue group-hover:text-white"
                   aria-hidden="true"
                 >
-                  <FontAwesomeIcon icon={exp.icon} />
+                  <DuckIcon icon={exp.icon} />
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-2 mb-1">
                     <span className="text-xs font-extrabold tracking-wider text-brand-navy" lang="en" dir="ltr">
                       {exp.label}
                     </span>
-                    <FontAwesomeIcon
+                    <DuckIcon
                       icon={ArrowIcon}
                       className="text-[11px] text-brand-blue opacity-70 transition-transform group-hover:translate-x-[-2px] ltr:group-hover:translate-x-[2px]"
                     />
@@ -210,11 +200,10 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                 type="button"
                 onClick={() => handleFilterSelect(dest.id)}
                 aria-pressed={isSelected}
-                className={`snap-start shrink-0 min-h-[44px] px-4 py-2 rounded-full font-bold text-xs min-[901px]:text-sm transition-all duration-200 cursor-pointer ${
-                  isSelected
-                    ? 'bg-brand-navy text-brand-yellow shadow-md border border-brand-navy'
-                    : 'bg-white text-brand-navy/85 border border-[rgba(20,125,159,0.22)] hover:bg-surface-mist hover:text-brand-navy'
-                }`}
+                className={`snap-start shrink-0 min-h-[44px] px-4 py-2 rounded-full font-bold text-xs min-[901px]:text-sm transition-all duration-200 cursor-pointer ${isSelected
+                  ? 'bg-brand-navy text-brand-yellow shadow-md border border-brand-navy'
+                  : 'bg-white text-brand-navy/85 border border-[rgba(20,125,159,0.22)] hover:bg-surface-mist hover:text-brand-navy'
+                  }`}
               >
                 <span>{label}</span>
                 <span className="ms-1.5 opacity-80 font-normal">({count})</span>
@@ -270,8 +259,8 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                   {t(`destinations.items.${selectedTrip.destKey}.name`)}
                 </span>
                 <span className="bg-white/20 backdrop-blur-md text-white px-3 py-1 rounded-full flex items-center gap-1.5">
-                  <FontAwesomeIcon
-                    icon={ACTIVITIES[selectedTrip.act]?.faIcon || faWater}
+                  <DuckIcon
+                    icon={ACTIVITIES[selectedTrip.act]?.faIcon || 'faWater'}
                     className="text-brand-yellow"
                     aria-hidden="true"
                   />
@@ -398,11 +387,10 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                     type="button"
                     onClick={() => setActiveTripId(trip.id)}
                     aria-pressed={isTripActive}
-                    className={`grid grid-cols-[26px_64px_1fr_auto] gap-3 items-center p-3 rounded-2xl border text-start cursor-pointer transition-all duration-200 ${
-                      isTripActive
-                        ? 'bg-brand-navy text-white border-brand-navy shadow-lg -translate-y-0.5'
-                        : 'bg-white text-brand-navy border-[rgba(20,125,159,0.14)] hover:bg-surface-mist hover:shadow-sm'
-                    }`}
+                    className={`grid grid-cols-[26px_64px_1fr_auto] gap-3 items-center p-3 rounded-2xl border text-start cursor-pointer transition-all duration-200 ${isTripActive
+                      ? 'bg-brand-navy text-white border-brand-navy shadow-lg -translate-y-0.5'
+                      : 'bg-white text-brand-navy border-[rgba(20,125,159,0.14)] hover:bg-surface-mist hover:shadow-sm'
+                      }`}
                   >
                     {/* Index Number */}
                     <span className={`text-xs font-bold ${isTripActive ? 'text-white/80' : 'text-brand-navy/60'}`}>
@@ -465,9 +453,8 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
             <div
               ref={trackRef}
               onPointerDown={handleTrackPointerDown}
-              className={`relative w-2 h-full rounded-full bg-[rgba(20,125,159,0.14)] touch-none cursor-pointer transition-opacity duration-200 select-none ${
-                isHidden ? 'opacity-0 pointer-events-none' : 'opacity-100'
-              }`}
+              className={`relative w-2 h-full rounded-full bg-[rgba(20,125,159,0.14)] touch-none cursor-pointer transition-opacity duration-200 select-none ${isHidden ? 'opacity-0 pointer-events-none' : 'opacity-100'
+                }`}
               aria-hidden="true"
             >
               {/* Custom Scrollbar Thumb: vertical teal-to-navy gradient with 2px white ring & floating shadow */}
@@ -480,9 +467,8 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                 style={{
                   height: `${thumbHeight}px`,
                 }}
-                className={`absolute top-0 start-0 w-2 rounded-full bg-gradient-to-b from-[#147D9F] to-[#0C1226] shadow-[0_0_0_2px_#ffffff,0_4px_10px_rgba(12,18,38,0.25)] select-none will-change-transform touch-none ${
-                  isDragging ? 'cursor-grabbing' : 'cursor-grab'
-                }`}
+                className={`absolute top-0 start-0 w-2 rounded-full bg-gradient-to-b from-[#147D9F] to-[#0C1226] shadow-[0_0_0_2px_#ffffff,0_4px_10px_rgba(12,18,38,0.25)] select-none will-change-transform touch-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'
+                  }`}
               >
                 {/* 4x4px Yellow Dot in center, 6px from top */}
                 <span
@@ -505,7 +491,7 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                 aria-label={t('nav.prevSlide')}
                 className="w-9 h-9 rounded-full border border-brand-blue/25 bg-surface-white text-brand-navy flex items-center justify-center shadow-card transition-all hover:bg-brand-navy hover:text-brand-yellow hover:border-brand-navy disabled:opacity-35 disabled:pointer-events-none cursor-pointer"
               >
-                <FontAwesomeIcon icon={PrevArrowIcon} className="text-xs" aria-hidden="true" />
+                <DuckIcon icon={PrevArrowIcon} className="text-xs" aria-hidden="true" />
               </button>
 
               <button
@@ -515,7 +501,7 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                 aria-label={t('nav.nextSlide')}
                 className="w-9 h-9 rounded-full border border-brand-blue/25 bg-surface-white text-brand-navy flex items-center justify-center shadow-card transition-all hover:bg-brand-navy hover:text-brand-yellow hover:border-brand-navy disabled:opacity-35 disabled:pointer-events-none cursor-pointer"
               >
-                <FontAwesomeIcon icon={NextArrowIcon} className="text-xs" aria-hidden="true" />
+                <DuckIcon icon={NextArrowIcon} className="text-xs" aria-hidden="true" />
               </button>
             </div>
           )}
@@ -587,7 +573,7 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                       {/* Meta tags */}
                       <div className="flex items-center gap-2 flex-wrap text-xs">
                         <span className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full text-white">
-                          <FontAwesomeIcon icon={faClock} className="text-brand-yellow text-[10px]" aria-hidden="true" />
+                          <DuckIcon icon="faClock" className="text-brand-yellow text-[10px]" aria-hidden="true" />
                           <span>{t(`trips.durations.${trip.durKey}`)}</span>
                         </span>
                         {trip.act === 'waterbike' ? (
@@ -654,11 +640,10 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                       className="grid place-items-center min-w-7 h-7 p-1 cursor-pointer"
                     >
                       <span
-                        className={`block h-2 rounded-full transition-all duration-300 ${
-                          safeMobileIdx === idx
-                            ? 'w-6 bg-brand-navy'
-                            : 'w-2 bg-brand-blue/30 hover:bg-brand-blue/60'
-                        }`}
+                        className={`block h-2 rounded-full transition-all duration-300 ${safeMobileIdx === idx
+                          ? 'w-6 bg-brand-navy'
+                          : 'w-2 bg-brand-blue/30 hover:bg-brand-blue/60'
+                          }`}
                       />
                     </button>
                   ))}

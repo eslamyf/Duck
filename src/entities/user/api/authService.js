@@ -1,10 +1,16 @@
 import { ROLES } from '../model/roles.js';
 import { authenticateDemoAccount } from '../../../shared/config/demoAccounts.js';
 import { notifyAuthUpdated } from '../../notification/index.js';
+import {
+    CURRENT_USER_KEY,
+    SESSION_USER_KEY,
+    getCurrentUser,
+    logoutUser,
+} from './authSession.js';
+
+export { getCurrentUser, logoutUser };
 
 const USERS_KEY = 'duck_users';
-const CURRENT_USER_KEY = 'duck_current_user';
-const SESSION_USER_KEY = 'duck_session_user';
 
 /**
  * Get users from localStorage
@@ -282,38 +288,6 @@ export async function loginUser({
     notifyAuthUpdated();
 
     return safeUser;
-}
-
-/**
- * Get currently logged-in user
- */
-export function getCurrentUser() {
-    try {
-        const persistentUser = localStorage.getItem(
-            CURRENT_USER_KEY
-        );
-
-        const sessionUser = sessionStorage.getItem(
-            SESSION_USER_KEY
-        );
-
-        const storedUser = persistentUser || sessionUser;
-
-        return storedUser
-            ? JSON.parse(storedUser)
-            : null;
-    } catch {
-        return null;
-    }
-}
-
-/**
- * Logout current user
- */
-export function logoutUser() {
-    localStorage.removeItem(CURRENT_USER_KEY);
-    sessionStorage.removeItem(SESSION_USER_KEY);
-    notifyAuthUpdated();
 }
 
 /**

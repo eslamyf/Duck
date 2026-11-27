@@ -1,21 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faXmark,
-  faTicket,
-  faHourglassHalf,
-  faChevronUp,
-  faChevronDown,
-  faCalendarDay,
-  faCopy,
-  faCheck,
-  faArrowUpRightFromSquare,
-  faMoneyBillWave,
-} from '@fortawesome/free-solid-svg-icons';
-import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
-import { useNotificationsSync } from '../../shared/hooks/index.js';
+import { DuckIcon } from '../../shared/ui/index.js';
+import { useNotificationsSync } from '../../shared/hooks/useNotificationsSync.js';
 import { ROUTES } from '../../shared/config/routes.js';
 import { CONTACT, buildWhatsAppUrl } from '../../shared/config/constants.js';
 import {
@@ -122,7 +109,7 @@ export default function PendingBookingPopup() {
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500" />
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-0.5 text-[11px] font-extrabold text-amber-800 border border-amber-200">
-                <FontAwesomeIcon icon={faHourglassHalf} className="text-[10px]" />
+                <DuckIcon icon="faHourglassHalf" className="text-[10px]" />
                 <span>{t('booking.pendingPopup.statusUnconfirmed')}</span>
               </span>
             </div>
@@ -134,7 +121,7 @@ export default function PendingBookingPopup() {
               aria-label={t('booking.pendingPopup.hideDetails')}
               title={t('booking.pendingPopup.hideDetails')}
             >
-              <FontAwesomeIcon icon={faXmark} className="text-xs" />
+              <DuckIcon icon="faXmark" className="text-xs" />
             </button>
           </div>
 
@@ -143,7 +130,7 @@ export default function PendingBookingPopup() {
             {/* Reference & Copy */}
             <div className="flex items-center justify-between bg-surface-mist/60 px-3 py-2 rounded-xl border border-brand-blue/10">
               <div className="flex items-center gap-1.5 text-brand-navy/70">
-                <FontAwesomeIcon icon={faTicket} className="text-brand-blue" />
+                <DuckIcon icon="faTicket" className="text-brand-blue" />
                 <span className="font-semibold">{t('booking.pendingPopup.bookingRef')}:</span>
               </div>
               <button
@@ -153,8 +140,8 @@ export default function PendingBookingPopup() {
                 title={t('booking.pendingPopup.copied')}
               >
                 <bdi dir="ltr">{pendingBooking.ref}</bdi>
-                <FontAwesomeIcon
-                  icon={copied ? faCheck : faCopy}
+                <DuckIcon
+                  icon={copied ? 'faCheck' : 'faCopy'}
                   className={copied ? 'text-green-600' : 'text-brand-navy/50'}
                 />
               </button>
@@ -174,7 +161,7 @@ export default function PendingBookingPopup() {
             {(bookingDate || bookingTime) && (
               <div className="flex items-center justify-between px-1">
                 <span className="text-brand-navy/70 font-semibold flex items-center gap-1">
-                  <FontAwesomeIcon icon={faCalendarDay} className="text-brand-blue/70 text-[11px]" />
+                  <DuckIcon icon="faCalendarDay" className="text-brand-blue/70 text-[11px]" />
                   <span>{t('booking.pendingPopup.dateAndTime')}:</span>
                 </span>
                 <span className="font-bold text-brand-navy">
@@ -187,7 +174,7 @@ export default function PendingBookingPopup() {
             {amountDue ? (
               <div className="flex items-center justify-between px-1 pt-1 border-t border-brand-navy/8">
                 <span className="text-brand-navy/70 font-semibold flex items-center gap-1">
-                  <FontAwesomeIcon icon={faMoneyBillWave} className="text-brand-blue/70 text-[11px]" />
+                  <DuckIcon icon="faMoneyBillWave" className="text-brand-blue/70 text-[11px]" />
                   <span>{t('booking.pendingPopup.amountDue')}:</span>
                 </span>
                 <span className="text-sm font-black text-brand-navy">
@@ -211,7 +198,7 @@ export default function PendingBookingPopup() {
               onClick={markPendingReceiptSent}
               className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-brand-whatsapp px-3.5 py-2.5 text-xs font-black text-brand-navy shadow-xs hover:brightness-105 transition-all text-center"
             >
-              <FontAwesomeIcon icon={faWhatsapp} className="text-sm" />
+              <DuckIcon icon="faWhatsapp" className="text-sm" />
               <span>{t('booking.pendingPopup.confirmWhatsAppBtn')}</span>
             </a>
 
@@ -221,7 +208,7 @@ export default function PendingBookingPopup() {
               className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-brand-navy/20 bg-surface-white px-3 py-2 text-xs font-bold text-brand-navy hover:bg-brand-navy hover:text-white transition-colors cursor-pointer"
             >
               <span>{t('booking.pendingPopup.viewInvoice')}</span>
-              <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[10px]" />
+              <DuckIcon icon="faArrowUpRightFromSquare" className="text-[10px]" />
             </button>
           </div>
         </div>
@@ -237,7 +224,7 @@ export default function PendingBookingPopup() {
           className="group flex min-w-0 items-center gap-1.5 sm:gap-2 text-start cursor-pointer focus-visible:outline-none"
         >
           <span className="relative flex h-6 w-6 sm:h-7 sm:w-7 shrink-0 items-center justify-center rounded-full bg-brand-yellow text-xs text-brand-navy shadow-xs transition-transform group-hover:scale-105">
-            <FontAwesomeIcon icon={faTicket} />
+            <DuckIcon icon="faTicket" />
             <span className="absolute -top-0.5 -end-0.5 h-2 w-2 rounded-full bg-amber-500 ring-2 ring-white animate-pulse" />
           </span>
 
@@ -254,7 +241,7 @@ export default function PendingBookingPopup() {
           </span>
 
           <span className="ms-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-surface-mist text-[9px] text-brand-navy/60 group-hover:bg-brand-navy group-hover:text-white transition-colors">
-            <FontAwesomeIcon icon={isExpanded ? faChevronDown : faChevronUp} />
+            <DuckIcon icon={isExpanded ? 'faChevronDown' : 'faChevronUp'} />
           </span>
         </button>
 
@@ -269,7 +256,7 @@ export default function PendingBookingPopup() {
             aria-label={t('booking.pendingPopup.confirmWhatsAppBtn')}
             className="hidden sm:flex h-6 w-6 items-center justify-center rounded-full bg-brand-whatsapp text-[11px] text-brand-navy shadow-xs transition-transform hover:scale-105"
           >
-            <FontAwesomeIcon icon={faWhatsapp} />
+            <DuckIcon icon="faWhatsapp" />
           </a>
 
           <button
@@ -279,7 +266,7 @@ export default function PendingBookingPopup() {
             aria-label={t('booking.pendingPopup.dismiss')}
             className="flex h-6 w-6 items-center justify-center rounded-full text-[11px] text-brand-navy/55 transition-colors hover:bg-surface-mist2 hover:text-brand-navy cursor-pointer"
           >
-            <FontAwesomeIcon icon={faXmark} />
+            <DuckIcon icon="faXmark" />
           </button>
         </div>
       </div>
