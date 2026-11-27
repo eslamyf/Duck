@@ -144,7 +144,7 @@ export default function Footer({ onDestinationClick }) {
                 to={ROUTES.CONTACT}
                 className="text-brand-navy/80 text-sm font-medium inline-flex items-center gap-2 hover:text-brand-blue hover:-translate-x-1 rtl:hover:-translate-x-1 ltr:hover:translate-x-1 transition-all duration-200"
               >
-                <DuckIcon icon="faHeadset" className="text-xs text-brand-blue" />
+                <DuckIcon icon="faEnvelope" className="text-xs text-brand-blue" />
                 {t('footer.contactUsLink')}
               </Link>
             </li>

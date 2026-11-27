@@ -75,7 +75,7 @@ export default function ContactPage() {
       accent: 'bg-brand-whatsapp/15 text-emerald-700',
     },
     {
-      icon: 'faPhone',
+      icon: 'faWhatsapp',
       title: t('contactPage.channels.phoneTitle'),
       value: '+20 155 006 1006',
       hint: t('contactPage.channels.phoneHint'),
@@ -117,7 +117,7 @@ export default function ContactPage() {
 
         <div className="relative z-10 mx-auto max-w-5xl text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-brand-yellow/35 bg-brand-yellow/12 px-4 py-1.5 text-xs font-extrabold tracking-wide text-brand-yellow mb-4">
-            <DuckIcon icon="faHeadset" />
+            <DuckIcon icon="faEnvelope" />
             <span>{t('contactPage.eyebrow')}</span>
           </span>
 

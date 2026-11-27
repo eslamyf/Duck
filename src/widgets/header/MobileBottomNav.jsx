@@ -27,11 +27,18 @@ export default function MobileBottomNav() {
         return;
       }
 
+      const scrollBottom = window.innerHeight + window.scrollY;
+      const totalHeight = document.documentElement.scrollHeight;
+      if (scrollBottom >= totalHeight - 150) {
+        setActiveSection(SECTIONS.FAQ);
+        return;
+      }
+
       const sectionIds = [
-        SECTIONS.LOCATIONS,
         SECTIONS.TRIPS,
-        SECTIONS.MAP,
+        SECTIONS.LOCATIONS,
         SECTIONS.REVIEWS,
+        SECTIONS.MAP,
         SECTIONS.FAQ,
       ];
 
@@ -42,7 +49,7 @@ export default function MobileBottomNav() {
         const el = document.getElementById(id);
         if (el) {
           const rect = el.getBoundingClientRect();
-          if (rect.top <= offset) {
+          if (rect.top <= offset && rect.bottom > 80) {
             current = id;
           }
         }
@@ -70,14 +77,10 @@ export default function MobileBottomNav() {
   }, [isMoreOpen]);
 
   const isHomeActive =
-    location.pathname === ROUTES.HOME &&
-    activeSection !== SECTIONS.TRIPS &&
-    activeSection !== SECTIONS.LOCATIONS;
+    location.pathname === ROUTES.HOME && activeSection === SECTIONS.TOP;
 
   const isExperiencesActive =
     (location.pathname === ROUTES.HOME && activeSection === SECTIONS.TRIPS) ||
-    location.pathname === ROUTES.ACTIVITIES ||
-    location.pathname.startsWith(`${ROUTES.ACTIVITIES}/`) ||
     location.pathname.startsWith('/trips/');
 
   const isDestinationsActive =
@@ -90,38 +93,52 @@ export default function MobileBottomNav() {
       to: ROUTES.ACTIVITIES,
       label: t('nav.activities'),
       icon: 'faCompass',
+      isActive:
+        location.pathname === ROUTES.ACTIVITIES ||
+        location.pathname.startsWith(`${ROUTES.ACTIVITIES}/`),
     },
     {
       to: sectionLink(SECTIONS.REVIEWS),
       label: t('nav.reviews'),
       icon: 'faStar',
+      isActive:
+        location.pathname === ROUTES.HOME && activeSection === SECTIONS.REVIEWS,
     },
     {
       to: sectionLink(SECTIONS.MAP),
       label: t('nav.exploreMapAria'),
       icon: 'faMapLocationDot',
+      isActive:
+        location.pathname === ROUTES.HOME && activeSection === SECTIONS.MAP,
     },
     {
       to: ROUTES.GROUPS,
       label: t('nav.groups'),
       icon: 'faUsersLine',
+      isActive: location.pathname === ROUTES.GROUPS,
     },
     {
       to: sectionLink(SECTIONS.FAQ),
       label: t('nav.faq'),
       icon: 'faCircleQuestion',
+      isActive:
+        location.pathname === ROUTES.HOME && activeSection === SECTIONS.FAQ,
     },
     {
       to: ROUTES.ABOUT,
       label: t('nav.about'),
       icon: 'faUsers',
+      isActive: location.pathname === ROUTES.ABOUT,
     },
     {
       to: ROUTES.CONTACT,
       label: t('nav.contact'),
-      icon: 'faHeadset',
+      icon: 'faEnvelope',
+      isActive: location.pathname === ROUTES.CONTACT,
     },
   ];
+
+  const isMoreTabActive = isMoreOpen || moreLinks.some((item) => item.isActive);
 
   const tabClass = (active) =>
     `flex flex-col items-center justify-center gap-1 h-full pt-1.5 pb-1 text-[11px] transition-colors ${
@@ -168,13 +185,13 @@ export default function MobileBottomNav() {
             className="flex flex-col items-center justify-end pb-1 group focus-visible:outline-none"
           >
             <span
-              className={`flex h-[58px] w-[58px] -translate-y-3.5 items-center justify-center rounded-full border-4 border-surface-white bg-brand-yellow text-brand-navy shadow-soft transition-transform group-active:scale-95 ${
+              className={`flex h-[46px] w-[46px] -translate-y-2 items-center justify-center rounded-full border-4 border-surface-white bg-brand-yellow text-brand-navy shadow-soft transition-transform group-active:scale-95 ${
                 isBookingActive ? 'ring-2 ring-brand-navy' : ''
               }`}
             >
-              <DuckIcon icon="faCalendarCheck" className="text-xl" aria-hidden="true" />
+              <DuckIcon icon="faCalendarCheck" className="text-lg" aria-hidden="true" />
             </span>
-            <span className="-mt-3 text-[11px] font-extrabold text-brand-navy whitespace-nowrap">
+            <span className="-mt-1 text-[11px] font-extrabold text-brand-navy whitespace-nowrap leading-none">
               {t('nav.bookNowShort')}
             </span>
           </Link>
@@ -195,7 +212,7 @@ export default function MobileBottomNav() {
             onClick={() => setMoreRouteKey((prev) => (prev === routeKey ? null : routeKey))}
             aria-expanded={isMoreOpen}
             aria-haspopup="dialog"
-            className={`${tabClass(isMoreOpen)} cursor-pointer`}
+            className={`${tabClass(isMoreTabActive)} cursor-pointer`}
           >
             <DuckIcon icon={isMoreOpen ? 'faXmark' : 'faBars'} className="text-[17px]" aria-hidden="true" />
             <span className="truncate max-w-full px-0.5">{t('nav.more')}</span>
@@ -246,16 +263,29 @@ export default function MobileBottomNav() {
                   key={item.to}
                   to={item.to}
                   onClick={() => setMoreRouteKey(null)}
-                  className="flex items-center justify-between min-h-[46px] px-3.5 py-2.5 rounded-xl border border-brand-blue/10 bg-surface-mist/70 hover:bg-surface-mist2 text-sm font-bold text-brand-navy transition-colors"
+                  className={`flex items-center justify-between min-h-[46px] px-3.5 py-2.5 rounded-xl border text-sm font-bold transition-colors ${
+                    item.isActive
+                      ? 'border-brand-blue bg-brand-blue/10 text-brand-blue'
+                      : 'border-brand-blue/10 bg-surface-mist/70 hover:bg-surface-mist2 text-brand-navy'
+                  }`}
                 >
                   <span className="inline-flex items-center gap-3">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-navy text-brand-yellow text-xs">
+                    <span
+                      className={`flex h-8 w-8 items-center justify-center rounded-lg text-xs ${
+                        item.isActive
+                          ? 'bg-brand-blue text-white'
+                          : 'bg-brand-navy text-brand-yellow'
+                      }`}
+                    >
                       <DuckIcon icon={item.icon} />
                     </span>
                     <span>{item.label}</span>
                   </span>
 
-                  <DuckIcon icon={ArrowIcon} className="text-xs text-brand-navy/45" />
+                  <DuckIcon
+                    icon={ArrowIcon}
+                    className={`text-xs ${item.isActive ? 'text-brand-blue' : 'text-brand-navy/45'}`}
+                  />
                 </Link>
               ))}
             </div>
