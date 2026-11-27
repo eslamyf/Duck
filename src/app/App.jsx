@@ -27,6 +27,7 @@ import ErrorBoundary from '../shared/ui/ErrorBoundary/index.js';
 import ScrollProgress from '../shared/ui/ScrollProgress/index.js';
 
 import { trackPageView } from '../shared/utils/analytics.js';
+import { applyRouteSeo } from '../shared/utils/seo.js';
 const PendingBookingPopup = lazy(
   () => import('../widgets/booking/PendingBookingPopup.jsx')
 );
@@ -354,74 +355,243 @@ function LegacyHashRedirect() {
   return null;
 }
 
-// Page Title Manager
+const ACTIVITY_SLUG_TO_I18N = {
+  kayaking: 'kayak',
+  'water-bike': 'water-bike',
+  sup: 'sup',
+  'nile-tours': 'nile-trips',
+};
+
+const HOME_ALIAS_PATHS = new Set([
+  ROUTES.HOME,
+  '/destinations',
+  '/locations',
+  '/trips',
+  '/reviews',
+  '/faq',
+  '/map',
+  '/contact',
+  '/experiences',
+]);
+
+// Page Title, Canonical & Meta Manager
 function TitleManager() {
   const { pathname, hash } = useLocation();
   const { t, lang } = useTranslation();
   const isArabic = lang === 'ar';
 
   useEffect(() => {
+    const brand = t('common.brandName');
+    const normalizedPath = pathname === '/' ? '/' : pathname.replace(/\/+$/, '');
     const isInvalidHomeHash =
-      pathname === ROUTES.HOME &&
+      normalizedPath === ROUTES.HOME &&
       hash &&
       !hash.startsWith('#/') &&
       !isValidSection(hash);
 
     if (isInvalidHomeHash) {
-      document.title = `${isArabic ? 'الصفحة غير موجودة (404)' : 'Page Not Found (404)'} | ${t('common.brandName')}`;
-    } else if (pathname === ROUTES.LOGIN || pathname === '/login') {
-      document.title = `${t('auth.login.metaTitle')} | ${t('common.brandName')}`;
+      applyRouteSeo({
+        title: `${isArabic ? 'الصفحة غير موجودة (404)' : 'Page Not Found (404)'} | ${brand}`,
+        description: t('hero.desc'),
+        canonicalPath: '/',
+        lang,
+        indexable: false,
+      });
+      return undefined;
+    }
+
+    if (normalizedPath === ROUTES.LOGIN || normalizedPath === '/login') {
+      applyRouteSeo({
+        title: `${t('auth.login.metaTitle')} | ${brand}`,
+        description: t('hero.desc'),
+        canonicalPath: ROUTES.LOGIN,
+        lang,
+        indexable: false,
+      });
     } else if (
-      pathname === ROUTES.SIGNUP ||
-      pathname === '/create-account'
+      normalizedPath === ROUTES.SIGNUP ||
+      normalizedPath === ROUTES.CREATE_ACCOUNT ||
+      normalizedPath === ROUTES.AUTH
     ) {
-      document.title = `${t('auth.signup.metaTitle')} | ${t('common.brandName')}`;
-    } else if (pathname.startsWith('/dashboard')) {
-      document.title = `Customer Dashboard | ${t('common.brandName')}`;
-    } else if (pathname.startsWith(ROUTES.ADMIN)) {
-      document.title = `Admin Portal | ${t('common.brandName')}`;
-    } else if (pathname.startsWith(ROUTES.PARTNER) || pathname.startsWith('/portal/b2b')) {
-      document.title = `Partner Portal | ${t('common.brandName')}`;
-    } else if (pathname.startsWith(ROUTES.OPERATIONS)) {
-      document.title = `Operations Portal | ${t('common.brandName')}`;
-    } else if (pathname.startsWith(ROUTES.TOUR_GUIDE) || pathname.startsWith('/portal/guide')) {
-      document.title = `Tour Guide Portal | ${t('common.brandName')}`;
-    } else if (pathname.startsWith('/portal/content')) {
-      document.title = `Content & Media Portal | ${t('common.brandName')}`;
-    } else if (pathname === ROUTES.ACTIVITIES || pathname.startsWith('/activities/')) {
-      document.title = `${t('activitiesPage.metaTitle')} | ${t('common.brandName')}`;
-    } else if (pathname === ROUTES.PRIVACY) {
-      document.title = `${t('legal.privacy.metaTitle')} | ${t('common.brandName')}`;
-    } else if (pathname === ROUTES.TERMS) {
-      document.title = `${t('legal.terms.metaTitle')} | ${t('common.brandName')}`;
-    } else if (pathname === ROUTES.CANCELLATION) {
-      document.title = `${t('legal.cancellation.metaTitle')} | ${t('common.brandName')}`;
-    } else if (pathname === ROUTES.GROUPS) {
-      document.title = `${t('groups.metaTitle')} | ${t('common.brandName')}`;
-    } else if (pathname === ROUTES.ABOUT) {
-      document.title = `${t('about.metaTitle')} | ${t('common.brandName')}`;
-    } else if (pathname === ROUTES.BOOKING) {
-      document.title = `${t('tripDetails.bookNow')} | ${t('common.brandName')}`;
-    } else if (pathname.startsWith('/trips/')) {
+      applyRouteSeo({
+        title: `${t('auth.signup.metaTitle')} | ${brand}`,
+        description: t('hero.desc'),
+        canonicalPath: normalizedPath,
+        lang,
+        indexable: false,
+      });
+    } else if (normalizedPath.startsWith('/dashboard')) {
+      applyRouteSeo({
+        title: `Customer Dashboard | ${brand}`,
+        description: t('hero.desc'),
+        canonicalPath: ROUTES.CUSTOMER_DASHBOARD,
+        lang,
+        indexable: false,
+      });
+    } else if (normalizedPath.startsWith(ROUTES.ADMIN)) {
+      applyRouteSeo({
+        title: `Admin Portal | ${brand}`,
+        description: t('hero.desc'),
+        canonicalPath: ROUTES.ADMIN,
+        lang,
+        indexable: false,
+      });
+    } else if (normalizedPath.startsWith(ROUTES.PARTNER) || normalizedPath.startsWith('/portal/b2b')) {
+      applyRouteSeo({
+        title: `Partner Portal | ${brand}`,
+        description: t('hero.desc'),
+        canonicalPath: normalizedPath,
+        lang,
+        indexable: false,
+      });
+    } else if (normalizedPath.startsWith(ROUTES.OPERATIONS)) {
+      applyRouteSeo({
+        title: `Operations Portal | ${brand}`,
+        description: t('hero.desc'),
+        canonicalPath: ROUTES.OPERATIONS,
+        lang,
+        indexable: false,
+      });
+    } else if (normalizedPath.startsWith(ROUTES.TOUR_GUIDE) || normalizedPath.startsWith('/portal/guide')) {
+      applyRouteSeo({
+        title: `Tour Guide Portal | ${brand}`,
+        description: t('hero.desc'),
+        canonicalPath: normalizedPath,
+        lang,
+        indexable: false,
+      });
+    } else if (normalizedPath.startsWith('/portal/content')) {
+      applyRouteSeo({
+        title: `Content & Media Portal | ${brand}`,
+        description: t('hero.desc'),
+        canonicalPath: ROUTES.CONTENT_MANAGER,
+        lang,
+        indexable: false,
+      });
+    } else if (normalizedPath === ROUTES.BOOKING || normalizedPath === '/booking') {
+      applyRouteSeo({
+        title: `${t('tripDetails.bookNow')} | ${brand}`,
+        description: t('booking.tripSelect.subtitle'),
+        canonicalPath: ROUTES.BOOKING,
+        lang,
+        indexable: false,
+      });
+    } else if (normalizedPath === ROUTES.ACTIVITIES) {
+      applyRouteSeo({
+        title: `${t('activitiesPage.metaTitle')} | ${brand}`,
+        description: t('activitiesPage.heroDescription'),
+        canonicalPath: ROUTES.ACTIVITIES,
+        lang,
+        indexable: true,
+      });
+    } else if (normalizedPath.startsWith('/activities/')) {
+      const slug = normalizedPath.split('/')[2] || '';
+      const actKey = ACTIVITY_SLUG_TO_I18N[slug];
+      if (actKey) {
+        applyRouteSeo({
+          title: `${t(`activitiesPage.items.${actKey}.title`)} | ${brand}`,
+          description: t(`activitiesPage.items.${actKey}.description`),
+          canonicalPath: `/activities/${slug}`,
+          lang,
+          indexable: true,
+        });
+      } else {
+        applyRouteSeo({
+          title: `${isArabic ? 'الصفحة غير موجودة (404)' : 'Page Not Found (404)'} | ${brand}`,
+          description: t('hero.desc'),
+          canonicalPath: normalizedPath,
+          lang,
+          indexable: false,
+        });
+      }
+    } else if (normalizedPath === ROUTES.PRIVACY) {
+      applyRouteSeo({
+        title: `${t('legal.privacy.metaTitle')} | ${brand}`,
+        description: t('legal.privacy.subtitle'),
+        canonicalPath: ROUTES.PRIVACY,
+        lang,
+        indexable: true,
+      });
+    } else if (normalizedPath === ROUTES.TERMS) {
+      applyRouteSeo({
+        title: `${t('legal.terms.metaTitle')} | ${brand}`,
+        description: t('legal.terms.subtitle'),
+        canonicalPath: ROUTES.TERMS,
+        lang,
+        indexable: true,
+      });
+    } else if (normalizedPath === ROUTES.CANCELLATION) {
+      applyRouteSeo({
+        title: `${t('legal.cancellation.metaTitle')} | ${brand}`,
+        description: t('legal.cancellation.subtitle'),
+        canonicalPath: ROUTES.CANCELLATION,
+        lang,
+        indexable: true,
+      });
+    } else if (normalizedPath === ROUTES.GROUPS) {
+      applyRouteSeo({
+        title: `${t('groups.metaTitle')} | ${brand}`,
+        description: t('groups.stageHeroDesc'),
+        canonicalPath: ROUTES.GROUPS,
+        lang,
+        indexable: true,
+      });
+    } else if (normalizedPath === ROUTES.ABOUT) {
+      applyRouteSeo({
+        title: `${t('about.metaTitle')} | ${brand}`,
+        description: t('about.hero.description'),
+        canonicalPath: ROUTES.ABOUT,
+        lang,
+        indexable: true,
+      });
+    } else if (normalizedPath.startsWith('/trips/')) {
       let active = true;
-      const slug = pathname.split('/')[2];
+      const slug = normalizedPath.split('/')[2] || '';
       import('../widgets/trips/tripsData.js').then(({ TRIPS }) => {
         if (!active) return;
         const trip = TRIPS.find((item) => item.slug === slug);
         if (trip) {
           const tripTitle = t(`trips.items.${trip.key}.title`);
-          document.title = `${tripTitle} | ${t('common.brandName')}`;
+          const tripDesc = t(`trips.items.${trip.key}.desc`);
+          applyRouteSeo({
+            title: `${tripTitle} | ${brand}`,
+            description: tripDesc,
+            canonicalPath: `/trips/${slug}`,
+            lang,
+            indexable: true,
+          });
         } else {
-          document.title = `${t('tripDetails.notFoundTitle')} | ${t('common.brandName')}`;
+          applyRouteSeo({
+            title: `${t('tripDetails.notFoundTitle')} | ${brand}`,
+            description: t('hero.desc'),
+            canonicalPath: normalizedPath,
+            lang,
+            indexable: false,
+          });
         }
       });
       return () => {
         active = false;
       };
+    } else if (HOME_ALIAS_PATHS.has(normalizedPath)) {
+      applyRouteSeo({
+        title: `${brand} - ${t('nav.home')}`,
+        description: t('hero.desc'),
+        canonicalPath: '/',
+        lang,
+        indexable: normalizedPath === ROUTES.HOME,
+      });
     } else {
-      document.title = `${t('common.brandName')} - ${t('nav.home')}`;
+      applyRouteSeo({
+        title: `${isArabic ? 'الصفحة غير موجودة (404)' : 'Page Not Found (404)'} | ${brand}`,
+        description: t('hero.desc'),
+        canonicalPath: normalizedPath,
+        lang,
+        indexable: false,
+      });
     }
-  }, [pathname, hash, t, isArabic]);
+    return undefined;
+  }, [pathname, hash, t, lang, isArabic]);
 
   return null;
 }

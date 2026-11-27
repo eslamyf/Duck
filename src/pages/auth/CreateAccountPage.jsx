@@ -4,23 +4,20 @@ import { AuthVisualSide, CreateAccountForm } from '../../features/auth/index.js'
 import kayakImage from '../../shared/assets/images/trips/botanical-garden-960w.webp';
 
 export default function CreateAccountPage() {
-  const { t, lang } = useTranslation();
+  const { lang } = useTranslation();
   const isArabic = lang === 'ar';
 
   useEffect(() => {
-    const prevTitle = document.title;
-    document.title = `${t('auth.signup.metaTitle')} | ${t('common.brandName')}`;
     const prevHtmlOverflow = document.documentElement.style.overflow;
     const prevBodyOverflow = document.body.style.overflow;
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 
     return () => {
-      document.title = prevTitle;
       document.documentElement.style.overflow = prevHtmlOverflow;
       document.body.style.overflow = prevBodyOverflow;
     };
-  }, [t]);
+  }, []);
 
   return (
     <div
