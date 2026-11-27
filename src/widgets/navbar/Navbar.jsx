@@ -326,10 +326,10 @@ export default function Navbar({ onBookClick }) {
         {/* Main Navbar */}
         <nav
           aria-label="Main Navigation"
-          className="flex items-center justify-between gap-1.5 min-[1440px]:gap-3 h-[52px] min-[901px]:h-[68px] w-full max-w-[1440px] mx-auto px-3 min-[1440px]:px-6"
+          className="flex items-center justify-between gap-2 min-[1480px]:gap-3 h-[52px] min-[901px]:h-[68px] w-full max-w-[1520px] mx-auto px-3 min-[1440px]:px-6"
         >
           {/* Start: Brand Logo + Aswan Weather Pill */}
-          <div className="flex items-center gap-2 min-[1440px]:gap-3 shrink-0">
+          <div className="flex items-center gap-2 min-[1480px]:gap-3 shrink-0">
             <Link
               to={ROUTES.HOME}
               className="block rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue shrink-0"
@@ -342,14 +342,14 @@ export default function Navbar({ onBookClick }) {
                 alt={t('common.brandName')}
                 width="140"
                 height="38"
-                className="h-[32px] min-[1380px]:h-[36px] w-auto object-contain cursor-pointer transition-transform duration-200 hover:scale-102"
+                className="h-[30px] min-[1440px]:h-[34px] w-auto object-contain cursor-pointer transition-transform duration-200 hover:scale-102"
               />
             </Link>
 
             {/* Compact Aswan Weather Badge */}
             <span
               id="tmpDesk"
-              className="hidden min-[1380px]:inline-flex items-center gap-1.5 rounded-full bg-surface-mist border border-brand-blue/15 px-2.5 py-1 text-xs font-bold text-brand-navy whitespace-nowrap shrink-0"
+              className="hidden min-[1500px]:inline-flex items-center gap-1.5 rounded-full bg-surface-mist border border-brand-blue/15 px-2.5 py-1 text-xs font-bold text-brand-navy whitespace-nowrap shrink-0"
             >
               <span
                 className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-brand-navy text-brand-yellow text-[9px]"
@@ -368,7 +368,7 @@ export default function Navbar({ onBookClick }) {
           </div>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden min-[1280px]:flex items-center justify-center gap-0.5 min-[1380px]:gap-1 min-[1440px]:gap-1.5 min-w-0">
+          <div className="hidden min-[1280px]:flex items-center justify-center gap-0.5 min-[1400px]:gap-1 min-[1500px]:gap-1.5 shrink-0">
             {navLinks.map((link) => {
               const isActive = checkIsActive(link);
 
@@ -376,7 +376,7 @@ export default function Navbar({ onBookClick }) {
                 <Link
                   key={link.to}
                   to={link.to}
-                  className={`relative whitespace-nowrap px-1 min-[1380px]:px-1.5 min-[1440px]:px-2 py-2 text-[11.5px] min-[1380px]:text-xs min-[1440px]:text-[13px] font-bold transition-colors duration-200 ${isActive
+                  className={`relative whitespace-nowrap px-1.5 min-[1480px]:px-2 py-2 text-[11.5px] min-[1400px]:text-[12.5px] min-[1500px]:text-[13px] font-bold transition-colors duration-200 ${isActive
                     ? 'text-brand-blue font-extrabold after:content-[""] after:absolute after:bottom-0 after:inset-x-1 after:h-[2.5px] after:rounded-full after:bg-brand-blue'
                     : 'text-brand-navy hover:text-brand-blue'
                     }`}
@@ -388,13 +388,13 @@ export default function Navbar({ onBookClick }) {
           </div>
 
           {/* Desktop Action Buttons */}
-          <div className="hidden min-[1280px]:flex items-center gap-1.5 min-[1440px]:gap-2.5 shrink-0">
+          <div className="hidden min-[1280px]:flex items-center gap-1.5 min-[1480px]:gap-2 shrink-0">
             {/* Language Switcher */}
             <button
               type="button"
               onClick={() => setLanguage(lang === 'ar' ? 'en' : 'ar')}
               aria-label={t('common.languageSwitch')}
-              className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-brand-navy/15 bg-surface-mist px-2.5 min-[1440px]:px-3 text-xs font-bold text-brand-navy transition-colors hover:bg-brand-navy hover:text-brand-yellow cursor-pointer whitespace-nowrap"
+              className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-brand-navy/15 bg-surface-mist px-2.5 min-[1480px]:px-3 text-xs font-bold text-brand-navy transition-colors hover:bg-brand-navy hover:text-brand-yellow cursor-pointer whitespace-nowrap"
             >
               <DuckIcon icon="faLanguage" className="text-brand-blue text-sm shrink-0" aria-hidden="true" />
               <span>{t('common.languageSwitch')}</span>
@@ -409,7 +409,7 @@ export default function Navbar({ onBookClick }) {
                 to={dashboardPath}
                 aria-label={isRtl ? 'الذهاب إلى لوحة التحكم' : 'Go to Dashboard'}
                 title={accountName}
-                className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-brand-navy bg-brand-navy px-2.5 min-[1440px]:px-3.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#161F3D] whitespace-nowrap"
+                className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-brand-navy bg-brand-navy px-2.5 min-[1480px]:px-3.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#161F3D] whitespace-nowrap"
               >
                 <DuckIcon icon="faGaugeHigh" className="text-brand-yellow shrink-0" aria-hidden="true" />
                 <span>{dashboardLabel}</span>
@@ -438,10 +438,10 @@ export default function Navbar({ onBookClick }) {
                   onBookClick();
                 }
               }}
-              className="shrink-0 px-3 min-[1440px]:px-4 font-bold shadow-sm whitespace-nowrap"
+              className="shrink-0 px-3 min-[1500px]:px-4 font-bold shadow-sm whitespace-nowrap"
             >
-              <span className="min-[1440px]:hidden">{t('nav.bookNowShort')}</span>
-              <span className="hidden min-[1440px]:inline">{t('nav.bookTripNow')}</span>
+              <span className="min-[1500px]:hidden">{t('nav.bookNowShort')}</span>
+              <span className="hidden min-[1500px]:inline">{t('nav.bookTripNow')}</span>
             </Button>
           </div>
 
