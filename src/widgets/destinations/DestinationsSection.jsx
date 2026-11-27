@@ -265,7 +265,6 @@ export default function DestinationsSection({ onSelectDestination }) {
                   id={`tb${item.id}`}
                   aria-expanded={isActive}
                   aria-controls={`dcc${item.id}`}
-                  aria-label={destName}
                   onClick={(e) => {
                     e.stopPropagation();
                     selectTab(item.id, true);
@@ -303,7 +302,7 @@ export default function DestinationsSection({ onSelectDestination }) {
                       headingRefs.current[item.id] = el;
                     }}
                     tabIndex={-1}
-                    className="text-2xl min-[901px]:text-3xl min-[1150px]:text-4xl font-extrabold text-white flex items-center gap-2.5 flex-wrap focus:outline-none drop-shadow-md"
+                    className="text-2xl min-[901px]:text-3xl min-[1150px]:text-4xl font-extrabold text-white flex items-center gap-2.5 flex-wrap rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow drop-shadow-md"
                   >
                     <span>{destName}</span>
                     {isSoon && (

@@ -24,23 +24,23 @@ export default function BookingStepper({
   return (
     <nav
       aria-label={t('booking.stepperAria')}
-      className="w-full max-w-3xl mx-auto px-4 py-2"
+      className="w-full max-w-3xl mx-auto px-4 py-2 relative"
     >
-      <ol className="flex items-center justify-between relative">
-        {/* Background track line */}
+      {/* Background track line (placed outside <ol> for valid list semantics) */}
+      <div
+        className="absolute top-[28px] sm:top-[32px] inset-x-10 h-1 bg-surface-mist border border-black/5 z-0 pointer-events-none"
+        aria-hidden="true"
+      >
+        {/* Active progress fill */}
         <div
-          className="absolute top-1/2 -translate-y-1/2 inset-x-6 h-1 bg-surface-mist border border-black/5 -z-0"
-          aria-hidden="true"
-        >
-          {/* Active progress fill */}
-          <div
-            className="h-full bg-brand-yellow transition-all duration-300 ease-out"
-            style={{
-              width: `${((Math.min(currentStep, 4) - 1) / (steps.length - 1)) * 100}%`,
-            }}
-          />
-        </div>
+          className="h-full bg-brand-yellow transition-all duration-300 ease-out"
+          style={{
+            width: `${((Math.min(currentStep, 4) - 1) / (steps.length - 1)) * 100}%`,
+          }}
+        />
+      </div>
 
+      <ol className="flex items-center justify-between relative list-none m-0 p-0">
         {steps.map((step, idx) => {
           const isCompleted = step.number < currentStep;
           const isCurrent = step.number === currentStep;
@@ -56,19 +56,20 @@ export default function BookingStepper({
                 type="button"
                 onClick={() => isClickable && onStepClick(step.number)}
                 disabled={!isClickable}
+                aria-label={step.title}
                 aria-current={isCurrent ? 'step' : undefined}
-                className={`w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center font-black text-sm transition-all duration-200 outline-none ${
+                className={`w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center font-black text-sm transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-brand-blue ${
                   isCurrent
                     ? 'bg-brand-yellow text-brand-navy shadow-md ring-4 ring-brand-yellow/30 scale-105'
                     : isCompleted
                     ? 'bg-brand-navy text-brand-yellow hover:scale-105 cursor-pointer shadow-sm'
-                    : 'bg-white text-brand-navy/40 border-2 border-slate-200 shadow-xs cursor-default'
+                    : 'bg-white text-brand-navy/60 border-2 border-slate-200 shadow-xs cursor-default'
                 }`}
               >
                 {isCompleted ? (
-                  <FontAwesomeIcon icon={faCheck} className="text-base" />
+                  <FontAwesomeIcon icon={faCheck} className="text-base" aria-hidden="true" />
                 ) : (
-                  <span className="flex items-center gap-1">
+                  <span className="flex items-center gap-1" aria-hidden="true">
                     <FontAwesomeIcon icon={Icon} className="text-xs sm:text-sm" />
                   </span>
                 )}
@@ -79,8 +80,8 @@ export default function BookingStepper({
                   isCurrent
                     ? 'text-brand-navy font-black'
                     : isCompleted
-                    ? 'text-brand-navy/80'
-                    : 'text-brand-navy/40'
+                    ? 'text-brand-navy/85'
+                    : 'text-brand-navy/60'
                 }`}
               >
                 {step.title}

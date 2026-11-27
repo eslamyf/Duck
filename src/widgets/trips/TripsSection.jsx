@@ -405,7 +405,7 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                     }`}
                   >
                     {/* Index Number */}
-                    <span className={`text-xs font-bold ${isTripActive ? 'text-white/60' : 'text-brand-navy/40'}`}>
+                    <span className={`text-xs font-bold ${isTripActive ? 'text-white/80' : 'text-brand-navy/60'}`}>
                       {formattedIdx}
                     </span>
 
@@ -520,120 +520,120 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
             </div>
           )}
 
-          <div
+          <ul
             ref={carouselRef}
             onScroll={handleCarouselScroll}
-            className="flex gap-3.5 overflow-x-auto snap-x snap-mandatory -mx-[5vw] px-[5vw] pb-4 scrollbar-none"
-            role="list"
+            className="flex gap-3.5 overflow-x-auto snap-x snap-mandatory -mx-[5vw] px-[5vw] pb-4 scrollbar-none list-none m-0"
             aria-label={t('trips.listAriaLabel')}
           >
             {visibleTrips.map((trip) => {
               return (
-                <article
+                <li
                   key={trip.id}
-                  role="listitem"
-                  className="flex-none w-[86%] max-w-[340px] h-[450px] snap-center rounded-[26px] overflow-hidden relative bg-brand-navy text-white shadow-xl border border-white/15 flex flex-col justify-end p-5"
+                  className="flex-none w-[86%] max-w-[340px] h-[450px] snap-center flex"
                 >
-                  {/* Background Image & Gradient */}
-                  <div className="absolute inset-0 z-0">
-                    <picture>
-                      {trip.images?.srcSet && (
-                        <source srcSet={trip.images.srcSet} sizes="86vw" />
-                      )}
-                      <img
-                        src={
-                          trip.images?.medium ||
-                          trip.images?.thumb ||
-                          trip.imageUrl ||
-                          'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1000&auto=format&fit=crop&q=80'
-                        }
-                        alt={trip.titleAr || t(`trips.items.${trip.key}.title`)}
-                        loading="lazy"
-                        decoding="async"
-                        width={640}
-                        height={450}
-                        style={{
-                          objectPosition: trip.imagePosition || trip.objectPosition || 'center center',
-                        }}
-                        className="w-full h-full object-cover"
+                  <article className="w-full h-full rounded-[26px] overflow-hidden relative bg-brand-navy text-white shadow-xl border border-white/15 flex flex-col justify-end p-5">
+                    {/* Background Image & Gradient */}
+                    <div className="absolute inset-0 z-0">
+                      <picture>
+                        {trip.images?.srcSet && (
+                          <source srcSet={trip.images.srcSet} sizes="86vw" />
+                        )}
+                        <img
+                          src={
+                            trip.images?.medium ||
+                            trip.images?.thumb ||
+                            trip.imageUrl ||
+                            'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1000&auto=format&fit=crop&q=80'
+                          }
+                          alt={trip.titleAr || t(`trips.items.${trip.key}.title`)}
+                          loading="lazy"
+                          decoding="async"
+                          width={640}
+                          height={450}
+                          style={{
+                            objectPosition: trip.imagePosition || trip.objectPosition || 'center center',
+                          }}
+                          className="w-full h-full object-cover"
+                        />
+                      </picture>
+                      <div
+                        className="absolute inset-0 bg-gradient-to-t from-[#121528] via-[#121528]/70 to-[#121528]/50 pointer-events-none"
+                        aria-hidden="true"
                       />
-                    </picture>
-                    <div
-                      className="absolute inset-0 bg-gradient-to-t from-[#121528] via-[#121528]/70 to-[#121528]/50 pointer-events-none"
-                      aria-hidden="true"
-                    />
-                  </div>
-
-                  {/* Top Bar Floating Badges */}
-                  <div className="absolute top-4 inset-x-4 z-10 flex items-start justify-between gap-2 pointer-events-none">
-                    <div className="bg-[#121528]/80 backdrop-blur-md border border-white/20 rounded-2xl p-2.5 max-w-[60%]">
-                      <small className="block text-[11px] text-brand-yellow font-bold">
-                        {t(`destinations.items.${trip.destKey}.name`)} · {t(`trips.activities.${trip.act}`)}
-                      </small>
-                      <b className="block text-xs font-bold text-white truncate">
-                        {t(`trips.items.${trip.key}.title`)}
-                      </b>
                     </div>
 
-                    <div className="bg-brand-yellow rounded-2xl px-3 py-1.5 text-brand-navy font-bold text-xs text-end shadow-md">
-                      <span>{formatPrice(trip.price)}</span>
-                      <small className="block text-[10px] font-semibold opacity-90">
-                        {trip.priceEg ? `${t('trips.egyptian')} ${formatPrice(trip.priceEg)}` : (trip.isHourly ? t('trips.perHour') : t('trips.unified'))}
-                      </small>
-                    </div>
-                  </div>
+                    {/* Top Bar Floating Badges */}
+                    <div className="absolute top-4 inset-x-4 z-10 flex items-start justify-between gap-2 pointer-events-none">
+                      <div className="bg-[#121528]/80 backdrop-blur-md border border-white/20 rounded-2xl p-2.5 max-w-[60%]">
+                        <small className="block text-[11px] text-brand-yellow font-bold">
+                          {t(`destinations.items.${trip.destKey}.name`)} · {t(`trips.activities.${trip.act}`)}
+                        </small>
+                        <b className="block text-xs font-bold text-white truncate">
+                          {t(`trips.items.${trip.key}.title`)}
+                        </b>
+                      </div>
 
-                  {/* Bottom Content */}
-                  <div className="relative z-10 flex flex-col gap-2">
-                    {/* Meta tags */}
-                    <div className="flex items-center gap-2 flex-wrap text-xs">
-                      <span className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full text-white">
-                        <FontAwesomeIcon icon={faClock} className="text-brand-yellow text-[10px]" aria-hidden="true" />
-                        <span>{t(`trips.durations.${trip.durKey}`)}</span>
-                      </span>
-                      {trip.act === 'waterbike' ? (
-                        <span className="bg-brand-yellow text-brand-navy font-bold px-2.5 py-0.5 rounded-full">
-                          {t('trips.waterbikeLimit')}
+                      <div className="bg-brand-yellow rounded-2xl px-3 py-1.5 text-brand-navy font-bold text-xs text-end shadow-md">
+                        <span>{formatPrice(trip.price)}</span>
+                        <small className="block text-[10px] font-semibold opacity-90">
+                          {trip.priceEg ? `${t('trips.egyptian')} ${formatPrice(trip.priceEg)}` : (trip.isHourly ? t('trips.perHour') : t('trips.unified'))}
+                        </small>
+                      </div>
+                    </div>
+
+                    {/* Bottom Content */}
+                    <div className="relative z-10 flex flex-col gap-2">
+                      {/* Meta tags */}
+                      <div className="flex items-center gap-2 flex-wrap text-xs">
+                        <span className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full text-white">
+                          <FontAwesomeIcon icon={faClock} className="text-brand-yellow text-[10px]" aria-hidden="true" />
+                          <span>{t(`trips.durations.${trip.durKey}`)}</span>
                         </span>
-                      ) : (
-                        <span className="bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full text-white">
-                          {t('trips.availableUnits')}
-                        </span>
-                      )}
-                    </div>
+                        {trip.act === 'waterbike' ? (
+                          <span className="bg-brand-yellow text-brand-navy font-bold px-2.5 py-0.5 rounded-full">
+                            {t('trips.waterbikeLimit')}
+                          </span>
+                        ) : (
+                          <span className="bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full text-white">
+                            {t('trips.availableUnits')}
+                          </span>
+                        )}
+                      </div>
 
-                    {/* Description */}
-                    <p className="text-white/90 text-xs leading-relaxed line-clamp-2">
-                      {t(`trips.items.${trip.key}.desc`)}
-                    </p>
+                      {/* Description */}
+                      <p className="text-white/90 text-xs leading-relaxed line-clamp-2">
+                        {t(`trips.items.${trip.key}.desc`)}
+                      </p>
 
-                    {/* Action buttons */}
-                    <div className="flex items-center gap-2 pt-2">
-                      <Button
-                        as={Link}
-                        to={ROUTES.booking(trip.slug)}
-                        data-trip={trip.id}
-                        variant="primary"
-                        size="sm"
-                        className="flex-1 font-bold py-2.5 text-xs text-brand-navy bg-brand-yellow justify-center"
-                      >
-                        {t('trips.bookNow')}
-                      </Button>
-                      <Button
-                        as={Link}
-                        to={ROUTES.tripDetails(trip.slug)}
-                        variant="outline"
-                        size="sm"
-                        className="flex-1 font-semibold py-2.5 text-xs text-white border-white/50 justify-center hover:bg-white/15"
-                      >
-                        {t('trips.detailsShort')}
-                      </Button>
+                      {/* Action buttons */}
+                      <div className="flex items-center gap-2 pt-2">
+                        <Button
+                          as={Link}
+                          to={ROUTES.booking(trip.slug)}
+                          data-trip={trip.id}
+                          variant="primary"
+                          size="sm"
+                          className="flex-1 font-bold py-2.5 text-xs text-brand-navy bg-brand-yellow justify-center"
+                        >
+                          {t('trips.bookNow')}
+                        </Button>
+                        <Button
+                          as={Link}
+                          to={ROUTES.tripDetails(trip.slug)}
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 font-semibold py-2.5 text-xs text-white border-white/50 justify-center hover:bg-white/15"
+                        >
+                          {t('trips.detailsShort')}
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                </article>
+                  </article>
+                </li>
               );
             })}
-          </div>
+          </ul>
 
           {/* Mobile Pagination Dots + Swipe Counter Indicator */}
           {visibleTrips.length > 0 && (

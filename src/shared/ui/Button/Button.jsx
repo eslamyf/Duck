@@ -28,7 +28,7 @@ export default function Button({
     ghost:
       'bg-transparent text-inherit hover:bg-white/10',
     whatsapp:
-      'bg-[#25D366] text-white font-bold shadow-[0_8px_24px_rgba(37,211,102,0.35)] hover:scale-105 active:scale-95',
+      'bg-[#25D366] text-brand-navy font-bold shadow-[0_8px_24px_rgba(37,211,102,0.35)] hover:scale-105 active:scale-95',
     chip: isPressed
       ? 'bg-brand-navy text-brand-yellow border-2 border-brand-navy shadow-md font-bold'
       : 'bg-white text-brand-navy/85 border border-[rgba(20,125,159,0.22)] font-semibold hover:bg-surface-mist hover:text-brand-navy',

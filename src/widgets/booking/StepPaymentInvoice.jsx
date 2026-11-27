@@ -209,9 +209,9 @@ export default function StepPaymentInvoice({
                 <FontAwesomeIcon icon={faBolt} className="text-sm" />
               </div>
               <div>
-                <h3 className="font-heading font-extrabold text-base sm:text-lg text-brand-navy">
+                <h2 className="font-heading font-extrabold text-base sm:text-lg text-brand-navy">
                   {t('booking.paymentInvoice.step1Title')}
-                </h3>
+                </h2>
                 <p className="text-xs text-brand-navy/60 font-medium">
                   {t('booking.paymentInvoice.step1Subtitle')}
                 </p>
@@ -271,9 +271,9 @@ export default function StepPaymentInvoice({
                 <FontAwesomeIcon icon={faWhatsapp} className="text-base" />
               </div>
               <div>
-                <h3 className="font-heading font-extrabold text-base sm:text-lg text-brand-navy">
+                <h2 className="font-heading font-extrabold text-base sm:text-lg text-brand-navy">
                   {t('booking.paymentInvoice.step2Title')}
-                </h3>
+                </h2>
                 <p className="text-xs text-brand-navy/60 font-medium">
                   {t('booking.paymentInvoice.step2Subtitle')}
                 </p>

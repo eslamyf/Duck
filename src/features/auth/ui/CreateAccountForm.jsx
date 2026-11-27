@@ -157,9 +157,9 @@ export default function CreateAccountForm() {
 
         {/* Header Titles */}
         <div className="mb-2 text-start">
-          <h2 className="text-xl sm:text-2xl font-black text-brand-navy tracking-tight leading-tight mb-0.5">
+          <h1 className="text-xl sm:text-2xl font-black text-brand-navy tracking-tight leading-tight mb-0.5">
             {t('auth.signup.title')}
-          </h2>
+          </h1>
           <p className="text-brand-navy/65 text-xs leading-relaxed">
             {role === 'Partner'
               ? t('auth.roles.partnerDescSignup')

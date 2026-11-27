@@ -36,7 +36,7 @@ export default function NotFoundPage() {
   };
 
   return (
-    <main
+    <div
       dir={isArabic ? 'rtl' : 'ltr'}
       className="min-h-[calc(100svh-100px)] bg-surface-mist flex items-center justify-center px-5 py-16 text-brand-navy"
     >
@@ -95,6 +95,6 @@ export default function NotFoundPage() {
           </Link>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

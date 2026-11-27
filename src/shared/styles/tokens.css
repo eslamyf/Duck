@@ -50,8 +50,9 @@
   /* Primary Accent / Sunburst Yellow  (PDF: #FDFB45) */
   --color-navy: #0C1226;
   /* Deep Navy Base — primary dark      (PDF: #0C1226) */
-  --color-blue: #147D9F;
-  /* Water Blue / Nile Teal             (PDF: #147D9F) */
+  /* Water Blue / Nile Teal (WCAG AA compliant #12718F) */
+  --color-blue: #12718F;
+  /* Legacy reference: #147D9F */
 
   /* ── Working Aliases (backward-compat with Final_4.html) ─── */
   --color-yellow-legacy: #F5E847;

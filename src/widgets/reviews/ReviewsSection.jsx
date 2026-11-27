@@ -215,68 +215,82 @@ export default function ReviewsSection() {
           {/* 3-Column Infinite Vertical Review Wall */}
           <div
             className="rv-wall relative grid grid-cols-2 min-[1281px]:grid-cols-3 gap-[18px] h-[580px] overflow-hidden rounded-[28px] [mask-image:linear-gradient(to_bottom,transparent_0,#000_12%,#000_88%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0,#000_12%,#000_88%,transparent_100%)] select-none"
-            role="list"
             aria-label={t('reviews.guestReviewsWall', 'آراء العملاء')}
           >
             {/* Column 0: Standard Downward Roll */}
-            <div
-              className="col flex flex-col gap-[18px] will-change-transform animate-rv-roll self-start"
+            <ul
+              className="col list-none m-0 p-0 flex flex-col gap-[18px] will-change-transform animate-rv-roll self-start"
               style={{ '--roll-duration': '46s' }}
+              aria-label={t('reviews.guestReviewsWall', 'آراء العملاء')}
             >
               {columns[0].items.map((item, itemIdx) => {
                 const isAriaHidden = itemIdx >= columns[0].halfCount;
 
                 return (
-                  <ReviewCard
+                  <li
                     key={`c0-${item.review.id}-${itemIdx}`}
-                    review={item.review}
-                    variant="wall"
-                    gradientIndex={item.globalIndex}
-                    ariaHidden={isAriaHidden}
-                  />
+                    aria-hidden={isAriaHidden ? 'true' : undefined}
+                  >
+                    <ReviewCard
+                      review={item.review}
+                      variant="wall"
+                      gradientIndex={item.globalIndex}
+                      ariaHidden={isAriaHidden}
+                    />
+                  </li>
                 );
               })}
-            </div>
+            </ul>
 
             {/* Column 1: Reversed Upward Roll */}
-            <div
-              className="col flex flex-col gap-[18px] will-change-transform animate-rv-roll-reverse self-start"
+            <ul
+              className="col list-none m-0 p-0 flex flex-col gap-[18px] will-change-transform animate-rv-roll-reverse self-start"
               style={{ '--roll-duration': '53s' }}
+              aria-label={t('reviews.guestReviewsWall', 'آراء العملاء')}
             >
               {columns[1].items.map((item, itemIdx) => {
                 const isAriaHidden = itemIdx >= columns[1].halfCount;
 
                 return (
-                  <ReviewCard
+                  <li
                     key={`c1-${item.review.id}-${itemIdx}`}
-                    review={item.review}
-                    variant="wall"
-                    gradientIndex={item.globalIndex}
-                    ariaHidden={isAriaHidden}
-                  />
+                    aria-hidden={isAriaHidden ? 'true' : undefined}
+                  >
+                    <ReviewCard
+                      review={item.review}
+                      variant="wall"
+                      gradientIndex={item.globalIndex}
+                      ariaHidden={isAriaHidden}
+                    />
+                  </li>
                 );
               })}
-            </div>
+            </ul>
 
             {/* Column 2: Standard Downward Roll (Visible on > 1280px) */}
-            <div
-              className="col hidden min-[1281px]:flex flex-col gap-[18px] will-change-transform animate-rv-roll self-start"
+            <ul
+              className="col list-none m-0 p-0 hidden min-[1281px]:flex flex-col gap-[18px] will-change-transform animate-rv-roll self-start"
               style={{ '--roll-duration': '60s' }}
+              aria-label={t('reviews.guestReviewsWall', 'آراء العملاء')}
             >
               {columns[2].items.map((item, itemIdx) => {
                 const isAriaHidden = itemIdx >= columns[2].halfCount;
 
                 return (
-                  <ReviewCard
+                  <li
                     key={`c2-${item.review.id}-${itemIdx}`}
-                    review={item.review}
-                    variant="wall"
-                    gradientIndex={item.globalIndex}
-                    ariaHidden={isAriaHidden}
-                  />
+                    aria-hidden={isAriaHidden ? 'true' : undefined}
+                  >
+                    <ReviewCard
+                      review={item.review}
+                      variant="wall"
+                      gradientIndex={item.globalIndex}
+                      ariaHidden={isAriaHidden}
+                    />
+                  </li>
                 );
               })}
-            </div>
+            </ul>
           </div>
         </div>
 

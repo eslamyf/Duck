@@ -234,9 +234,9 @@ export default function StepGuestDetails({
           <div>
             <div className="flex items-center gap-2 pb-2 border-b border-black/5">
               <FontAwesomeIcon icon={faUser} className="text-brand-blue text-sm" />
-              <h3 className="font-heading font-extrabold text-sm sm:text-base text-brand-navy">
+              <h2 className="font-heading font-extrabold text-sm sm:text-base text-brand-navy">
                 {t('booking.guestDetails.contactSectionTitle')}
-              </h3>
+              </h2>
             </div>
 
             <div className="space-y-3 mt-3">
@@ -277,9 +277,9 @@ export default function StepGuestDetails({
           <div className="flex items-center justify-between pb-2 border-b border-black/5">
             <div className="flex items-center gap-2">
               <FontAwesomeIcon icon={faCalendarCheck} className="text-brand-blue text-sm" />
-              <h3 className="font-heading font-extrabold text-sm sm:text-base text-brand-navy">
+              <h2 className="font-heading font-extrabold text-sm sm:text-base text-brand-navy">
                 {t('booking.guestDetails.dateTimeSectionTitle')}
-              </h3>
+              </h2>
             </div>
             <span className="text-[11px] text-brand-navy/60 font-semibold">
               {t('booking.guestDetails.operatingHoursNotice')}
@@ -330,6 +330,7 @@ export default function StepGuestDetails({
 
             <DatePicker
               id="book-date"
+              aria-label={t('booking.guestDetails.bookingDate', isArabic ? 'تاريخ الرحلة' : 'Trip Date')}
               value={bookingData.date || todayIso}
               min={todayIso}
               onChange={(e) => {
@@ -388,9 +389,9 @@ export default function StepGuestDetails({
         <div className="flex items-center justify-between pb-2 border-b border-black/5">
           <div className="flex items-center gap-2">
             <FontAwesomeIcon icon={faUsers} className="text-brand-blue text-sm" />
-            <h3 className="font-heading font-extrabold text-sm sm:text-base text-brand-navy">
+            <h2 className="font-heading font-extrabold text-sm sm:text-base text-brand-navy">
               {t('booking.guestDetails.guestsSectionTitle')}
-            </h3>
+            </h2>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <span className={`text-[11px] sm:text-xs font-black px-2.5 py-0.5 rounded-full inline-flex items-center gap-1.5 ${

@@ -218,39 +218,38 @@ export default function HeroSection() {
       </div>
 
       {/* Stats Strip under Hero */}
-      <div
-        className="bg-surface-mist border-y border-brand-blue/16 px-[5vw] min-[901px]:px-[6vw] py-5 min-[901px]:py-7"
-        role="list"
-        aria-label="Platform Statistics"
-      >
-        <div className="grid grid-cols-3 gap-3 min-[901px]:gap-6 max-w-[1200px] mx-auto text-center">
-          <div role="listitem">
+      <div className="bg-surface-mist border-y border-brand-blue/16 px-[5vw] min-[901px]:px-[6vw] py-5 min-[901px]:py-7">
+        <ul
+          className="grid grid-cols-3 gap-3 min-[901px]:gap-6 max-w-[1200px] mx-auto text-center list-none m-0 p-0"
+          aria-label="Platform Statistics"
+        >
+          <li>
             <b className="block text-2xl min-[901px]:text-3xl lg:text-4xl font-bold text-brand-blue leading-tight">
               {t('hero.stat1Number')}
             </b>
-            <span className="text-xs min-[901px]:text-sm text-brand-navy/75 font-medium mt-1 block">
+            <span className="text-xs min-[901px]:text-sm text-brand-navy/80 font-medium mt-1 block">
               {t('hero.stat1Label')}
             </span>
-          </div>
+          </li>
 
-          <div role="listitem">
+          <li>
             <b className="block text-2xl min-[901px]:text-3xl lg:text-4xl font-bold text-brand-blue leading-tight">
               {t('hero.stat2Number')}
             </b>
-            <span className="text-xs min-[901px]:text-sm text-brand-navy/75 font-medium mt-1 block">
+            <span className="text-xs min-[901px]:text-sm text-brand-navy/80 font-medium mt-1 block">
               {t('hero.stat2Label')}
             </span>
-          </div>
+          </li>
 
-          <div role="listitem">
+          <li>
             <b className="block text-2xl min-[901px]:text-3xl lg:text-4xl font-bold text-brand-blue leading-tight">
               {t('hero.stat3Number')}
             </b>
-            <span className="text-xs min-[901px]:text-sm text-brand-navy/75 font-medium mt-1 block">
+            <span className="text-xs min-[901px]:text-sm text-brand-navy/80 font-medium mt-1 block">
               {t('hero.stat3Label')}
             </span>
-          </div>
-        </div>
+          </li>
+        </ul>
       </div>
     </section>
   );

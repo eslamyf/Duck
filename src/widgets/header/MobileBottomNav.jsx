@@ -291,7 +291,7 @@ export default function MobileBottomNav() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMoreRouteKey(null)}
-                className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-brand-whatsapp px-3 py-2 text-xs font-extrabold text-white shadow-card hover:opacity-95 transition-opacity"
+                className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-brand-whatsapp px-3 py-2 text-xs font-extrabold text-brand-navy shadow-card hover:opacity-95 transition-opacity"
               >
                 <FontAwesomeIcon icon={faWhatsapp} className="text-base" />
                 <span>{t('common.whatsapp')}</span>

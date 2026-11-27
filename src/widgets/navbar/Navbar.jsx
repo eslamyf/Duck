@@ -252,7 +252,7 @@ export default function Navbar({ onBookClick }) {
       >
         <Link
           to={ROUTES.HOME}
-          className="inline-flex items-center focus:outline-none"
+          className="inline-flex items-center rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue"
           aria-label={t('common.brandName')}
         >
           <img
@@ -309,7 +309,7 @@ export default function Navbar({ onBookClick }) {
           <div className="flex items-center gap-2 min-[1360px]:gap-3 shrink-0">
             <Link
               to={ROUTES.HOME}
-              className="block focus:outline-none shrink-0"
+              className="block rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue shrink-0"
               aria-label={t('common.brandName')}
             >
               <img
@@ -441,7 +441,7 @@ export default function Navbar({ onBookClick }) {
               aria-expanded={isMobileOpen}
               aria-controls="mobile-nav"
               aria-label={t('nav.menuAria')}
-              className="p-2 text-brand-navy text-xl focus:outline-none"
+              className="p-2 text-brand-navy text-xl rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue"
             >
               <FontAwesomeIcon icon={isMobileOpen ? faXmark : faBars} />
             </button>

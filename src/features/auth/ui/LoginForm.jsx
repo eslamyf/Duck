@@ -131,9 +131,9 @@ export default function LoginForm() {
         />
 
         <div className="mb-3 text-start">
-          <h2 className="text-xl sm:text-2xl font-black text-brand-navy tracking-tight leading-tight mb-1">
+          <h1 className="text-xl sm:text-2xl font-black text-brand-navy tracking-tight leading-tight mb-1">
             {t('auth.login.title')}
-          </h2>
+          </h1>
 
           <p className="text-brand-navy/65 text-xs sm:text-sm leading-relaxed">
             {role === 'Partner'

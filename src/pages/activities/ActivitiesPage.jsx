@@ -43,7 +43,7 @@ export default function PublicActivitiesPage() {
   };
 
   return (
-    <main
+    <div
       dir={isArabic ? 'rtl' : 'ltr'}
       className="min-h-screen bg-surface-mist text-brand-navy font-body"
     >
@@ -272,6 +272,6 @@ export default function PublicActivitiesPage() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

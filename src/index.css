@@ -311,6 +311,7 @@ body {
 
 .duck-pin:hover .dava,
 .duck-pin:focus-visible .dava,
+.leaflet-marker-icon:focus-visible .duck-pin .dava,
 .duck-pin.on .dava {
   transform: scale(1.12);
   border-color: var(--color-yellow, #fdfb45);
@@ -319,6 +320,7 @@ body {
 
 .duck-pin:hover .dlbl,
 .duck-pin:focus-visible .dlbl,
+.leaflet-marker-icon:focus-visible .duck-pin .dlbl,
 .duck-pin.on .dlbl {
   background: var(--color-yellow, #fdfb45);
   color: var(--color-navy, #0c1226);

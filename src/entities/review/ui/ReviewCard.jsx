@@ -44,9 +44,8 @@ export default function ReviewCard({
         href={GOOGLE_REVIEWS_URL}
         target="_blank"
         rel="noopener noreferrer"
-        role="listitem"
-        aria-hidden={ariaHidden ? 'true' : undefined}
-        className={`group relative flex-none rounded-[24px] p-4 sm:p-5 flex flex-col gap-3 transition-all duration-300 no-underline cursor-pointer block bg-white text-brand-navy border border-[rgba(20,125,159,0.16)] shadow-[0_12px_32px_rgba(12,18,38,0.08)] hover:shadow-[0_20px_48px_rgba(20,125,159,0.16)] hover:border-brand-blue/30 hover:-translate-y-1 hover:scale-[1.02] ${className}`.trim()}
+        tabIndex={ariaHidden ? -1 : undefined}
+        className={`group relative flex-none rounded-[24px] p-4 sm:p-5 flex flex-col gap-3 transition-all duration-300 no-underline cursor-pointer block bg-white text-brand-navy border border-[rgba(20,125,159,0.16)] shadow-[0_12px_32px_rgba(12,18,38,0.08)] hover:shadow-[0_20px_48px_rgba(20,125,159,0.16)] hover:border-brand-blue/30 hover:-translate-y-1 hover:scale-[1.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue ${className}`.trim()}
       >
         {/* Real Customer Experience Photo */}
         {review.img && (
@@ -117,8 +116,7 @@ export default function ReviewCard({
       href={GOOGLE_REVIEWS_URL}
       target="_blank"
       rel="noopener noreferrer"
-      className={`group relative flex flex-col sm:grid sm:grid-cols-[190px_1fr] gap-4 p-5 sm:p-6 rounded-[24px] bg-white border border-[rgba(20,125,159,0.18)] shadow-[0_14px_36px_rgba(12,18,38,0.08)] max-w-[680px] w-full mx-auto overflow-hidden transition-all duration-300 hover:shadow-xl no-underline cursor-pointer block text-brand-navy ${className}`.trim()}
-      aria-label={`${reviewerName} - ${reviewerActivity}`}
+      className={`group relative flex flex-col sm:grid sm:grid-cols-[190px_1fr] gap-4 p-5 sm:p-6 rounded-[24px] bg-white border border-[rgba(20,125,159,0.18)] shadow-[0_14px_36px_rgba(12,18,38,0.08)] max-w-[680px] w-full mx-auto overflow-hidden transition-all duration-300 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue no-underline cursor-pointer block text-brand-navy ${className}`.trim()}
     >
       {/* Animated 7-second Progress Bar (GPU Composite Transform) */}
       {showProgress && (

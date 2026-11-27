@@ -209,7 +209,7 @@ export default function PendingBookingPopup() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={markPendingReceiptSent}
-              className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-brand-whatsapp px-3.5 py-2.5 text-xs font-black text-white shadow-xs hover:brightness-105 transition-all text-center"
+              className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-brand-whatsapp px-3.5 py-2.5 text-xs font-black text-brand-navy shadow-xs hover:brightness-105 transition-all text-center"
             >
               <FontAwesomeIcon icon={faWhatsapp} className="text-sm" />
               <span>{t('booking.pendingPopup.confirmWhatsAppBtn')}</span>
@@ -267,7 +267,7 @@ export default function PendingBookingPopup() {
             onClick={markPendingReceiptSent}
             title={t('booking.pendingPopup.confirmWhatsAppBtn')}
             aria-label={t('booking.pendingPopup.confirmWhatsAppBtn')}
-            className="hidden sm:flex h-6 w-6 items-center justify-center rounded-full bg-brand-whatsapp text-[11px] text-white shadow-xs transition-transform hover:scale-105"
+            className="hidden sm:flex h-6 w-6 items-center justify-center rounded-full bg-brand-whatsapp text-[11px] text-brand-navy shadow-xs transition-transform hover:scale-105"
           >
             <FontAwesomeIcon icon={faWhatsapp} />
           </a>

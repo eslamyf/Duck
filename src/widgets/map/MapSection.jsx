@@ -11,9 +11,9 @@ const EgyptInteractiveMap = lazy(() => import('./EgyptInteractiveMap.jsx'));
 
 function MapSkeleton() {
   return (
-    <div className="w-full h-full min-h-[460px] min-[901px]:min-h-[540px] flex flex-col items-center justify-center bg-[#f2efe9] text-brand-navy/60 animate-pulse p-6">
+    <div className="w-full h-full min-h-[460px] min-[901px]:min-h-[540px] flex flex-col items-center justify-center bg-[#f2efe9] text-brand-navy p-6">
       <div className="w-12 h-12 rounded-full border-3 border-brand-blue/30 border-t-brand-blue animate-spin mb-3" />
-      <span className="font-bold text-xs tracking-wider">جاري تحميل خريطة الوجهات...</span>
+      <span className="font-bold text-xs tracking-wider text-brand-navy">جاري تحميل خريطة الوجهات...</span>
     </div>
   );
 }

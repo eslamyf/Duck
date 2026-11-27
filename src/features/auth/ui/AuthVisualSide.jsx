@@ -37,6 +37,7 @@ export default function AuthVisualSide({ mode = 'login' }) {
       <div className="relative z-10 flex items-center justify-between">
         <Link
           to={ROUTES.HOME}
+          tabIndex={-1}
           className="inline-flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow rounded-xl"
         >
           <img
@@ -62,9 +63,9 @@ export default function AuthVisualSide({ mode = 'login' }) {
           </span>
         </div>
 
-        <h1 className="text-2xl xl:text-3xl font-black leading-tight mb-2 tracking-tight text-white">
+        <p className="text-2xl xl:text-3xl font-black leading-tight mb-2 tracking-tight text-white">
           {t('auth.common.journeyStartsHere')}
-        </h1>
+        </p>
 
         <p className="text-white/85 text-xs xl:text-sm leading-relaxed mb-4 max-w-md">
           {t('auth.common.journeyDesc')}

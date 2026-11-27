@@ -44,7 +44,7 @@ export default function Footer({ onDestinationClick }) {
       <div className="grid grid-cols-1 min-[901px]:grid-cols-[1.35fr_1fr_1fr_1.25fr] gap-7 min-[901px]:gap-9 px-[5vw] min-[901px]:px-[6vw] pt-9 min-[901px]:pt-14 pb-6 min-[901px]:pb-10 max-w-[1360px] mx-auto">
         {/* Brand Column */}
         <div className="flex flex-col gap-3.5 items-start">
-          <Link to={ROUTES.HOME} className="inline-block focus:outline-none" aria-label={t('common.brandName')}>
+          <Link to={ROUTES.HOME} className="inline-block rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue" aria-label={t('common.brandName')}>
             <img
               src={duckLogo}
               alt={t('common.brandName')}
@@ -262,7 +262,7 @@ export default function Footer({ onDestinationClick }) {
               {t('footer.cancellationPolicy')}
             </Link>
             <span>•</span>
-            <span className="text-brand-navy/50">{t('footer.developerCredit')}</span>
+            <span className="text-brand-navy/65">{t('footer.developerCredit')}</span>
           </div>
         </div>
       </div>
@@ -274,7 +274,7 @@ export default function Footer({ onDestinationClick }) {
         rel="noopener noreferrer"
         aria-label={t('footer.whatsappAction')}
         title={t('footer.whatsappAction')}
-        className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+5.75rem)] min-[901px]:bottom-6 end-4 min-[901px]:end-6 z-[90] flex h-12 w-12 sm:h-13 sm:w-13 items-center justify-center rounded-full bg-brand-whatsapp text-white shadow-[0_8px_24px_rgba(37,211,102,0.45)] transition-all duration-200 hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
+        className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+5.75rem)] min-[901px]:bottom-6 end-4 min-[901px]:end-6 z-[90] flex h-12 w-12 sm:h-13 sm:w-13 items-center justify-center rounded-full bg-brand-whatsapp text-brand-navy shadow-[0_8px_24px_rgba(37,211,102,0.45)] transition-all duration-200 hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
       >
         <FontAwesomeIcon icon={faWhatsapp} className="text-2xl" aria-hidden="true" />
       </a>

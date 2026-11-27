@@ -80,7 +80,7 @@ export default function QuantityStepper({
               style={{
                 background: `linear-gradient(to ${lang === 'ar' ? 'left' : 'right'}, var(--color-blue) ${percent}%, #dbe8ee ${percent}%)`,
               }}
-              className="w-full h-3 rounded-full appearance-none cursor-pointer accent-brand-navy focus:outline-none"
+              className="w-full h-3 rounded-full appearance-none cursor-pointer accent-brand-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue"
             />
           </div>
         )}

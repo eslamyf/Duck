@@ -117,11 +117,13 @@ export default function NotificationBell({ tone = 'light' }) {
         onClick={toggleOpen}
         aria-expanded={isOpen}
         aria-haspopup="menu"
-        aria-label={isArabic ? 'التنبيهات والإشعارات' : 'Notifications'}
         title={isArabic ? 'التنبيهات' : 'Notifications'}
         className={`relative inline-flex h-9 w-9 items-center justify-center rounded-full border text-sm transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue ${buttonToneClass}`}
       >
-        <FontAwesomeIcon icon={faBell} />
+        <FontAwesomeIcon icon={faBell} aria-hidden="true" />
+        <span className="sr-only">
+          {isArabic ? 'التنبيهات والإشعارات' : 'Notifications'}
+        </span>
 
         {unreadCount > 0 && (
           <span

@@ -98,7 +98,7 @@ export default function BookingDetailsModal({ booking, onClose }) {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-brand-whatsapp px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:opacity-90"
+              className="inline-flex items-center gap-2 rounded-full bg-brand-whatsapp px-4 py-2.5 text-xs font-bold text-brand-navy shadow-sm transition hover:opacity-90"
             >
               <FontAwesomeIcon icon={faWhatsapp} />
               <span>{isArabic ? 'إرسال عبر واتساب' : 'Send via WhatsApp'}</span>

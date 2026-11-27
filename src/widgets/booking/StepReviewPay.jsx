@@ -243,9 +243,9 @@ export default function StepReviewPay({
           <div>
             <div className="flex items-center gap-2 pb-2 border-b border-black/5">
               <FontAwesomeIcon icon={faTag} className="text-brand-blue text-sm" />
-              <h3 className="font-heading font-extrabold text-sm sm:text-base text-brand-navy">
+              <h2 className="font-heading font-extrabold text-sm sm:text-base text-brand-navy">
                 {t('booking.reviewPay.promoCodeTitle')}
-              </h3>
+              </h2>
             </div>
 
             <div className="mt-3">
@@ -275,6 +275,7 @@ export default function StepReviewPay({
                         setPromoInput(e.target.value);
                         if (promoError) setPromoError('');
                       }}
+                      aria-label={t('booking.reviewPay.promoCodeTitle')}
                       placeholder="DUCK10 / DUCK2026 / WELCOME"
                       className="flex-1 px-3 py-2 rounded-xl border border-black/15 font-bold text-xs uppercase tracking-wider focus:border-brand-blue focus:outline-none"
                     />
@@ -324,9 +325,9 @@ export default function StepReviewPay({
       <section className="bg-white p-4 sm:p-5 rounded-2xl border border-black/10 shadow-xs space-y-3">
         <div className="flex items-center gap-2 pb-2 border-b border-black/5">
           <FontAwesomeIcon icon={faMoneyBillWave} className="text-brand-blue text-sm" />
-          <h3 className="font-heading font-extrabold text-sm sm:text-base text-brand-navy">
+          <h2 className="font-heading font-extrabold text-sm sm:text-base text-brand-navy">
             {t('booking.reviewPay.howMuchToPayTitle')}
-          </h3>
+          </h2>
         </div>
 
         {/* 2 Payment Cards Side-by-Side (Full Payment & 50% Deposit) with Checkmark on Selection */}

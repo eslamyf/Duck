@@ -215,7 +215,7 @@ export default function AboutJourney() {
                   onFocus={() => setActiveStep(idx)}
                   onClick={() => setActiveStep(idx)}
                   tabIndex={0}
-                  className={`group relative ms-7 sm:ms-0 flex flex-col justify-between rounded-2xl border bg-surface-white p-4 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md cursor-pointer focus:outline-none ${
+                  className={`group relative ms-7 sm:ms-0 flex flex-col justify-between rounded-2xl border bg-surface-white p-4 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue ${
                     isActive
                       ? 'border-brand-blue/45 ring-2 ring-brand-yellow/60 shadow-soft'
                       : 'border-black/10'

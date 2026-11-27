@@ -104,8 +104,8 @@ export default function EgyptInteractiveMap({
       const icon = L.divIcon({
         className: 'duck-marker',
         html: `
-          <div class="duck-pin" data-loc="${p.destId}" role="button" tabindex="0" aria-label="${pinTitle}">
-            <span class="dava" style="background-color: #ffffff; background-image: url('${duckPinLogo}'); background-repeat: no-repeat; background-position: center; background-size: 78% auto;">
+          <div class="duck-pin" data-loc="${p.destId}">
+            <span class="dava" style="background-color: #ffffff; background-image: url('${duckPinLogo}'); background-repeat: no-repeat; background-position: center; background-size: 78% auto;" aria-hidden="true">
               <img src="${duckPinLogo}" alt="" width="38" height="38" decoding="async" style="display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;transform:scale(1.35)!important;pointer-events:none!important;" />
             </span>
             <span class="dlbl">${pinTitle}</span>
@@ -115,9 +115,15 @@ export default function EgyptInteractiveMap({
         iconAnchor: [0, 0],
       });
 
-      const marker = L.marker([p.lat, p.lng], { icon }).addTo(map);
+      const marker = L.marker([p.lat, p.lng], { icon, alt: pinTitle, title: pinTitle }).addTo(map);
       marker.on('click', () => {
         onSelectPin(p.destId);
+      });
+      marker.on('keydown', (e) => {
+        if (e.originalEvent?.key === 'Enter' || e.originalEvent?.key === ' ') {
+          e.originalEvent.preventDefault();
+          onSelectPin(p.destId);
+        }
       });
 
       return marker;

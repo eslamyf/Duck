@@ -120,7 +120,7 @@ export default function TicketCard({ booking, onOpenDetails, onCancel }) {
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex min-h-[38px] items-center gap-1.5 rounded-full bg-brand-whatsapp px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition hover:opacity-90"
+          className="inline-flex min-h-[38px] items-center gap-1.5 rounded-full bg-brand-whatsapp px-3.5 py-1.5 text-xs font-bold text-brand-navy shadow-xs transition hover:opacity-90"
         >
           <FontAwesomeIcon icon={faWhatsapp} />
           <span>{isArabic ? 'واتساب الدعم' : 'WhatsApp Support'}</span>

@@ -79,7 +79,7 @@ export default function GroupsPage() {
       </div>
 
       {/* 2. Main Booking Card Section */}
-      <main className="relative z-30 max-w-[980px] mx-auto -mt-12 sm:-mt-16 px-4 pb-20 print:m-0 print:p-0 print:max-w-none print:static">
+      <div className="relative z-30 max-w-[980px] mx-auto -mt-12 sm:-mt-16 px-4 pb-20 print:m-0 print:p-0 print:max-w-none print:static">
         <div
           ref={cardRef}
           className="bg-white rounded-[28px] p-6 sm:p-9 shadow-[0_30px_70px_rgba(12,18,38,0.22)] border border-[rgba(20,125,159,0.14)] scroll-mt-24 print:border-none print:shadow-none print:p-0 print:m-0 print:rounded-none"
@@ -136,7 +136,7 @@ export default function GroupsPage() {
             />
           )}
         </div>
-      </main>
+      </div>
     </div>
   );
 }
