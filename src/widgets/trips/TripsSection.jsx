@@ -1,18 +1,12 @@
 import { useState, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from '../../shared/i18n/index.js';
-import { SectionHeader, Button, Card, DuckIcon } from '../../shared/ui/index.js';
+import { SectionHeader, Button, DuckIcon } from '../../shared/ui/index.js';
 import { useCustomScrollbar } from '../../shared/hooks/useCustomScrollbar.js';
 import { useCMS } from '../../shared/hooks/useCMS.js';
 import { TRIPS, DESTINATIONS_FILTER, ACTIVITIES } from './tripsData.js';
 import { ROUTES } from '../../shared/config/routes.js';
 import { trackSearch } from '../../shared/utils/analytics.js';
-
-const EXPERIENCE_TYPES = [
-  { key: 'kayak', label: 'KAYAK', slug: 'kayaking', icon: 'faWater' },
-  { key: 'sup', label: 'SUP', slug: 'sup', icon: 'faCompass' },
-  { key: 'waterbike', label: 'WATER BIKE', slug: 'water-bike', icon: 'faBicycle' },
-];
 
 export default function TripsSection({ externalFilter, onFilterChange }) {
   const { t, lang } = useTranslation();
@@ -137,44 +131,6 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
           theme="light"
           align="start"
         />
-
-        {/* Core Experience Types Strip (KAYAK · SUP · WATER BIKE) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 mb-6 min-[901px]:mb-8">
-          {EXPERIENCE_TYPES.map((exp) => {
-            const ArrowIcon = lang === 'ar' ? 'faArrowLeft' : 'faArrowRight';
-            return (
-              <Card
-                key={exp.key}
-                as={Link}
-                to={`${ROUTES.ACTIVITIES}/${exp.slug}`}
-                variant="default"
-                padding="sm"
-                className="group flex items-start gap-3.5 hover:-translate-y-0.5 hover:border-brand-blue/40 hover:shadow-card"
-              >
-                <span
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-navy text-brand-yellow text-base transition-colors group-hover:bg-brand-blue group-hover:text-white"
-                  aria-hidden="true"
-                >
-                  <DuckIcon icon={exp.icon} />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between gap-2 mb-1">
-                    <span className="text-xs font-extrabold tracking-wider text-brand-navy" lang="en" dir="ltr">
-                      {exp.label}
-                    </span>
-                    <DuckIcon
-                      icon={ArrowIcon}
-                      className="text-[11px] text-brand-blue opacity-70 transition-transform group-hover:translate-x-[-2px] ltr:group-hover:translate-x-[2px]"
-                    />
-                  </div>
-                  <p className="text-xs leading-relaxed text-brand-navy/75 m-0">
-                    {t(`trips.activityDescriptions.${exp.key}`)}
-                  </p>
-                </div>
-              </Card>
-            );
-          })}
-        </div>
 
         {/* Destination Filter Tabs */}
         <div
