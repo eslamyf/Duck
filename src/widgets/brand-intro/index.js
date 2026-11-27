@@ -1,1 +1,1 @@
-export { default as BrandIntroSection } from './BrandIntroSection.jsx';
+export { default as BrandIntroSection } from '../story-gallery/StoryGallerySection.jsx';

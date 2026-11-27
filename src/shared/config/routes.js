@@ -66,6 +66,7 @@ export const VALID_SECTIONS = Object.freeze(
     SECTIONS.ABOUT,
     'why-duck',
     'brand-intro',
+    'story-gallery',
     'final-cta',
   ])
 );

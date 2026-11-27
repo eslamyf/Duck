@@ -1,0 +1,324 @@
+/* ============================================================
+   Story & Gallery Section — Duck Entertainment
+   Aligned with classic-3-gallery.html & Design Tokens
+   GPU-Accelerated Smooth Transitions & Dark Mode Support
+   ============================================================ */
+
+.story-gallery-sec {
+  --sg-navy: var(--color-navy, #0C1226);
+  --sg-ink: #4A556C;
+  --sg-teal: #13708C;
+  --sg-line: #DCE6EA;
+  --sg-yellow: var(--color-yellow, #FDFB4A);
+  color: var(--sg-navy);
+  padding: clamp(48px, 6vw, 84px) 24px;
+  background-color: var(--color-surface-white, #FFFFFF);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Dark mode overrides */
+.dark .story-gallery-sec,
+.story-gallery-sec.dark {
+  background-color: var(--color-navy, #0C1226);
+  color: #FFFFFF;
+  --sg-ink: #94A3B8;
+  --sg-line: rgba(255, 255, 255, 0.12);
+}
+
+.story-gallery-wrap {
+  max-width: 1180px;
+  margin-inline: auto;
+}
+
+.story-gallery-head {
+  text-align: center;
+}
+
+.story-gallery-title {
+  font-family: var(--font-heading, 'Baloo Bhaijaan 2', sans-serif);
+  font-size: clamp(1.95rem, 3.4vw, 2.85rem);
+  line-height: 1.38;
+  font-weight: 800;
+  margin-top: 14px;
+  color: var(--sg-navy);
+  letter-spacing: -0.01em;
+}
+
+.dark .story-gallery-title,
+.story-gallery-sec.dark .story-gallery-title {
+  color: #FFFFFF;
+}
+
+.story-gallery-title span {
+  display: inline;
+}
+
+.story-gallery-title span:first-child {
+  font-weight: 500;
+  opacity: 0.95;
+}
+
+.story-gallery-title span + span {
+  margin-inline-start: 0.3em;
+}
+
+/* 3-Column Gallery Grid */
+.story-gallery-grid {
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 1.9fr) 1fr;
+  gap: clamp(24px, 3.4vw, 48px);
+  align-items: center;
+  margin-top: 44px;
+}
+
+/* Frame Showcase (Center Column) */
+.story-gallery-frame {
+  margin: 0;
+  border: 1px solid #CBDADF;
+  padding: 16px;
+  background: #FFFFFF;
+  border-radius: 4px;
+  box-shadow: 0 28px 50px -34px rgba(12, 18, 38, 0.4);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.dark .story-gallery-frame,
+.story-gallery-sec.dark .story-gallery-frame {
+  background: #12182E;
+  border-color: rgba(19, 112, 140, 0.35);
+  box-shadow: 0 28px 50px -34px rgba(0, 0, 0, 0.65);
+}
+
+.story-gallery-img-container {
+  overflow: hidden;
+  border-radius: 2px;
+  background-color: var(--color-navy, #0C1226);
+}
+
+.story-gallery-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3.1;
+  object-fit: cover;
+  object-position: 54% 50%;
+  transform: translateZ(0);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.story-gallery-frame:hover img {
+  transform: scale(1.02);
+}
+
+.story-gallery-frame figcaption {
+  padding-top: 12px;
+  text-align: center;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--sg-teal);
+  font-size: 0.95rem;
+}
+
+.dark .story-gallery-frame figcaption,
+.story-gallery-sec.dark .story-gallery-frame figcaption {
+  color: #38BDF8;
+}
+
+/* Side Column (Story Text & CTA) */
+.story-gallery-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.story-gallery-text {
+  color: var(--sg-ink);
+  font-size: 1.05rem;
+  line-height: 2;
+  margin: 0;
+}
+
+.story-gallery-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 54px;
+  padding: 0 34px;
+  border-radius: 99px;
+  background: var(--sg-yellow);
+  color: var(--sg-navy);
+  font-family: var(--font-body, 'Baloo Bhaijaan 2', sans-serif);
+  font-weight: 800;
+  font-size: 1.08rem;
+  text-decoration: none;
+  margin-top: 26px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(12, 18, 38, 0.08);
+  transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  will-change: transform;
+}
+
+.story-gallery-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.story-gallery-btn:hover {
+  background: var(--sg-navy);
+  color: #FFFFFF;
+  box-shadow: 0 10px 24px -6px rgba(12, 18, 38, 0.28);
+}
+
+[dir="rtl"] .story-gallery-btn:hover svg {
+  transform: translateX(-5px);
+}
+
+[dir="ltr"] .story-gallery-btn:hover svg {
+  transform: translateX(5px);
+}
+
+.story-gallery-btn:focus-visible {
+  outline: 3px solid var(--sg-teal);
+  outline-offset: 4px;
+}
+
+/* Features List Column */
+.story-gallery-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.story-gallery-list li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 22px 6px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--sg-navy);
+  transition: color 0.3s ease;
+}
+
+.dark .story-gallery-list li,
+.story-gallery-sec.dark .story-gallery-list li {
+  color: #F1F5F9;
+}
+
+.story-gallery-list li + li {
+  border-top: 1px solid var(--sg-line);
+}
+
+.story-gallery-ico {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: var(--sg-teal);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.3s ease, transform 0.3s ease;
+}
+
+.dark .story-gallery-ico,
+.story-gallery-sec.dark .story-gallery-ico {
+  stroke: #38BDF8;
+}
+
+.story-gallery-list li:hover .story-gallery-ico {
+  transform: scale(1.1);
+}
+
+/* Dual-Wave Kinetic River Float Animation */
+@keyframes riverWaveFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+.animate-sg-wave-float {
+  animation: riverWaveFloat 2.8s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Responsive Rules matching classic-3-gallery.html */
+@media (max-width: 1000px) {
+  .story-gallery-grid {
+    grid-template-columns: 1fr;
+    margin-top: 28px;
+    max-width: 560px;
+    margin-inline: auto;
+  }
+
+  .story-gallery-frame {
+    order: -1;
+    padding: 10px;
+  }
+
+  .story-gallery-title span {
+    display: block;
+  }
+
+  .story-gallery-title span + span {
+    margin-inline-start: 0;
+  }
+
+  .story-gallery-side {
+    align-items: center;
+    text-align: center;
+  }
+
+  .story-gallery-list li {
+    flex-direction: row;
+    padding: 16px 8px;
+    font-size: 1rem;
+    text-align: start;
+    justify-content: flex-start;
+  }
+
+  [dir="rtl"] .story-gallery-list li {
+    text-align: right;
+  }
+
+  .story-gallery-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 860px) {
+  .story-gallery-sec {
+    padding: 44px 20px;
+  }
+}
+
+/* Accessible Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .story-gallery-sec *,
+  .animate-sg-wave-float,
+  .story-gallery-frame img,
+  .story-gallery-btn,
+  .story-gallery-btn svg,
+  .story-gallery-ico {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}

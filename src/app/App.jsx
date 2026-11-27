@@ -11,7 +11,7 @@ import Navbar from '../widgets/navbar/Navbar.jsx';
 import { MobileBottomNav } from '../widgets/header/index.js';
 import Footer from '../widgets/footer/Footer.jsx';
 import HeroSection from '../widgets/hero/HeroSection.jsx';
-import { BrandIntroSection } from '../widgets/brand-intro/index.js';
+import { StoryGallerySection } from '../widgets/story-gallery/index.js';
 import LazyViewportSection from './LazyViewportSection.jsx';
 
 import { useTranslation } from '../shared/i18n/index.js';
@@ -621,7 +621,7 @@ function HomePageView({
     <>
       <HeroSection />
 
-      <BrandIntroSection />
+      <StoryGallerySection />
 
       <LazyViewportSection id={SECTIONS.DESTINATIONS} fallback={<DestinationsFallback />}>
         <DestinationsSection

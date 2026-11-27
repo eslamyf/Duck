@@ -178,7 +178,8 @@ src/
 │   ├── navbar/                 # الشريط العلوي الرئيسي مع محولات اللغة والعملة
 │   ├── header/                 # شريط التنقل السفلي المدمج للموبايل (MobileBottomNav)
 │   ├── hero/                   # الهيرو السينمائي مع إطارات ديكورية و DuckManifesto
-│   ├── brand-intro/            # قسم مدخل الهوية والتجربة
+│   ├── story-gallery/          # قسم المعرض والقصة التعريفية (Classic 3-Gallery Layout & Kinetic Manifesto)
+│   ├── brand-intro/            # قسم مدخل الهوية والتجربة (Legacy Alias)
 │   ├── destinations/           # بطاقات واستعراض الوجهات السياحية
 │   ├── trips/                  # شبكة الرحلات، بطاقات الأسعار، والفلاتر
 │   ├── why-duck/               # ركائز التميز ومميزات المنصة
