@@ -95,7 +95,7 @@ export default function HeroSection() {
         entries.forEach((entry) => {
           if (videoRef.current) {
             if (entry.isIntersecting) {
-              videoRef.current.play().catch(() => {});
+              videoRef.current.play().catch(() => { });
             } else {
               videoRef.current.pause();
             }
@@ -157,9 +157,8 @@ export default function HeroSection() {
                 poster={isDesktop ? heroPosterDesktop : heroPosterMobile}
                 onPlaying={() => setIsVideoPlaying(true)}
                 onError={() => setVideoError(true)}
-                className={`absolute inset-0 w-full h-full rounded-[inherit] object-cover object-[center_56%] contrast-[1.06] saturate-[1.12] [transform:translateZ(0)] transition-opacity duration-700 ${
-                  isVideoPlaying ? 'opacity-100' : 'opacity-0'
-                }`}
+                className={`absolute inset-0 w-full h-full rounded-[inherit] object-cover object-[center_56%] contrast-[1.06] saturate-[1.12] [transform:translateZ(0)] transition-opacity duration-700 ${isVideoPlaying ? 'opacity-100' : 'opacity-0'
+                  }`}
               >
                 <source
                   src={isDesktop ? heroVideoDesktop : heroVideoMobile}
