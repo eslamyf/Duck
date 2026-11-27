@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import duckLogo from '../../shared/assets/icons/Artboard 14.png';
+import duckLogo280 from '../../shared/assets/icons/duck-logo-280w.webp';
+import duckLogo560 from '../../shared/assets/icons/duck-logo-560w.webp';
 
 import { useTranslation } from '../../shared/i18n/index.js';
 import { Button, Badge } from '../../shared/ui/index.js';
@@ -256,7 +257,9 @@ export default function Navbar({ onBookClick }) {
           aria-label={t('common.brandName')}
         >
           <img
-            src={duckLogo}
+            src={duckLogo280}
+            srcSet={`${duckLogo280} 280w, ${duckLogo560} 560w`}
+            sizes="124px"
             alt={t('common.brandName')}
             width="124"
             height="32"
@@ -313,7 +316,9 @@ export default function Navbar({ onBookClick }) {
               aria-label={t('common.brandName')}
             >
               <img
-                src={duckLogo}
+                src={duckLogo280}
+                srcSet={`${duckLogo280} 280w, ${duckLogo560} 560w`}
+                sizes="140px"
                 alt={t('common.brandName')}
                 width="140"
                 height="38"

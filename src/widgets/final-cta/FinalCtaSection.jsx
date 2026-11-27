@@ -4,7 +4,8 @@ import { faCalendarCheck, faArrowLeft, faArrowRight } from '@fortawesome/free-so
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES } from '../../shared/config/routes.js';
 import { Button, DuckManifesto } from '../../shared/ui/index.js';
-import ctaBg from '../../shared/assets/images/about/cta-bg.webp';
+import ctaBg640 from '../../shared/assets/images/about/cta-bg-640w.webp';
+import ctaBg1200 from '../../shared/assets/images/about/cta-bg-1200w.webp';
 
 export default function FinalCtaSection() {
   const { t, lang } = useTranslation();
@@ -20,8 +21,12 @@ export default function FinalCtaSection() {
     >
       <div className="relative mx-auto max-w-[1400px] overflow-hidden rounded-3xl min-[901px]:rounded-[28px] border border-brand-navy/10 bg-brand-navy text-white shadow-hero-frame py-12 sm:py-16 min-[901px]:py-20 px-5 sm:px-10">
         <img
-          src={ctaBg}
+          src={ctaBg1200}
+          srcSet={`${ctaBg640} 640w, ${ctaBg1200} 1200w`}
+          sizes="(max-width: 640px) 92vw, 1300px"
           alt=""
+          width={1200}
+          height={675}
           loading="lazy"
           decoding="async"
           aria-hidden="true"

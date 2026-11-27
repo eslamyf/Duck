@@ -8,7 +8,7 @@ import {
 import { useTranslation } from '../../../shared/i18n/index.js';
 import { ROUTES } from '../../../shared/config/routes.js';
 import kayakImage from '../../../shared/assets/images/trips/botanical-garden-960w.webp';
-import duckLogo from '../../../shared/assets/icons/Artboard 14.png';
+import duckLogo from '../../../shared/assets/icons/duck-logo-280w.webp';
 
 export default function AuthVisualSide({ mode = 'login' }) {
   const { t } = useTranslation();

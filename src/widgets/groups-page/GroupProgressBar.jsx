@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import duckIcon from '../../shared/assets/icons/Artboard_8-removebg-preview.png';
+import duckIcon from '../../shared/assets/icons/duck-mark-192w.webp';
 
 export default function GroupProgressBar({ state, step, setStep, submitted, t, lang }) {
   // Dynamic percentage calculation based on user interaction & data entry:

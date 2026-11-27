@@ -61,6 +61,8 @@ export default function DestinationMapCard({
                       'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80'
                     }
                     alt={title}
+                    width={72}
+                    height={60}
                     loading="lazy"
                     decoding="async"
                     style={{
@@ -135,6 +137,8 @@ export default function DestinationMapCard({
             srcSet={activeDest.images?.srcSet}
             sizes="(max-width: 900px) 90vw, 500px"
             alt={title}
+            width={500}
+            height={281}
             loading="lazy"
             decoding="async"
             style={{

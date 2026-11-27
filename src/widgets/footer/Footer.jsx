@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import duckLogo from '../../shared/assets/icons/Artboard 14.png';
+import duckLogo280 from '../../shared/assets/icons/duck-logo-280w.webp';
+import duckLogo560 from '../../shared/assets/icons/duck-logo-560w.webp';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
 import {
@@ -46,7 +47,9 @@ export default function Footer({ onDestinationClick }) {
         <div className="flex flex-col gap-3.5 items-start">
           <Link to={ROUTES.HOME} className="inline-block rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue" aria-label={t('common.brandName')}>
             <img
-              src={duckLogo}
+              src={duckLogo280}
+              srcSet={`${duckLogo280} 280w, ${duckLogo560} 560w`}
+              sizes="188px"
               alt={t('common.brandName')}
               width={188}
               height={40}

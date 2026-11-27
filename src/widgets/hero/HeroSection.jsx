@@ -137,8 +137,8 @@ export default function HeroSection() {
               <img
                 src={heroPosterDesktop}
                 alt={t('hero.videoPosterAlt')}
-                width={isDesktop ? 1080 : 720}
-                height={isDesktop ? 1440 : 960}
+                width={isDesktop ? 1080 : 600}
+                height={isDesktop ? 560 : 800}
                 fetchPriority="high"
                 decoding="async"
                 className="w-full h-full rounded-[inherit] object-cover object-[center_56%] contrast-[1.06] saturate-[1.12] [transform:translateZ(0)]"

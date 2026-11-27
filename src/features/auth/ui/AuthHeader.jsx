@@ -7,7 +7,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../../shared/i18n/index.js';
 import { ROUTES } from '../../../shared/config/routes.js';
-import duckLogo from '../../../shared/assets/icons/Artboard 14.png';
+import duckLogo from '../../../shared/assets/icons/duck-logo-280w.webp';
 
 export default function AuthHeader() {
   const { lang, setLanguage, t } = useTranslation();

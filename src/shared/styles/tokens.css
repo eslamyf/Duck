@@ -4,44 +4,22 @@
    Synchronized: 2026-11-26 | Local Baloo Bhaijaan 2 Typography
    ============================================================ */
 
+/* Baloo Bhaijaan 2 Variable Subset Font (64KB WOFF2 covering 400-800 weights, Ar+Latin+Symbols) */
 @font-face {
   font-family: 'Baloo Bhaijaan 2';
-  src: url('../assets/fonts/Baloo_Bhaijaan_2/static/BalooBhaijaan2-Regular.ttf') format('truetype');
-  font-weight: 400;
+  src: url('../assets/fonts/Baloo_Bhaijaan_2/BalooBhaijaan2-Variable-subset.woff2') format('woff2');
+  font-weight: 400 800;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Baloo Bhaijaan 2';
-  src: url('../assets/fonts/Baloo_Bhaijaan_2/static/BalooBhaijaan2-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Baloo Bhaijaan 2';
-  src: url('../assets/fonts/Baloo_Bhaijaan_2/static/BalooBhaijaan2-SemiBold.ttf') format('truetype');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Baloo Bhaijaan 2';
-  src: url('../assets/fonts/Baloo_Bhaijaan_2/static/BalooBhaijaan2-Bold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Baloo Bhaijaan 2';
-  src: url('../assets/fonts/Baloo_Bhaijaan_2/static/BalooBhaijaan2-ExtraBold.ttf') format('truetype');
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
+  font-family: 'Baloo Bhaijaan 2 Fallback';
+  src: local('Segoe UI'), local('Arial'), local('Tahoma');
+  size-adjust: 97%;
+  ascent-override: 108%;
+  descent-override: 63.2%;
+  line-gap-override: 0%;
 }
 
 :root {
@@ -127,10 +105,10 @@
   --transition-slow: 500ms var(--ease-marine);
 
   /* ── Typography (Unified Local Font: Baloo Bhaijaan 2) ── */
-  --font-arabic: 'Baloo Bhaijaan 2', system-ui, sans-serif;
-  --font-body: 'Baloo Bhaijaan 2', system-ui, sans-serif;
-  --font-display: 'Baloo Bhaijaan 2', system-ui, sans-serif;
-  --font-heading: 'Baloo Bhaijaan 2', system-ui, sans-serif;
+  --font-arabic: 'Baloo Bhaijaan 2', 'Baloo Bhaijaan 2 Fallback', system-ui, sans-serif;
+  --font-body: 'Baloo Bhaijaan 2', 'Baloo Bhaijaan 2 Fallback', system-ui, sans-serif;
+  --font-display: 'Baloo Bhaijaan 2', 'Baloo Bhaijaan 2 Fallback', system-ui, sans-serif;
+  --font-heading: 'Baloo Bhaijaan 2', 'Baloo Bhaijaan 2 Fallback', system-ui, sans-serif;
   --font-mono: ui-monospace, Consolas, monospace;
 
   /* ── Layout & Header Heights ─────────────────────────────── */

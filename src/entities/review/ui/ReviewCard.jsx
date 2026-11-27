@@ -53,6 +53,8 @@ export default function ReviewCard({
             <img
               src={review.img}
               alt={reviewerActivity || reviewerName}
+              width={320}
+              height={200}
               loading="lazy"
               decoding="async"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -146,6 +148,8 @@ export default function ReviewCard({
           <img
             src={review.img}
             alt={reviewerActivity || reviewerName}
+            width={320}
+            height={200}
             loading="lazy"
             decoding="async"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"

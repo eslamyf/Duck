@@ -4,7 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES } from '../../shared/config/routes.js';
-import ctaBg from '../../shared/assets/images/about/cta-bg.webp';
+import ctaBg640 from '../../shared/assets/images/about/cta-bg-640w.webp';
+import ctaBg1200 from '../../shared/assets/images/about/cta-bg-1200w.webp';
 
 export default function AboutCTA() {
   const { lang, t } = useTranslation();
@@ -21,8 +22,12 @@ export default function AboutCTA() {
           duration: 1.2,
           ease: 'easeOut',
         }}
-        src={ctaBg}
+        src={ctaBg1200}
+        srcSet={`${ctaBg640} 640w, ${ctaBg1200} 1200w`}
+        sizes="100vw"
         alt={t('about.cta.title')}
+        width={1200}
+        height={675}
         loading="eager"
         decoding="async"
         className="absolute inset-0 h-full w-full object-cover object-[center_65%]"

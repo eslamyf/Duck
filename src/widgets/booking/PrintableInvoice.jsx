@@ -1,5 +1,5 @@
 import QRCodeSVG from './QRCodeSVG.jsx';
-import duckLogo from '../../shared/assets/icons/Artboard_8-removebg-preview.png';
+import duckLogo from '../../shared/assets/icons/duck-mark-192w.webp';
 import { CONTACT } from '../../shared/config/constants.js';
 import { MAP_PINS } from '../map/mapData.js';
 

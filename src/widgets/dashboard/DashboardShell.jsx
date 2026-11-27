@@ -10,7 +10,7 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
 
-import duckLogo from '../../shared/assets/icons/Artboard_8-removebg-preview.png';
+import duckLogo from '../../shared/assets/icons/duck-mark-192w.webp';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES } from '../../shared/config/routes.js';
 import { DEMO_ACCOUNTS } from '../../shared/config/demoAccounts.js';

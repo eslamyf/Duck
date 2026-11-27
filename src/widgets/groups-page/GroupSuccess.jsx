@@ -14,7 +14,7 @@ import {
   faArrowRotateLeft,
   faShieldHalved,
 } from '@fortawesome/free-solid-svg-icons';
-import duckLogo from '../../shared/assets/icons/Artboard 14.png';
+import duckLogo from '../../shared/assets/icons/duck-logo-280w.webp';
 import { GROUP_TYPES, GROUP_ACTIVITIES, TIMES_OF_DAY } from './sceneData.js';
 import { DESTINATIONS } from '../destinations/destinationsData.js';
 import { Button } from '../../shared/ui/index.js';

@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus, faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from '../../shared/i18n/index.js';
-import duckPinLogo from '../../shared/assets/icons/Artboard 19.png';
+import duckPinLogo from '../../shared/assets/icons/duck-pin-96w.webp';
 
 const GOOGLE_ROADMAP_URL =
   'https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&hl={hl}';

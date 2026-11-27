@@ -7,7 +7,8 @@ import {
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES } from '../../shared/config/routes.js';
 import { Button, DuckManifesto } from '../../shared/ui/index.js';
-import introImage from '../../shared/assets/images/image1.jpeg';
+import introImg480 from '../../shared/assets/images/image1-480w.webp';
+import introImg720 from '../../shared/assets/images/image1-720w.webp';
 
 export default function BrandIntroSection() {
   const { t, lang } = useTranslation();
@@ -58,8 +59,12 @@ export default function BrandIntroSection() {
         {/* Visual Showcase */}
         <div className="relative rounded-[26px] overflow-hidden border border-brand-blue/15 bg-brand-navy shadow-ocean aspect-[16/10] min-[901px]:aspect-[4/3]">
           <img
-            src={introImage}
+            src={introImg720}
+            srcSet={`${introImg480} 480w, ${introImg720} 720w`}
+            sizes="(max-width: 900px) 92vw, 525px"
             alt={t('brandIntro.imageAlt')}
+            width={720}
+            height={540}
             loading="lazy"
             decoding="async"
             className="w-full h-full object-cover object-[center_45%] transition-transform duration-700 hover:scale-105"

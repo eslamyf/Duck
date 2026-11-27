@@ -234,7 +234,7 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
             <div className="absolute inset-0 z-0 bg-brand-navy">
               <picture>
                 {selectedTrip.images?.srcSet && (
-                  <source srcSet={selectedTrip.images.srcSet} sizes="(min-width: 901px) 60vw, 100vw" />
+                  <source srcSet={selectedTrip.images.srcSet} sizes="(min-width: 901px) 690px, 100vw" />
                 )}
                 <img
                   key={selectedTrip.id}
@@ -537,7 +537,7 @@ export default function TripsSection({ externalFilter, onFilterChange }) {
                     <div className="absolute inset-0 z-0">
                       <picture>
                         {trip.images?.srcSet && (
-                          <source srcSet={trip.images.srcSet} sizes="86vw" />
+                          <source srcSet={trip.images.srcSet} sizes="(max-width: 640px) 300px, 440px" />
                         )}
                         <img
                           src={

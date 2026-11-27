@@ -1,6 +1,6 @@
-import backgroundImage from '../../shared/assets/images/about-background.jpg';
-import mainImage from '../../shared/assets/images/about-main.jpg';
-import secondaryImage from '../../shared/assets/images/about-secondary.jpg';
+import backgroundImage from '../../shared/assets/images/about-background.webp';
+import mainImage from '../../shared/assets/images/about-main.webp';
+import secondaryImage from '../../shared/assets/images/about-secondary.webp';
 import { useTranslation } from '../../shared/i18n/index.js';
 
 import {

@@ -1,11 +1,11 @@
-import bot640 from '../../../shared/assets/images/trips/botanical-garden-640w.webp';
-import sup640 from '../../../shared/assets/images/trips/sup-nile-640w.webp';
-import priv640 from '../../../shared/assets/images/trips/kayak-private-640w.webp';
-import adv640 from '../../../shared/assets/images/trips/gharb-adventure-640w.webp';
-import wb640 from '../../../shared/assets/images/trips/waterbike-nile-640w.webp';
-import slouga640 from '../../../shared/assets/images/trips/slouga-ghazal-640w.webp';
-import ageeba640 from '../../../shared/assets/images/trips/ageeba-beach-640w.webp';
-import giza640 from '../../../shared/assets/images/trips/giza-abbas-bridge-640w.webp';
+import bot640 from '../../../shared/assets/images/trips/botanical-garden-320w.webp';
+import sup640 from '../../../shared/assets/images/trips/sup-nile-320w.webp';
+import priv640 from '../../../shared/assets/images/trips/kayak-private-320w.webp';
+import adv640 from '../../../shared/assets/images/trips/gharb-adventure-320w.webp';
+import wb640 from '../../../shared/assets/images/trips/waterbike-nile-320w.webp';
+import slouga640 from '../../../shared/assets/images/trips/slouga-ghazal-320w.webp';
+import ageeba640 from '../../../shared/assets/images/trips/ageeba-beach-320w.webp';
+import giza640 from '../../../shared/assets/images/trips/giza-abbas-bridge-320w.webp';
 
 export const GOOGLE_REVIEWS_URL = 'https://maps.app.goo.gl/FPt8JJ8VgaTTzBir6';
 

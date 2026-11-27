@@ -1,46 +1,57 @@
 import { faWater, faCompass, faBicycle } from '@fortawesome/free-solid-svg-icons';
 
 import bot160 from '../../shared/assets/images/trips/botanical-garden-160w.webp';
+import bot480 from '../../shared/assets/images/trips/botanical-garden-480w.webp';
 import bot640 from '../../shared/assets/images/trips/botanical-garden-640w.webp';
 import bot960 from '../../shared/assets/images/trips/botanical-garden-960w.webp';
 
 import sup160 from '../../shared/assets/images/trips/sup-nile-160w.webp';
+import sup480 from '../../shared/assets/images/trips/sup-nile-480w.webp';
 import sup640 from '../../shared/assets/images/trips/sup-nile-640w.webp';
 import sup960 from '../../shared/assets/images/trips/sup-nile-960w.webp';
 
 import slouga160 from '../../shared/assets/images/trips/slouga-ghazal-160w.webp';
+import slouga480 from '../../shared/assets/images/trips/slouga-ghazal-480w.webp';
 import slouga640 from '../../shared/assets/images/trips/slouga-ghazal-640w.webp';
 import slouga960 from '../../shared/assets/images/trips/slouga-ghazal-960w.webp';
 
 import priv160 from '../../shared/assets/images/trips/kayak-private-160w.webp';
+import priv480 from '../../shared/assets/images/trips/kayak-private-480w.webp';
 import priv640 from '../../shared/assets/images/trips/kayak-private-640w.webp';
 import priv960 from '../../shared/assets/images/trips/kayak-private-960w.webp';
 
 import free160 from '../../shared/assets/images/trips/kayak-free-160w.webp';
+import free480 from '../../shared/assets/images/trips/kayak-free-480w.webp';
 import free640 from '../../shared/assets/images/trips/kayak-free-640w.webp';
 import free960 from '../../shared/assets/images/trips/kayak-free-960w.webp';
 
 import exp160 from '../../shared/assets/images/trips/gharb-explorer-160w.webp';
+import exp480 from '../../shared/assets/images/trips/gharb-explorer-480w.webp';
 import exp640 from '../../shared/assets/images/trips/gharb-explorer-640w.webp';
 import exp960 from '../../shared/assets/images/trips/gharb-explorer-960w.webp';
 
 import adv160 from '../../shared/assets/images/trips/gharb-adventure-160w.webp';
+import adv480 from '../../shared/assets/images/trips/gharb-adventure-480w.webp';
 import adv640 from '../../shared/assets/images/trips/gharb-adventure-640w.webp';
 import adv960 from '../../shared/assets/images/trips/gharb-adventure-960w.webp';
 
 import om160 from '../../shared/assets/images/trips/om-elrakham-160w.webp';
+import om480 from '../../shared/assets/images/trips/om-elrakham-480w.webp';
 import om640 from '../../shared/assets/images/trips/om-elrakham-640w.webp';
 import om960 from '../../shared/assets/images/trips/om-elrakham-960w.webp';
 
 import ageeba160 from '../../shared/assets/images/trips/ageeba-beach-160w.webp';
+import ageeba480 from '../../shared/assets/images/trips/ageeba-beach-480w.webp';
 import ageeba640 from '../../shared/assets/images/trips/ageeba-beach-640w.webp';
 import ageeba960 from '../../shared/assets/images/trips/ageeba-beach-960w.webp';
 
 import wb160 from '../../shared/assets/images/trips/waterbike-nile-160w.webp';
+import wb480 from '../../shared/assets/images/trips/waterbike-nile-480w.webp';
 import wb640 from '../../shared/assets/images/trips/waterbike-nile-640w.webp';
 import wb960 from '../../shared/assets/images/trips/waterbike-nile-960w.webp';
 
 import giza160 from '../../shared/assets/images/trips/giza-abbas-bridge-160w.webp';
+import giza480 from '../../shared/assets/images/trips/giza-abbas-bridge-480w.webp';
 import giza640 from '../../shared/assets/images/trips/giza-abbas-bridge-640w.webp';
 import giza960 from '../../shared/assets/images/trips/giza-abbas-bridge-960w.webp';
 
@@ -75,7 +86,7 @@ export const TRIPS = [
       thumb: bot160,
       medium: bot640,
       large: bot960,
-      srcSet: `${bot640} 640w, ${bot960} 960w`,
+      srcSet: `${bot480} 480w, ${bot640} 640w, ${bot960} 960w`,
     },
   },
   {
@@ -94,7 +105,7 @@ export const TRIPS = [
       thumb: sup160,
       medium: sup640,
       large: sup960,
-      srcSet: `${sup640} 640w, ${sup960} 960w`,
+      srcSet: `${sup480} 480w, ${sup640} 640w, ${sup960} 960w`,
     },
   },
   {
@@ -116,7 +127,7 @@ export const TRIPS = [
       thumb: slouga160,
       medium: slouga640,
       large: slouga960,
-      srcSet: `${slouga640} 640w, ${slouga960} 960w`,
+      srcSet: `${slouga480} 480w, ${slouga640} 640w, ${slouga960} 960w`,
     },
   },
   {
@@ -135,7 +146,7 @@ export const TRIPS = [
       thumb: priv160,
       medium: priv640,
       large: priv960,
-      srcSet: `${priv640} 640w, ${priv960} 960w`,
+      srcSet: `${priv480} 480w, ${priv640} 640w, ${priv960} 960w`,
     },
   },
   {
@@ -154,7 +165,7 @@ export const TRIPS = [
       thumb: free160,
       medium: free640,
       large: free960,
-      srcSet: `${free640} 640w, ${free960} 960w`,
+      srcSet: `${free480} 480w, ${free640} 640w, ${free960} 960w`,
     },
   },
   {
@@ -173,7 +184,7 @@ export const TRIPS = [
       thumb: exp160,
       medium: exp640,
       large: exp960,
-      srcSet: `${exp640} 640w, ${exp960} 960w`,
+      srcSet: `${exp480} 480w, ${exp640} 640w, ${exp960} 960w`,
     },
   },
   {
@@ -192,7 +203,7 @@ export const TRIPS = [
       thumb: adv160,
       medium: adv640,
       large: adv960,
-      srcSet: `${adv640} 640w, ${adv960} 960w`,
+      srcSet: `${adv480} 480w, ${adv640} 640w, ${adv960} 960w`,
     },
   },
   {
@@ -211,7 +222,7 @@ export const TRIPS = [
       thumb: om160,
       medium: om640,
       large: om960,
-      srcSet: `${om640} 640w, ${om960} 960w`,
+      srcSet: `${om480} 480w, ${om640} 640w, ${om960} 960w`,
     },
   },
   {
@@ -230,7 +241,7 @@ export const TRIPS = [
       thumb: ageeba160,
       medium: ageeba640,
       large: ageeba960,
-      srcSet: `${ageeba640} 640w, ${ageeba960} 960w`,
+      srcSet: `${ageeba480} 480w, ${ageeba640} 640w, ${ageeba960} 960w`,
     },
   },
   {
@@ -250,7 +261,7 @@ export const TRIPS = [
       thumb: wb160,
       medium: wb640,
       large: wb960,
-      srcSet: `${wb640} 640w, ${wb960} 960w`,
+      srcSet: `${wb480} 480w, ${wb640} 640w, ${wb960} 960w`,
     },
   },
   {
@@ -270,7 +281,7 @@ export const TRIPS = [
       thumb: giza160,
       medium: giza640,
       large: giza960,
-      srcSet: `${giza640} 640w, ${giza960} 960w`,
+      srcSet: `${giza480} 480w, ${giza640} 640w, ${giza960} 960w`,
     },
   },
 ];

@@ -232,8 +232,8 @@ export default function DestinationsSection({ onSelectDestination }) {
                         srcSet={isActive ? item.images?.srcSet : undefined}
                         sizes={
                           isActive
-                            ? '(max-width: 900px) 84vw, (min-width: 901px) 800px'
-                            : '(max-width: 900px) 84vw, 360px'
+                            ? '(max-width: 640px) 320px, (max-width: 900px) 60vw, 700px'
+                            : '(max-width: 900px) 320px, 140px'
                         }
                         alt={destAlt}
                         width={item.width || 1080}
