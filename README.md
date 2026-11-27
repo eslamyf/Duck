@@ -1,16 +1,36 @@
-# 🦆 Duck — Water Sports & Marine Activities Platform
+<div align="center">
+  <img src="src/shared/assets/icons/Artboard%2014.png" alt="Duck Entertainment Logo" width="280" />
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-duck--lac.vercel.app-FDFB45?style=for-the-badge&logo=vercel&logoColor=black)](https://duck-lac.vercel.app/)
-[![React](https://img.shields.io/badge/React-19.3.1-61DAFB?logo=react&logoColor=black)](https://react.dev/)
-[![Vite](https://img.shields.io/badge/Vite-8.3.6-646CFF?logo=vite&logoColor=white)](https://vite.dev/)
-[![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-v4.3.5-38BDF8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![React Router](https://img.shields.io/badge/React_Router-v7.18.6-CA4245?logo=reactrouter&logoColor=white)](https://reactrouter.com/)
-[![Design Tokens](https://img.shields.io/badge/Brand-In%20Duck%20We%20Trust-FDFB45)](https://duck-lac.vercel.app/)
+  # 🦆 Duck — Water Sports & Marine Activities Platform
 
-> 🌐 **رابط المعاينة الحية للمشروع (Production Live Demo):**  
-> **[https://duck-lac.vercel.app/](https://duck-lac.vercel.app/)**
+  **"IN DUCK WE TRUST"**  
+  *المنصة الرائدة لحجز الأنشطة والتجارب المائية في مصر*
 
-منصة ويب عصرية وتفاعلية لحجز وإدارة الأنشطة والتجارب المائية في مصر (Kayak, SUP, Water Bike) بشعارها الرسمي **"IN DUCK WE TRUST"**. صُممت وبُنيت المنصة وفق معايير هندسة البرمجيات المؤسسية من الدرجة الأولى (**Enterprise-Grade Frontend Engineering**)، بالاعتماد على معمارية **Feature-Sliced Design (FSD)**، مع نظام تسعير مزدوج (مصري/أجنبي)، ومسار حجز فوري كزائر (**Guest Checkout**)، ومنظومة صلاحيات متقدمة لـ **6 أدوار (Multi-Role RBAC)**، ودعم ثنائي متكامل للغة والاتجاه (**AR / RTL** و **EN / LTR**).
+  [![Live Demo](https://img.shields.io/badge/Live_Demo-duck--lac.vercel.app-FDFB45?style=for-the-badge&logo=vercel&logoColor=black)](https://duck-lac.vercel.app/)
+  [![React](https://img.shields.io/badge/React-19.3.1-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+  [![Vite](https://img.shields.io/badge/Vite-8.3.6-646CFF?logo=vite&logoColor=white)](https://vite.dev/)
+  [![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-v4.3.5-38BDF8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+  [![React Router](https://img.shields.io/badge/React_Router-v7.18.6-CA4245?logo=reactrouter&logoColor=white)](https://reactrouter.com/)
+  [![Design Tokens](https://img.shields.io/badge/Brand-In%20Duck%20We%20Trust-FDFB45)](https://duck-lac.vercel.app/)
+
+  <br />
+
+  <h3>
+    🌐 <a href="https://duck-lac.vercel.app/">رابط المعاينة الحية المباشرة (Production Live Demo)</a>
+  </h3>
+</div>
+
+---
+
+## 📸 لقطات من واجهة المنصة (Visual Showcase & Gallery)
+
+| الهيرو السينمائي الرئيسي (Hero Experience) | بوابة حجز المجموعات والشركات (Groups & B2B Live Pass) |
+| :---: | :---: |
+| <img src="src/shared/assets/images/hero-poster-desktop.webp" alt="Hero Experience" width="540" /> | <img src="src/shared/assets/images/groups-banner-1200w.webp" alt="Groups & Corporate Booking" width="540" /> |
+
+| تجارب الكاياك في نيل أسوان (Kayaking on the Nile) | ستاند أب بادل ودراجات مائية (SUP & Water Bikes) |
+| :---: | :---: |
+| <img src="src/shared/assets/images/trips/botanical-garden-960w.webp" alt="Botanical Garden Kayaking" width="540" /> | <img src="src/shared/assets/images/trips/gharb-adventure-960w.webp" alt="Water Sports & Nile Adventures" width="540" /> |
 
 ---
 
