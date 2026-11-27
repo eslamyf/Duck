@@ -259,7 +259,11 @@
     "stat2Label": "وجهات ساحرة",
     "stat3Number": "100%",
     "stat3Label": "سترات نجاة وإرشاد معتمد",
-    "videoPosterAlt": "أسطول كاياك Duck على نيل أسوان"
+    "videoPosterAlt": "أسطول كاياك Duck على نيل أسوان",
+    "playVideo": "تشغيل فيديو الخلفية",
+    "pauseVideo": "إيقاف فيديو الخلفية",
+    "playShort": "تشغيل",
+    "pauseShort": "إيقاف"
   },
   "destinations": {
     "title": "أماكن جديدة.. وذكريات تستاهل تتحكي.",

@@ -4,7 +4,7 @@ import { useTranslation } from '../../shared/i18n/index.js';
 import { useNotificationsSync } from '../../shared/hooks/useNotificationsSync.js';
 import { ROUTES } from '../../shared/config/routes.js';
 import { getPortalPathForRole } from '../../shared/config/rbac.js';
-import { DuckIcon } from '../../shared/ui/index.js';
+import DuckIcon from '../../shared/ui/Icon/DuckIcon.jsx';
 
 const KIND_STYLES = {
   ticket: {

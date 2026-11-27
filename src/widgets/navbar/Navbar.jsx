@@ -5,7 +5,9 @@ import duckLogo280 from '../../shared/assets/icons/duck-logo-280w.webp';
 import duckLogo560 from '../../shared/assets/icons/duck-logo-560w.webp';
 
 import { useTranslation } from '../../shared/i18n/index.js';
-import { Button, Badge, DuckIcon } from '../../shared/ui/index.js';
+import Button from '../../shared/ui/Button/index.js';
+import Badge from '../../shared/ui/Badge/index.js';
+import DuckIcon from '../../shared/ui/Icon/DuckIcon.jsx';
 import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
 import { getPortalPathForRole, ROLES } from '../../shared/config/rbac.js';
 
@@ -55,17 +57,23 @@ export default function Navbar({ onBookClick }) {
         .catch(() => { });
     };
 
-    if ('requestIdleCallback' in window) {
-      const id = window.requestIdleCallback(fetchWeather, { timeout: 3000 });
-      return () => {
-        cancelled = true;
-        if ('cancelIdleCallback' in window) window.cancelIdleCallback(id);
-      };
-    }
-    const timer = setTimeout(fetchWeather, 1800);
+    const scheduleIdleFetch = () => {
+      if ('requestIdleCallback' in window) {
+        const id = window.requestIdleCallback(fetchWeather, { timeout: 3500 });
+        cleanupIdle = () => {
+          if ('cancelIdleCallback' in window) window.cancelIdleCallback(id);
+        };
+      } else {
+        fetchWeather();
+      }
+    };
+
+    let cleanupIdle = null;
+    const timer = setTimeout(scheduleIdleFetch, 2500);
     return () => {
       cancelled = true;
       clearTimeout(timer);
+      if (cleanupIdle) cleanupIdle();
     };
   }, []);
 

@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
 import { buildWhatsAppUrl } from '../../shared/config/constants.js';
-import { DuckIcon } from '../../shared/ui/index.js';
+import DuckIcon from '../../shared/ui/Icon/DuckIcon.jsx';
 
 export default function MobileBottomNav() {
   const { lang, setLanguage, t } = useTranslation();

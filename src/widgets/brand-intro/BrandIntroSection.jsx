@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES } from '../../shared/config/routes.js';
-import { Button, DuckManifesto, DuckIcon } from '../../shared/ui/index.js';
+import Button from '../../shared/ui/Button/index.js';
+import DuckManifesto from '../../shared/ui/DuckManifesto.jsx';
+import DuckIcon from '../../shared/ui/Icon/DuckIcon.jsx';
 import introImg480 from '../../shared/assets/images/image1-480w.webp';
+import introImg540 from '../../shared/assets/images/image1-540w.webp';
 import introImg720 from '../../shared/assets/images/image1-720w.webp';
 
 export default function BrandIntroSection() {
@@ -54,14 +57,15 @@ export default function BrandIntroSection() {
         {/* Visual Showcase */}
         <div className="relative rounded-[26px] overflow-hidden border border-brand-blue/15 bg-brand-navy shadow-ocean aspect-[16/10] min-[901px]:aspect-[4/3]">
           <img
-            src={introImg720}
-            srcSet={`${introImg480} 480w, ${introImg720} 720w`}
-            sizes="(max-width: 900px) 92vw, 525px"
+            src={introImg540}
+            srcSet={`${introImg480} 480w, ${introImg540} 540w, ${introImg720} 720w`}
+            sizes="(max-width: 639px) 480px, (max-width: 900px) 540px, 525px"
             alt={t('brandIntro.imageAlt')}
             width={720}
             height={540}
             loading="lazy"
             decoding="async"
+            fetchPriority="low"
             className="w-full h-full object-cover object-[center_45%] transition-transform duration-700 hover:scale-105"
           />
           <div

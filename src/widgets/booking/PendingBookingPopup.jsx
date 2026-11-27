@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from '../../shared/i18n/index.js';
-import { DuckIcon } from '../../shared/ui/index.js';
+import DuckIcon from '../../shared/ui/Icon/DuckIcon.jsx';
 import { useNotificationsSync } from '../../shared/hooks/useNotificationsSync.js';
 import { ROUTES } from '../../shared/config/routes.js';
 import { CONTACT, buildWhatsAppUrl } from '../../shared/config/constants.js';

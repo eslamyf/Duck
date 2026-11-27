@@ -23,13 +23,39 @@ import {
 } from '../shared/config/routes.js';
 
 
-import {
-  ErrorBoundary,
-  ScrollProgress,
-} from '../shared/ui/index.js';
+import ErrorBoundary from '../shared/ui/ErrorBoundary/index.js';
+import ScrollProgress from '../shared/ui/ScrollProgress/index.js';
 
 import { trackPageView } from '../shared/utils/analytics.js';
-import PendingBookingPopup from '../widgets/booking/PendingBookingPopup.jsx';
+const PendingBookingPopup = lazy(
+  () => import('../widgets/booking/PendingBookingPopup.jsx')
+);
+
+function DeferredPendingBookingPopup() {
+  const [shouldRender, setShouldRender] = useState(false);
+
+  useEffect(() => {
+    const check = () => {
+      if (localStorage.getItem('duck_pending_booking') || localStorage.getItem('duck_user')) {
+        setShouldRender(true);
+      }
+    };
+    check();
+    window.addEventListener('storage', check);
+    window.addEventListener('duck:bookings-updated', check);
+    return () => {
+      window.removeEventListener('storage', check);
+      window.removeEventListener('duck:bookings-updated', check);
+    };
+  }, []);
+
+  if (!shouldRender) return null;
+  return (
+    <Suspense fallback={null}>
+      <PendingBookingPopup />
+    </Suspense>
+  );
+}
 
 // Lazy-loaded public sections
 const DestinationsSection = lazy(() => import('../widgets/destinations/DestinationsSection.jsx'));
@@ -525,7 +551,7 @@ export default function App() {
 
       {!hideMainLayout && (
         <div className="print:hidden">
-          <PendingBookingPopup />
+          <DeferredPendingBookingPopup />
         </div>
       )}
 

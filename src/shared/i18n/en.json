@@ -259,7 +259,11 @@
     "stat2Label": "Stunning Destinations",
     "stat3Number": "100%",
     "stat3Label": "Certified Life Jackets & Guides",
-    "videoPosterAlt": "Duck Kayak Fleet on the Aswan Nile"
+    "videoPosterAlt": "Duck Kayak Fleet on the Aswan Nile",
+    "playVideo": "Play background video",
+    "pauseVideo": "Pause background video",
+    "playShort": "Play",
+    "pauseShort": "Pause"
   },
   "destinations": {
     "title": "New Places.. Memories Worth Telling.",

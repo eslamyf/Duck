@@ -6,15 +6,19 @@ import heroPosterDesktop from '../../shared/assets/images/hero-poster-desktop.we
 import heroPosterMobile from '../../shared/assets/images/hero-poster-mobile.webp';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
-import { DuckManifesto, DuckIcon } from '../../shared/ui/index.js';
+import DuckManifesto from '../../shared/ui/DuckManifesto.jsx';
+import DuckIcon from '../../shared/ui/Icon/DuckIcon.jsx';
 
 export default function HeroSection() {
   const { lang, t } = useTranslation();
   const [videoTarget, setVideoTarget] = useState(null); // 'desktop' | 'mobile' | null
   const [videoError, setVideoError] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [isUserPaused, setIsUserPaused] = useState(false);
   const videoRef = useRef(null);
   const sectionRef = useRef(null);
+  const userPausedRef = useRef(false);
+  const motionOverrideRef = useRef(false);
 
   const isRtl = lang === 'ar';
   const ArrowIcon = isRtl ? 'faArrowLeft' : 'faArrowRight';
@@ -39,8 +43,12 @@ export default function HeroSection() {
     }
 
     const handleMotionChange = (e) => {
-      if (e.matches) {
-        setVideoError(true);
+      if (e.matches && !motionOverrideRef.current) {
+        userPausedRef.current = true;
+        setIsUserPaused(true);
+        if (videoRef.current) {
+          videoRef.current.pause();
+        }
       }
     };
     mediaQuery.addEventListener('change', handleMotionChange);
@@ -48,8 +56,8 @@ export default function HeroSection() {
     let loaded = false;
     let timerId = null;
     const startVideoLoad = () => {
-      if (loaded) return;
-      if (!checkMotion() && !isSaveData && !isSlowConnection) {
+      if (loaded || userPausedRef.current) return;
+      if (motionOverrideRef.current || (!checkMotion() && !isSaveData && !isSlowConnection)) {
         loaded = true;
         setVideoTarget(window.innerWidth > 900 ? 'desktop' : 'mobile');
       }
@@ -90,7 +98,7 @@ export default function HeroSection() {
     };
   }, []);
 
-  // Pause video when scrolled out of view, resume when visible
+  // Pause video when scrolled out of view, resume when visible unless user paused it
   useEffect(() => {
     if (!videoTarget || !sectionRef.current) return undefined;
 
@@ -98,7 +106,7 @@ export default function HeroSection() {
       (entries) => {
         entries.forEach((entry) => {
           if (videoRef.current) {
-            if (entry.isIntersecting) {
+            if (entry.isIntersecting && !userPausedRef.current) {
               videoRef.current.play().catch(() => { });
             } else {
               videoRef.current.pause();
@@ -112,6 +120,30 @@ export default function HeroSection() {
     observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, [videoTarget]);
+
+  const handleToggleVideo = () => {
+    if (videoTarget && !videoError && videoRef.current) {
+      if (videoRef.current.paused) {
+        userPausedRef.current = false;
+        motionOverrideRef.current = true;
+        setIsUserPaused(false);
+        videoRef.current.play().catch(() => { });
+      } else {
+        userPausedRef.current = true;
+        setIsUserPaused(true);
+        videoRef.current.pause();
+      }
+      return;
+    }
+
+    userPausedRef.current = false;
+    motionOverrideRef.current = true;
+    setVideoError(false);
+    setIsUserPaused(false);
+    setVideoTarget(window.innerWidth > 900 ? 'desktop' : 'mobile');
+  };
+
+  const isActivelyPlaying = Boolean(videoTarget && !videoError && isVideoPlaying && !isUserPaused);
 
   // Directional gradient stays strictly behind text edge and fades to 0% before screen center,
   // keeping the kayaker and Nile river colors clean and unclouded.
@@ -137,7 +169,7 @@ export default function HeroSection() {
           <div className="absolute inset-0 z-0 overflow-hidden rounded-[inherit] bg-brand-navy" aria-hidden="true">
             <picture className="absolute inset-0 w-full h-full rounded-[inherit]">
               <source media="(min-width: 901px)" srcSet={heroPosterDesktop} width={1080} height={560} />
-              <source media="(max-width: 900px)" srcSet={heroPosterMobile} width={600} height={800} />
+              <source media="(max-width: 900px)" srcSet={heroPosterMobile} width={540} height={720} />
               <img
                 src={heroPosterDesktop}
                 alt={t('hero.videoPosterAlt')}
@@ -158,6 +190,10 @@ export default function HeroSection() {
                 loop
                 playsInline
                 preload="none"
+                onPlay={() => {
+                  setIsVideoPlaying(true);
+                  setIsUserPaused(false);
+                }}
                 onPlaying={() => setIsVideoPlaying(true)}
                 onError={() => setVideoError(true)}
                 className={`absolute inset-0 w-full h-full rounded-[inherit] object-cover object-[center_56%] contrast-[1.06] saturate-[1.12] [transform:translateZ(0)] transition-opacity duration-700 ${isVideoPlaying ? 'opacity-100' : 'opacity-0'
@@ -176,6 +212,22 @@ export default function HeroSection() {
             {/* Soft Bottom Vignette for Mobile Readability Only */}
             <div className="absolute inset-0 z-[1] bg-gradient-to-t from-brand-navy/88 from-0% via-brand-navy/50 via-35% to-transparent to-60% pointer-events-none min-[901px]:hidden" />
           </div>
+
+          {/* Accessible Background Video Toggle (WCAG 2.2.2 Pause, Stop, Hide) */}
+          <button
+            type="button"
+            onClick={handleToggleVideo}
+            aria-label={isActivelyPlaying ? t('hero.pauseVideo') : t('hero.playVideo')}
+            className="absolute top-4 end-4 min-[901px]:top-auto min-[901px]:bottom-6 min-[901px]:end-6 z-20 inline-flex items-center justify-center gap-2 min-h-[44px] min-w-[44px] px-3 min-[901px]:px-4 rounded-full bg-brand-navy/90 hover:bg-brand-navy text-white border border-white/25 hover:border-brand-yellow/60 shadow-lg text-xs font-bold transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy"
+          >
+            <DuckIcon
+              icon={isActivelyPlaying ? 'faPause' : 'faPlay'}
+              className="w-3.5 h-3.5 text-brand-yellow shrink-0"
+            />
+            <span className="hidden min-[901px]:inline">
+              {isActivelyPlaying ? t('hero.pauseShort') : t('hero.playShort')}
+            </span>
+          </button>
 
           {/* Foreground Content Aligned to Start Edge */}
           <div className="relative z-10 w-full max-w-[700px] px-5 pt-24 pb-10 sm:px-9 sm:py-14 min-[901px]:px-14 min-[901px]:py-16">
