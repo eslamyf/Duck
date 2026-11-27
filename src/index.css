@@ -167,6 +167,31 @@ body {
   }
 }
 
+/* ================= ZERO-LAG FLUID PAGE TRANSITIONS ================= */
+@keyframes routePageEnter {
+  0% {
+    opacity: 0.88;
+    transform: translateY(3px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.route-page-container {
+  width: 100%;
+  animation: routePageEnter 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: opacity, transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-page-container {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
 /* ================= PRINT STYLES ================= */
 @media print {
   @page {

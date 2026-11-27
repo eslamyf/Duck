@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import {
   Routes,
   Route,
@@ -275,9 +275,10 @@ function FAQFallback() {
   );
 }
 
-// Scroll Manager
+// Scroll Manager — Instant zero-lag route scroll with smooth anchor scroll
 function ScrollManager() {
   const { pathname, hash } = useLocation();
+  const prevPathnameRef = useRef(pathname);
 
   useEffect(() => {
     trackPageView(pathname + (hash || ''));
@@ -285,11 +286,15 @@ function ScrollManager() {
 
   useEffect(() => {
     if (!hash) {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
+      // Instant scroll-to-top on route changes to prevent lag or scroll stutter
+      if (prevPathnameRef.current !== pathname) {
+        window.scrollTo({
+          top: 0,
+          behavior: 'instant',
+        });
+      }
     }
+    prevPathnameRef.current = pathname;
   }, [pathname, hash]);
 
   useEffect(() => {
@@ -316,12 +321,20 @@ function ScrollManager() {
           });
         } else if (retries < 15) {
           retries++;
-          setTimeout(scrollToTarget, 80);
+          setTimeout(scrollToTarget, 50);
         }
       };
 
-      const timer = setTimeout(scrollToTarget, 50);
+      // Check immediately first, then fallback to quick retries
+      const elImmediate =
+        document.getElementById(targetId) ||
+        document.getElementById(targetId.toLowerCase());
+      if (elImmediate) {
+        elImmediate.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
 
+      const timer = setTimeout(scrollToTarget, 30);
       return () => clearTimeout(timer);
     }
   }, [pathname, hash]);
@@ -621,14 +634,7 @@ function HomePageView({
     <>
       <HeroSection />
 
-      <StoryGallerySection />
-
-      <LazyViewportSection id={SECTIONS.DESTINATIONS} fallback={<DestinationsFallback />}>
-        <DestinationsSection
-          onSelectDestination={onSelectDestination}
-        />
-      </LazyViewportSection>
-
+      {/* 1. Core Bookable Experiences (Instant Discovery & Frictionless Booking) */}
       <LazyViewportSection id={SECTIONS.TRIPS} fallback={<TripsFallback />}>
         <TripsSection
           externalFilter={selectedDestinationFilter}
@@ -636,34 +642,50 @@ function HomePageView({
         />
       </LazyViewportSection>
 
-      <div className="content-visibility-auto">
-        <LazyViewportSection id="why-duck" fallback={<WhyDuckFallback />}>
-        <WhyDuckSection />
-      </LazyViewportSection>
-      </div>
-
-      <div className="content-visibility-auto">
-        <LazyViewportSection id={SECTIONS.GROUPS} fallback={<GroupsBannerFallback />}>
-        <GroupsBanner />
-      </LazyViewportSection>
-      </div>
-
-      <LazyViewportSection id="map" fallback={<MapFallback />}>
-        <MapSection onSelectDestination={onSelectDestination} />
+      {/* 2. Visual Destination Hub (Explore Egypt's Nile & Coast) */}
+      <LazyViewportSection id={SECTIONS.DESTINATIONS} fallback={<DestinationsFallback />}>
+        <DestinationsSection
+          onSelectDestination={onSelectDestination}
+        />
       </LazyViewportSection>
 
+      {/* 3. Authentic Brand Story & Editorial Gallery ("مش مجرد خروجة.. دي حكاية جديدة") */}
+      <StoryGallerySection />
+
+      {/* 4. Social Proof & Traveler Reviews (High trust factor before decision) */}
       <LazyViewportSection id="reviews" fallback={<ReviewsFallback />}>
         <ReviewsSection />
       </LazyViewportSection>
 
+      {/* 5. Core Value Proposition & Safety Guarantees */}
+      <div className="content-visibility-auto">
+        <LazyViewportSection id="why-duck" fallback={<WhyDuckFallback />}>
+          <WhyDuckSection />
+        </LazyViewportSection>
+      </div>
+
+      {/* 6. Interactive Egypt Departure Points Map */}
+      <LazyViewportSection id="map" fallback={<MapFallback />}>
+        <MapSection onSelectDestination={onSelectDestination} />
+      </LazyViewportSection>
+
+      {/* 7. Corporate & Large Groups Banner */}
+      <div className="content-visibility-auto">
+        <LazyViewportSection id={SECTIONS.GROUPS} fallback={<GroupsBannerFallback />}>
+          <GroupsBanner />
+        </LazyViewportSection>
+      </div>
+
+      {/* 8. Frequently Asked Questions (Eliminating last doubts) */}
       <LazyViewportSection id="faq" fallback={<FAQFallback />}>
         <FAQSection />
       </LazyViewportSection>
 
+      {/* 9. Final High-Impact Booking Call to Action */}
       <div className="content-visibility-auto">
         <LazyViewportSection id="final-cta" fallback={<FinalCtaFallback />}>
-        <FinalCtaSection />
-      </LazyViewportSection>
+          <FinalCtaSection />
+        </LazyViewportSection>
       </div>
     </>
   );
@@ -706,6 +728,25 @@ export default function App() {
     }
   };
 
+  // Preload interactive public routes on browser idle for zero-lag instant page navigation
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+
+    const preloadKeyRoutes = () => {
+      import('../pages/activities/ActivitiesPage.jsx').catch(() => {});
+      import('../pages/booking/index.js').catch(() => {});
+      import('../pages/about/AboutPage.jsx').catch(() => {});
+      import('../widgets/groups-page/GroupsPage.jsx').catch(() => {});
+    };
+
+    if ('requestIdleCallback' in window) {
+      const handle = window.requestIdleCallback(preloadKeyRoutes, { timeout: 2500 });
+      return () => window.cancelIdleCallback(handle);
+    }
+    const timer = setTimeout(preloadKeyRoutes, 1200);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div
       className={`font-body selection:bg-brand-yellow selection:text-brand-navy ${isAuthPage
@@ -745,7 +786,8 @@ export default function App() {
           } print:pt-0 print:m-0 print:p-0`}
       >
         <ErrorBoundary>
-          <Routes>
+          <div key={pathname} className="route-page-container">
+            <Routes>
             {/* Home Page */}
             <Route
               path={ROUTES.HOME}
@@ -1018,6 +1060,7 @@ export default function App() {
               }
             />
           </Routes>
+          </div>
         </ErrorBoundary>
       </main>
 
