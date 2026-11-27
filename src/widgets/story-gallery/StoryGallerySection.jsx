@@ -70,32 +70,22 @@ export default function StoryGallerySection() {
               className="w-9 sm:w-14 h-[2px] rounded-full bg-gradient-to-r from-transparent to-[#13708C]"
             />
 
-            {/* Dual parallel curved river waves with subtle GPU floating animation */}
+            {/* Dual parallel curved river waves with kinetic flowing current */}
             <span
               aria-hidden="true"
-              className="relative flex flex-col justify-center gap-[3px] w-6 h-5 shrink-0 animate-sg-wave-float"
+              className="relative flex flex-col justify-center gap-[3px] w-7 h-5 overflow-hidden shrink-0 [mask-image:linear-gradient(to_right,transparent,#000_15%,#000_85%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,#000_15%,#000_85%,transparent)]"
             >
-              <svg viewBox="0 0 24 8" className="w-6 h-2 text-[#13708C]" fill="none">
-                <path
-                  d="M1 4.5 Q6 1 12 4.5 T23 4.5"
-                  stroke="currentColor"
-                  strokeWidth="2.2"
-                  strokeLinecap="round"
-                />
+              <svg viewBox="0 0 56 10" className="w-14 h-2.5 shrink-0 animate-river-flow text-[#13708C]" fill="none">
+                <path d="M0 5 Q7 0 14 5 T28 5 T42 5 T56 5" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
               </svg>
-              <svg viewBox="0 0 24 8" className="w-6 h-2 text-[#94A3B8]" fill="none">
-                <path
-                  d="M1 4.5 Q6 1 12 4.5 T23 4.5"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
+              <svg viewBox="0 0 56 10" className="w-14 h-2.5 shrink-0 animate-river-flow-slow text-[#94A3B8]" fill="none">
+                <path d="M0 5 Q7 0 14 5 T28 5 T42 5 T56 5" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" />
               </svg>
             </span>
 
-            {/* Deconstructed Typographic Lockup */}
-            <div className="inline-flex items-center gap-2 sm:gap-2.5 uppercase text-xs sm:text-[13px] font-extrabold tracking-[0.22em] text-[#0C1226] dark:text-white/95">
-              <span>IN</span>
+            {/* Deconstructed Typographic Lockup — Solid High-Contrast Contrast Guarantee */}
+            <div className="inline-flex items-center gap-2 sm:gap-2.5 uppercase text-xs sm:text-[13px] font-black tracking-[0.24em] select-none story-gallery-motto-text">
+              <span className="story-gallery-motto-word">IN</span>
 
               {/* Tilted -10deg DUCK Badge with offset #13708C backing */}
               <span className="relative inline-flex items-center shrink-0">
@@ -110,7 +100,7 @@ export default function StoryGallerySection() {
                 </span>
               </span>
 
-              <span>WE TRUST</span>
+              <span className="story-gallery-motto-word">WE TRUST</span>
             </div>
           </div>
 

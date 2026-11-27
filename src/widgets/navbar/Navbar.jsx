@@ -165,6 +165,12 @@ export default function Navbar({ onBookClick }) {
       sectionId: SECTIONS.DESTINATIONS,
     },
     {
+      to: ROUTES.ACTIVITIES,
+      label: t('nav.activities'),
+      icon: 'faWater',
+      isActivities: true,
+    },
+    {
       to: tripsTarget,
       label: t('nav.trips'),
       icon: 'faCompass',
@@ -225,12 +231,12 @@ export default function Navbar({ onBookClick }) {
       return Boolean(link.isAbout);
     }
 
-    // Activities / Experiences pages highlight Experiences link
+    // Activities page
     if (
       location.pathname === ROUTES.ACTIVITIES ||
       location.pathname.startsWith(`${ROUTES.ACTIVITIES}/`)
     ) {
-      return link.sectionId === SECTIONS.TRIPS;
+      return Boolean(link.isActivities);
     }
 
     // Groups page
@@ -386,13 +392,13 @@ export default function Navbar({ onBookClick }) {
             {/* Notifications Bell */}
             <NotificationBell />
 
-            {/* Login / Dashboard Button (Unified navy + yellow across languages) */}
+            {/* Login / Dashboard Button (Brand blue identity) */}
             {currentUser ? (
               <Link
                 to={dashboardPath}
                 aria-label={isRtl ? 'الذهاب إلى لوحة التحكم' : 'Go to Dashboard'}
                 title={accountName}
-                className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-brand-navy bg-brand-navy px-3 min-[1360px]:px-3.5 text-xs font-bold text-brand-yellow shadow-sm transition hover:bg-brand-navy-legacy hover:text-brand-yellow whitespace-nowrap"
+                className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-brand-blue bg-brand-blue px-3 min-[1360px]:px-3.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#0e5c75] whitespace-nowrap"
               >
                 <DuckIcon icon="faGaugeHigh" className="text-brand-yellow shrink-0" aria-hidden="true" />
                 <span>{dashboardLabel}</span>
@@ -529,14 +535,14 @@ export default function Navbar({ onBookClick }) {
               <Link
                 to={dashboardPath}
                 onClick={() => setIsMobileOpen(false)}
-                className="mt-2 flex min-h-[48px] w-full items-center justify-between rounded-xl border border-brand-yellow/40 bg-brand-yellow/15 px-3.5 text-[15px] font-bold text-brand-yellow transition hover:bg-brand-yellow hover:text-brand-navy"
+                className="mt-2 flex min-h-[48px] w-full items-center justify-between rounded-xl border border-brand-blue bg-brand-blue px-3.5 text-[15px] font-bold text-white transition hover:bg-[#0e5c75]"
                 aria-label={isRtl ? 'الذهاب إلى لوحة التحكم' : 'Go to Dashboard'}
                 title={accountName}
               >
                 <span className="inline-flex items-center gap-2.5">
                   <DuckIcon
                     icon="faGaugeHigh"
-                    className="w-5 text-center"
+                    className="w-5 text-center text-brand-yellow"
                   />
                   <span>{dashboardLabel}</span>
                 </span>

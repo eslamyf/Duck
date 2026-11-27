@@ -36,6 +36,24 @@
   text-align: center;
 }
 
+/* Typographic Lockup Motto */
+.story-gallery-motto-text {
+  color: #0C1226;
+}
+
+.story-gallery-motto-word {
+  color: #0C1226;
+  font-weight: 900;
+  letter-spacing: 0.22em;
+}
+
+.dark .story-gallery-motto-text,
+.story-gallery-sec.dark .story-gallery-motto-text,
+.dark .story-gallery-motto-word,
+.story-gallery-sec.dark .story-gallery-motto-word {
+  color: #FFFFFF !important;
+}
+
 .story-gallery-title {
   font-family: var(--font-heading, 'Baloo Bhaijaan 2', sans-serif);
   font-size: clamp(1.95rem, 3.4vw, 2.85rem);
@@ -149,8 +167,8 @@
   min-height: 54px;
   padding: 0 34px;
   border-radius: 99px;
-  background: var(--sg-yellow);
-  color: var(--sg-navy);
+  background: var(--color-blue, #12718F);
+  color: #FFFFFF;
   font-family: var(--font-body, 'Baloo Bhaijaan 2', sans-serif);
   font-weight: 800;
   font-size: 1.08rem;
@@ -158,7 +176,7 @@
   margin-top: 26px;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(12, 18, 38, 0.08);
+  box-shadow: 0 4px 16px rgba(18, 113, 143, 0.25);
   transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
   will-change: transform;
 }
@@ -176,9 +194,21 @@
 }
 
 .story-gallery-btn:hover {
-  background: var(--sg-navy);
+  background: #0e5c75;
   color: #FFFFFF;
-  box-shadow: 0 10px 24px -6px rgba(12, 18, 38, 0.28);
+  box-shadow: 0 10px 24px -6px rgba(18, 113, 143, 0.38);
+}
+
+.dark .story-gallery-btn,
+.story-gallery-sec.dark .story-gallery-btn {
+  background: var(--color-blue, #12718F);
+  color: #FFFFFF;
+}
+
+.dark .story-gallery-btn:hover,
+.story-gallery-sec.dark .story-gallery-btn:hover {
+  background: #0e5c75;
+  color: #FFFFFF;
 }
 
 [dir="rtl"] .story-gallery-btn:hover svg {
