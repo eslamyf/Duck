@@ -1,26 +1,41 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useSyncExternalStore } from 'react';
 import ar from './ar.json';
 import en from './en.json';
 import { I18nContext } from './I18nContext.js';
 
 const translations = { ar, en };
+const LANG_EVENT = 'duck:lang-change';
+
+const subscribeLang = (callback) => {
+  window.addEventListener(LANG_EVENT, callback);
+  window.addEventListener('storage', callback);
+  return () => {
+    window.removeEventListener(LANG_EVENT, callback);
+    window.removeEventListener('storage', callback);
+  };
+};
+
+const getClientLang = () => {
+  try {
+    const saved = localStorage.getItem('duck_lang');
+    if (saved === 'ar' || saved === 'en') return saved;
+  } catch {
+    // Safe fallback if localStorage is disabled or throws
+  }
+  return 'ar';
+};
+
+const getServerLang = () => 'ar';
 
 export function I18nProvider({ children }) {
-  const [lang, setLang] = useState(() => {
-    try {
-      const saved = localStorage.getItem('duck_lang');
-      if (saved === 'ar' || saved === 'en') return saved;
-    } catch {
-      // Safe fallback if localStorage is disabled or throws
-    }
-    return 'ar';
-  });
+  // Server and initial hydration both use getServerLang ('ar'), then React smoothly syncs getClientLang.
+  const lang = useSyncExternalStore(subscribeLang, getClientLang, getServerLang);
 
   const setLanguage = useCallback((newLang) => {
     if (newLang === 'ar' || newLang === 'en') {
-      setLang(newLang);
       try {
         localStorage.setItem('duck_lang', newLang);
+        window.dispatchEvent(new Event(LANG_EVENT));
       } catch {
         // Safe fallback if localStorage is unavailable
       }

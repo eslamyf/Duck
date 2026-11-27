@@ -12,33 +12,14 @@ import { DuckManifesto } from '../../shared/ui/index.js';
 
 export default function HeroSection() {
   const { lang, t } = useTranslation();
-  const [isDesktop, setIsDesktop] = useState(() =>
-    typeof window !== 'undefined' ? window.innerWidth > 900 : true
-  );
-  const [videoError, setVideoError] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-    const isSaveData = connection?.saveData === true;
-    const isSlowConnection =
-      connection?.effectiveType === '2g' || connection?.effectiveType === 'slow-2g';
-    return mediaQuery.matches || isSaveData || isSlowConnection;
-  });
-  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+  const [videoTarget, setVideoTarget] = useState(null); // 'desktop' | 'mobile' | null
+  const [videoError, setVideoError] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const videoRef = useRef(null);
   const sectionRef = useRef(null);
 
   const isRtl = lang === 'ar';
   const ArrowIcon = isRtl ? faArrowLeft : faArrowRight;
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsDesktop(window.innerWidth > 900);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   // Performance & Accessibility Guard:
   // Defer background video stream until idle and skip under reduced motion / slow network
@@ -51,7 +32,9 @@ export default function HeroSection() {
     const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     const isSaveData = connection?.saveData === true;
     const isSlowConnection =
-      connection?.effectiveType === '2g' || connection?.effectiveType === 'slow-2g';
+      connection?.effectiveType === '2g' ||
+      connection?.effectiveType === 'slow-2g' ||
+      connection?.effectiveType === '3g';
 
     if (checkMotion() || isSaveData || isSlowConnection) {
       return undefined;
@@ -64,14 +47,32 @@ export default function HeroSection() {
     };
     mediaQuery.addEventListener('change', handleMotionChange);
 
+    let loaded = false;
+    let timerId = null;
     const startVideoLoad = () => {
+      if (loaded) return;
       if (!checkMotion() && !isSaveData && !isSlowConnection) {
-        setShouldLoadVideo(true);
+        loaded = true;
+        setVideoTarget(window.innerWidth > 900 ? 'desktop' : 'mobile');
       }
     };
 
+    const onResize = () => {
+      if (loaded) {
+        setVideoTarget(window.innerWidth > 900 ? 'desktop' : 'mobile');
+      }
+    };
+
+    const onInteract = () => {
+      startVideoLoad();
+    };
+
     const triggerVideo = () => {
-      setTimeout(startVideoLoad, 1500);
+      timerId = setTimeout(startVideoLoad, 4500);
+      window.addEventListener('pointerdown', onInteract, { once: true, passive: true });
+      window.addEventListener('scroll', onInteract, { once: true, passive: true });
+      window.addEventListener('keydown', onInteract, { once: true, passive: true });
+      window.addEventListener('resize', onResize, { passive: true });
     };
 
     if (document.readyState === 'complete') {
@@ -81,14 +82,19 @@ export default function HeroSection() {
     }
 
     return () => {
+      if (timerId) clearTimeout(timerId);
       mediaQuery.removeEventListener('change', handleMotionChange);
       window.removeEventListener('load', triggerVideo);
+      window.removeEventListener('pointerdown', onInteract);
+      window.removeEventListener('scroll', onInteract);
+      window.removeEventListener('keydown', onInteract);
+      window.removeEventListener('resize', onResize);
     };
   }, []);
 
   // Pause video when scrolled out of view, resume when visible
   useEffect(() => {
-    if (!shouldLoadVideo || !sectionRef.current) return undefined;
+    if (!videoTarget || !sectionRef.current) return undefined;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -107,7 +113,7 @@ export default function HeroSection() {
 
     observer.observe(sectionRef.current);
     return () => observer.disconnect();
-  }, [shouldLoadVideo]);
+  }, [videoTarget]);
 
   // Directional gradient stays strictly behind text edge and fades to 0% before screen center,
   // keeping the kayaker and Nile river colors clean and unclouded.
@@ -132,36 +138,35 @@ export default function HeroSection() {
           {/* Full-Bleed Background Media (HD Poster + Deferred HD Responsive Video) */}
           <div className="absolute inset-0 z-0 overflow-hidden rounded-[inherit] bg-brand-navy" aria-hidden="true">
             <picture className="absolute inset-0 w-full h-full rounded-[inherit]">
-              <source media="(min-width: 901px)" srcSet={heroPosterDesktop} />
-              <source media="(max-width: 900px)" srcSet={heroPosterMobile} />
+              <source media="(min-width: 901px)" srcSet={heroPosterDesktop} width={1080} height={560} />
+              <source media="(max-width: 900px)" srcSet={heroPosterMobile} width={600} height={800} />
               <img
                 src={heroPosterDesktop}
                 alt={t('hero.videoPosterAlt')}
-                width={isDesktop ? 1080 : 600}
-                height={isDesktop ? 560 : 800}
+                width={1080}
+                height={560}
                 fetchPriority="high"
-                decoding="async"
+                decoding="sync"
                 className="w-full h-full rounded-[inherit] object-cover object-[center_56%] contrast-[1.06] saturate-[1.12] [transform:translateZ(0)]"
               />
             </picture>
 
-            {shouldLoadVideo && !videoError ? (
+            {videoTarget && !videoError ? (
               <video
-                key={isDesktop ? 'desktop-video' : 'mobile-video'}
+                key={videoTarget}
                 ref={videoRef}
                 autoPlay
                 muted
                 loop
                 playsInline
                 preload="none"
-                poster={isDesktop ? heroPosterDesktop : heroPosterMobile}
                 onPlaying={() => setIsVideoPlaying(true)}
                 onError={() => setVideoError(true)}
                 className={`absolute inset-0 w-full h-full rounded-[inherit] object-cover object-[center_56%] contrast-[1.06] saturate-[1.12] [transform:translateZ(0)] transition-opacity duration-700 ${isVideoPlaying ? 'opacity-100' : 'opacity-0'
                   }`}
               >
                 <source
-                  src={isDesktop ? heroVideoDesktop : heroVideoMobile}
+                  src={videoTarget === 'desktop' ? heroVideoDesktop : heroVideoMobile}
                   type="video/mp4"
                 />
               </video>
