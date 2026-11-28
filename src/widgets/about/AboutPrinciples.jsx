@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { useTranslation } from '../../shared/i18n/index.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -11,7 +12,7 @@ import {
 import imgAdventure from '../../shared/assets/images/about/principle-adventure.webp';
 import imgFreedom from '../../shared/assets/images/about/principle-freedom.webp';
 import imgConnection from '../../shared/assets/images/about/principle-connection.webp';
-import imgSafety from '../../shared/assets/images/about/principle-safety.webp';
+import imgSafety from '../../shared/assets/images/about/principle-safety-v2.jpg';
 
 export default function AboutPrinciples() {
   const { lang, t } = useTranslation();
@@ -61,9 +62,13 @@ export default function AboutPrinciples() {
           : 'min-h-[260px] lg:min-h-0 lg:col-span-4 lg:row-span-1';
 
     return (
-      <article
+      <motion.article
         key={principle.key}
         dir={isArabic ? 'rtl' : 'ltr'}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.15 }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         className={`group relative isolate overflow-hidden rounded-[24px] bg-brand-navy shadow-sm h-full ${responsiveLayout}`}
       >
         {/* Background Real Duck Image */}
@@ -119,14 +124,14 @@ export default function AboutPrinciples() {
             )}
           </div>
         </div>
-      </article>
+      </motion.article>
     );
   };
 
   return (
     <section
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="flex min-h-[calc(100svh-100px)] flex-col justify-center bg-surface-sand py-10 md:py-14"
+      className="flex min-h-[calc(100svh-100px)] flex-col justify-center bg-surface-sand bg-pattern-duck py-10 md:py-14"
     >
       <div className="mx-auto w-full max-w-7xl px-6 md:px-10 lg:px-16">
         {/* Section Heading */}

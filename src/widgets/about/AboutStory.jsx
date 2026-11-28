@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { useTranslation } from '../../shared/i18n/index.js';
 import storyImage from '../../shared/assets/images/about/story-aswan.webp';
 
@@ -9,7 +10,7 @@ export default function AboutStory() {
     <section
       id="about-story"
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="relative min-h-[calc(100svh-100px)] overflow-hidden bg-surface-sand pb-14 pt-10 text-brand-navy lg:py-16"
+      className="relative min-h-[calc(100svh-100px)] overflow-hidden bg-surface-sand bg-pattern-duck pb-14 pt-10 text-brand-navy lg:py-16"
     >
       {/* Subtle Background Glows */}
       <div
@@ -26,8 +27,12 @@ export default function AboutStory() {
         className="relative z-10 mx-auto grid max-w-7xl items-center gap-8 px-6 md:px-10 lg:grid-cols-2 lg:gap-12 lg:px-16"
       >
         {/* Story Content */}
-        <div
+        <motion.div
           dir={isArabic ? 'rtl' : 'ltr'}
+          initial={{ opacity: 0, y: 22 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
           className={`${
             isArabic
               ? 'text-right lg:order-2'
@@ -83,10 +88,14 @@ export default function AboutStory() {
               </p>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Story Image - Real Duck Aswan Image */}
-        <div
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96, y: 22 }}
+          whileInView={{ opacity: 1, scale: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           className={`relative h-[360px] overflow-hidden rounded-3xl shadow-xl sm:h-[440px] lg:h-[min(68vh,560px)] ${
             isArabic ? 'lg:order-1' : 'lg:order-2'
           }`}
@@ -109,7 +118,7 @@ export default function AboutStory() {
           >
             {t('about.story.imageTag', t('about.story.established', 'أسوان، مصر'))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
