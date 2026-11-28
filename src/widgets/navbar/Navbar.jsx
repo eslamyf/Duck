@@ -402,10 +402,10 @@ export default function Navbar({ onBookClick }) {
                 to={dashboardPath}
                 aria-label={isRtl ? 'الذهاب إلى لوحة التحكم' : 'Go to Dashboard'}
                 title={accountName}
-                className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-brand-navy bg-brand-navy px-2.5 min-[1480px]:px-3.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#161F3D] whitespace-nowrap"
+                className="inline-flex h-9 w-9 min-[1480px]:w-auto shrink-0 items-center justify-center gap-1.5 rounded-full border border-brand-navy bg-brand-navy px-0 min-[1480px]:px-3.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#161F3D] whitespace-nowrap"
               >
                 <DuckIcon icon="faGaugeHigh" className="text-brand-yellow shrink-0" aria-hidden="true" />
-                <span>{dashboardLabel}</span>
+                <span className="hidden min-[1480px]:inline">{dashboardLabel}</span>
               </Link>
             ) : (
               <Button
@@ -413,9 +413,10 @@ export default function Navbar({ onBookClick }) {
                 to={ROUTES.LOGIN}
                 variant="ghost"
                 size="sm"
-                className="shrink-0 text-brand-navy border border-brand-navy/20 hover:border-brand-blue hover:text-brand-blue whitespace-nowrap"
+                className="shrink-0 w-9 min-[1480px]:w-auto px-0 min-[1480px]:px-3 text-brand-navy border border-brand-navy/20 hover:border-brand-blue hover:text-brand-blue whitespace-nowrap justify-center"
               >
-                {t('common.login')}
+                <DuckIcon icon="faArrowRightToBracket" className="text-brand-blue text-xs min-[1480px]:hidden" aria-hidden="true" />
+                <span className="hidden min-[1480px]:inline">{t('common.login')}</span>
               </Button>
             )}
 
