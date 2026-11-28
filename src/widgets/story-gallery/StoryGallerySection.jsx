@@ -71,31 +71,6 @@ export default function StoryGallerySection() {
             lang="en"
             className="inline-flex items-center justify-center gap-3 sm:gap-3.5 select-none mx-auto mb-2"
           >
-            {/* Startup EST. 2023 + Geometric Duck Mark Pill */}
-            <span
-              className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-[#13708C]/30 bg-[#13708C]/10 px-2.5 py-1 text-[10px] font-extrabold tracking-[0.16em] text-[#0C1226] shrink-0"
-            >
-              <svg viewBox="0 0 56 32" className="h-3 w-4 shrink-0 text-[#13708C]" fill="none" aria-hidden="true">
-                <path
-                  d="M4 15h44v5a9 9 0 0 1-9 9H13a9 9 0 0 1-9-9v-5z"
-                  fill="currentColor"
-                  fillOpacity="0.2"
-                  stroke="currentColor"
-                  strokeWidth="2.4"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M26 3h11a11 11 0 0 1 11 11v1H26V3z"
-                  fill="currentColor"
-                  fillOpacity="0.35"
-                  stroke="currentColor"
-                  strokeWidth="2.4"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <span>EST. 2023</span>
-            </span>
-
             {/* Sleek Kayak & Paddle emblem */}
             <span
               aria-hidden="true"
