@@ -131,7 +131,7 @@ export default function AboutPrinciples() {
   return (
     <section
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="flex min-h-[calc(100svh-100px)] flex-col justify-center bg-surface-sand bg-pattern-duck py-10 md:py-14"
+      className="flex min-h-[calc(100svh-100px)] flex-col justify-center bg-surface-sand py-10 md:py-14"
     >
       <div className="mx-auto w-full max-w-7xl px-6 md:px-10 lg:px-16">
         {/* Section Heading */}

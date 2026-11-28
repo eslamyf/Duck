@@ -137,7 +137,7 @@ export default function AboutJourney() {
   return (
     <section
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="overflow-hidden bg-surface-sand bg-pattern-duck py-12 md:py-16 text-brand-navy"
+      className="overflow-hidden bg-surface-sand py-12 md:py-16 text-brand-navy"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16">
         {/* Section Heading - Compact */}

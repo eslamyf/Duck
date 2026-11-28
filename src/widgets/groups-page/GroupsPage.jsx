@@ -68,7 +68,7 @@ export default function GroupsPage() {
   }, [setSubmitted, setStep, scrollToCard]);
 
   return (
-    <div className="w-full bg-surface-mist bg-pattern-duck font-body print:p-0 print:m-0 print:bg-white print:bg-none">
+    <div className="w-full bg-surface-mist font-body print:p-0 print:m-0 print:bg-white print:bg-none">
       {/* 1. Hero Group Stage with Real Photo & Dynamic Counter */}
       <div className="print:hidden">
         <GroupStage

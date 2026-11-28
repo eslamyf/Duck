@@ -45,7 +45,7 @@ export default function AboutMissionVision() {
   return (
     <section
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="relative overflow-hidden bg-surface-sand bg-pattern-duck py-14 md:py-20 text-brand-navy"
+      className="relative overflow-hidden bg-surface-sand py-14 md:py-20 text-brand-navy"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16 space-y-10">
         {/* Non-Traditional Company Goal Manifesto Banner */}

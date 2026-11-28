@@ -23,7 +23,7 @@ export default function Footer({ onDestinationClick }) {
   };
 
   return (
-    <footer className="bg-surface-white bg-pattern-duck text-brand-navy p-0 text-start border-t border-brand-blue/16 font-body">
+    <footer className="bg-surface-white text-brand-navy p-0 text-start border-t border-brand-blue/16 font-body">
       {/* Top Grid */}
       <div className="grid grid-cols-1 min-[901px]:grid-cols-[1.35fr_1fr_1fr_1.25fr] gap-7 min-[901px]:gap-9 px-[5vw] min-[901px]:px-[6vw] pt-9 min-[901px]:pt-14 pb-6 min-[901px]:pb-10 max-w-[1360px] mx-auto">
         {/* Brand Column */}

@@ -10,7 +10,7 @@ export default function AboutStory() {
     <section
       id="about-story"
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="relative min-h-[calc(100svh-100px)] overflow-hidden bg-surface-sand bg-pattern-duck pb-14 pt-10 text-brand-navy lg:py-16"
+      className="relative min-h-[calc(100svh-100px)] overflow-hidden bg-surface-sand pb-14 pt-10 text-brand-navy lg:py-16"
     >
       {/* Subtle Background Glows */}
       <div

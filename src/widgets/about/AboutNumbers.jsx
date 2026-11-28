@@ -66,7 +66,7 @@ export default function AboutNumbers() {
   return (
     <section
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="relative overflow-hidden bg-brand-navy bg-pattern-waves-dark py-12 md:py-16 text-white"
+      className="relative overflow-hidden bg-brand-navy py-12 md:py-16 text-white"
     >
       {/* Subtle Background Glows */}
       <div
