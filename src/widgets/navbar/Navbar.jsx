@@ -35,6 +35,17 @@ export default function Navbar({ onBookClick }) {
     };
   }, []);
 
+  useEffect(() => {
+    if (!isMobileOpen) return undefined;
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') setIsMobileOpen(false);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isMobileOpen]);
+
   // Current Logged-in User (refreshed on auth event or navigation)
   const currentUser = (() => {
     void authTick;
@@ -323,11 +334,11 @@ export default function Navbar({ onBookClick }) {
       </header>
 
       {/* Tablet (>= 768px) & Full Desktop (>= 901px) Single-Row Header */}
-      <header className="hidden md:block fixed top-0 inset-x-0 z-[9999] w-full max-w-full overflow-x-clip bg-white border-b border-[rgba(20,125,159,0.16)] shadow-[0_8px_24px_rgba(12,18,38,0.06)] font-body">
+      <header className="hidden md:block fixed top-0 inset-x-0 z-[9999] h-[52px] min-[901px]:h-[68px] w-full max-w-full overflow-x-clip bg-white border-b border-[rgba(20,125,159,0.16)] shadow-[0_8px_24px_rgba(12,18,38,0.06)] font-body contain-layout">
         {/* Main Navbar */}
         <nav
           aria-label="Main Navigation"
-          className="flex items-center justify-between gap-2 min-[1480px]:gap-3 h-[52px] min-[901px]:h-[68px] w-full max-w-[1520px] mx-auto px-3 min-[1440px]:px-6"
+          className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 min-[1480px]:gap-3 h-full w-full max-w-[1520px] mx-auto px-3 min-[1440px]:px-6"
         >
           {/* Start: Brand Logo + Aswan Weather Pill */}
           <div className="flex items-center gap-2 min-[1480px]:gap-3 shrink-0">
@@ -369,7 +380,7 @@ export default function Navbar({ onBookClick }) {
           </div>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden min-[1280px]:flex items-center justify-center gap-0.5 min-[1400px]:gap-1 min-[1500px]:gap-1.5 shrink-0">
+          <div className="hidden min-[1280px]:flex min-w-0 items-center justify-center justify-self-center gap-0.5 overflow-hidden min-[1400px]:gap-1 min-[1500px]:gap-1.5">
             {navLinks.map((link) => {
               const isActive = checkIsActive(link);
 
@@ -389,7 +400,7 @@ export default function Navbar({ onBookClick }) {
           </div>
 
           {/* Desktop Action Buttons */}
-          <div className="hidden min-[1280px]:flex items-center gap-1.5 min-[1480px]:gap-2 shrink-0">
+          <div className="hidden min-[1280px]:flex items-center justify-self-end gap-1.5 min-[1480px]:gap-2 shrink-0">
             {/* Language Switcher */}
             <KayakLanguageSwitch />
 
@@ -464,7 +475,7 @@ export default function Navbar({ onBookClick }) {
         {isMobileOpen && (
           <div
             id="mobile-nav"
-            className="min-[1280px]:hidden fixed inset-x-0 top-[53px] min-[901px]:top-[69px] bottom-0 z-[10000] bg-brand-navy text-white px-[6vw] py-4 pb-[calc(88px+env(safe-area-inset-bottom))] flex flex-col gap-1 overflow-y-auto shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200"
+            className="min-[1280px]:hidden fixed inset-x-0 top-[52px] min-[901px]:top-[68px] bottom-0 z-[10000] bg-brand-navy text-white px-[6vw] py-4 pb-[calc(88px+env(safe-area-inset-bottom))] flex flex-col gap-1 overflow-y-auto shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200"
           >
             {/* Mobile Top Controls */}
             <div className="flex items-center justify-between gap-2 p-2 bg-white/8 border border-white/14 rounded-[14px] mb-2">
