@@ -45,6 +45,42 @@ export function getDynamicDestinations() {
     if (Array.isArray(parsed) && parsed.length > 0) {
       let changed = false;
       const repaired = parsed.map((d) => {
+        const baseline = INITIAL_DESTINATIONS.find(
+          (item) =>
+            String(item.id) === String(d.id) ||
+            String(item.key) === String(d.key) ||
+            String(item.filterKey) === String(d.filterKey)
+        );
+
+        if (baseline) {
+          const canonicalImages = {
+            cover: baseline.images?.cover || baseline.images?.defaultSrc || baseline.images?.stripSrc,
+            defaultSrc: baseline.images?.defaultSrc,
+            stripSrc: baseline.images?.stripSrc,
+            srcSet: baseline.images?.srcSet || '',
+          };
+          const needsRepair =
+            d.images?.defaultSrc !== canonicalImages.defaultSrc ||
+            d.images?.stripSrc !== canonicalImages.stripSrc ||
+            d.images?.cover !== canonicalImages.cover ||
+            d.imageUrl !== canonicalImages.defaultSrc;
+
+          if (needsRepair) {
+            changed = true;
+            return {
+              ...d,
+              id: baseline.id,
+              key: baseline.key,
+              num: d.num || baseline.num,
+              imageUrl: canonicalImages.defaultSrc,
+              imagePosition: d.imagePosition || d.objectPosition || '50% 50%',
+              objectPosition: d.imagePosition || d.objectPosition || '50% 50%',
+              images: canonicalImages,
+            };
+          }
+          return d;
+        }
+
         const img =
           d.imageUrl ||
           d.images?.cover ||

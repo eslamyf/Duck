@@ -385,7 +385,7 @@ export default function AdminDashboardPage() {
       editingDest.imageUrl ||
       editingDest.images?.cover ||
       editingDest.images?.defaultSrc ||
-      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80';
+      '';
     const finalPos = editDestForm.imagePosition || '50% 50%';
 
     updateDynamicDestination(editingDest.id, {
