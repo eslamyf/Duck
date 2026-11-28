@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import { useTranslation } from '../../shared/i18n/index.js';
+import duckMarkImg from '../../shared/assets/icons/duck-mark-192w.webp';
 import imgBeginning from '../../shared/assets/images/about/journey-beginning.webp';
 import imgFleet from '../../shared/assets/images/about/journey-fleet.webp';
 import imgCommunity from '../../shared/assets/images/about/journey-community.webp';
@@ -72,6 +74,32 @@ export default function AboutJourney() {
   const { lang, t } = useTranslation();
   const isArabic = lang === 'ar';
   const [activeStep, setActiveStep] = useState(0);
+  const cardRefs = useRef([]);
+
+  // Auto-advance active milestone on mobile/tablet as user scrolls through cards
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.IntersectionObserver) return undefined;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const idx = Number(entry.target.getAttribute('data-step-index'));
+            if (!Number.isNaN(idx)) {
+              setActiveStep(idx);
+            }
+          }
+        });
+      },
+      { rootMargin: '-35% 0px -45% 0px', threshold: 0.1 }
+    );
+
+    cardRefs.current.forEach((el) => {
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const milestones = [
     {
@@ -109,7 +137,7 @@ export default function AboutJourney() {
   return (
     <section
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="overflow-hidden bg-surface-sand py-12 md:py-16 text-brand-navy"
+      className="overflow-hidden bg-surface-sand bg-pattern-duck py-12 md:py-16 text-brand-navy"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16">
         {/* Section Heading - Compact */}
@@ -150,11 +178,19 @@ export default function AboutJourney() {
             }}
           />
 
-          {/* Sailing Kayak / Boat moving smoothly along the connecting path */}
+          {/* Sailing Kayak / Boat + Bouncing Duck moving smoothly along the connecting path */}
           <div
-            className={`absolute top-1 z-20 transition-all duration-500 ease-out motion-reduce:transition-none ${centerShiftClass}`}
+            className={`absolute top-0 z-20 flex items-end gap-1.5 transition-all duration-500 ease-out motion-reduce:transition-none ${centerShiftClass}`}
             style={{ insetInlineStart: `${12.5 + activeStep * 25}%` }}
           >
+            <motion.img
+              src={duckMarkImg}
+              alt=""
+              aria-hidden="true"
+              animate={{ y: [0, -7, 0] }}
+              transition={{ duration: 0.9, repeat: Infinity, ease: 'easeInOut' }}
+              className="h-7 w-7 rounded-full border-2 border-brand-navy bg-brand-yellow object-contain p-0.5 shadow-sm"
+            />
             <KayakTrackIcon flipped={isArabic} />
           </div>
 
@@ -205,12 +241,34 @@ export default function AboutJourney() {
             aria-hidden="true"
           />
 
+          {/* Mobile Moving Kayak + Bouncing Duck tracking active milestone */}
+          <div
+            aria-hidden="true"
+            className="sm:hidden pointer-events-none absolute start-0 z-30 flex flex-col items-center gap-0.5 transition-all duration-500 ease-out"
+            style={{ top: `calc(${activeStep * 25}% + 18px)` }}
+          >
+            <motion.img
+              src={duckMarkImg}
+              alt=""
+              animate={{ y: [0, -6, 0] }}
+              transition={{ duration: 0.85, repeat: Infinity, ease: 'easeInOut' }}
+              className="h-7 w-7 rounded-full border-2 border-brand-navy bg-brand-yellow object-contain p-0.5 shadow-md"
+            />
+            <div className="scale-75 -mt-1">
+              <KayakTrackIcon flipped={isArabic} />
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {milestones.map((item, idx) => {
               const isActive = idx === activeStep;
               return (
                 <div
                   key={item.key}
+                  ref={(el) => {
+                    cardRefs.current[idx] = el;
+                  }}
+                  data-step-index={idx}
                   onMouseEnter={() => setActiveStep(idx)}
                   onFocus={() => setActiveStep(idx)}
                   onClick={() => setActiveStep(idx)}

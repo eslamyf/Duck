@@ -77,16 +77,24 @@ export default function StoryGallerySection() {
               className="w-9 sm:w-14 h-[2px] rounded-full bg-gradient-to-r from-transparent to-[#13708C]"
             />
 
-            {/* Dual parallel curved river waves with kinetic flowing current */}
+            {/* Sleek Kayak & Paddle emblem */}
             <span
               aria-hidden="true"
-              className="relative flex flex-col justify-center gap-[3px] w-7 h-5 overflow-hidden shrink-0 [mask-image:linear-gradient(to_right,transparent,#000_15%,#000_85%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,#000_15%,#000_85%,transparent)]"
+              className="inline-flex items-center justify-center shrink-0"
             >
-              <svg viewBox="0 0 56 10" className="w-14 h-2.5 shrink-0 animate-river-flow text-[#13708C]" fill="none">
-                <path d="M0 5 Q7 0 14 5 T28 5 T42 5 T56 5" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" />
-              </svg>
-              <svg viewBox="0 0 56 10" className="w-14 h-2.5 shrink-0 animate-river-flow-slow text-[#94A3B8]" fill="none">
-                <path d="M0 5 Q7 0 14 5 T28 5 T42 5 T56 5" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" />
+              <svg viewBox="0 0 44 24" className="w-9 h-5 shrink-0 text-[#13708C]" fill="none">
+                <path
+                  d="M3 15c7 5 31 5 38 0-7-4-31-4-38 0z"
+                  fill="currentColor"
+                  fillOpacity="0.2"
+                  stroke="currentColor"
+                  strokeWidth="1.9"
+                  strokeLinejoin="round"
+                />
+                <ellipse cx="22" cy="14.5" rx="5.5" ry="1.8" stroke="currentColor" strokeWidth="1.5" />
+                <path d="M12 21L32 4" stroke="#0C1226" strokeWidth="1.9" strokeLinecap="round" />
+                <ellipse cx="10.5" cy="21.8" rx="3.2" ry="1.3" transform="rotate(-38 10.5 21.8)" fill="#0C1226" />
+                <ellipse cx="33.5" cy="3.2" rx="3.2" ry="1.3" transform="rotate(-38 33.5 3.2)" fill="#0C1226" />
               </svg>
             </span>
 
