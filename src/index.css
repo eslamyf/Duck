@@ -361,3 +361,19 @@ body {
   content-visibility: auto;
   contain-intrinsic-size: auto 650px;
 }
+
+/* ================= ZERO-OVERHEAD BRAND SVG PATTERNS ================= */
+.bg-pattern-duck {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='76' viewBox='0 0 96 76'%3E%3Cg fill='none' stroke='%23147D9F' stroke-opacity='0.06' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M16 32c0 8 7 13 18 13h10c7 0 11-4 11-9 0-3-2-6-5-7 2-3 1-8-3-10-4-2-9 0-11 4-2 4-7 5-12 5h-5c-2 0-3 2-3 4z'/%3E%3Ccircle cx='46' cy='23' r='1' fill='%23147D9F' fill-opacity='0.06' stroke='none'/%3E%3Cpath d='M64 68c0 8 7 13 18 13h10c7 0 11-4 11-9'/%3E%3Cpath d='M-32 68c0 8 7 13 18 13h10c7 0 11-4 11-9 0-3-2-6-5-7 2-3 1-8-3-10-4-2-9 0-11 4-2 4-7 5-12 5h-5c-2 0-3 2-3 4z'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 96px 76px;
+}
+
+.bg-pattern-kayak {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='84' viewBox='0 0 120 84'%3E%3Cg fill='none' stroke='%230C1226' stroke-opacity='0.05' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 26c14-7 36-7 50 0-14 7-36 7-50 0z'/%3E%3Cellipse cx='39' cy='26' rx='9' ry='2.8'/%3E%3Cpath d='M25 41L53 11'/%3E%3Cellipse cx='55' cy='9.5' rx='4.5' ry='2' transform='rotate(-45 55 9.5)'/%3E%3Cellipse cx='23' cy='42.5' rx='4.5' ry='2' transform='rotate(-45 23 42.5)'/%3E%3Cpath d='M74 68c14-7 36-7 50 0-14 7-36 7-50 0z'/%3E%3Cellipse cx='99' cy='68' rx='9' ry='2.8'/%3E%3Cpath d='M85 83L113 53'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 120px 84px;
+}
+
+.bg-pattern-waves-dark {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='70' viewBox='0 0 140 70'%3E%3Cg fill='none' stroke='%23FDFB4A' stroke-opacity='0.075' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='M0 22c24-18 46-18 70 0s46 18 70 0'/%3E%3Cpath d='M0 30c24-18 46-18 70 0s46 18 70 0'/%3E%3Cpath d='M-70 57c24-18 46-18 70 0s46 18 70 0s46 18 70 0'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 140px 70px;
+}

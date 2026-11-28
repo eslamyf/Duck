@@ -17,7 +17,7 @@ export default function FinalCtaSection() {
       aria-label={t('finalCta.title')}
       className="bg-surface-white py-8 sm:py-10 min-[901px]:py-14 px-4 sm:px-6 min-[901px]:px-[4vw] font-body border-t border-brand-blue/12"
     >
-      <div className="relative mx-auto max-w-[1400px] overflow-hidden rounded-3xl min-[901px]:rounded-[28px] border border-brand-navy/10 bg-brand-navy text-white shadow-hero-frame py-12 sm:py-16 min-[901px]:py-20 px-5 sm:px-10">
+      <div className="relative mx-auto max-w-[1400px] overflow-hidden rounded-3xl min-[901px]:rounded-[28px] border border-brand-navy/10 bg-brand-navy bg-pattern-waves-dark text-white shadow-hero-frame py-12 sm:py-16 min-[901px]:py-20 px-5 sm:px-10">
         <img
           src={ctaBg1200}
           srcSet={`${ctaBg640} 640w, ${ctaBg1200} 1200w`}

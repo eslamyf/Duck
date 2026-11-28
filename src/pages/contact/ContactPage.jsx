@@ -103,9 +103,9 @@ export default function ContactPage() {
   ];
 
   return (
-    <div dir={isArabic ? 'rtl' : 'ltr'} className="bg-surface-mist min-h-screen font-body text-brand-navy">
+    <div dir={isArabic ? 'rtl' : 'ltr'} className="bg-surface-mist bg-pattern-duck min-h-screen font-body text-brand-navy">
       {/* Hero Header */}
-      <section className="relative overflow-hidden bg-brand-navy text-white py-14 sm:py-20 px-[5vw]">
+      <section className="relative overflow-hidden bg-brand-navy bg-pattern-waves-dark text-white py-14 sm:py-20 px-[5vw]">
         <div
           className="pointer-events-none absolute -top-24 -end-24 h-72 w-72 rounded-full bg-brand-blue/25 blur-3xl"
           aria-hidden="true"

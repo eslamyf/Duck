@@ -19,7 +19,7 @@ export default function WhyDuckSection() {
       id="why-duck"
       dir={isArabic ? 'rtl' : 'ltr'}
       aria-label={t('whyDuck.title')}
-      className="bg-surface-sand text-brand-navy py-12 min-[901px]:py-20 px-[5vw] min-[901px]:px-[6vw] font-body border-t border-brand-blue/12"
+      className="bg-surface-sand bg-pattern-duck text-brand-navy py-12 min-[901px]:py-20 px-[5vw] min-[901px]:px-[6vw] font-body border-t border-brand-blue/12"
     >
       <div className="max-w-[1360px] mx-auto">
         <SectionHeader

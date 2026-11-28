@@ -98,7 +98,7 @@ export default function PublicActivitiesPage() {
       {/* Experiences Grid */}
       <section
         id="activities-list"
-        className="scroll-mt-20 px-5 py-14 sm:px-8 lg:px-16 lg:py-20"
+        className="scroll-mt-20 bg-pattern-kayak px-5 py-14 sm:px-8 lg:px-16 lg:py-20"
       >
         <div className="mx-auto max-w-7xl">
           <div className="mb-10 max-w-3xl">
