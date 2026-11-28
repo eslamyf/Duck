@@ -38,7 +38,7 @@ export default function NotFoundPage() {
   return (
     <div
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="min-h-[calc(100svh-100px)] bg-surface-mist flex items-center justify-center px-5 py-16 text-brand-navy"
+      className="min-h-[calc(100svh-100px)] bg-surface-mist bg-pattern-duck flex items-center justify-center px-5 py-16 text-brand-navy"
     >
       <div className="max-w-xl w-full rounded-[28px] border border-brand-blue/16 bg-surface-white p-8 sm:p-12 text-center shadow-card space-y-6">
         <div className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-navy text-brand-yellow text-3xl shadow-sm">

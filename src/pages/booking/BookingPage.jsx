@@ -217,7 +217,7 @@ function BookingFlowContent({ searchParams, setSearchParams }) {
   return (
     <div
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="min-h-screen bg-surface-sand text-brand-navy pt-16 sm:pt-20 min-[901px]:pt-24 pb-8 px-4 sm:px-6 relative isolate selection:bg-brand-yellow selection:text-brand-navy font-body print:p-0 print:m-0 print:bg-white"
+      className="min-h-screen bg-surface-sand bg-pattern-kayak text-brand-navy pt-16 sm:pt-20 min-[901px]:pt-24 pb-8 px-4 sm:px-6 relative isolate selection:bg-brand-yellow selection:text-brand-navy font-body print:p-0 print:m-0 print:bg-white print:bg-none"
     >
       <div className="max-w-4xl mx-auto space-y-4">
         {/* Top Back / Previous Bar */}

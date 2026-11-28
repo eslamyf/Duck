@@ -88,7 +88,7 @@ export default function HeroSection() {
       id={SECTIONS.TOP}
       ref={sectionRef}
       dir={isRtl ? 'rtl' : 'ltr'}
-      className="relative w-full bg-surface-white font-body scroll-mt-[var(--header-offset)]"
+      className="relative w-full bg-surface-white bg-pattern-duck font-body scroll-mt-[var(--header-offset)]"
       aria-label="Hero"
     >
       {/* Clean White Canvas Wrapper framing the Floating Cinematic Video (all 4 corners visible below fixed navbar) */}
