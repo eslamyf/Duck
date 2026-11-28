@@ -5,6 +5,7 @@ import { ROUTES } from '../../shared/config/routes.js';
 import introImg480 from '../../shared/assets/images/image1-480w.webp';
 import introImg540 from '../../shared/assets/images/image1-540w.webp';
 import introImg720 from '../../shared/assets/images/image1-720w.webp';
+import riverPattern from '../../shared/assets/images/duck-river-pattern.webp';
 import './story-gallery.css';
 
 /**
@@ -50,6 +51,12 @@ export default function StoryGallerySection() {
       dir={isRtl ? 'rtl' : 'ltr'}
       aria-labelledby="story-gallery-heading"
       className="story-gallery-sec"
+      style={{
+        backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.86)), url(${riverPattern})`,
+        backgroundRepeat: 'repeat',
+        backgroundSize: '900px auto',
+        backgroundPosition: 'center',
+      }}
     >
       <div
         className={`story-gallery-wrap transition-all duration-500 ease-out motion-reduce:transition-none ${
