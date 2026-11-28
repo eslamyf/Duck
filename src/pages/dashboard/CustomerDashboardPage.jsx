@@ -15,7 +15,6 @@ import {
   faArrowLeft,
   faArrowRight,
   faMagnifyingGlass,
-  faGlobe,
   faRightFromBracket,
   faBoxesStacked,
   faTriangleExclamation,
@@ -43,6 +42,7 @@ import {
   getUserBookings,
   updateBookingStatus,
 } from '../../entities/booking/api/bookingService.js';
+import { KayakLanguageSwitch } from '../../features/currency-language-switcher/index.js';
 
 const B2B_PACKAGES = [
   {
@@ -81,7 +81,7 @@ const B2B_PACKAGES = [
 ];
 
 export default function CustomerDashboardPage() {
-  const { lang, setLanguage, t } = useTranslation();
+  const { lang, t } = useTranslation();
   const isArabic = lang === 'ar';
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -820,18 +820,9 @@ export default function CustomerDashboardPage() {
             </p>
 
             <div className="space-y-2.5 pt-2">
-              <button
-                type="button"
-                onClick={() => setLanguage(isArabic ? 'en' : 'ar')}
-                className="flex min-h-[42px] w-full items-center justify-center gap-2 rounded-full border border-brand-navy/20 bg-surface-mist px-4 text-xs font-bold text-brand-navy transition hover:bg-brand-navy hover:text-brand-yellow cursor-pointer"
-              >
-                <FontAwesomeIcon icon={faGlobe} />
-                <span>
-                  {isArabic
-                    ? 'Switch to English (Sidebar Left)'
-                    : 'التبديل إلى العربية (القائمة يمين)'}
-                </span>
-              </button>
+              <div className="flex min-h-[42px] w-full items-center justify-center">
+                <KayakLanguageSwitch />
+              </div>
 
               <button
                 type="button"

@@ -10,13 +10,14 @@ import Badge from '../../shared/ui/Badge/index.js';
 import DuckIcon from '../../shared/ui/Icon/DuckIcon.jsx';
 import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
 import { getPortalPathForRole, ROLES } from '../../shared/config/rbac.js';
+import { KayakLanguageSwitch } from '../../features/currency-language-switcher/index.js';
 
 import { getCurrentUser } from '../../entities/user/api/authSession.js';
 import { AUTH_UPDATED_EVENT } from '../../entities/notification/index.js';
 import { NotificationBell } from '../notifications/index.js';
 
 export default function Navbar({ onBookClick }) {
-  const { lang, setLanguage, t } = useTranslation();
+  const { lang, t } = useTranslation();
   const location = useLocation();
 
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -390,15 +391,7 @@ export default function Navbar({ onBookClick }) {
           {/* Desktop Action Buttons */}
           <div className="hidden min-[1280px]:flex items-center gap-1.5 min-[1480px]:gap-2 shrink-0">
             {/* Language Switcher */}
-            <button
-              type="button"
-              onClick={() => setLanguage(lang === 'ar' ? 'en' : 'ar')}
-              aria-label={t('common.languageSwitch')}
-              className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-brand-navy/15 bg-surface-mist px-2.5 min-[1480px]:px-3 text-xs font-bold text-brand-navy transition-colors hover:bg-brand-navy hover:text-brand-yellow cursor-pointer whitespace-nowrap"
-            >
-              <DuckIcon icon="faLanguage" className="text-brand-blue text-sm shrink-0" aria-hidden="true" />
-              <span>{t('common.languageSwitch')}</span>
-            </button>
+            <KayakLanguageSwitch />
 
             {/* Notifications Bell */}
             <NotificationBell />
@@ -447,15 +440,9 @@ export default function Navbar({ onBookClick }) {
 
           {/* Tablet / Compact Laptop Actions + Hamburger Button (< 1280px) */}
           <div className="flex items-center gap-2 min-[1280px]:hidden shrink-0">
-            <button
-              type="button"
-              onClick={() => setLanguage(lang === 'ar' ? 'en' : 'ar')}
-              aria-label={t('common.languageSwitch')}
-              className="hidden min-[901px]:inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-brand-navy/15 bg-surface-mist px-2.5 text-xs font-bold text-brand-navy transition-colors hover:bg-brand-navy hover:text-brand-yellow cursor-pointer whitespace-nowrap"
-            >
-              <DuckIcon icon="faLanguage" className="text-brand-blue text-xs shrink-0" aria-hidden="true" />
-              <span>{t('common.languageSwitch')}</span>
-            </button>
+            <div className="hidden min-[901px]:block">
+              <KayakLanguageSwitch />
+            </div>
 
             <NotificationBell />
 
@@ -480,15 +467,7 @@ export default function Navbar({ onBookClick }) {
           >
             {/* Mobile Top Controls */}
             <div className="flex items-center justify-between gap-2 p-2 bg-white/8 border border-white/14 rounded-[14px] mb-2">
-              <Button
-                type="button"
-                variant="chip"
-                size="xs"
-                icon={<DuckIcon icon="faLanguage" />}
-                onClick={() => setLanguage(lang === 'ar' ? 'en' : 'ar')}
-              >
-                {t('common.languageSwitch')}
-              </Button>
+              <KayakLanguageSwitch />
 
               <Badge
                 as="span"

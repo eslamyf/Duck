@@ -5,7 +5,6 @@ import {
   faBars,
   faXmark,
   faRightFromBracket,
-  faGlobe,
   faHouse,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
@@ -21,6 +20,7 @@ import {
   loginUser,
 } from '../../entities/user/api/authService.js';
 import { NotificationBell } from '../notifications/index.js';
+import { KayakLanguageSwitch } from '../../features/currency-language-switcher/index.js';
 
 /**
  * Unified Dashboard Shell aligned with Final_4.html (.pm / .pm-side / .pm-top / .pm-main).
@@ -35,7 +35,7 @@ export default function DashboardShell({
   children,
   headerActions,
 }) {
-  const { lang, setLanguage, t } = useTranslation();
+  const { lang, t } = useTranslation();
   const isArabic = lang === 'ar';
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -226,14 +226,7 @@ export default function DashboardShell({
 
               <NotificationBell compact />
 
-              <button
-                type="button"
-                onClick={() => setLanguage(isArabic ? 'en' : 'ar')}
-                className="inline-flex items-center gap-1.5 rounded-full border border-brand-blue/20 bg-surface-mist px-3 py-1.5 text-xs font-bold text-brand-navy transition hover:bg-brand-navy hover:text-brand-yellow cursor-pointer"
-              >
-                <FontAwesomeIcon icon={faGlobe} />
-                <span>{t('common.languageSwitch')}</span>
-              </button>
+              <KayakLanguageSwitch />
 
               <Link
                 to={ROUTES.HOME}

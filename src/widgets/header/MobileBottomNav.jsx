@@ -5,9 +5,10 @@ import { useTranslation } from '../../shared/i18n/index.js';
 import { ROUTES, SECTIONS, sectionLink } from '../../shared/config/routes.js';
 import { buildWhatsAppUrl } from '../../shared/config/constants.js';
 import DuckIcon from '../../shared/ui/Icon/DuckIcon.jsx';
+import { KayakLanguageSwitch } from '../../features/currency-language-switcher/index.js';
 
 export default function MobileBottomNav() {
-  const { lang, setLanguage, t } = useTranslation();
+  const { lang, t } = useTranslation();
   const location = useLocation();
   const isArabic = lang === 'ar';
   const ArrowIcon = isArabic ? 'faArrowLeft' : 'faArrowRight';
@@ -292,17 +293,9 @@ export default function MobileBottomNav() {
 
             {/* Bottom Controls: Language Toggle & WhatsApp */}
             <div className="grid grid-cols-2 gap-2.5 mt-4 pt-3.5 border-t border-brand-blue/12">
-              <button
-                type="button"
-                onClick={() => {
-                  setLanguage(lang === 'ar' ? 'en' : 'ar');
-                  setMoreRouteKey(null);
-                }}
-                className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-brand-blue/25 bg-surface-white px-3 py-2 text-xs font-extrabold text-brand-navy hover:bg-brand-navy hover:text-brand-yellow transition-colors cursor-pointer"
-              >
-                <DuckIcon icon="faLanguage" className="text-brand-blue" />
-                <span>{t('common.languageSwitch')}</span>
-              </button>
+              <div className="flex min-h-[44px] items-center justify-center">
+                <KayakLanguageSwitch />
+              </div>
 
               <a
                 href={buildWhatsAppUrl(t('footer.whatsappPrefill'))}
