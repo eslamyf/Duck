@@ -380,7 +380,7 @@ export default function Navbar({ onBookClick }) {
           </div>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden min-[1280px]:flex min-w-0 items-center justify-center justify-self-center gap-0.5 overflow-hidden min-[1400px]:gap-1 min-[1500px]:gap-1.5">
+          <div className="hidden min-[1440px]:flex min-w-0 items-center justify-center justify-self-center gap-0.5 overflow-hidden min-[1500px]:gap-1.5">
             {navLinks.map((link) => {
               const isActive = checkIsActive(link);
 
@@ -400,7 +400,7 @@ export default function Navbar({ onBookClick }) {
           </div>
 
           {/* Desktop Action Buttons */}
-          <div className="hidden min-[1280px]:flex items-center justify-self-end gap-1.5 min-[1480px]:gap-2 shrink-0">
+          <div className="hidden min-[1440px]:flex items-center justify-self-end gap-1.5 min-[1480px]:gap-2 shrink-0">
             {/* Language Switcher */}
             <KayakLanguageSwitch />
 
@@ -451,8 +451,8 @@ export default function Navbar({ onBookClick }) {
           </div>
 
           {/* Tablet / Compact Laptop Actions + Hamburger Button (< 1280px) */}
-          <div className="flex items-center gap-2 min-[1280px]:hidden shrink-0">
-            <div className="hidden min-[901px]:block">
+          <div className="flex items-center gap-2 min-[1440px]:hidden shrink-0">
+            <div className="hidden min-[768px]:block">
               <KayakLanguageSwitch />
             </div>
 
@@ -475,7 +475,7 @@ export default function Navbar({ onBookClick }) {
         {isMobileOpen && (
           <div
             id="mobile-nav"
-            className="min-[1280px]:hidden fixed inset-x-0 top-[52px] min-[901px]:top-[68px] bottom-0 z-[10000] bg-brand-navy text-white px-[6vw] py-4 pb-[calc(88px+env(safe-area-inset-bottom))] flex flex-col gap-1 overflow-y-auto shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200"
+            className="min-[1440px]:hidden fixed inset-x-0 top-[52px] min-[901px]:top-[68px] bottom-0 z-[10000] bg-brand-navy text-white px-[6vw] py-4 pb-[calc(88px+env(safe-area-inset-bottom))] flex flex-col gap-1 overflow-y-auto shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200"
           >
             {/* Mobile Top Controls */}
             <div className="flex items-center justify-between gap-2 p-2 bg-white/8 border border-white/14 rounded-[14px] mb-2">
