@@ -29,17 +29,37 @@ export default function DuckManifesto({
     ? 'bg-brand-yellow text-brand-navy'
     : 'bg-brand-navy text-brand-yellow';
 
-  const tailGradientClass = isDark
-    ? 'ltr:bg-gradient-to-r rtl:bg-gradient-to-l from-brand-yellow/90 via-brand-blue/75 to-transparent'
-    : 'ltr:bg-gradient-to-r rtl:bg-gradient-to-l from-brand-blue/80 via-brand-navy/20 to-transparent';
-
-  const centerLeftWingClass = isDark
-    ? 'bg-gradient-to-r from-transparent via-brand-blue/75 to-brand-yellow/90'
-    : 'bg-gradient-to-r from-transparent via-brand-navy/20 to-brand-blue/80';
-
-  const centerRightWingClass = isDark
-    ? 'bg-gradient-to-r from-brand-yellow/90 via-brand-blue/75 to-transparent'
-    : 'bg-gradient-to-r from-brand-blue/80 via-brand-navy/20 to-transparent';
+  const startupPill = (
+    <span
+      dir="ltr"
+      lang="en"
+      className={`hidden sm:inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-extrabold tracking-[0.16em] uppercase shrink-0 ${
+        isDark
+          ? 'border-brand-yellow/40 bg-brand-navy/55 text-brand-yellow backdrop-blur-xs'
+          : 'border-brand-blue/25 bg-surface-mist text-brand-navy'
+      }`}
+    >
+      <svg viewBox="0 0 56 32" className="h-3 w-4 shrink-0" fill="none" aria-hidden="true">
+        <path
+          d="M4 15h44v5a9 9 0 0 1-9 9H13a9 9 0 0 1-9-9v-5z"
+          fill="currentColor"
+          fillOpacity="0.22"
+          stroke="currentColor"
+          strokeWidth="2.4"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M26 3h11a11 11 0 0 1 11 11v1H26V3z"
+          fill="currentColor"
+          fillOpacity="0.35"
+          stroke="currentColor"
+          strokeWidth="2.4"
+          strokeLinejoin="round"
+        />
+      </svg>
+      <span>EST. 2023</span>
+    </span>
+  );
 
   const lockup = (
     <div
@@ -134,30 +154,20 @@ export default function DuckManifesto({
     return (
       <div
         dir="ltr"
-        className={`flex items-center justify-center gap-3 sm:gap-4 group w-fit mx-auto max-w-full ${className}`.trim()}
+        className={`flex items-center justify-center gap-3 sm:gap-3.5 group w-fit mx-auto max-w-full ${className}`.trim()}
       >
-        <span
-          aria-hidden="true"
-          className={`hidden sm:block h-[2px] w-10 sm:w-14 rounded-full ${centerLeftWingClass}`}
-        />
+        {startupPill}
         {lockup}
-        <span
-          aria-hidden="true"
-          className={`hidden sm:block h-[2px] w-10 sm:w-14 rounded-full ${centerRightWingClass}`}
-        />
       </div>
     );
   }
 
   return (
     <div
-      className={`flex items-center gap-3 sm:gap-4 group w-fit max-w-full ${className}`.trim()}
+      className={`flex items-center gap-3 sm:gap-3.5 group w-fit max-w-full ${className}`.trim()}
     >
       {lockup}
-      <span
-        aria-hidden="true"
-        className={`hidden sm:block h-[2px] w-12 min-[901px]:w-20 rounded-full transition-transform duration-300 ltr:origin-left rtl:origin-right group-hover:scale-x-110 motion-reduce:transform-none ${tailGradientClass}`}
-      />
+      {startupPill}
     </div>
   );
 }
